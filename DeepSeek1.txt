@@ -1,0 +1,4128 @@
+ITEM 1: Midjourney Prompt-Architektur (5 Elemente)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 2)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+JEDER Prompt folgt diesem Aufbau (5 Elemente, diese Reihenfolge):
+
+MEDIUM-ANKER (Pflicht, immer zuerst)
+
+SZENEN-BESCHREIBUNG (Pflicht, kurz)
+
+LICHT (Pflicht, immer mit konkreter Quelle)
+
+EMOTIONALER HOOK (stark empfohlen)
+
+FILMSTOCK + MJ-PARAMETER (Pflicht, immer zuletzt)
+
+FIXED PARTS:
+
+Reihenfolge ist fix: 1→2→3→4→5
+
+Medium-Anker immer zuerst
+
+Filmstock + MJ-Parameter immer zuletzt
+
+VARIABLE PARTS:
+
+Inhalt jedes Elements je nach Shot
+
+OPERATIONAL LOGIC:
+
+Medium-Anker bestimmt das gesamte Rendering
+
+Licht muss konkrete Quelle haben
+
+Emotionaler Hook ist optional aber stark empfohlen
+
+MJ-Parameter: --ar [ratio] --raw (immer --raw)
+
+META / NOT FOR PROMPT:
+
+Die Beschreibung ist eine Anweisung an den Prompt-Schreiber, kein Prompt-Bestandteil
+
+NOTES:
+
+Für Midjourney, nicht für Video-Tools
+
+ITEM 2: Medium-Anker Aufbau (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 2.1)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+AUFBAU: "Film still from a [MODIFIKATOR] [GENRE] film [ZUSATZ]"
+
+MODIFIKATOREN (wähle passend):
+"low-budget" → dreckig, unglamourös, realistisch
+"independent" → ungefiltert, authentisch
+"1970s" / "2004" → Ära-spezifische Ästhetik
+"European" → weniger Hollywood-Polierung
+"Scandinavian" → kalt, minimal, nüchtern
+"Japanese" → spezifische Farbpalette und Komposition
+
+ZUSÄTZE (optional aber wirkungsvoll):
+"shot on location" → verhindert Studio-Look
+"shot on 16mm" → körnig, dokumentarisch
+"shot on 35mm" → klassisch filmisch
+
+ALTERNATIVE FORMULIERUNGEN:
+"Cinematography still, [GENRE]"
+"Film still, [TAGESZEIT] exterior"
+"A still from a [REGISSEUR]-style film"
+
+FIXED PARTS:
+
+"Film still from a" als Basis (oder Alternativen)
+
+VARIABLE PARTS:
+
+[MODIFIKATOR]
+
+[GENRE]
+
+[ZUSATZ] (optional)
+
+OPERATIONAL LOGIC:
+
+Medium-Anker ist immer der erste Satz
+
+Bestimmt das gesamte Rendering
+
+META / NOT FOR PROMPT:
+
+Die Beschreibung der Wirkung ist erklärend
+
+NOTES:
+
+ITEM 3: Licht-Beschreibungsregel (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 2.3)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+AUFBAU: "[QUELLE] [WAS SIE BELEUCHTET]. [WAS DUNKEL BLEIBT]."
+
+BEISPIELE:
+"Single iron lantern casting a small pool of amber light on left wall. Everything beyond is near-black."
+"Late afternoon sun through a window illuminates her face and table surface. Room behind her falls into soft shadow."
+"Neon sign reflecting pink and blue on wet pavement. Faces of passersby only half-lit."
+"Hard directional moonlight from upper right. Only the wall surface catches light, rest of frame in deep black."
+"Overcast daylight. Flat, grey, no shadows. Everything equally visible and equally bleak."
+
+FIXED PARTS:
+
+Struktur: Quelle + was sie beleuchtet. Was dunkel bleibt.
+
+VARIABLE PARTS:
+
+Quelle, Beleuchtetes, Dunkles
+
+OPERATIONAL LOGIC:
+
+Jedes Licht muss von irgendwo kommen
+
+Eine Hauptquelle benennen
+
+Dann beschreiben was diese Quelle NICHT erreicht
+
+"cinematic lighting" und "dramatic lighting" vermeiden (zu vage)
+
+Optional: "no fill light, no rim light" als Zusatz bei dunklen, unpolierten Szenen
+
+META / NOT FOR PROMPT:
+
+Die Beispiele sind vollständige Prompt-Teile
+
+NOTES:
+
+ITEM 4: Emotionaler Hook – Beispiele und Funktion
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 2.4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Ein kurzer Satz der die Stimmung setzt. Stark empfohlen — oft das entscheidende Element das MJ aus dem generischen "Filmbild"-Modus in eine spezifische Stimmung kippt.
+
+BEISPIELE:
+"Too quiet for a place that looks lived-in."
+"Feels like escape. Or exposure."
+"Empty. Waiting."
+"The kind of afternoon that never ends."
+"Nobody is coming back."
+"Wrong kind of quiet."
+"Not beautiful — exposed."
+"She doesn't know she's being watched."
+"The kind of loneliness you chose."
+
+FIXED PARTS:
+
+Keine feste Formulierung
+
+VARIABLE PARTS:
+
+Subjektiver, poetischer, unscharfer Satz
+
+OPERATIONAL LOGIC:
+
+Nur weglassen wenn wirklich kein passender Hook kommt
+
+Darf subjektiv, poetisch, unscharf sein
+
+META / NOT FOR PROMPT:
+
+Die Beschreibung ist Anweisung
+
+NOTES:
+
+ITEM 5: Filmstock + MJ-Parameter (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 2.5)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+FILMSTOCK-OPTIONEN:
+"35mm film grain" → allgemein filmisch
+"35mm Kodak Vision3 500T" → warm, organisch, körnig
+"underexposed 35mm" → dunkel, körnig
+"35mm anamorphic" → Breitbild-Charakter
+"16mm film stock" → rau, körnig, dokumentarisch
+"Fuji Eterna" → soft, gedämpft, romantisch
+
+MJ-PARAMETER (immer):
+--ar 16:9 → Breitbild (anpassen wenn Shot es verlangt)
+--raw → IMMER. Reduziert MJs Verschönerung.
+
+OPTIONAL:
+--ar 2.39:1 → Cinemascope
+--ar 4:3 → Enge, Porträt, Retro
+--ar 9:16 → Vertikal
+
+FIXED PARTS:
+
+--raw ist Pflicht
+
+--ar [ratio] ist Pflicht (ohne Default?)
+
+VARIABLE PARTS:
+
+Filmstock-Text
+
+Aspect Ratio
+
+OPERATIONAL LOGIC:
+
+Filmstock gibt analoge Textur und Farbcharakter
+
+MJ-Parameter immer am Ende
+
+META / NOT FOR PROMPT:
+
+Die Pfeile (→) sind erklärend
+
+NOTES:
+
+ITEM 6: Anti-Patterns – Verbotene Wörter (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 3)
+ITEM TYPE: CONSTRAINT / FORBIDDEN
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+VERMEIDEN:
+
+VERSCHÖNERUNGSWÖRTER
+"beautiful", "stunning", "gorgeous", "warm glow", "cozy",
+"magical", "ethereal"
+→ Aktivieren das Postkarten/Stockfoto-Template.
+
+GENERISCHE LICHTBEGRIFFE
+"cinematic lighting", "dramatic lighting", "moody lighting",
+"atmospheric"
+→ Zu vage. Konkrete Quelle benennen.
+
+TECHNISCHE KAMERAPARAMETER
+"f/2.8", "85mm", "ISO 800", "shallow DOF", "rack focus"
+→ MJ interpretiert diese nicht zuverlässig.
+
+AI-QUALITÄTS-TAGS
+"ultra-photorealistic", "8K", "hyper-detailed", "unreal engine",
+"octane render"
+→ Aktivieren Stockfoto- oder Videospiel-Ästhetik.
+
+PROMPT-AUFBLÄHUNG
+→ Bei schlechten Ergebnissen: KÜRZEN, nicht verlängern.
+→ ~60 Wörter als Ausgangspunkt.
+
+LICHT OHNE QUELLE
+→ Jedes Licht im Prompt muss motiviert sein.
+
+FIXED PARTS:
+
+Liste der verbotenen Wörter
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Wenn etwas schön sein soll: die Szene schön BESCHREIBEN, nicht das Wort "beautiful" benutzen
+
+Sonderfall "golden hour": Als alleinstehender Stimmungsbegriff vermeiden; als konkrete Lichtbeschreibung innerhalb einer Szene erlaubt
+
+Statt technischer Parameter die WIRKUNG beschreiben
+
+META / NOT FOR PROMPT:
+
+Die Erklärungen (→) sind nicht Teil des Prompts
+
+NOTES:
+
+ITEM 7: Template – Establishing Wide (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Film still from a [MODIFIKATOR] [GENRE] film. [ORT] seen from [PERSPEKTIVE] at [TAGESZEIT]. [2-3 DETAILS]. [LICHTQUELLE]. [WAS DUNKEL/UNSICHTBAR]. [EMOTIONALER HOOK]. [FILMSTOCK]. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"Film still from a"
+
+"seen from"
+
+"at"
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[MODIFIKATOR]
+
+[GENRE]
+
+[ORT]
+
+[PERSPEKTIVE]
+
+[TAGESZEIT]
+
+[2-3 DETAILS]
+
+[LICHTQUELLE]
+
+[WAS DUNKEL/UNSICHTBAR]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+Platzhalter in [KLAMMERN] ersetzen
+
+Struktur und Kürze beibehalten
+
+META / NOT FOR PROMPT:
+
+Template als Ausgangspunkt
+
+NOTES:
+
+ITEM 8: Template – Enger Raum / Gasse / Korridor (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Film still from a [MODIFIKATOR] [GENRE] film shot on location. [RAUM]. [LICHTQUELLE] casting [WAS/WO]. [WAS DUNKEL]. [OBERFLÄCHE/TEXTUR]. [EMOTIONALER HOOK]. [FILMSTOCK], no fill light. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"Film still from a"
+
+"shot on location"
+
+"casting"
+
+"no fill light"
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[MODIFIKATOR]
+
+[GENRE]
+
+[RAUM]
+
+[LICHTQUELLE]
+
+[WAS/WO]
+
+[WAS DUNKEL]
+
+[OBERFLÄCHE/TEXTUR]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+Platzhalter ersetzen
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 9: Template – Detail / Close-up (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Film still, [TAGESZEIT] exterior, [GENRE]. Close-up of [OBJEKT] in [KONTEXT]. [LICHTQUELLE] illuminates [WAS], rest in [DUNKELHEIT/UNSCHÄRFE]. [TEXTUR]. [EMOTIONALER HOOK]. [FILMSTOCK]. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"Film still,"
+
+"exterior,"
+
+"Close-up of"
+
+"in"
+
+"illuminates"
+
+"rest in"
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[TAGESZEIT]
+
+[GENRE]
+
+[OBJEKT]
+
+[KONTEXT]
+
+[LICHTQUELLE]
+
+[WAS]
+
+[DUNKELHEIT/UNSCHÄRFE]
+
+[TEXTUR]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 10: Template – Charakter (partiell sichtbar) (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Film still from a [MODIFIKATOR] [GENRE] film shot on location. [FIGUR] seen from [PERSPEKTIVE] in [ORT]. [LICHTQUELLE]. Only [SICHTBARER BEREICH], rest of figure in [SCHATTEN/DUNKELHEIT]. [EMOTIONALER HOOK]. [FILMSTOCK]. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"Film still from a"
+
+"shot on location"
+
+"seen from"
+
+"in"
+
+"Only"
+
+"rest of figure in"
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[MODIFIKATOR]
+
+[GENRE]
+
+[FIGUR]
+
+[PERSPEKTIVE]
+
+[ORT]
+
+[LICHTQUELLE]
+
+[SICHTBARER BEREICH]
+
+[SCHATTEN/DUNKELHEIT]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+Figuren nicht komplett ausleuchten. Partiell im Schatten lassen. Das verhindert den "Sticker-Effekt"
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 11: Template – Pillow Shot (Objekt, kein Mensch) (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Film still, [GENRE]. [OBJEKT] in [KONTEXT]. [LICHTQUELLE]. No people. [EMOTIONALER HOOK]. [FILMSTOCK]. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"Film still,"
+
+"in"
+
+"No people."
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[GENRE]
+
+[OBJEKT]
+
+[KONTEXT]
+
+[LICHTQUELLE]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 12: Template – Oberfläche / Textur (Midjourney)
+SOURCE: MJ_STARTFRAME_MODUL_v4.2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Template mit Platzhaltern)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+[TAGESZEIT] exterior, [GENRE] film. [OBERFLÄCHE] lit by [LICHTQUELLE] from [RICHTUNG]. Strong light-to-shadow falloff. [SICHTBARER BEREICH], rest in deep black. [EMOTIONALER HOOK]. [FILMSTOCK]. --ar 16:9 --raw
+
+FIXED PARTS:
+
+"exterior,"
+
+"film."
+
+"lit by"
+
+"from"
+
+"Strong light-to-shadow falloff."
+
+"rest in deep black."
+
+"--ar 16:9 --raw"
+
+VARIABLE PARTS:
+
+[TAGESZEIT]
+
+[GENRE]
+
+[OBERFLÄCHE]
+
+[LICHTQUELLE]
+
+[RICHTUNG]
+
+[SICHTBARER BEREICH]
+
+[EMOTIONALER HOOK]
+
+[FILMSTOCK]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 13: Pre-Prompt Protocol (8 Fragen)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 1, Kapitel 10)
+ITEM TYPE: LOGIC_FRAGMENT (Workflow)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+FÜR JEDEN SHOT AUSFÜLLEN:
+
+GEFÜHL: Was soll der Zuschauer fühlen?
+In EIGENEN WORTEN. Mischungen sind Normalfall.
+
+WISSEN: Was erfährt er NEUES?
+
+VERBERGEN: Was versteckt der Shot BEWUSST?
+
+DISTANZ: Wie nah ist der Zuschauer emotional?
+Spektrum von "verschmelzend" bis "fern beobachtend"
+
+BEWEGUNG: Was passiert emotional → daraus folgt Kamerabewegung
+
+FARBE: Emotionale Temperatur? Mischungen möglich.
+
+ABWESENHEIT: Was lasse ich WEG und warum?
+
+SOUND: Was HÖRT die Figur? Was hört sie NICHT?
+
+ERST NACH BEANTWORTUNG: Technische Docs konsultieren.
+
+FIXED PARTS:
+
+Die 8 Fragen als fixe Struktur
+
+VARIABLE PARTS:
+
+Antworten auf jede Frage
+
+OPERATIONAL LOGIC:
+
+Vor jedem Prompt ausfüllen
+
+Emotion bestimmt Technik
+
+Harte Sperre: Templates und Prompt-Formate werden ERST konsultiert NACHDEM das Pre-Prompt Protocol vollständig ausgefüllt ist
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 14: 5C Checklist (Prompt-Strukturprüfung)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 3)
+ITEM TYPE: LOGIC_FRAGMENT (Checklist)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+C1 CAMERA
+□ Lens definiert? (→ psychologische Distanz, Doc 1 Prinzip 3)
+□ Bewegung ODER Stillstand? (→ emotionaler Zustand, Doc 1 Prinzip 4)
+"static camera, locked-off" ist aktive Entscheidung
+Bewegung IMMER mit Duration: "slow dolly-in over 3s"
+□ Blende? (f/1.4-2.8 Isolation | f/4-5.6 Kontext | f/8-16 Übersicht)
+
+C2 COMPOSITION
+□ Framing-Regel? (rule of thirds / symmetry / negative space)
+ODER Komposition als Psychogramm (Zentrum = Kontrolle. Rand = Marginalisierung. Leer = Abwesenheit.)
+□ Depth layering? (foreground / midground / background)
+
+C3 EMOTIONAL FOCUS
+□ Wo liegt das GEFÜHL?
+Close-up (Intimität) / Wide (Einsamkeit) / Leer (Abwesenheit)
+□ Stimmt mit Pre-Prompt Protocol überein?
+
+C4 CUTTING
+□ Duration explizit? ("over 3s" / "holds for 8s")
+□ Übergang zum nächsten Shot? (Hard / Dissolve / J-Cut / Match / Smash)
+□ Übergangs-Typ folgt aus Emotion?
+
+C5 CONTINUITY
+□ Subjekt visuell verankert? ("Woman A: dark hair, leather jacket")
+□ Lichtquelle benannt + positioniert?
+□ Quality-Suffix angehängt?
+
+FIXED PARTS:
+
+Die 5 C-Kategorien mit Unterpunkten
+
+VARIABLE PARTS:
+
+Die konkreten Werte für jeden Shot
+
+OPERATIONAL LOGIC:
+
+Jeder Prompt MUSS alle 5 Prüfpunkte bestehen
+
+Voraussetzung: Pre-Prompt Protocol ist ausgefüllt
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 15: Quality Suffix – Aspect Ratio, Grain, Farb-Intent, Stabilität
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 3)
+ITEM TYPE: LOGIC_FRAGMENT (Parameter-Liste)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+ASPECT RATIO (KEIN Default):
+2.39:1 Weite/Epik | 1.85:1 Standard | 16:9 Digital |
+4:3 Enge/Porträt | 9:16 Vertikal/Mobile
+
+GRAIN (KEIN Default):
+ARRI Alexa (clean) | Kodak 500T (warm) | 16mm (rau) | Fuji Eterna (soft)
+
+FARB-INTENT (pro Szene, aus Pre-Prompt Protocol Punkt 6):
+NIEMALS "teal-orange grade" als Default.
+
+STABILITÄTS-SUFFIX (positive Formulierung):
+"stable anatomy, sharp detail retention, clean frame-to-frame
+consistency, physically grounded elements, consistent exposure"
+NICHT: "no morphing, no blur, no ghosting"
+
+FIXED PARTS:
+
+Die konkreten Werte für Aspect Ratio, Grain, Stabilitäts-Suffix
+
+VARIABLE PARTS:
+
+Auswahl aus den Listen
+
+OPERATIONAL LOGIC:
+
+KEIN Default bei Aspect Ratio, Grain, Farb-Intent
+
+Stabilitäts-Suffix positiv formulieren, keine Negationen
+
+Farb-Intent pro Szene, nicht global
+
+META / NOT FOR PROMPT:
+
+Die Suffix-Formulierung ist direkt verwendbar
+
+NOTES:
+
+ITEM 16: 5-Layer-Framework (Prompt-Reihenfolge)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: LOGIC_FRAGMENT (Prompt-Aufbau)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+LAYER 1: KAMERA & OBJEKTIV (immer zuerst)
+Brennweite + Blende + Bewegung/Stillstand + Duration.
+OHNE Layer 1 → flache Ergebnisse bei allen Modellen.
+
+LAYER 2: SUBJEKT-DETAIL
+Visuelle Beschreibung. So spezifisch wie möglich.
+Bei Multi-Shot: Identische Beschreibung über alle Shots.
+
+LAYER 3: UMGEBUNG & LICHT
+Setting + Lichtquelle mit Position + Qualität.
+Statisch ("warm key from camera-left") oder
+dynamisch ("light shifts from warm to cool over duration").
+
+LAYER 4: BEWEGUNG & AKTION
+Was bewegt sich + wie + Geschwindigkeit. ODER: "no movement".
+IMMER mit Zeitangabe. Ohne → KI-Bewegung verschmiert.
+
+LAYER 5: STIMMUNG & QUALITY
+Farb-Intent + Grain + Aspect Ratio + Stabilitäts-Suffix.
+KEIN Default-Grade. Jede Szene eigene Farbtemperatur.
+
+FIXED PARTS:
+
+Reihenfolge Layer 1→2→3→4→5
+
+VARIABLE PARTS:
+
+Inhalt jedes Layers
+
+OPERATIONAL LOGIC:
+
+Kamera zuerst. Immer Layer 1 am Anfang.
+
+Bewegung explizit. Inkl. "no movement".
+
+Zeit immer angeben. "over 3s", "holds for 8s".
+
+Farbe pro Szene. Kein Default-Grade.
+
+Positive Constraints.
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 17: Modellwahl – Entscheidungsbaum (Kling/Seedance/Veo)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: LOGIC_FRAGMENT (Triggerlogik)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+FRAGE 1: Erzählt der SCHNITT die Geschichte?
+(Perspektivwechsel, Gegenschuss, Montage, Kuleshov)
+→ JA: KLING (Multi-Shot, bis 6 Shots, Shot-Liste PFLICHT)
+
+FRAGE 2: Erzählt die DAUER die Geschichte?
+(Nicht wegschauen können, Stillstand als Statement,
+interne Bewegung statt Kamerabewegung)
+→ JA: SEEDANCE (Single-Shot, höchste Stabilität)
+
+FRAGE 3: Noch unsicher wie der Moment aussehen soll?
+→ JA: VEO (schneller Prototyp, max ~8s, Mood-Test)
+
+FIXED PARTS:
+
+Die drei Fragen und Zuordnungen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Entscheidungsbaum vor Tool-Wahl
+
+Kling für Multi-Shot Coverage
+
+Seedance für Single-Shot mit Dauer als Erzählmittel
+
+Veo für Prototyping
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 18: Kling Format (Multi-Shot)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Formatvorlage)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+KLING FORMAT:
+Shot 1: [Layer 1]. [Layer 2]. [Layer 3-4]. (Duration: individuell)
+Shot 2: [Neuer Winkel]. [Reaktion]. [Layer 3-4]. (Duration: individuell)
+Shot 3: [Emotional Focus]. [Layer 3-4]. (Duration: individuell)
+[Layer 5: Farbe, Grain, Aspect Ratio, Stabilitäts-Suffix]
+
+FIXED PARTS:
+
+"Shot 1:", "Shot 2:", etc.
+
+Layer 5 am Ende
+
+VARIABLE PARTS:
+
+Inhalt pro Shot
+
+OPERATIONAL LOGIC:
+
+Durationen NICHT gleichmäßig verteilen. Jeder Shot hat eigene Länge basierend auf emotionalem Gewicht.
+
+5s → 2s → 8s ist ein Rhythmus. 5s → 5s → 5s ist rhythmusloses Cutting.
+
+META / NOT FOR PROMPT:
+
+Dies ist ein Template aus dem Filmsystem, nicht die vollständige Kling-Syntax aus dem Prompt-Modul
+
+NOTES:
+
+ITEM 19: Seedance Format
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Formatvorlage)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+SEEDANCE FORMAT:
+[Layer 1 + Duration]. [Layer 2]. [Layer 3]. [Layer 4]. [Layer 5].
+
+FIXED PARTS:
+
+Reihenfolge Layer 1-5
+
+VARIABLE PARTS:
+
+Inhalt
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 20: Veo Format
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: PARTIAL_PROMPT (Formatvorlage)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+VEO FORMAT:
+[Layer 1]. [Layer 2+3 kompakt]. [Layer 4]. [Layer 5 minimal].
+
+FIXED PARTS:
+
+Reihenfolge
+
+VARIABLE PARTS:
+
+Inhalt
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 21: Universelle Regeln für Prompts
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 4)
+ITEM TYPE: CONSTRAINT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+
+KAMERA ZUERST. Immer Layer 1 am Anfang.
+
+SPEZIFISCH BEIM SUBJEKT. Details erzeugen Kohärenz.
+
+BEWEGUNG EXPLIZIT. Inkl. "no movement".
+
+ZEIT IMMER ANGEBEN. "over 3s", "holds for 8s".
+
+FARBE PRO SZENE. Kein Default-Grade.
+
+POSITIVE CONSTRAINTS. "stable anatomy" statt "no morphing".
+
+BEI KLING: Shot-Liste statt Fließtext.
+
+FIXED PARTS:
+
+Die 7 Regeln
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Für alle Tools gültig
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 22: Brennweiten – psychologische Zuordnung
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+14-24mm Ultra-wide. Überwältigung, Weite, Einsamkeit.
+35mm Standard. Dokumentarisch, natürlich, Beobachtung.
+50mm Neutral. Objektivität, kein visueller Kommentar.
+85mm Porträt. Isolation, Intimität, Sehnsucht.
+135mm+ Tele. Extreme Kompression, Trennung, maximale Isolation.
+
+FIXED PARTS:
+
+Die Zahlen und Zuordnungen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Immer mit Unit: "35mm" nicht "35"
+
+"shallow depth of field at f/1.8" > nur "f/1.8"
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 23: Kamerabewegungen – Liste mit Speed + Duration
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+INTENSIVIERUNG: dolly in, slider push, dolly zoom, crash zoom
+ENTFERNUNG: dolly out, pull-back
+BEGLEITUNG: tracking shot, steadicam
+ENTHÜLLUNG: crane shot, jib rise, technocrane sweep
+ENERGIE: gimbal orbit, handheld, speed ramp
+ÜBERGANG: whip pan transition, match cut on action
+STILLSTAND: static camera, locked-off shot
+
+FIXED PARTS:
+
+Die Begriffe
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Immer mit Speed + Duration
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 24: Licht-Begriffe (Setup, dynamisch, Temperatur, Qualität)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+SETUPS: three-point, motivated, practical, chiaroscuro
+DYNAMISCH: "light shifts over duration", "candle creating moving shadows", "cloud passing, shadow sweeps"
+TEMPERATUR: 3200K tungsten (warm) | 5600K daylight (neutral) | mixed
+QUALITÄT: hard (scharfe Schatten) | soft (diffus) | volumetric (god rays)
+
+FIXED PARTS:
+
+Die Begriffe
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 25: Kompositions-Begriffe
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+FRAMING: rule of thirds, leading lines, negative space, symmetry, dutch angle
+PSYCHOGRAMM: Zentrum=Kontrolle, Rand=Marginalisierung, Unten=Unterdrückung, Leer=Abwesenheit
+DEPTH: foreground element, midground subject, background atmosphere
+
+FIXED PARTS:
+
+Die Begriffe und Zuordnungen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 26: Farb-Intent – KEIN Default, pro Szene
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+KALT: "desaturated cool grade, crushed shadows"
+WARM: "amber warmth, soft golden highlights, rich shadow detail"
+NEUTRAL: "natural color rendition, minimal grading"
+SPANNUNG: "high contrast, selective color emphasis"
+FIEBRIG: "oversaturated primaries, unnatural push"
+MONOCHROM: "near-monochrome, deep blacks, single accent color"
+Mischungen erwünscht: "warm center fading to cool periphery"
+
+FIXED PARTS:
+
+Die genannten Phrasen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+KEIN Default-Grade. Jede Szene eigene Farbtemperatur.
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 27: Stabilitäts-Suffix (positive Formulierung)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: FULL_PROMPT (Teil eines Prompts)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"stable anatomy, sharp detail retention, clean frame-to-frame consistency, physically grounded elements, consistent exposure"
+
+FIXED PARTS:
+
+Der gesamte String
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+IMMER positiv formulieren
+
+NICHT: "no morphing, no blur, no ghosting, no flicker"
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 28: Was NICHT funktioniert (für Prompts)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 5)
+ITEM TYPE: CONSTRAINT / FORBIDDEN
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Sensor-Größen ("Super35") | Shutter-Angaben ("180° shutter") |
+
+80 Wörter pro Prompt | Negative Constraints | Default-Grades
+
+FIXED PARTS:
+
+Liste
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Vermeiden
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 29: Szenenplan-Format (Übergabe ans Prompt-Modul)
+SOURCE: FILMSYSTEM_MASTER_LLM_v2.txt (Abschnitt 7)
+ITEM TYPE: LOGIC_FRAGMENT (Datenstruktur)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+EBENE 1: FILM-KONTEXT
+Farb-Arc Position: Wo in der Episode/im Film steht diese Szene?
+Aktive Motive: Welche visuellen Motive laufen gerade?
+Protagonist-Status: Was weiß der Zuschauer bereits?
+
+EBENE 2: SZENEN-KONTEXT
+Location: Wo spielt die Szene?
+Emotionaler Bogen: Von welchem Gefühl zu welchem Gefühl?
+Beats: Anzahl und Beschreibung.
+Pacing-Intent: Dicht / atmend / eskalierend — MIT Begründung.
+POV-Logik: Objektiv / Subjektiv / Semi-Subjektiv — MIT Begründung.
+Shot-Leiter: Befolgen oder brechen — MIT Begründung.
+Pillow Shot davor: Ja/Nein. Wenn ja: welcher Typ?
+Pillow Shot danach: Ja/Nein. Wenn ja: welcher Typ?
+Cut zur nächsten Szene: Typ + Begründung.
+Atmosphären-Elemente (visuell): Liste aller Wetter- oder Umgebungseffekte, die IM BILD sichtbar sein müssen.
+
+EBENE 3: SHOT-DETAILS (pro Shot)
+GEFÜHL:, WISSEN:, VERBERGEN:, LINSE:, KAMERA:, FARBE:, GRAIN:, ABWESENHEIT:, SOUND:, FRAMING:, SUBJEKT:, AKTION:, DURATION:, CUT DANACH:
+
+FIXED PARTS:
+
+Die drei Ebenen mit ihren Feldern
+
+VARIABLE PARTS:
+
+Werte für jedes Feld
+
+OPERATIONAL LOGIC:
+
+Der Szenenplan ist die EINZIGE Brücke zwischen Filmsystem und Prompt-Modul
+
+Wird in separatem Chat an KI_FILM_PROMPT_MODUL übergeben
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 30: KI_FILM_PROMPT_MODUL – Baustein 0: Szenenplan als Input
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 0)
+ITEM TYPE: LOGIC_FRAGMENT (Workflow-Regel)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Das Modul trifft PRODUKTIONS-Entscheidungen:
+
+Location-Bibliothek: Wie viele Startframes braucht der Raum?
+
+Raumseiten-Logik: Wie wird die Szene in Multi-Shots aufgeteilt?
+
+Tool-Zuordnung: Welcher Shot wird Kling, welcher Seedance?
+
+Anchor-Identifikation: Welche visuellen Elemente werden verankert?
+
+Screen-Direction-Bridging: Wie leiten Multi-Shots zueinander über?
+
+Prompt-Generierung: Tool-spezifische, paste-ready Prompts
+
+Scene-End-Lock: Wie enden die Generierungen visuell?
+
+DAS MODUL ÜBERSCHREIBT NIEMALS DEN SZENENPLAN.
+EINZIGE AUSNAHME: Wenn eine filmische Entscheidung im Plan technisch nicht umsetzbar ist → Konflikt melden und Produktions-Alternative vorschlagen.
+
+FIXED PARTS:
+
+Die 7 Produktionsentscheidungen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Wenn kein Szenenplan vorliegt → STOPP und Rückfrage
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 31: Validierungs-Gates (11 Gates)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 1)
+ITEM TYPE: LOGIC_FRAGMENT (Checklist/Workflow)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+GATE 1: SZENENPLAN VORHANDEN UND VOLLSTÄNDIG?
+GATE 2: PRODUKTIONSPLAN BEGRÜNDET?
+GATE 2a: INITIALER OBJEKTZUSTAND (nur relevante Objekte)?
+GATE 2b: RÄUMLICHE KOMPATIBILITÄT (nur bei offensichtlichem Konflikt)?
+GATE 2d: ATMOSPHÄREN-ELEMENTE — VISUELLE SPEZIFIKATION?
+GATE 3: ANKER IDENTIFIZIERT?
+GATE 4: EINE KAMERABEWEGUNG PRO SHOT?
+GATE 5: PROMPT 50-100 WÖRTER PRO SHOT?
+GATE 6: KEIN VERBOTENES VOKABULAR?
+GATE 7: SCENE-END-LOCK GESETZT?
+GATE 8: BLICKRICHTUNG — MECHANISCH ODER EXPRESSIV?
+
+FIXED PARTS:
+
+Die 11 Gates
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Jeder Prompt durchläuft alle Gates
+
+Kein Gate darf übersprungen werden
+
+Gate 2a: Objektzustände dokumentieren, Startframe erst NACHDEM Zustände definiert sind
+
+Gate 2b: Offensichtlicher Konflikt → Rückfrage; mehrdeutig → plausibelste Interpretation wählen
+
+Gate 2d: Wenn Feld fehlt und Element auditiv → rein auditiv; wenn in Location ohne Feld → Rückfrage
+
+Gate 3: Visuelle Anker müssen im Framing sichtbar sein können; nicht-visuelle Anker immer erlaubt
+
+Gate 4: Eine Kamerabewegung pro Shot; Ausnahme bei Module C Referenz
+
+Gate 5: 50-100 Wörter
+
+Gate 8: Mechanische Blickrichtung umschreiben zu Intent; Zielangabe nur wenn unsichtbar
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 32: Sperrliste für KI-Video-Prompts
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 3)
+ITEM TYPE: CONSTRAINT / FORBIDDEN
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+✗ "cinematic lighting" → konkrete Quelle aus Szenenplan nutzen
+✗ "beautiful", "stunning", "cool", "nice" → null Information
+✗ Sensor-Größen ("Super35", "full-frame")
+✗ Shutter-Angaben ("180° shutter")
+✗ Negative Constraints ("no morphing", "no blur", "no ghosting")
+✗ Mehr als eine Kamerabewegung pro Shot
+✗ Mehr als 100 Wörter pro Shot-Prompt (50-100 optimal)
+✗ "cinematic color grade" ohne Spezifik aus dem Szenenplan
+
+SEEDANCE-SPEZIFISCH:
+✗ Vage Aktionswörter ("dancing", "fighting") ohne Detail
+✗ Widersprüchliche Anforderungen ("super fast + perfectly stable")
+✗ >4 Personen gleichzeitig in Bewegung
+
+ERLAUBTE ERSETZUNGEN:
+✗ "cinematic" → ✓ [Filmstock aus Szenenplan], [Aspect Ratio]
+✗ "moody" → ✓ [Farb-Intent aus Szenenplan]
+✗ "no shaking" → ✓ "stable camera, smooth tracking"
+✗ "no deformation"→ ✓ Charakter als Element laden, nicht im Prompt fixen
+
+FIXED PARTS:
+
+Die verbotenen Ausdrücke
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Für Kling und Seedance
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 33: Shot-Pairing-Regeln (technische Kompatibilität)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 3)
+ITEM TYPE: LOGIC_FRAGMENT (Constraint)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Wide Shot → Slow dolly ODER locked-off. Keine schnellen Pans.
+Medium Shot → Handheld = persönlich. Gimbal = poliert.
+Close-Up → Kleine Push-Ins am besten. Pans jarring.
+Pan → IMMER langsam. Schnelle Pans = Artefakte.
+Dolly/Track → Funktioniert bei jeder Geschwindigkeit.
+Handheld → Riskant bei Text im Bild.
+Crane → Für Enthüllung. Langsam starten.
+
+FIXED PARTS:
+
+Die Paarungen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Wenn Szenenplan problematische Kombination vorschlägt → Rückfrage
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 34: Kling Multi-Shot Format (vollständige Syntax)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: PARTIAL_PROMPT (Formatvorlage)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Shot 1: [Stimmung]. [Framing aus Plan]. [Subjekt + Aktion aus Plan]. [Kamerabewegung aus Plan]. [Anker].
+Shot 2: [Framing]. [Subjekt + Aktion]. [Kamerabewegung]. [Anker].
+...
+Letzter Shot: [...]. [Scene-End-Lock].
+
+REGELN:
+
+Max 6 Shots pro Multi-Shot-Generation
+
+Gesamtdauer max 15 Sekunden
+
+Shots explizit labeln und nummerieren
+
+EINE primäre Kamerabewegung pro Shot
+
+Kamerabewegung als EIGENER SATZ, getrennt von der Aktion
+FALSCH: "She walks toward the door while camera dollies in."
+RICHTIG: "She walks toward the door. Slow dolly-in, 4s."
+
+Wenn Szene mehr als 6 Shots braucht → Raumseiten-Logik ODER Endframe-Chaining
+
+FIXED PARTS:
+
+"Shot 1:", "Shot 2:", etc.
+
+Scene-End-Lock am Ende des letzten Shots
+
+VARIABLE PARTS:
+
+Stimmung, Framing, Subjekt, Aktion, Kamerabewegung, Anker
+
+OPERATIONAL LOGIC:
+
+Die ersten 2-3 Worte von Shot 1 primen die Stimmung für die gesamte Sequenz
+
+Optional: Duration im Shot-Feld ("Shot 2 (5 seconds): [...]")
+
+Bei Coverage: Charakter IM Startframe (bestätigt stabiler)
+
+Bei Szenen-Interaktion: Charakter im Startframe mit korrekter Blickrichtung und Position
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 35: Kling Audio-Regeln
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+P1 — STRUKTURIERTE BENENNUNG:
+[Character A: Black-suited Agent] — eindeutig, konsistent.
+Keine Pronomen, keine Synonyme.
+
+P2 — VISUELLE VERANKERUNG:
+Aktion ZUERST, dann Dialog.
+"The agent slams his hand on the table.
+[Agent, angrily]: 'Where is the truth?'"
+
+P3 — AUDIO-DETAILS:
+Tonfall pro Charakter: [Agent, raspy deep voice]
+
+P4 — TEMPORALE KONTROLLE:
+"Immediately" als Linking-Word. Ohne → Sprecher verschmelzen.
+
+FIXED PARTS:
+
+Die vier Prinzipien
+
+VARIABLE PARTS:
+
+Charakter-Name, Tonfall, Dialog
+
+OPERATIONAL LOGIC:
+
+Für Dialog-Szenen in Kling
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 36: Kling Scene-End-Lock
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: PARTIAL_PROMPT (Teil eines Prompts)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"The scene ends with [Subjekt] in [Position]."
+
+Für Screen-Direction-Bridging: Blickrichtung oder Bewegung Richtung nächste Raumseite einbauen.
+
+FIXED PARTS:
+
+"The scene ends with"
+
+VARIABLE PARTS:
+
+[Subjekt], [Position]
+
+OPERATIONAL LOGIC:
+
+Letzter Satz verankert Szenenende
+
+Pflicht bei Multi-Shot wenn kein Endframe verfügbar
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 37: Kling Tool-Verhalten – Regel T1 (Ein Shot = eine Kamera auf einen Vorgang)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT (Constraint)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Jeder Shot-Prompt ist eine Anweisung für EINE durchgehende Kameraperspektive auf EINEN durchgehend physischen Vorgang.
+
+FALSCH: "presses a button, bends down, grabs a can, stands up, looks at the can"
+RICHTIG: "she hears something unsettling offscreen, fear crosses her face"
+RICHTIG: "uses the vending machine"
+
+ZWEI AKTIONEN — WANN JA, WANN NEIN:
+GUT: "opens the box, revealing the product inside"
+SCHLECHT: "grabs a drink from the vending machine and freezes, staring into the darkness behind her"
+
+DER TEST: Brauchen die zwei Aktionen VERSCHIEDENE Kamera-Motivationen? → Splitten.
+Sind sie EIN räumlich zusammenhängendes Ereignis aus EINER Perspektive? → Kann in einem Shot bleiben.
+
+PRINZIP: Beschreibe WAS PASSIERT und WAS GEFÜHLT WIRD. Nicht die mechanischen Teilschritte.
+
+FIXED PARTS:
+
+Die Beispiele
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Physik-Detail innerhalb einer Handlung erlaubt: "grabs the drink with visible weight in her grip"
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 38: Kling Tool-Verhalten – Regel T2 (Subject Anchor)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Die Constraint-Sandwich-Methode:
+
+Subject Anchor: Wer ist die Figur, was definiert sie visuell
+
+Shot + Action: Framing und was passiert
+
+Constraints: Was konsistent bleiben muss
+
+Das Character Element (@element) liefert das GESICHT.
+Der Prompt liefert die ROLLE im Raum.
+
+FIXED PARTS:
+
+Die 3-Schritt-Struktur
+
+VARIABLE PARTS:
+
+Inhalt
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 39: Kling Tool-Verhalten – Regel T3 (Startframe-Prompt-Kohärenz)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+WENN Charakter im Startframe AN einem Ort steht:
+→ Shot 1 darf NICHT beschreiben dass der Charakter zu diesem Ort HINLÄUFT.
+
+WENN Charakter im Startframe in eine Richtung SCHAUT:
+→ Kling folgt der BLICKRICHTUNG im Bild, nicht dem Prompt.
+
+WENN Startframe eine bestimmte Tageszeit zeigt:
+→ Prompt muss dieselbe Tageszeit bestätigen oder zumindest nicht widersprechen.
+
+WENN Startframe leer ist (Methode B: Charakter als Element):
+→ Charakter existiert nicht im Bild. Shot 1 muss beschreiben WOHER der Charakter kommt.
+
+PRINZIP: Lies deinen Startframe wie Kling ihn liest — als visuellen Zustand den der Prompt FORTSETZT, nicht überschreibt.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 40: Kling Tool-Verhalten – Regel T4 (Spawn-Kontrolle)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Bei Methode B (leerer Startframe + Charakter als Element):
+Der Charakter muss eine explizite Eintrittsrichtung bekommen.
+
+FALSCH: "@julia walks across the parking lot"
+RICHTIG: "@julia enters frame from the right, walks across the parking lot"
+
+Wenn sie NICHT von außen kommen soll sondern bereits im Raum ist: Startframe MIT Charakter verwenden (Methode A) oder explizit beschreiben: "@julia stands at the counter"
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Eintrittsrichtung
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 41: Kling Tool-Verhalten – Regel T5 (Objekt-Interaktion)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Kling kann Objekt-Interaktion wenn sie als EINE zusammenhängende Handlung beschrieben wird.
+
+FALSCH: "reaches for the door handle, grips it, turns it clockwise, pulls the door toward her, steps through"
+RICHTIG: "opens the door and steps inside"
+
+FALSCH: "presses a button, bends down to grab a can"
+RICHTIG: "grabs a drink from the vending machine"
+
+PRINZIP: Beschreibe das ERGEBNIS der Interaktion, nicht den Prozess.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 42: Kling Tool-Verhalten – Regel T6 (Prompt-Ende darf nicht widersprechen)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Wenn ein Shot mit einer abgeschlossenen Aktion endet, darf DANACH keine weitere Kamerabewegung kommen die Zeit braucht.
+
+FALSCH: "@julia steps inside, door closes behind her. Slow crane-up revealing the empty parking lot."
+
+RICHTIG (Option A): Crane raus. Shot endet mit der Tür.
+RICHTIG (Option B): Crane als eigenen Shot danach.
+
+PRINZIP: Jeder Shot hat EIN Ende.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 43: Kling Tool-Verhalten – Regel T7b (Startframe-Dominanz und Ort-Kontamination)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+PROBLEM 1 — ORTSNAMEN IM PROMPT:
+Wenn der Startframe einen Ort visuell zeigt, den Ortsnamen NICHT im Prompt wiederholen.
+
+FALSCH: "grabs a drink from the vending machine at the gas station"
+RICHTIG: "grabs a drink from the vending machine"
+
+PROBLEM 2 — VISUELLE DOMINANZ IM STARTFRAME:
+Kling schickt den Charakter zum visuell DOMINANTESTEN Element im Startframe.
+LÖSUNG: Der Startframe muss das Interaktions-Ziel VISUELL PROMINENT zeigen.
+
+PRINZIP: Kling liest den Startframe wie ein Mensch ein Foto liest — es geht zum Größten, Hellsten, Zentralsten. Der Prompt kann das nicht überschreiben.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 44: Kling Tool-Verhalten – Regel T8 (Was Kling sich merkt und was nicht)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+WAS KLING SICH MERKT (über Shots hinweg):
+
+RAUM-GEDÄCHTNIS → kommt vom STARTFRAME
+
+CHARAKTER-GEDÄCHTNIS → kommt vom ELEMENT / SHEET
+
+STIL-GEDÄCHTNIS → kommt vom Startframe + Prompt-Ton
+
+WAS KLING SICH NICHT MERKT:
+
+HANDLUNGS-ZUSTAND (Was in Shot 2 passiert ist existiert in Shot 3 nicht)
+
+OBJEKT-AUSSEHEN (jeder Shot generiert andere Dose) → LÖSUNG: Objekt als eigenes ELEMENT
+
+RAUMPOSITION (wo Figur am Ende von Shot 2 steht ist in Shot 3 nicht bekannt)
+
+EMOTIONALER ZUSTAND (muss neu beschrieben werden)
+
+OBJEKT-ZUSTÄNDE (Tür offen/zu, Licht an/aus)
+
+KONSEQUENZ: Kausale Kontinuität hat DREI Werkzeuge: Startframe, @element, Prompt-Text.
+
+FIXED PARTS:
+
+Die Listen
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 45: Kling Tool-Verhalten – Regel T9 (Shot-Label in jedem Feld wiederholen)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 4)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+Auch wenn die Plattform separate UI-Felder für Shot 1, Shot 2 etc. hat: Im Prompt-Text JEDES Feldes nochmal explizit "Shot 1:", "Shot 2:" etc. an den Anfang schreiben.
+
+MIT Label (im Feld, obwohl das UI schon "Shot 2" sagt):
+"Shot 2: Close-up. @julia's tired face..."
+
+Kling 3 wurde explizit darauf trainiert, strukturierte Shot-Labels ("Shot 1:", "Shot 2:", "Cut to:") zu erkennen.
+
+FIXED PARTS:
+
+"Shot 1:", "Shot 2:", etc.
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+In JEDEM Shot-Feld zusätzlich an den Anfang schreiben
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 46: Seedance Prompt-Grundstruktur
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: PARTIAL_PROMPT (Formatvorlage)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+REIHENFOLGE:
+Style-Framing → Subject → Action → Camera → Atmosphere → Constraints
+
+STYLE-FRAMING ALS ERSTES WORT:
+RICHTIG: "Cinematic noir realism, a detective in a wet alley..."
+FALSCH: "A detective in a wet alley, cinematic noir..."
+
+AKTIONSBESCHREIBUNG — ZWEI MODI:
+RUHIGE SZENEN: Langsam, kontinuierlich, natürlich.
+"walks slowly, steps lightly, turns head gradually"
+ESKALATION / ACTION: Aggressiv, dynamisch, detailliert.
+"dodges a punch, counters with elbow strike, slides across car hood"
+
+FIXED PARTS:
+
+Style-Framing als erstes Wort
+
+VARIABLE PARTS:
+
+Style-Framing, Subject, Action, Camera, Atmosphere, Constraints
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 47: Seedance Timestamp-Syntax
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: PARTIAL_PROMPT (Format)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+[00-03s] Beschreibung + Kamerabewegung
+[03-06s] Beschreibung + Kamerabewegung
+[06-10s] Beschreibung + Kamerabewegung
+
+Durationen aus dem Szenenplan übernehmen.
+
+FIXED PARTS:
+
+Zeitstempel in [ss-ss] Format
+
+VARIABLE PARTS:
+
+Beschreibung + Kamerabewegung
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 48: Seedance fließender Storyboard-Text
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"It starts with a close-up of the face, then slowly zooms out. The character walks slowly, camera follows steadily. A sudden noise — hard cut to wide shot."
+
+Seedance verarbeitet Fließtext besser als starre Shot-Listen.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Fließtext
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 49: Seedance Plansequenz
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"Single continuous cinematic shot..."
+
+FIXED PARTS:
+
+"Single continuous cinematic shot"
+
+VARIABLE PARTS:
+
+Fortsetzung
+
+OPERATIONAL LOGIC:
+
+Für Del-Toro-Fahrten, Crane-Reveals, komplexe Tracking-Shots
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 50: Seedance Referenz-System
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+OFFIZIELLES SYSTEM (voller Zugang):
+Bis zu 9 Bilder (@Image1-9), 3 Video-Clips (@Video1-3), 3 Audio-Dateien (@Audio1-3) — zusammen bis 12 Elemente.
+
+Single-Frame-Modus: Start + End Frame → Seedance interpoliert.
+Multiframes-Modus: @AssetName im Prompt referenzieren.
+
+FIXED PARTS:
+
+@Image1-9, @Video1-3, @Audio1-3
+
+VARIABLE PARTS:
+
+Asset-Namen
+
+OPERATIONAL LOGIC:
+
+Aktueller Zugang (Whitelabel-Aggregator) möglicherweise eingeschränkt auf einen einzelnen Image-Input
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 51: Seedance native Audio – Auto-Speech-Trigger vermeiden
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: CONSTRAINT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+WARNUNG — AUTO-SPEECH-TRIGGER:
+Bei Text-Triggern wie "arguing", "talking", "shouting" oder jeder Beschreibung die Sprechen impliziert, erzeugt Seedance EIGENMÄCHTIG Dialoge.
+
+REGEL: Wenn der Szenenplan KEIN Sprechen vorsieht, MUSS der Prompt harte Audio-Constraints enthalten:
+"completely silent, no voices, ambient sounds only"
+
+FIXED PARTS:
+
+"completely silent, no voices, ambient sounds only"
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 52: Seedance Stabilitäts-Suffix
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: FULL_PROMPT (Teil eines Prompts)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"Stable anatomy, natural proportions, consistent face, smooth continuous motion, sharp detail, film-grade visuals."
+
+Ruhige Szenen zusätzlich: "Gentle movements, natural and fluid."
+
+FIXED PARTS:
+
+Die Strings
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 53: Seedance Scene-End-Lock
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 5)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+"The scene ends with [Subjekt] in [Position/Aktion]."
+
+Bei Start-End-Frame nicht nötig (Endframe definiert visuell).
+
+FIXED PARTS:
+
+"The scene ends with"
+
+VARIABLE PARTS:
+
+[Subjekt], [Position/Aktion]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 54: Output-Formate (4 Blöcke)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 6)
+ITEM TYPE: LOGIC_FRAGMENT (Workflow)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+BLOCK 1: PRODUKTIONSPROTOKOLL
+Tool: [Kling Multi-Shot / Kling Single / Seedance]
+Begründung: [Warum dieses Tool]
+Startframe: [Welcher aus der Location-Bibliothek]
+Raumseite: [A/B/C — welcher Blickwinkel]
+Anker: [A1, A2, A3]
+Filmische Parameter: [Aus Szenenplan übernommen]
+
+BLOCK 2: PASTE-READY PROMPT
+Fertig. Kopieren, einfügen, generieren.
+
+BLOCK 3: SOUND-INTENT (für Resolve)
+Aus dem Szenenplan übernommen.
+
+BLOCK 4: ANSCHLUSS-INFO
+Wie endet dieser Shot/Multi-Shot visuell?
+Screen-Direction für den nächsten Multi-Shot?
+Endframe-Chaining nötig?
+
+FIXED PARTS:
+
+Die 4 Block-Header
+
+VARIABLE PARTS:
+
+Inhalt pro Block
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 55: Endframe-Chaining Workflow
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Baustein 7)
+ITEM TYPE: LOGIC_FRAGMENT (Workflow)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+PROBLEM: Szene braucht mehr als 15 Sekunden im SELBEN Winkel.
+
+LÖSUNG: Endframe von Generation A → Startframe für Generation B.
+
+WORKFLOW:
+
+Generation A produzieren
+
+Letzten Frame extrahieren
+
+Als Startframe für Generation B laden
+
+Anker-Prompts WORTWÖRTLICH wiederholen
+
+SCENE-END-LOCK BEI CHAINING:
+Szenenende von A so formulieren dass Fortsetzung möglich ist:
+Offene Tür, Blick in Richtung, Position nahe Übergang.
+NICHT: Augen schließen, Wegdrehen, "fertig"-Gefühl.
+
+DREI SZENEN-LÄNGEN:
+KURZ (10-15s): Eine Generation.
+MITTEL (15-30s): Zwei Generierungen, Endframe-Chaining.
+LANG (30s+): Mehrfach verketten. Resolve gleicht Drift aus.
+
+FIXED PARTS:
+
+Die 4 Schritte
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 56: Kamera-Vokabular für KI-Tools (Kling + Seedance)
+SOURCE: KI_FILM_PROMPT_MODUL_v2.1.txt (Anhang)
+ITEM TYPE: LOGIC_FRAGMENT (Referenz)
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+SHOT-GRÖSSEN:
+extreme close-up | close-up | medium close-up | medium shot |
+medium wide | wide shot | extreme wide shot
+
+KAMERA-WINKEL:
+low angle | high angle | eye level | over-the-shoulder |
+bird's eye view | dutch angle | worm's eye view
+
+KAMERA-BEWEGUNGEN:
+static / locked-off | dolly-in | dolly-out | tracking shot |
+following shot | orbit shot | pan (left/right) | tilt (up/down) |
+crane up/down | push-in | pull-back | handheld | steadicam |
+whip pan | slow zoom
+
+TEMPO:
+slow | gradual | smooth | aggressive | rapid | sudden
+
+FIXED PARTS:
+
+Die Begriffe
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 57: Module C – Entscheidungslogik für erweiterte Kamerabewegungen
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt
+ITEM TYPE: LOGIC_FRAGMENT
+STATUS: STABLE
+
+RAW EXTRACTED CONTENT:
+
+Was verlangt die EMOTION? (→ Filmsystem Abschnitt 1 Prinzip 4)
+
+Reicht eine BASIS-FAHRT? (→ Filmsystem Abschnitt 5)
+→ WENN JA: Basis nehmen. Einfachheit > Komplexität.
+
+Erzählt eine erweiterte Fahrt MEHR? (→ dieses Modul)
+→ KI-Status prüfen. Fallback bereithalten.
+
+9:16 Format? → Vertikale Bewegungen bevorzugen.
+
+Im SZENENPLAN: Wenn eine Technik aus diesem Modul gewählt wird, den Namen + KI-Status im Shot-Detail unter KAMERA eintragen.
+z.B. "KAMERA: Entdeckungs-Schwenk (Module C, Technik 5, [TEILWEISE]), Fallback: Kuleshov über zwei statische Shots."
+
+FIXED PARTS:
+
+Die 4 Schritte
+
+VARIABLE PARTS:
+
+Technik-Name, KI-Status, Fallback
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 58: Module C – Technik 1: Anstieg (Low-to-High)
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 1)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: ERPROBT
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera starts at ground level, slowly rises to eye level over 6s, revealing [Enthüllung]."
+Fallback: Low-angle statisch → Cut → High-angle statisch.
+
+FIXED PARTS:
+
+"Camera starts at ground level, slowly rises to eye level over 6s, revealing"
+
+VARIABLE PARTS:
+
+[Enthüllung]
+
+OPERATIONAL LOGIC:
+
+Emotion: Unterwerfung → Erkenntnis → Überblick
+
+Sehr stabil bei langsamer Ausführung
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 59: Module C – Technik 2: Absenkung (High-to-Low)
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 1)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: ERPROBT
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera starts from above, slowly descends to ground level over 8s, ending at [Bodennah-Detail]."
+Fallback: High-angle → Cut → Low-angle close-up.
+
+FIXED PARTS:
+
+"Camera starts from above, slowly descends to ground level over 8s, ending at"
+
+VARIABLE PARTS:
+
+[Bodennah-Detail]
+
+OPERATIONAL LOGIC:
+
+Stabil bei langsamer Geschwindigkeit
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 60: Module C – Technik 3: Tracking-Crane Kombination
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 1)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: UNBEWIESEN
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera tracks alongside [Figur] walking, simultaneously rising from waist to above head over 8s."
+Fallback: Reines Tracking ohne vertikale Komponente.
+
+FIXED PARTS:
+
+"Camera tracks alongside"
+
+"walking, simultaneously rising from waist to above head over 8s"
+
+VARIABLE PARTS:
+
+[Figur]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 61: Module C – Technik 4: Dolly mit Richtungswechsel
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 1)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera approaches over 4s, stops for 2s, then slowly pulls back over 4s."
+Fallback: Dolly-in und Dolly-out als separate Shots.
+
+FIXED PARTS:
+
+"Camera approaches over 4s, stops for 2s, then slowly pulls back over 4s"
+
+VARIABLE PARTS:
+
+Durationen können variieren
+
+OPERATIONAL LOGIC:
+
+Riskant bei starkem Wechsel, Kling priorisiert oft eine Richtung
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 62: Module C – Technik 5: Entdeckungs-Schwenk
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 2)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera on [Figur], slowly pans right over 5s, leaving figure, revealing [Bedrohung] in background."
+Fallback: Shot 1 Figur → Shot 2 Bedrohung (Kuleshov).
+
+FIXED PARTS:
+
+"Camera on"
+
+"slowly pans right over 5s, leaving figure, revealing"
+
+"in background"
+
+VARIABLE PARTS:
+
+[Figur], [Bedrohung]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 63: Module C – Technik 6: Verlassende Kamera
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 2)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: UNBEWIESEN
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera drifts right over 8s, figure sliding out of frame until only empty environment remains."
+Fallback: Pull-back (Figur wird kleiner).
+
+FIXED PARTS:
+
+"Camera drifts right over 8s, figure sliding out of frame until only empty environment remains"
+
+VARIABLE PARTS:
+
+Richtung, Duration
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 64: Module C – Technik 7: Vertikaler Reveal (Füße-zu-Gesicht)
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 3)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera starts at ground showing feet on wet stone, tilts up over 8s — kimono, hands, finally face."
+Fallback: Drei statische Shots (Füße → Hände → Gesicht).
+
+FIXED PARTS:
+
+"Camera starts at ground showing"
+
+"tilts up over 8s —"
+
+VARIABLE PARTS:
+
+Details (feet on wet stone, kimono, hands, finally face)
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 65: Module C – Technik 8: Vertikaler Fall
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 3)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: UNBEWIESEN
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera rapidly descends from treetop to ground over 3s, motion blur, ending on [Boden-Detail]."
+Fallback: Smash Cut High-angle → Low-angle.
+
+FIXED PARTS:
+
+"Camera rapidly descends from treetop to ground over 3s, motion blur, ending on"
+
+VARIABLE PARTS:
+
+[Boden-Detail]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 66: Module C – Technik 9: Kamera durchquert Schwelle
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 4)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera moves forward through [Schwelle] over 6s, frame narrowing then opening into [was dahinter liegt]."
+
+FIXED PARTS:
+
+"Camera moves forward through"
+
+"over 6s, frame narrowing then opening into"
+
+VARIABLE PARTS:
+
+[Schwelle], [was dahinter liegt]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 67: Module C – Technik 10: Kamera bleibt diesseits
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 4)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: ERPROBT
+
+RAW EXTRACTED CONTENT:
+Prompt: "Static camera behind [Schwelle]. [Figur] walks through, disappearing into [Nebel/Dunkelheit]."
+
+FIXED PARTS:
+
+"Static camera behind"
+
+"walks through, disappearing into"
+
+VARIABLE PARTS:
+
+[Schwelle], [Figur], [Nebel/Dunkelheit]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 68: Module C – Technik 11: Kamera überquert, Figur nicht
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 4)
+ITEM TYPE: LOGIC_FRAGMENT (nur Beschreibung)
+STATUS: UNBEWIESEN
+
+RAW EXTRACTED CONTENT:
+Kein Prompt-Text. Fallback: Zwei Shots von diesseits/jenseits. Cut dazwischen.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Kein Prompt verfügbar
+
+META / NOT FOR PROMPT:
+
+Nur beschrieben, kein Prompt
+
+NOTES:
+
+ITEM 69: Module C – Technik 12: Freeze
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 5)
+ITEM TYPE: LOGIC_FRAGMENT (nur Beschreibung)
+STATUS: MANUELL
+
+RAW EXTRACTED CONTENT:
+Umsetzung: Im Editor Frame einfrieren.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Nicht im Prompt umsetzbar
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 70: Module C – Technik 13: Beschleunigung / Speed Ramp
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 5)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera begins very slow dolly-in, gradually accelerating over 8s toward [Ziel]."
+
+FIXED PARTS:
+
+"Camera begins very slow dolly-in, gradually accelerating over 8s toward"
+
+VARIABLE PARTS:
+
+[Ziel]
+
+OPERATIONAL LOGIC:
+
+Starke Speed Ramps besser in Resolve umsetzen
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 71: Module C – Technik 14: Reverse
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 5)
+ITEM TYPE: LOGIC_FRAGMENT (nur Beschreibung)
+STATUS: MANUELL
+
+RAW EXTRACTED CONTENT:
+Umsetzung: "Retime → Reverse" in Resolve.
+
+FIXED PARTS:
+
+Keine
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Nicht im Prompt umsetzbar
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 72: Module C – Technik 15: Gegenläufig
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 6)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: UNBEWIESEN
+
+RAW EXTRACTED CONTENT:
+Prompt: "Subject walks right while camera moves left over 6s."
+Fallback: Tracking → Pull-back über Schnitt.
+
+FIXED PARTS:
+
+"Subject walks right while camera moves left over 6s"
+
+VARIABLE PARTS:
+
+Richtungen, Duration
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 73: Module C – Technik 16: Orbit
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 6)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Camera slowly orbits around [Figur] over 8s."
+Fallback: Drei statische Shots aus verschiedenen Winkeln.
+
+FIXED PARTS:
+
+"Camera slowly orbits around"
+
+"over 8s"
+
+VARIABLE PARTS:
+
+[Figur]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 74: Module C – Technik 17: Rack Focus
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 7)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Rack focus from foreground object to the character in the background."
+Fallback: Zwei Shots (Vordergrund-Detail → Hintergrund).
+
+FIXED PARTS:
+
+"Rack focus from"
+
+"to the character in the background"
+
+VARIABLE PARTS:
+
+foreground object
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 75: Module C – Technik 18: Subtle Handheld Micro-Shake
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 7)
+ITEM TYPE: FULL_PROMPT (Teil eines Prompts)
+STATUS: ERPROBT
+
+RAW EXTRACTED CONTENT:
+"Subtle handheld feel, slight micro-movements."
+
+FIXED PARTS:
+
+Der gesamte String
+
+VARIABLE PARTS:
+
+Keine
+
+OPERATIONAL LOGIC:
+
+Fallback: Static locked-off
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 76: Module C – Technik 19: Whip Pan
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 7)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Fast whip pan from [A] to [B]."
+Fallback: Harter Cut.
+
+FIXED PARTS:
+
+"Fast whip pan from"
+
+"to"
+
+VARIABLE PARTS:
+
+[A], [B]
+
+OPERATIONAL LOGIC:
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+ITEM 77: Module C – Technik 20: Dolly Zoom (Vertigo-Effekt)
+SOURCE: MODULE_C_CAMERA_CHOREOGRAPHY_v2.txt (Teil 7)
+ITEM TYPE: PARTIAL_PROMPT
+STATUS: TEILWEISE
+
+RAW EXTRACTED CONTENT:
+Prompt: "Slow dolly zoom on [Figur] over 6s, background warping while subject stays same size."
+Fallback: Slow dolly-in + leichte Verzerrung in Resolve.
+
+FIXED PARTS:
+
+"Slow dolly zoom on"
+
+"over 6s, background warping while subject stays same size"
+
+VARIABLE PARTS:
+
+[Figur]
+
+OPERATIONAL LOGIC:
+
+Funktioniert bei langsamer Ausführung überraschend oft
+
+META / NOT FOR PROMPT:
+
+NOTES:
+
+MISSING_OR_INCOMPLETE_ITEMS:
+Midjourney – Beispiel-Prompts (vollständig) – Die Dokumente enthalten vollständige Beispiel-Prompts (z.B. "Film still from a low-budget European horror film. Small stone village seen from a mountain ridge...") aber diese sind als Beispiele markiert, nicht als operative Templates. Sie wurden nicht als eigenständige Items extrahiert, da sie keine Platzhalter haben und nur illustrativ sind. (STATUS: DESCRIPTION_ONLY für die konkreten Beispiele)
+
+Module C – Technik 11 – Kein Prompt-Text, nur Beschreibung und Fallback.
+
+Module C – Technik 12 – Kein Prompt-Text, nur "Im Editor Frame einfrieren".
+
+Module C – Technik 14 – Kein Prompt-Text, nur Resolve-Anweisung.
+
+Gridformate – Keine expliziten Gridformate in den Dokumenten gefunden.
+
+Presetformate – Keine expliziten Presetformate (außer den Templates).
+
+Style-Injektion – Keine explizite Logik zur Style-Injektion gefunden (außer dem Style-Framing bei Seedance).
+
+## EXTRAHIERTE PROMPTFORMATE, PRESETFORMATE & OPERATIVE LOGIK
+
+---
+
+### ITEM 1: World Zone Builder 3x3
+**SOURCE:** 3x3GRIDS.txt (PROMPT 1)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+World Zone Builder 3x3
+You are given a reference image or a location description.
+TASK
+Create a 3x3 world zone board of one physically connected cinematic location. Treat this place like a real film set — the viewer must clearly understand how a character could physically move between the zones.
+REFERENCE PRIORITY
+Preserve: world identity, material family, lighting family, atmosphere, terrain/architectural logic, spatial relationships.
+ZONE DESIGN
+Each of the 9 panels shows a distinct but logically connected zone of the same location.
+Adapt the zones naturally to your scene (examples: entrance, narrow passage, threshold, main locus, observation point, hidden depth, side alley, elevated vantage, aftermath area).
+COHERENCE RULE
+All 9 zones must feel like believable parts of ONE single place. Same materials, same light logic, same atmosphere, same time of day. Each zone should feel like the most natural continuation of the previous one.
+LAYOUT
+3x3 grid. Clean alignment. Even spacing. Thin subtle separators. No text. No labels.
+QUALITY ANCHOR
+Premium cinematic rendering, rich material detail, atmospheric depth, correct perspective and scale across all panels.
+FORBIDDEN
+No disconnected zones. No architecture or geology drift. No random fantasy clutter without spatial logic. No quality downgrade.
+```
+
+**FIXED PARTS:**
+- "World Zone Builder 3x3"
+- "You are given a reference image or a location description."
+- "TASK" + gesamter Aufgabenblock
+- "REFERENCE PRIORITY" Block
+- "ZONE DESIGN" Block mit Beispielen
+- "COHERENCE RULE" Block
+- "LAYOUT: 3x3 grid. Clean alignment. Even spacing. Thin subtle separators. No text. No labels."
+- "QUALITY ANCHOR" Block
+- "FORBIDDEN" Liste
+
+**VARIABLE PARTS:**
+- reference image oder location description (Input)
+- Zone-Rollen (Beispiele sind variabel anpassbar)
+
+**OPERATIONAL LOGIC:**
+- Eingabe: Referenzbild oder Ortsbeschreibung
+- Ausgabe: 3x3 Grid mit 9 Zonen
+- Ziel: räumlich zusammenhängender Film-Schauplatz
+
+**META / NOT FOR PROMPT:**
+- "3x3 Grid Edition – optimiert für Nano Banana Pro & OpenArt"
+- "Stand: April 2026"
+- "Mehr Abdeckung (9 Panels statt 4) → bessere Konsistenz für Video-Referenzen"
+- "Direkter Storyboard-Charakter → Panels lassen sich sofort als Start-/End-Frames oder Multi-References in Kling 3 / Seedance 2.0 nutzen"
+- "Flexibler: Kombiniert Character-Angles, World-Zones und Storytelling in einem einheitlichen Format"
+- "Weniger Redundanz, klarere Panel-Funktionen, stärkere Continuity-Regeln"
+- "Kompatibel mit deinem Face Crop, OpenArt Assets und Preservation-Workflow"
+- "Empfohlene Nutzung: Nach Character + World Integration ein 3x3 Grid generieren / Panels extrahieren / Als starke References in Image-to-Video (Kling/Seedance) werfen oder zum Chaining nutzen"
+
+**NOTES:** Enthält auch globalen Style-Hinweis: "STYLE (immer am Ende): Apply Neo-Noir Cinematic Style (oder dein aktueller Style Asset aus OpenArt)." – siehe ITEM "Globaler Style-Block 3x3"
+
+---
+
+### ITEM 2: Single-Zone 3x3 Multishot
+**SOURCE:** 3x3GRIDS.txt (PROMPT 2A)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+3x3 Multi-Shot Grid — Single-Zone Version
+You are given:
+Reference A = character master reference (or OpenArt Character Asset)
+Reference B = world zone board or single integrated scene
+TASK
+Pick one zone from Reference B.
+Create a cinematic 3x3 sequence of nine consecutive film beats inside that single zone. This is a short scene / storyboard, not a variation sheet. Each panel must add new visual or emotional information.
+REFERENCE PRIORITY
+Character identity, face, proportions, outfit, materials = Reference A (Face Crop has highest authority).
+Spatial identity, materials, light, atmosphere of the chosen zone = Reference B.
+PANEL FUNCTIONS (von links oben nach rechts unten lesen):
+Panel 1: Establishing shot — where are we? (wide, sets scale and mood)
+Panel 2: Atmospheric insert — one specific tactile detail (texture, object, small motion)
+Panel 3: Character introduction beat — who is here and in what state?
+Panel 4: Tension build — subtle shift or clue that something is off
+Panel 5: Emotional / character beat — internal reaction or micro-action
+Panel 6: Escalation — action or disturbance intensifies
+Panel 7: Peak tension or reveal moment
+Panel 8: Immediate consequence / payoff
+Panel 9: Lingering aftermath or eerie lingering detail
+CONTINUITY RULE
+Each panel must motivate the next. Elements from earlier panels (light, objects, atmosphere) must affect or pay off in later panels. The viewer must feel a continuous short scene unfolding in one coherent space.
+LAYOUT
+3x3 grid. Even spacing. Thin subtle separators. No text. No labels.
+LOCKED
+Same character identity, same outfit, same zone, same atmosphere and lighting across all 9 panels.
+VARIABLE
+Camera angle, distance, composition, character position, subtle action/motion.
+FORBIDDEN
+No face or outfit drift. No zone changes within the sequence. No duplicated or near-identical shots. No pasted-in character feeling. No quality drop.
+```
+
+**FIXED PARTS:**
+- "3x3 Multi-Shot Grid — Single-Zone Version"
+- "You are given: Reference A = character master reference (or OpenArt Character Asset) / Reference B = world zone board or single integrated scene"
+- "TASK" Block
+- "REFERENCE PRIORITY" Block
+- "PANEL FUNCTIONS" mit 9 festen Funktionen
+- "CONTINUITY RULE" Block
+- "LAYOUT: 3x3 grid. Even spacing. Thin subtle separators. No text. No labels."
+- "LOCKED" Liste
+- "VARIABLE" Liste
+- "FORBIDDEN" Liste
+
+**VARIABLE PARTS:**
+- Reference A (Character)
+- Reference B (World Zone Board oder integrierte Szene)
+- Gewählte Zone aus Reference B
+
+**OPERATIONAL LOGIC:**
+- Leseordnung: links oben nach rechts unten
+- Jedes Panel muss das nächste motivieren
+- 9 Panels = kurze Szene / Storyboard
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 3: Cross-Zone 3x3 Multishot
+**SOURCE:** 3x3GRIDS.txt (PROMPT 2B)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+3x3 Multi-Shot Grid — Cross-Zone Version
+You are given:
+Reference A = character master reference
+Reference B = world zone board (3x3 zones)
+TASK
+Create a cinematic 3x3 sequence showing a short location journey that moves through the zones from Reference B. Use the zone board as a believable spatial path. This is a mini-story / location progression, not random shots.
+REFERENCE PRIORITY
+Character = Reference A (Face Crop highest).
+World identity, zone relationships, materials, light, atmosphere = Reference B.
+PANEL FUNCTIONS (sequential reading order):
+Panel 1–3: Arrival & First Contact (entrance / outer zones)
+Panel 4–6: Transition & Deepening (thresholds, passages, rising tension)
+Panel 7–9: Core Confrontation & Aftermath (main locus → hidden depth → lingering consequence)
+CONTINUITY RULE
+The viewer must believe the character physically moved through connected terrain from Panel 1 to Panel 9. Zones must feel like a natural progression. What happens in earlier panels influences later ones.
+LAYOUT
+3x3 grid. Even spacing. Thin subtle separators. No text. No labels.
+LOCKED
+Same character identity, same outfit, same overall world logic and lighting continuity.
+VARIABLE
+Zone progression, camera angle, distance, composition, character position and action.
+FORBIDDEN
+No face or outfit drift. No disconnected location jumps. No duplicated shots. No pasted-in character feeling.
+```
+
+**FIXED PARTS:**
+- "3x3 Multi-Shot Grid — Cross-Zone Version"
+- "You are given: Reference A = character master reference / Reference B = world zone board (3x3 zones)"
+- "TASK" Block
+- "REFERENCE PRIORITY" Block
+- "PANEL FUNCTIONS" (Panel 1-3, 4-6, 7-9 als Gruppen)
+- "CONTINUITY RULE" Block
+- "LAYOUT: 3x3 grid. Even spacing. Thin subtle separators. No text. No labels."
+- "LOCKED" Liste
+- "VARIABLE" Liste
+- "FORBIDDEN" Liste
+
+**VARIABLE PARTS:**
+- Reference A (Character)
+- Reference B (3x3 Zone Board)
+- Zone progression
+
+**OPERATIONAL LOGIC:**
+- Sequenzielle Leseordnung
+- Bewegung durch Zonen als räumlicher Pfad
+- Mini-Story / Location Progression
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 4: Character Angle / Storyboard 3x3
+**SOURCE:** 3x3GRIDS.txt (PROMPT 3)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Cinematic 3x3 Character Grid
+You are given:
+Reference A = character preservation / integration image (full body)
+Reference B = upscaled Face Crop (highest authority for face)
+TASK
+Create a professional cinematic 3x3 grid showing the exact same character in 9 different camera angles and shot types. This is NOT a technical reference sheet — it is nine cinematic film captures of the same person in a consistent environment.
+PANEL CONTENT (suggested powerful layout — du kannst anpassen):
+Row 1: Extreme Close-up (face) · Close-up (shoulders) · Medium Shot (waist-up)
+Row 2: Full Body Front · Low Angle Heroic · High Angle / Top-Down
+Row 3: True Side Profile · Over-the-Shoulder · Three-Quarter Rear / Back View
+REFERENCE PRIORITY
+Face identity and fine details = Reference B (absolute priority).
+Body, proportions, outfit, materials = Reference A.
+QUALITY ANCHOR
+Match the premium cinematic quality and atmospheric depth of the source. Rich materials, nuanced lighting, no simplification.
+LAYOUT
+3x3 grid. Even spacing. Thin subtle separators. No text. No labels. Entire figure fully visible where appropriate. Natural relaxed or motivated pose.
+FORBIDDEN
+No face drift, no outfit change, no flat rendering, no neutral studio background, no quality downgrade.
+```
+
+**FIXED PARTS:**
+- "Cinematic 3x3 Character Grid"
+- "You are given: Reference A = character preservation / integration image (full body) / Reference B = upscaled Face Crop (highest authority for face)"
+- "TASK" Block
+- "PANEL CONTENT" (vorgeschlagenes Layout – als variabel markiert)
+- "REFERENCE PRIORITY" Block
+- "QUALITY ANCHOR" Block
+- "LAYOUT: 3x3 grid. Even spacing. Thin subtle separators. No text. No labels. Entire figure fully visible where appropriate. Natural relaxed or motivated pose."
+- "FORBIDDEN" Liste
+
+**VARIABLE PARTS:**
+- Panel Content (vorgeschlagenes Layout kann angepasst werden)
+- Reference A, Reference B
+
+**OPERATIONAL LOGIC:**
+- Kein technisches Referenzblatt, sondern Filmaufnahmen
+- Gleiche konsistente Umgebung
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 5: Globaler Style-Block 3x3
+**SOURCE:** 3x3GRIDS.txt (unter "LAYOUT (immer)" und "STYLE (immer am Ende)")
+**ITEM TYPE:** LOGIC_FRAGMENT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+LAYOUT (immer):
+3x3 Grid, clean aligned, even spacing, thin subtle separators (keine dicken Rahmen), no text, no labels.
+STYLE (immer am Ende):
+Apply Neo-Noir Cinematic Style (oder dein aktueller Style Asset aus OpenArt).
+```
+
+**FIXED PARTS:**
+- Layout: 3x3 Grid, clean aligned, even spacing, thin subtle separators, no text, no labels
+- Style-Injektion am Ende: "Apply [Style]"
+
+**VARIABLE PARTS:**
+- Style-Name (Neo-Noir Cinematic Style oder aktueller Style Asset aus OpenArt)
+
+**OPERATIONAL LOGIC:**
+- Style muss immer am Ende des Prompts stehen
+- Layout gilt für alle 3x3 Grids im Dokument
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 6: Character Angle Study (2x2)
+**SOURCE:** Angle Study and Detail Anchor.txt
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Character Angle Study
+
+You are given:
+Reference A = cinematic character ingredient image (full body)
+Reference B = upscaled close crop of the character's face
+
+TASK
+Create four cinematic full-body shots of the same exact character from four different camera angles, arranged in a 2x2 grid.
+Each shot must maintain the same rendering quality and atmospheric depth as Reference A.
+
+This is NOT a technical reference layout. This is four cinematic captures of the same person.
+
+REFERENCE PRIORITY
+Face identity, facial structure, and fine facial details = Reference B (the face crop is the highest-authority face reference).
+Body proportions, hairstyle, outfit, materials, and footwear = Reference A.
+If any conflict occurs: preserve face from Reference B first, then body and outfit from Reference A, then materials.
+
+QUALITY ANCHOR
+Each panel must match the rendering quality of the source image.
+Preserve material richness, lighting nuance, atmospheric depth, and surface detail.
+Do not simplify into flat, clean, utilitarian rendering.
+
+LAYOUT
+2x2 grid. Even spacing. No text. No labels.
+
+PANEL CONTENT
+Panel 1: Full-body front view
+Panel 2: Full-body true right profile
+Panel 3: Full-body true left profile
+Panel 4: Full-body back view
+
+Entire figure fully visible in all panels.
+No cropped head, no cropped feet, no hidden footwear.
+
+VIEW RULES
+Use true profile and true back view — not three-quarter angles.
+Same character scale and camera height in all panels.
+
+POSE
+Natural relaxed stance. Not rigid, not aggressive.
+
+ENVIRONMENT
+Keep the same atmospheric environment from the source image.
+Do not replace it with a neutral studio background.
+
+FORBIDDEN
+No face drift. No hairstyle drift. No outfit change.
+No mirrored fake profiles. No crop errors.
+No flat simplified rendering. No neutral blank background.
+No quality downgrade from the source image.
+```
+
+**FIXED PARTS:**
+- "Character Angle Study"
+- "You are given: Reference A = cinematic character ingredient image (full body) / Reference B = upscaled close crop of the character's face"
+- "TASK" Block
+- "REFERENCE PRIORITY" mit Konfliktlösungsreihenfolge
+- "QUALITY ANCHOR"
+- "LAYOUT: 2x2 grid. Even spacing. No text. No labels."
+- "PANEL CONTENT" (4 feste Ansichten)
+- "VIEW RULES"
+- "POSE"
+- "ENVIRONMENT"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+
+**OPERATIONAL LOGIC:**
+- Kein "Sheet" oder "Turnaround" nennen – das triggert flaches Rendering (siehe META)
+
+**META / NOT FOR PROMPT:**
+```
+WICHTIG: Nicht "Sheet" oder "Turnaround" nennen — das triggert flaches Rendering.
+Die Aufgabe ist "vier Filmaufnahmen aus vier Winkeln", nicht "ein technisches Referenzblatt".
+```
+
+---
+
+### ITEM 7: Detail Anchor Strip
+**SOURCE:** Angle Study and Detail Anchor.txt (STEP 6)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Detail Anchor Strip
+
+You are given a character angle study showing the same character from multiple views.
+
+TASK
+Create 3 to 5 close detail crops of the most important recurring identity anchors from the character.
+
+PURPOSE
+This preserves the micro-signatures that tend to drift in later generates.
+Each crop must be detailed enough to serve as a correction reference.
+
+DETAIL SELECTION
+Choose only the most identity-critical recurring details, such as:
+hand shape, collar or neckline, footwear, signature accessory, sleeve hem, hair ornament, belt or clasp, earring, fabric texture, weapon detail.
+Choose what matters most for THIS character. Do not pad with generic details.
+
+QUALITY ANCHOR
+Each crop must preserve full material detail and surface quality from the source.
+Do not simplify textures or flatten materials.
+
+LAYOUT
+3 to 5 panels in a clean horizontal strip. Even spacing. No text. No labels.
+
+STYLE
+Apply Yokuro Style DNA.
+
+FORBIDDEN
+No redesigned details. No invented accessories.
+No flat simplified rendering.
+```
+
+**FIXED PARTS:**
+- "Detail Anchor Strip"
+- "You are given a character angle study showing the same character from multiple views."
+- "TASK" Block
+- "PURPOSE" Block
+- "DETAIL SELECTION" mit Beispielliste
+- "QUALITY ANCHOR"
+- "LAYOUT: 3 to 5 panels in a clean horizontal strip. Even spacing. No text. No labels."
+- "STYLE: Apply Yokuro Style DNA."
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Anzahl Panels (3-5)
+- Welche Details ausgewählt werden
+
+**OPERATIONAL LOGIC:**
+- Wird nach Character Angle Study verwendet
+- Dient als Korrekturreferenz für späteren Generates
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Die Angle Study ist fertig. Jetzt die kritischen Signaturdetails separat sichern als Referenz.
+```
+
+---
+
+### ITEM 8: Character + World Integration
+**SOURCE:** Angle Study and Detail Anchor.txt (STEP 7)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Character + World Integration
+
+You are given:
+Reference A = character ingredient image (full body)
+Reference B = world ingredient image
+Reference C = upscaled close crop of the character's face
+
+TASK
+Place the character into the world as a natural inhabitant of this scene.
+The character must look like they belong here — not like a reference image pasted onto a background.
+
+REFERENCE PRIORITY
+Face identity and fine facial details = Reference C (highest-authority face reference).
+Character body proportions, hairstyle, outfit silhouette, materials = Reference A.
+Environment geometry, terrain, architecture, atmosphere, spatial logic = Reference B.
+Lighting and color grading = Reference B is the master. The character adapts to the world's light, not the other way around.
+
+Conflict priority: 1. character identity, 2. world identity, 3. cinematic quality.
+
+WHAT TO PRESERVE FROM REFERENCE A
+Face, body, hair, outfit design, material logic.
+
+WHAT NOT TO PRESERVE FROM REFERENCE A
+Pose, body orientation, gaze direction, lighting on the character, color temperature on the character.
+These must all adapt to fit the world from Reference B.
+
+POSE RULE
+The character's pose must feel motivated by the environment.
+Standing at a threshold → body oriented toward it, weight shifted.
+Near water → looking down or crouching.
+On steps → mid-stride or pausing with one foot higher.
+In fog → tension in shoulders, head slightly turned.
+Do NOT default to a neutral frontal stance facing the camera.
+The pose must answer: what would this person naturally be doing in this specific place?
+
+LIGHTING RULE
+The world's light is the master light source.
+Match the light direction, color temperature, shadow hardness, and ambient fill from Reference B onto the character.
+If the world has cool moonlight from the left, the character must have cool moonlight from the left.
+If the world has warm lantern glow, the character's skin and fabric must catch that warmth.
+Do not keep the character's original studio-neutral lighting inside a moody world.
+
+INTEGRATION RULES
+Correct scale and perspective. Matching camera height and lens logic.
+Contact shadow on the ground matching the world's shadow behavior.
+Atmospheric wrapping — fog, mist, ambient haze must affect the character the same way it affects the environment.
+The character must not look pasted in.
+
+QUALITY ANCHOR
+Preserve premium quality from both sources.
+Preserve depth layering, atmospheric density, material richness, shadow structure, and silhouette elegance.
+Do not simplify into a flatter generic rendering.
+
+FLEXIBLE LAYER
+Allow subtle variation in fog density, soft shadow edges, reflective behavior, and atmospheric blending for scene cohesion. Do not over-normalize.
+
+FORBIDDEN
+No face reinterpretation. No character redesign. No world identity change.
+No pasted-in composition. No perspective or lighting mismatch.
+No character lighting that ignores the world's light source.
+```
+
+**FIXED PARTS:**
+- "Character + World Integration"
+- "You are given: Reference A, Reference B, Reference C" mit Definitionen
+- "TASK"
+- "REFERENCE PRIORITY" (inkl. Conflict priority)
+- "WHAT TO PRESERVE FROM REFERENCE A"
+- "WHAT NOT TO PRESERVE FROM REFERENCE A"
+- "POSE RULE" mit Beispielen
+- "LIGHTING RULE"
+- "INTEGRATION RULES"
+- "QUALITY ANCHOR"
+- "FLEXIBLE LAYER"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Reference A (Character Ingredient)
+- Reference B (World Ingredient)
+- Reference C (Face Crop)
+
+**OPERATIONAL LOGIC:**
+- Welt-Licht ist Master; Charakter passt sich an
+- Pose muss durch Umgebung motiviert sein
+- Konfliktpriorität: 1. Charakteridentität, 2. Weltidentität, 3. Qualität
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Character Ingredient und World Ingredient sind fertig. Jetzt beide in dieselbe Szene setzen.
+```
+
+---
+
+### ITEM 9: Start–End Frame Generator
+**SOURCE:** YOKURO_02_Film_Tools_v3.txt (TOOL A)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Start–End Frame Generator
+
+You are given a reference image of a scene.
+
+TASK
+Create a keyframe pair: START state and END state of one small natural motion within the same scene.
+
+REFERENCE PRIORITY
+Scene geometry, architecture, materials, lighting, and character identity = preserve from the reference.
+Only the specified motion element may change.
+
+MOTION ELEMENT
+[DESCRIBE WHAT MOVES — e.g. fog drifting, hair shifting, lantern dimming, sleeve moving, water ripple expanding, head lifting slightly]
+
+LAYOUT
+2 panels. Left = START. Right = END. Even spacing. No text.
+
+LOCKED
+Same camera position, angle, framing. Same environment. Same light source and direction. Same character identity and base pose.
+
+VARIABLE
+Only the specified motion element. The change must be subtle, physically plausible, and clearly readable.
+
+CONSISTENCY RULE
+Shown in sequence, a viewer must read these as the same scene with minor natural movement — not two separate images.
+
+FORBIDDEN
+No camera movement. No environment drift. No character drift.
+No lighting change. No added or removed elements.
+```
+
+**FIXED PARTS:**
+- "Start–End Frame Generator"
+- "You are given a reference image of a scene."
+- "TASK"
+- "REFERENCE PRIORITY"
+- "MOTION ELEMENT" (mit Platzhalter)
+- "LAYOUT: 2 panels. Left = START. Right = END. Even spacing. No text."
+- "LOCKED" Liste
+- "VARIABLE: Only the specified motion element."
+- "CONSISTENCY RULE"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- [DESCRIBE WHAT MOVES] – Platzhalter für Bewegungselement
+
+**OPERATIONAL LOGIC:**
+- Für Video-KI, Ambient Motion oder kleine Bewegung
+- Zwei Ankerbilder für konsistente Bewegung
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Du brauchst zwei konsistente Ankerbilder für Video-KI, Ambient Motion oder kleine Bewegung. Kein 4er-Grid nötig.
+```
+
+---
+
+### ITEM 10: 2x2 Multi-Shot Grid (Standalone) – Basis mit 3 Schemata
+**SOURCE:** YOKURO_02_Film_Tools_v3.txt (TOOL B)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+2x2 Multi-Shot Grid
+
+You are given:
+Reference A = character master reference
+Reference B = environment/world reference
+
+TASK
+Create a cinematic 2x2 sequence showing four consecutive moments inside the same world.
+This is a scene, not a variation sheet. Each panel must add new visual information.
+
+REFERENCE PRIORITY
+Character identity, face, proportions, hair, outfit, materials = Reference A.
+Environment, terrain, lighting, atmosphere, spatial logic = Reference B.
+
+LAYOUT
+2x2 grid. Even spacing. No text.
+
+LOCKED
+Same character identity, outfit, and world logic in all panels.
+
+VARIABLE
+Camera angle, distance, composition, character position, action.
+
+Choose ONE schema:
+
+SCHEMA A — STANDARD STORY BEATS
+Panel 1: Establishing shot — where are we?
+Panel 2: Character orientation — who is here?
+Panel 3: Action or tension beat — what is happening or what is wrong?
+Panel 4: Payoff — emotional detail, eerie cue, or meaningful aftermath
+
+SCHEMA B — ATMOSPHERIC INSERT
+Panel 1: Establishing shot
+Panel 2: Atmospheric insert — one specific tactile detail (object on stone, insect, water drop, drifting thread, lantern chain). Must feel grounded and specific, not decorative filler.
+Panel 3: Character beat or tension cue
+Panel 4: Payoff — emotional, eerie, or meaningful close detail
+
+SCHEMA C — REVEAL / HAUNT
+Panel 1: Establishing shot
+Panel 2: Atmospheric clue — a small sign that something is off
+Panel 3: Disturbance or reveal — the scene shifts, something is wrong, the supernatural shows
+Panel 4: Aftermath — a lingering haunting detail
+
+CONTINUITY RULE
+Each panel must motivate the next. No repeated shots, no simple crops or zooms.
+
+FORBIDDEN
+No face or outfit drift. No environment replacement.
+No duplicated shots. No repeated framing.
+```
+
+**FIXED PARTS:**
+- "2x2 Multi-Shot Grid"
+- "You are given: Reference A = character master reference / Reference B = environment/world reference"
+- "TASK"
+- "REFERENCE PRIORITY"
+- "LAYOUT: 2x2 grid. Even spacing. No text."
+- "LOCKED"
+- "VARIABLE"
+- Drei Schemata (A, B, C) mit festen Panel-Funktionen
+- "CONTINUITY RULE"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+- Wahl des Schemas (A, B oder C)
+
+**OPERATIONAL LOGIC:**
+- Vor dem Generieren EIN Schema wählen, nicht mischen
+- 4-Bild Mini-Szene ohne Zone-System
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Du willst eine 4-Bild Mini-Szene ohne das Zone-System.
+Für Zone-basierte Multishots → siehe 03_WorldZone_2x2.
+Wähle EIN Schema vor dem Generate. Nicht mischen.
+```
+
+---
+
+### ITEM 11: Two Character Integration
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (1)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Two Character Integration
+
+You are given two reference images of two different characters.
+Reference A = Character A identity.
+Reference B = Character B identity.
+
+TASK
+Place both characters into the same cinematic scene. Maintain perfect identity separation.
+
+SCENE
+[DESCRIBE SCENE HERE]
+
+ACTION
+[DESCRIBE WHAT THEY ARE DOING]
+
+REFERENCE PRIORITY
+Character A face, body, hair, outfit, materials = Reference A only.
+Character B face, body, hair, outfit, materials = Reference B only.
+Environment and atmosphere = scene description or scene reference.
+
+CRITICAL
+Do not blend identities. Do not average faces. Do not transfer hairstyle or outfit elements between characters.
+
+INTEGRATION
+Both characters share the same lighting, perspective, atmosphere, and world depth.
+Natural relative scale. Natural positioning. Consistent shadow direction.
+The scene must feel like one coherent cinematic shot.
+
+FORBIDDEN
+No face blending. No identity drift. No pasted look.
+No mismatched scale or perspective.
+```
+
+**FIXED PARTS:**
+- "Two Character Integration"
+- "You are given two reference images of two different characters. Reference A = Character A identity. Reference B = Character B identity."
+- "TASK"
+- "SCENE" (Platzhalter)
+- "ACTION" (Platzhalter)
+- "REFERENCE PRIORITY"
+- "CRITICAL"
+- "INTEGRATION"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- [DESCRIBE SCENE HERE]
+- [DESCRIBE WHAT THEY ARE DOING]
+- Reference A, Reference B
+
+**OPERATIONAL LOGIC:**
+- Keine Identitätsvermischung, kein Face Averaging
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Zwei verschiedene Figuren müssen in dieselbe Szene.
+```
+
+---
+
+### ITEM 12: Outfit Swap — Identity Locked
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (2)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Outfit Swap — Identity Locked
+
+You are given a character angle study showing the same character from multiple views.
+
+TASK
+Create an updated version where only the outfit changes. Everything else stays identical.
+
+OUTFIT CHANGE
+[DESCRIBE NEW OUTFIT HERE]
+
+LOCKED
+Same face, body proportions, hairstyle, pose, camera angles, grid layout, background in all panels.
+
+VARIABLE
+Only the clothing. This is a garment transfer, not a redesign.
+
+OUTFIT RULES
+Natural fit on existing body and pose. Realistic folds, seams, materials.
+Consistent across all panels. Preserve body underneath.
+
+FORBIDDEN
+No face, body, hairstyle, pose, camera, layout, or background changes.
+```
+
+**FIXED PARTS:**
+- "Outfit Swap — Identity Locked"
+- "You are given a character angle study showing the same character from multiple views."
+- "TASK"
+- "OUTFIT CHANGE" (Platzhalter)
+- "LOCKED" Liste
+- "VARIABLE: Only the clothing."
+- "OUTFIT RULES"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- [DESCRIBE NEW OUTFIT HERE]
+
+**OPERATIONAL LOGIC:**
+- Input: fertiges Character Angle Study Grid
+- Nur Outfit wechseln, alles andere identisch
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Nur Outfit wechseln, alles andere identisch halten.
+Input: ein fertiges Character Angle Study Grid.
+```
+
+---
+
+### ITEM 13: Yokai Reveal Transition
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (3)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Yokai Reveal Transition
+
+You are given two reference images of the same entity in two states.
+Reference A = human mask state (beautiful, calm, composed).
+Reference B = reveal state (supernatural form partially or fully visible).
+
+TASK
+Create a 2-row, 6-panel transition showing the same entity across both states.
+The viewer must recognize both states as the SAME being.
+
+SHARED ANCHORS
+Same underlying facial bone structure, body frame, and hair base across all panels.
+
+ROW 1 — MASK STATE (3 panels)
+Panel 1: Full human mask. Calm, composed, beautiful.
+Panel 2: Subtle tell. One micro-detail is wrong — eyes too still, symmetry too perfect, smile held too long.
+Panel 3: Mask slipping. One supernatural trait beginning to show through.
+
+ROW 2 — REVEAL STATE (3 panels)
+Panel 4: Partial reveal. Human and supernatural coexist.
+Panel 5: Full reveal. True form dominant, human traces still readable.
+Panel 6: Icon shot. Silhouette-readable reveal against near-black background.
+
+TRANSITION LOGIC
+Continuous transformation, not two different characters.
+Shared anchor points must persist across all panels.
+
+FORBIDDEN
+No identity break between states. No generic evil face.
+No cute monster girl. No jump-scare horror face.
+```
+
+**FIXED PARTS:**
+- "Yokai Reveal Transition"
+- "You are given two reference images of the same entity in two states. Reference A = human mask state / Reference B = reveal state"
+- "TASK"
+- "SHARED ANCHORS"
+- "ROW 1 — MASK STATE" mit 3 festen Panel-Beschreibungen
+- "ROW 2 — REVEAL STATE" mit 3 festen Panel-Beschreibungen
+- "TRANSITION LOGIC"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+
+**OPERATIONAL LOGIC:**
+- 2 Reihen, 6 Panels
+- Kontinuierliche Transformation
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 14: Environment Continuity
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (4)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Environment Continuity
+
+You are given a reference image of a specific environment.
+
+TASK
+Create a 2x3 grid showing the same location from 6 different camera positions.
+Nothing may be added, removed, or relocated.
+
+LOCKED
+Same physical space, architecture, materials, light direction, time of day, atmosphere in all panels.
+
+PANELS
+1. Wide establishing shot — full spatial layout
+2. Low angle looking up at dominant vertical element
+3. Ground-level POV approaching the threshold
+4. Reverse angle — looking back toward Panel 1's camera position
+5. Tight detail shot of the most textured surface
+6. Overhead or elevated angle showing spatial relationships
+
+CAMERA RULES
+True perspective shifts, not cropping. Each panel must confirm the same 3D space.
+No elements appearing or disappearing. Water reflections update per angle.
+
+FORBIDDEN
+No architecture drift. No terrain change. No material swap.
+No lighting direction change.
+```
+
+**FIXED PARTS:**
+- "Environment Continuity"
+- "You are given a reference image of a specific environment."
+- "TASK"
+- "LOCKED"
+- "PANELS" (6 feste Panel-Beschreibungen)
+- "CAMERA RULES"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzbild
+
+**OPERATIONAL LOGIC:**
+- 2x3 Grid
+- Keine hinzugefügten/entfernten Elemente
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 15: Signature Material Isolation
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (5)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Signature Material Isolation
+
+You are given a reference showing a supernatural material or texture.
+
+TASK
+Create a 2x2 material study isolating this material under controlled conditions.
+
+PANELS
+1. Material on flat neutral surface under direct moonlight. Show surface behavior.
+2. Material draped over a simple geometric form (sphere/cylinder). Show volume behavior.
+3. Material in contact with water. Show interaction.
+4. Material in deep shadow with only edge light. Show silhouette and self-luminosity.
+
+LOCKED
+Same material, color range, translucency, and light response in all panels.
+No character presence — material only.
+
+FORBIDDEN
+No material redesign between panels. No color shift.
+```
+
+**FIXED PARTS:**
+- "Signature Material Isolation"
+- "You are given a reference showing a supernatural material or texture."
+- "TASK"
+- "PANELS" (4 feste Panel-Beschreibungen)
+- "LOCKED"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzmaterial/-textur
+
+**OPERATIONAL LOGIC:**
+- Kein Charakter – nur Material
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 16: Scale + Staging Reference
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (6)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Scale + Staging Reference
+
+You are given:
+Reference A = human character.
+Reference B = yokai / supernatural entity.
+
+TASK
+Create a 3-panel horizontal strip showing both entities in the same space with correct relative size.
+
+PANELS
+1. Maximum distance. Both full bodies visible. Scale relationship immediately readable.
+2. Medium distance. Human foreground, yokai behind. Forced perspective reinforcing scale.
+3. Human's POV looking up at yokai. What the human would actually see.
+
+SCALE RULE
+Size ratio must remain physically consistent across all panels.
+Use environmental anchors (trees, torii, steps) to reinforce scale.
+
+FORBIDDEN
+No scale inconsistency. No cute miniaturization.
+No equal-size staging unless lore-accurate.
+```
+
+**FIXED PARTS:**
+- "Scale + Staging Reference"
+- "You are given: Reference A = human character. Reference B = yokai / supernatural entity."
+- "TASK"
+- "PANELS" (3 feste Panel-Beschreibungen)
+- "SCALE RULE"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+
+**OPERATIONAL LOGIC:**
+- 3 Panels horizontal
+- Konsistente Größenverhältnisse
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 17: Expression Target
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (7)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Expression Target
+
+You are given a character reference image.
+
+TASK
+Create a 2x3 grid showing 6 controlled expression variations of the same character.
+
+LOCKED
+Same face, facial proportions, hairstyle, skin tone, visible clothing, camera distance, camera height, lighting in all panels.
+
+VARIABLE
+Only facial expression. Controlled, readable changes — no distortion.
+
+PANELS
+1. Neutral
+2. Restrained subtle smile
+3. Soft laughter
+4. Confused / uncertain
+5. Angry but controlled
+6. Sad / exhausted
+
+LAYOUT
+Head-and-shoulders framing. Neutral background. No text.
+
+FORBIDDEN
+No face drift. No age shift. No beautification drift.
+No exaggerated cartoon distortion.
+```
+
+**FIXED PARTS:**
+- "Expression Target"
+- "You are given a character reference image."
+- "TASK"
+- "LOCKED"
+- "VARIABLE: Only facial expression."
+- "PANELS" (6 feste Expressionen)
+- "LAYOUT: Head-and-shoulders framing. Neutral background. No text."
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzbild
+
+**OPERATIONAL LOGIC:**
+- 2x3 Grid
+- Nur Gesichtsausdruck variiert
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 18: Lighting Test Matrix
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (8)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Lighting Test Matrix
+
+You are given a character reference image.
+
+TASK
+Create a 2x2 grid showing the same character under 4 different lighting conditions.
+Same bust shot, same pose, same expression, same background in all panels.
+
+PANELS
+1. Soft diffuse front lighting
+2. Hard top lighting
+3. Side lighting
+4. Underlighting from below
+
+LOCKED
+Same face, hairstyle, outfit, pose, framing, camera, background in all panels.
+
+VARIABLE
+Only the lighting setup.
+
+FORBIDDEN
+No face, pose, framing, or background drift.
+```
+
+**FIXED PARTS:**
+- "Lighting Test Matrix"
+- "You are given a character reference image."
+- "TASK"
+- "PANELS" (4 feste Lichtbedingungen)
+- "LOCKED"
+- "VARIABLE: Only the lighting setup."
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzbild
+
+**OPERATIONAL LOGIC:**
+- 2x2 Grid
+- Bust shot, gleiche Pose, gleicher Hintergrund
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 19: Progression Array
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (9)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Progression Array
+
+You are given a character reference image.
+
+TASK
+Create a 4-panel horizontal grid showing the same character moving through a gradual state change.
+
+LOCKED
+Same face, body proportions, hairstyle base, core outfit silhouette, camera angle, camera height, framing in all panels.
+
+VARIABLE
+Only the state progression. Gradual, controlled, readable left to right.
+
+PANELS
+1. Base state — calm, intact
+2. Lightly altered
+3. Clearly affected
+4. Fully transformed
+
+FORBIDDEN
+No identity reset between panels. No random redesign.
+No camera or framing drift.
+```
+
+**FIXED PARTS:**
+- "Progression Array"
+- "You are given a character reference image."
+- "TASK"
+- "LOCKED"
+- "VARIABLE: Only the state progression."
+- "PANELS" (4 Stufen)
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzbild
+- Art der Zustandsveränderung (Transformation, Schaden, Korruption, Alterung – siehe META)
+
+**OPERATIONAL LOGIC:**
+- 4 Panels horizontal
+- Graduelle Zustandsentwicklung
+
+**META / NOT FOR PROMPT:**
+```
+Wann: Kontrollierte Zustandsentwicklung (Transformation, Schaden, Korruption, Alterung).
+```
+
+---
+
+### ITEM 20: Cross-Section / Cutaway Worldbuilding
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (10)
+**ITEM TYPE:** PARTIAL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Cross-Section / Cutaway Worldbuilding
+
+TASK
+Create a single cross-section composition revealing multiple connected layers of one location.
+
+SUBJECT
+[DESCRIBE THE LOCATION HERE]
+
+STRUCTURE
+Cutaway view revealing connected layers. Each layer physically connected.
+The world must read as one coherent environment with believable spatial logic.
+Clean readable edges and clear spatial relationships.
+
+FORBIDDEN
+No disconnected layers. No random perspective shifts.
+No repeated copied rooms. No chaotic overlap.
+```
+
+**FIXED PARTS:**
+- "Cross-Section / Cutaway Worldbuilding"
+- "TASK"
+- "SUBJECT" (Platzhalter)
+- "STRUCTURE"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- [DESCRIBE THE LOCATION HERE]
+
+**OPERATIONAL LOGIC:**
+- Einzelne Querschnitts-Komposition
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 21: Knolling / Inventory Layout
+**SOURCE:** YOKURO_04_Werkbank_Reserve_v3.txt (11)
+**ITEM TYPE:** PARTIAL_PROMPT
+**STATUS:** EXPERIMENTAL
+
+**RAW EXTRACTED CONTENT:**
+```
+Knolling / Inventory Layout
+
+You are given a character, outfit, or prop set reference.
+
+TASK
+Create a clean inventory layout breaking the outfit or prop set into readable individual components.
+
+SUBJECT
+[DESCRIBE THE OUTFIT OR PROP SET HERE]
+
+LAYOUT
+Knolling / flat lay from above. All items clearly separated, fully visible.
+Balanced spacing. Clean alignment. Neutral background. No text.
+
+RULES
+Each item shown as individual component. Orderly and readable.
+No merged pieces. No invented extra props. Design consistency across all items.
+
+FORBIDDEN
+No perspective scene view. No character wearing items (unless requested).
+No cluttered composition.
+```
+
+**FIXED PARTS:**
+- "Knolling / Inventory Layout"
+- "You are given a character, outfit, or prop set reference."
+- "TASK"
+- "SUBJECT" (Platzhalter)
+- "LAYOUT: Knolling / flat lay from above. All items clearly separated, fully visible. Balanced spacing. Clean alignment. Neutral background. No text."
+- "RULES"
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- [DESCRIBE THE OUTFIT OR PROP SET HERE]
+
+**OPERATIONAL LOGIC:**
+- Knolling / Flat Lay von oben
+
+**META / NOT FOR PROMPT:** keine
+
+---
+
+### ITEM 22: World Zone Builder (4-Panel)
+**SOURCE:** YOKURO_WorldZone_2x2_V4.txt (PROMPT 1)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+World Zone Builder
+
+You are given a reference image or a location description.
+
+TASK
+Create a 4-panel world zone board of one connected location.
+Treat this place like a real film set — a viewer must understand how someone could physically move from one zone to the next.
+
+REFERENCE PRIORITY
+Preserve from reference: world identity, material family, lighting family, atmosphere, terrain logic, architectural logic.
+
+ZONE DESIGN
+Each panel = one distinct zone of the same location.
+Typical zone roles (adapt to fit the location):
+entrance, transition path, main locus, hidden depth, observation point, threshold, side passage, ritual space.
+Assign roles that fit YOUR location naturally.
+Do not force a shrine structure onto a forest or a river.
+
+LAYOUT
+4 panels. Clean aligned grid. No text. Even spacing.
+
+COHERENCE
+All zones share: same materials, same atmosphere, same light logic, same architecture/geology.
+Each zone must feel like the next most believable part of the same place — not an unrelated pretty image.
+
+STYLE
+Apply Yokuro Style DNA.
+
+FORBIDDEN
+No disconnected zones.
+No architecture or geology drift between panels.
+No fantasy clutter without spatial logic.
+```
+
+**FIXED PARTS:**
+- "World Zone Builder"
+- "You are given a reference image or a location description."
+- "TASK"
+- "REFERENCE PRIORITY"
+- "ZONE DESIGN" mit Rollenvorschlägen
+- "LAYOUT: 4 panels. Clean aligned grid. No text. Even spacing."
+- "COHERENCE"
+- "STYLE: Apply Yokuro Style DNA."
+- "FORBIDDEN"
+
+**VARIABLE PARTS:**
+- Referenzbild oder Ortsbeschreibung
+- Zone-Rollen (anpassbar)
+
+**OPERATIONAL LOGIC:**
+- 4 Panels (statt 3x3)
+
+**META / NOT FOR PROMPT:**
+```
+Was dieses System macht: Baut einen Ort als räumlich zusammenhängenden Film-Schauplatz (Zone Builder), dann dreht darin eine kleine Filmszene (2x2 Multishot).
+Zwei Modi: Single-Zone / Cross-Zone
+Reihenfolge: 1. Style DNA einmal pasten (aus YOKURO_Style_DNA.txt) 2. World Zone Builder laufen lassen 3. Ergebnis prüfen 4. Dann Version A oder B pasten, Zone-Grid als Reference B mitgeben
+```
+
+---
+
+### ITEM 23: Single-Zone 2x2 Multishot
+**SOURCE:** YOKURO_WorldZone_2x2_V4.txt (PROMPT 2A)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+2x2 Multi-Shot Grid — Single-Zone Version
+
+You are given:
+Reference A = character reference
+Reference B = world zone board (4 zones)
+
+TASK
+Pick one zone from Reference B.
+Create a 2x2 sequence of four consecutive film beats inside that one zone.
+This is a scene, not a variation sheet.
+
+REFERENCE PRIORITY
+Character identity, face, proportions, hair, outfit, materials = Reference A.
+Spatial identity, materials, light, atmosphere of the chosen zone = Reference B.
+
+PANEL FUNCTIONS
+Panel 1: Establish the zone — where are we?
+Panel 2: Atmospheric insert — one specific tactile detail (object, texture, small motion)
+Panel 3: Character beat or tension shift
+Panel 4: Payoff — emotional, eerie, or meaningful consequence
+
+CONTINUITY RULE
+Each panel must motivate the next. What appears in an earlier panel must affect, deepen, or pay off in a later one.
+
+LAYOUT
+2x2 grid. No text. Even spacing.
+
+LOCKED
+Same character identity, same outfit, same zone, same atmosphere across all panels.
+
+VARIABLE
+Camera angle, distance, composition, character position, action.
+
+FORBIDDEN
+No face or outfit drift.
+No zone changes within the sequence.
+No duplicated or near-identical shots.
+No pasted-in character feeling.
+
+STYLE
+Apply Yokuro Style DNA.
+```
+
+**FIXED PARTS:**
+- "2x2 Multi-Shot Grid — Single-Zone Version"
+- "You are given: Reference A = character reference / Reference B = world zone board (4 zones)"
+- "TASK"
+- "REFERENCE PRIORITY"
+- "PANEL FUNCTIONS" (4 feste Funktionen)
+- "CONTINUITY RULE"
+- "LAYOUT: 2x2 grid. No text. Even spacing."
+- "LOCKED"
+- "VARIABLE"
+- "FORBIDDEN"
+- "STYLE: Apply Yokuro Style DNA."
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+- Gewählte Zone aus Reference B
+
+**OPERATIONAL LOGIK:**
+- Für Spannung, Inserts, Horror-Beats (siehe META)
+
+**META / NOT FOR PROMPT:**
+```
+Wann nutzen: Eine Zone reicht für eine ganze kleine Szene. Insert + Tension + Payoff. Subtile Horror-Beats. Beobachtung.
+```
+
+---
+
+### ITEM 24: Cross-Zone 2x2 Multishot
+**SOURCE:** YOKURO_WorldZone_2x2_V4.txt (PROMPT 2B)
+**ITEM TYPE:** FULL_PROMPT
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+2x2 Multi-Shot Grid — Cross-Zone Version
+
+You are given:
+Reference A = character reference
+Reference B = world zone board (4 zones)
+
+TASK
+Create a 2x2 sequence of four consecutive film beats moving through the zones from Reference B.
+Use the zone board as a spatial path. This is a location journey, not four unrelated images.
+
+REFERENCE PRIORITY
+Character identity, face, proportions, hair, outfit, materials = Reference A.
+World identity, zone relationships, materials, light, atmosphere = Reference B.
+
+PANEL FUNCTIONS
+Panel 1: First contact — arrival or entrance zone
+Panel 2: Transition — threshold or passage beat
+Panel 3: Main beat — key character moment or confrontation at the core zone
+Panel 4: Depth — hidden layer, aftermath, reveal, or lingering consequence
+
+CONTINUITY RULE
+Each panel must motivate the next. A viewer must believe the character physically moved from Panel 1's space to Panel 4's space through connected terrain.
+
+LAYOUT
+2x2 grid. No text. Even spacing.
+
+LOCKED
+Same character identity, same outfit, same world logic across all panels.
+
+VARIABLE
+Zone, camera angle, distance, composition, character position, action.
+
+FORBIDDEN
+No face or outfit drift.
+No disconnected location jumps.
+No duplicated or near-identical shots.
+No pasted-in character feeling.
+
+STYLE
+Apply Yokuro Style DNA.
+```
+
+**FIXED PARTS:**
+- "2x2 Multi-Shot Grid — Cross-Zone Version"
+- "You are given: Reference A = character reference / Reference B = world zone board (4 zones)"
+- "TASK"
+- "REFERENCE PRIORITY"
+- "PANEL FUNCTIONS" (4 feste Funktionen)
+- "CONTINUITY RULE"
+- "LAYOUT: 2x2 grid. No text. Even spacing."
+- "LOCKED"
+- "VARIABLE"
+- "FORBIDDEN"
+- "STYLE: Apply Yokuro Style DNA."
+
+**VARIABLE PARTS:**
+- Reference A, Reference B
+- Zone-Progression
+
+**OPERATIONAL LOGIC:**
+- Für Mini-Handlung, Ortsdurchlauf, Lore-Gefühl, räumlichen Fortschritt
+
+**META / NOT FOR PROMPT:**
+```
+Wann nutzen: Ort als zusammenhängenden Raum fühlen lassen. Mini-Handlung, Ortsdurchlauf, Lore-Gefühl, räumlicher Fortschritt.
+```
+
+---
+
+### ITEM 25: Zone-Rollen-Referenz (operativer Leitfaden)
+**SOURCE:** YOKURO_WorldZone_2x2_V4.txt (ANHANG)
+**ITEM TYPE:** LOGIC_FRAGMENT / DESCRIPTION_ONLY
+**STATUS:** STABLE
+
+**RAW EXTRACTED CONTENT:**
+```
+Nicht ins Modell pasten. Nur für deine eigene Planung.
+
+Wenn du dem Modell explizit sagen willst, welche Zone welche Rolle hat,
+schreib es als kurzen Zusatz unter den Prompt:
+
+Beispiel Schrein:
+  Zone A = Torii-Eingang
+  Zone B = Steintreppe im Nebel
+  Zone C = Veranda / Haupthalle
+  Zone D = Hinterhof / verborgener Garten
+
+Beispiel Fluss:
+  Zone A = Waldpfad zum Ufer
+  Zone B = Flussbett / Steine
+  Zone C = Stille Biegung mit Spiegelung
+  Zone D = Unterholz hinter dem Wasser
+
+Beispiel Brücke:
+  Zone A = Zugang / Wegbiegung
+  Zone B = Brückenmitte
+  Zone C = Gegenüber / Schwelle
+  Zone D = Unterseite / Wasserebene
+```
+
+**FIXED PARTS:** keine
+
+**VARIABLE PARTS:**
+- Zonenrollen-Zuordnungen (Beispiele)
+
+**OPERATIONAL LOGIC:**
+- Zusatz unter dem Prompt: "Zone A = ... Zone B = ..." usw.
+- Nicht in den Prompt pasten, sondern zur eigenen Planung
+
+**META / NOT FOR PROMPT:**
+```
+Nicht ins Modell pasten. Nur für deine eigene Planung.
+```
+
+---
+
+
+
+
+
+---
+

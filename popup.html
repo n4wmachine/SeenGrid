@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CinePrompt</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ── HEADER ─────────────────────────────────── -->
+    <header class="header">
+      <div class="header-logo">
+        <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#1a1a2e"/>
+          <rect x="4" y="10" width="24" height="14" rx="2" fill="#f5a623"/>
+          <rect x="4" y="10" width="4" height="3" rx="1" fill="#0c0c18"/>
+          <rect x="4" y="15" width="4" height="3" rx="1" fill="#0c0c18"/>
+          <rect x="4" y="20" width="4" height="4" rx="1" fill="#0c0c18"/>
+          <rect x="24" y="10" width="4" height="3" rx="1" fill="#0c0c18"/>
+          <rect x="24" y="15" width="4" height="3" rx="1" fill="#0c0c18"/>
+          <rect x="24" y="20" width="4" height="4" rx="1" fill="#0c0c18"/>
+          <circle cx="16" cy="17" r="5" fill="#0c0c18"/>
+          <circle cx="16" cy="17" r="3" fill="#f5a623" opacity="0.6"/>
+          <circle cx="16" cy="17" r="1.5" fill="#f5a623"/>
+          <rect x="13" y="7" width="6" height="4" rx="1" fill="#f5a623"/>
+        </svg>
+        <div>
+          <h1 class="header-title">CinePrompt</h1>
+          <p class="header-sub">NanoBanana Pro · Prompt Builder</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="reset-btn" id="gridBtn" title="CineGrid öffnen">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V7zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2z"/></svg>
+        </button>
+        <button class="reset-btn" id="randomBtn" title="Zufällige Inspiration">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/><path d="M5.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4-4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
+        </button>
+        <button class="reset-btn" id="resetBtn" title="Alles zurücksetzen">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── SCENE INPUT ─────────────────────────────── -->
+    <section class="section scene-section">
+      <label class="section-label" for="sceneInput">Szene / Motiv</label>
+      <textarea
+        class="scene-input"
+        id="sceneInput"
+        placeholder="Beschreibe deine Szene… z.B. 'A detective walks through rain-soaked streets at night'"
+        rows="3"
+        spellcheck="false"
+      ></textarea>
+    </section>
+
+    <!-- ── FILM STYLE ──────────────────────────────── -->
+    <section class="section accordion" id="section-style">
+      <button class="section-header" aria-expanded="true" data-target="body-style">
+        <span class="section-title">
+          <span class="section-dot" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa88"></span>
+          Film Style
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body" id="body-style">
+        <div class="chips" data-group="style" data-mode="single"></div>
+      </div>
+    </section>
+
+    <!-- ── KAMERA & OPTIK ──────────────────────────── -->
+    <section class="section accordion" id="section-camera">
+      <button class="section-header" aria-expanded="true" data-target="body-camera">
+        <span class="section-title">
+          <span class="section-dot" style="background:#60a5fa;box-shadow:0 0 6px #60a5fa88"></span>
+          Kamera &amp; Optik
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body" id="body-camera">
+        <div class="sub-group">
+          <p class="sub-label">Kamerasystem</p>
+          <div class="chips" data-group="camera" data-mode="single"></div>
+        </div>
+        <div class="sub-group">
+          <p class="sub-label">Objektiv / Linsentyp</p>
+          <div class="chips" data-group="lens" data-mode="single"></div>
+        </div>
+        <div class="sub-group">
+          <p class="sub-label">Brennweite</p>
+          <div class="chips" data-group="focal" data-mode="single"></div>
+        </div>
+        <div class="sub-group">
+          <p class="sub-label">Blende / Tiefenschärfe</p>
+          <div class="chips" data-group="aperture" data-mode="single"></div>
+        </div>
+        <div class="sub-group">
+          <p class="sub-label">Bildformat / Aspect Ratio</p>
+          <div class="chips" data-group="aspectratio" data-mode="single"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EINSTELLUNG & WINKEL ──────────────────────── -->
+    <section class="section accordion" id="section-shot">
+      <button class="section-header" aria-expanded="true" data-target="body-shot">
+        <span class="section-title">
+          <span class="section-dot" style="background:#67e8f9;box-shadow:0 0 6px #67e8f988"></span>
+          Einstellung &amp; Winkel
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body" id="body-shot">
+        <div class="sub-group">
+          <p class="sub-label">Einstellungsgröße (Shot Size)</p>
+          <div class="chips" data-group="shotsize" data-mode="single"></div>
+        </div>
+        <div class="sub-group">
+          <p class="sub-label">Kamerawinkel</p>
+          <div class="chips" data-group="cameraangle" data-mode="single"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── LICHT ───────────────────────────────────── -->
+    <section class="section accordion" id="section-lighting">
+      <button class="section-header" aria-expanded="true" data-target="body-lighting">
+        <span class="section-title">
+          <span class="section-dot" style="background:#fbbf24;box-shadow:0 0 6px #fbbf2488"></span>
+          Licht &amp; Atmosphäre
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body" id="body-lighting">
+        <div class="chips" data-group="lighting" data-mode="multi"></div>
+      </div>
+    </section>
+
+    <!-- ── COLOR GRADE ─────────────────────────────── -->
+    <section class="section accordion" id="section-color">
+      <button class="section-header" aria-expanded="true" data-target="body-color">
+        <span class="section-title">
+          <span class="section-dot" style="background:#f472b6;box-shadow:0 0 6px #f472b688"></span>
+          Color Grade
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body" id="body-color">
+        <div class="chips" data-group="colorgrade" data-mode="single"></div>
+      </div>
+    </section>
+
+    <!-- ── KAMERA BEWEGUNG ─────────────────────────── -->
+    <section class="section accordion" id="section-movement">
+      <button class="section-header" aria-expanded="false" data-target="body-movement">
+        <span class="section-title">
+          <span class="section-dot" style="background:#34d399;box-shadow:0 0 6px #34d39988"></span>
+          Kamera Bewegung
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body collapsed" id="body-movement">
+        <div class="chips" data-group="movement" data-mode="single"></div>
+      </div>
+    </section>
+
+    <!-- ── FILM EFFEKTE ────────────────────────────── -->
+    <section class="section accordion" id="section-effects">
+      <button class="section-header" aria-expanded="false" data-target="body-effects">
+        <span class="section-title">
+          <span class="section-dot" style="background:#f87171;box-shadow:0 0 6px #f8717188"></span>
+          Film Effekte
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body collapsed" id="body-effects">
+        <div class="chips" data-group="effects" data-mode="multi"></div>
+      </div>
+    </section>
+
+    <!-- ── NEGATIVER PROMPT ────────────────────────── -->
+    <section class="section accordion" id="section-negative">
+      <button class="section-header" aria-expanded="false" data-target="body-negative">
+        <span class="section-title">
+          <span class="section-dot" style="background:#6b7280;box-shadow:0 0 6px #6b728088"></span>
+          Negativ Prompt
+        </span>
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+      </button>
+      <div class="section-body collapsed" id="body-negative">
+        <div class="chips" data-group="negative" data-mode="multi"></div>
+        <textarea
+          class="scene-input negative-input"
+          id="negativeInput"
+          placeholder="Eigene Negativ-Begriffe hinzufügen…"
+          rows="2"
+          spellcheck="false"
+          style="margin-top:8px"
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- ── PROMPT OUTPUT ───────────────────────────── -->
+    <section class="section prompt-section">
+      <div class="prompt-header">
+        <label class="section-label">Generierter Prompt</label>
+        <div class="prompt-meta">
+          <span class="prompt-count" id="promptCount">0 Zeichen</span>
+          <button class="quality-toggle" id="qualityToggle" title="Quality-Suffix an/aus">
+            <span class="quality-dot active" id="qualityDot"></span>
+            <span id="qualityLabel">8K Suffix</span>
+          </button>
+        </div>
+      </div>
+      <div class="prompt-box" id="promptBox">
+        <p class="prompt-placeholder">Wähle Optionen oben um deinen Prompt zu bauen…</p>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="copyBtn" disabled>
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+          Kopieren
+        </button>
+        <button class="btn btn-secondary" id="insertBtn" disabled>
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M4.5 3a.5.5 0 0 0 0 1h5.793l-1.147 1.146a.5.5 0 0 0 .708.708l2-2a.5.5 0 0 0 0-.708l-2-2a.5.5 0 1 0-.708.708L10.293 3H4.5z"/><path d="M2 7.5a.5.5 0 0 1 .5-.5H5a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-8a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5z"/></svg>
+          In Seite
+        </button>
+      </div>
+    </section>
+
+  </div><!-- /.app -->
+  <script src="popup.js"></script>
+</body>
+</html>
