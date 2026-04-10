@@ -1,0 +1,10 @@
+[
+  { "v": "ARRI Alexa 35",     "t": "Industrie-Standard — organisch, filmisches Highlight-Rolloff" },
+  { "v": "RED V-RAPTOR 8K",   "t": "Hochauflösend, präzise — scharf, sauber, digital" },
+  { "v": "Sony Venice 2",     "t": "Dual ISO, filmisch — exzellente Hauttöne, tiefer Farbraum" },
+  { "v": "Blackmagic URSA",   "t": "RAW, cost-efficient — populär in Indies" },
+  { "v": "Canon Cinema EOS",  "t": "Warm, vielseitig — Canon color science, skintone-freundlich" },
+  { "v": "35mm Filmkamera",   "t": "Klassischer Film-Look — Korn, Textur, organisches Licht" },
+  { "v": "16mm Filmkamera",   "t": "Indie-Look — stark körnig, dokumentarisch, roh" },
+  { "v": "Super 8",           "t": "Lo-Fi, nostalgisch, retro — flickering warmth, soft edges" }
+]

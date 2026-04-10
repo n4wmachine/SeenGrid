@@ -1,0 +1,11 @@
+[
+  { "v": "14mm",   "t": "Ultra-Weitwinkel — dramatische Verzerrung, Überwältigung, Einsamkeit" },
+  { "v": "24mm",   "t": "Weitwinkel — Umgebung betonen, großes Kino der 90er" },
+  { "v": "28mm",   "t": "Leicht weitwinklig — Reporter-Style, beobachtend, nah dran" },
+  { "v": "35mm",   "t": "Normales Weitwinkel — klassisch dokumentarisch, natürlich" },
+  { "v": "50mm",   "t": "Normal — nah am menschlichen Auge, Objektivität" },
+  { "v": "85mm",   "t": "Porträt — schmeichelhaft, Isolation, Intimität, Sehnsucht" },
+  { "v": "105mm",  "t": "Kurzes Tele — flache Tiefenschärfe, sanfte Kompression" },
+  { "v": "135mm",  "t": "Tele — sehr flache DOF, extreme Trennung Subjekt/Hintergrund" },
+  { "v": "200mm",  "t": "Langes Tele — maximale Kompression, voyeuristische Distanz" }
+]

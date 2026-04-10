@@ -1,0 +1,14 @@
+[
+  { "v": "Heavy Film Grain",        "t": "Starkes Filmkorn — 16mm Look, grob, dokumentarisch" },
+  { "v": "Light Film Grain",        "t": "Subtiles Korn — 35mm Look, organisch, nicht digital" },
+  { "v": "Anamorphic Lens Flares",  "t": "Horizontale Lens Flares — Sci-Fi, polished cinema" },
+  { "v": "Subtle Lens Flare",       "t": "Leichte Gegenlicht-Blendfackeln — natürlich, nicht aufgesetzt" },
+  { "v": "Creamy Bokeh",            "t": "Weiches, cremiges Unschärfebild — portrait, dreamy" },
+  { "v": "Strong Vignette",         "t": "Starke Randabdunkelung — focus center, noir feeling" },
+  { "v": "Soft Vignette",           "t": "Sanfte Randabdunkelung — barely noticeable, subtle depth" },
+  { "v": "Chromatic Aberration",    "t": "Farbsäume an Kontrastkanten — vintage lens character" },
+  { "v": "Halation",                "t": "Filmisches Leuchten um helle Stellen — Kodak warmth" },
+  { "v": "Soft Glow",               "t": "Sanfter Schimmer auf Lichtern — ethereal, romantic" },
+  { "v": "Sharp / Clinical",        "t": "Ultra-scharf, keine Weichheit — digital precision" },
+  { "v": "Motion Blur",             "t": "Bewegungsunschärfe bei Dynamik — energy, speed" }
+]

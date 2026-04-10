@@ -1,0 +1,16 @@
+[
+  { "v": "blurry",           "t": "Verhindert unscharfe / verwackelte Bilder" },
+  { "v": "overexposed",      "t": "Verhindert ausgebrannte Lichter" },
+  { "v": "underexposed",     "t": "Verhindert zu dunkle, unlesbare Bilder" },
+  { "v": "low quality",      "t": "Verhindert generell niedrige Bildqualität" },
+  { "v": "watermark",        "t": "Verhindert Wasserzeichen im Bild" },
+  { "v": "distorted",        "t": "Verhindert verzerrte oder deformierte Elemente" },
+  { "v": "cartoon",          "t": "Verhindert Cartoon- oder Animations-Stil" },
+  { "v": "anime",            "t": "Verhindert Anime-Ästhetik" },
+  { "v": "text",             "t": "Verhindert Text oder Untertitel im Bild" },
+  { "v": "duplicate",        "t": "Verhindert doppelte Elemente oder Cloning" },
+  { "v": "noise",            "t": "Verhindert digitales (nicht filmisches) Rauschen" },
+  { "v": "ugly",             "t": "Allgemeiner Qualitäts-Schutz" },
+  { "v": "flat lighting",    "t": "Verhindert gleichmäßig flaches, reizloses Licht" },
+  { "v": "plastic skin",     "t": "Verhindert unnatürlich glattes Porzellan-Skin" }
+]

@@ -1,0 +1,14 @@
+[
+  { "v": "Extreme Close-Up (ECU)", "t": "Extrem nah — einzelnes Detail: Auge, Lippe, Hand, Textur" },
+  { "v": "Close-Up (CU)",          "t": "Gesicht oder Detail füllt das Bild — Intimität, Emotion" },
+  { "v": "Medium Close-Up (MCU)",  "t": "Kopf bis Schultern — Interview-Style, Charakter-Fokus" },
+  { "v": "Medium Shot (MS)",        "t": "Taille aufwärts — Dialog, Action, Kontext" },
+  { "v": "Medium Long Shot (MLS)",  "t": "Knie aufwärts — Ganzkörper mit Kontext" },
+  { "v": "Full Shot (FS)",          "t": "Gesamte Person im Bild — Kostüm, Haltung, Umgebung" },
+  { "v": "Long Shot (LS)",          "t": "Person klein, Umgebung dominant — Einsamkeit, Kontext" },
+  { "v": "Extreme Long Shot (ELS)", "t": "Epische Weite — winzige Figur, overwhelming landscape" },
+  { "v": "Two-Shot",                "t": "Zwei Personen gleichzeitig im Bild — Beziehung, Spannung" },
+  { "v": "Over-the-Shoulder",       "t": "Über die Schulter gefilmt — Dialog, Perspektive" },
+  { "v": "POV Shot",                "t": "Aus der subjektiven Sicht der Figur — Immersion" },
+  { "v": "Insert Shot",             "t": "Detailaufnahme eines Objekts — narrative Bedeutung" }
+]

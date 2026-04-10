@@ -1,0 +1,9 @@
+[
+  { "v": "Eye Level",    "t": "Auf Augenhöhe — neutral, natürlich, kein Kommentar" },
+  { "v": "High Angle",   "t": "Von oben — Figur wirkt klein, schwach, verletzlich" },
+  { "v": "Low Angle",    "t": "Von unten — Figur wirkt mächtig, bedrohlich, heroisch" },
+  { "v": "Bird's Eye",   "t": "Vogelperspektive — direkt senkrecht von oben, God-view" },
+  { "v": "Worm's Eye",   "t": "Wurmperspektive — extrem nah am Boden, maximale Größe" },
+  { "v": "Dutch Angle",  "t": "Schräggestellte Kamera — Unbehagen, Instabilität, Wahnsinn" },
+  { "v": "Aerial",       "t": "Aus der Luft — Drohne / Helikopter, Landschaft, Kontext" }
+]

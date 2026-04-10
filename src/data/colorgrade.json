@@ -1,0 +1,13 @@
+[
+  { "v": "Orange & Teal",       "t": "Klassischer Blockbuster-Look — skin tones warm, shadows cool" },
+  { "v": "Warm Film",           "t": "Warme, goldene Töne — Kodak 500T feeling, rich shadows" },
+  { "v": "Cool / Desaturated",  "t": "Kühles, entsättigtes Bild — clinical, distant, cold" },
+  { "v": "Bleach Bypass",       "t": "Kontraststark, entsättigt, hart — silver retention look" },
+  { "v": "Kodak Vision 3",      "t": "Klassischer Filmstock-Look — warm, organic, rich grain" },
+  { "v": "Fuji Eterna",         "t": "Sanft, kühl, japanisch — gedämpfte Primaries, soft highlights" },
+  { "v": "High Contrast",       "t": "Starker Kontrast, intensiv — crushed blacks, bright highlights" },
+  { "v": "Monochrome B&W",      "t": "Klassisches Schwarzweiß — luminance only, stark" },
+  { "v": "Sepia Vintage",       "t": "Altes Sepia, nostalgisch — faded edges, amber cast" },
+  { "v": "Neon Vibrant",        "t": "Satte, leuchtende Farben — primaries pushed, neon world" },
+  { "v": "Faded / Washed",      "t": "Ausgeblichener Indie-Look — lifted blacks, low contrast" }
+]

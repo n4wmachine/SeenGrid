@@ -1,0 +1,9 @@
+[
+  { "v": "2.39:1", "t": "Anamorphic Cinemascope — klassisches Kinoformat, weit und episch" },
+  { "v": "2.35:1", "t": "Scope-Format — großes Kino der 60er–90er, Leone, Kubrick" },
+  { "v": "1.85:1", "t": "Flat Widescreen — modernes Kinoformat, Nolan, Fincher" },
+  { "v": "16:9",   "t": "Standard Widescreen — Streaming & TV, digital native" },
+  { "v": "4:3",    "t": "Klassisch retro — Vintage Film & TV, Enge, Portrait" },
+  { "v": "1:1",    "t": "Quadratisch — Social Media / Art House / Instagram" },
+  { "v": "9:16",   "t": "Vertikal — Reels, Shorts, TikTok, Mobile-First" }
+]

@@ -1,0 +1,16 @@
+[
+  { "v": "Golden Hour",        "t": "Warmes, goldenes Stundenlicht kurz vor Sonnenuntergang" },
+  { "v": "Magic Hour",         "t": "Kurzes Fenster nach Sonnenuntergang — diffus, traumhaft" },
+  { "v": "Blue Hour",          "t": "Tiefblaues Dämmerungslicht — kalt, ruhig, melancholisch" },
+  { "v": "Harsh Midday",       "t": "Hartes Sonnenlicht — starke Schatten, Exposition" },
+  { "v": "Overcast Soft",      "t": "Bewölkt, gleichmäßig diffus — kein Drama, alles sichtbar" },
+  { "v": "Studio 3-Point",     "t": "Klassisches Studiolicht — Key / Fill / Rim" },
+  { "v": "Neon Lights",        "t": "Bunte Neon-Lichter — urban, feucht, gefährlich" },
+  { "v": "Practical Only",     "t": "Nur vorhandene Lichtquellen — realistisch, unpoliert" },
+  { "v": "Backlit / Rim",      "t": "Gegenlicht — Rim-Light auf Silhouette, kein Fill" },
+  { "v": "High Key",           "t": "Hell, wenig Schatten — optimistisch, sauber, exposé" },
+  { "v": "Low Key",            "t": "Dunkel, dramatische Schatten — Pool of light, noir" },
+  { "v": "Chiaroscuro",        "t": "Extremer Hell-Dunkel-Kontrast — Caravaggio in Film" },
+  { "v": "Candlelight",        "t": "Kerzenlicht — sehr warm, flackernd, intimate" },
+  { "v": "Tungsten Warm",      "t": "Warmes Glühlampenlicht — 3200K, amber shadows" }
+]

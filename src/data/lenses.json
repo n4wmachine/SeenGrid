@@ -1,0 +1,10 @@
+[
+  { "v": "Anamorphic",          "t": "Ovale Bokeh, horizontale Lens Flares, 2.39:1 Charakter" },
+  { "v": "Spherical Prime",     "t": "Scharf, clean, neutral — kein optischer Charakter" },
+  { "v": "Vintage Character",   "t": "Weich, glühen, retro — swirly bokeh, breathing at edges" },
+  { "v": "Cinema Zoom",         "t": "Flexibel, leichter Schärfeverlust — Kompromiss für Operator" },
+  { "v": "Macro",               "t": "Extreme Nahaufnahmen, flache DOF — Insekten-Nahaufnahmen" },
+  { "v": "Tilt-Shift",          "t": "Selektive Unschärfe — Miniatur-Effekt oder Perspektiv-Kontrolle" },
+  { "v": "Cooke S7/i",          "t": "Cremig, warm, klassisch britisch — The Cooke Look" },
+  { "v": "Leica Summilux",      "t": "Präzise, leuchtkräftig — Stills-Character in Film" }
+]
