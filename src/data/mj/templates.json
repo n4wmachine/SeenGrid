@@ -1,0 +1,103 @@
+[
+  {
+    "id": "establishing-wide",
+    "label": "Establishing Wide",
+    "desc": "Weitwinkel-Einführung eines Ortes. Raum, Stimmung, Kontext.",
+    "source": "DeepSeek1.txt Item 7",
+    "template": "Film still from a [MODIFIER] [GENRE] film. [LOCATION] seen from [PERSPECTIVE] at [TIME_OF_DAY]. [2-3 DETAILS]. [LIGHT_SOURCE]. [WHAT_IS_DARK]. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "fields": [
+      { "id": "MODIFIER",       "label": "Modifier",       "placeholder": "low-budget / independent / 1970s / European / Scandinavian",  "examples": ["low-budget", "independent", "1970s", "European", "Scandinavian", "Japanese"] },
+      { "id": "GENRE",          "label": "Genre",          "placeholder": "thriller / drama / horror / noir",                            "examples": ["thriller", "drama", "horror", "noir", "sci-fi", "western"] },
+      { "id": "LOCATION",       "label": "Location",       "placeholder": "A crumbling apartment block / An empty highway",             "examples": [] },
+      { "id": "PERSPECTIVE",    "label": "Perspective",    "placeholder": "street level / above / the end of the alley",               "examples": ["street level", "above", "the end of the corridor"] },
+      { "id": "TIME_OF_DAY",    "label": "Time of Day",    "placeholder": "night / late afternoon / dusk",                             "examples": ["night", "late afternoon", "dusk", "early morning", "midday"] },
+      { "id": "DETAILS",        "label": "2-3 Details",    "placeholder": "broken windows, pooling water, a single lit room",         "examples": [] },
+      { "id": "LIGHT_SOURCE",   "label": "Light Source",   "placeholder": "Single sodium streetlight casting orange on wet pavement",   "examples": [] },
+      { "id": "WHAT_IS_DARK",   "label": "What is Dark",   "placeholder": "Everything beyond 10 metres lost in fog",                   "examples": [] },
+      { "id": "EMOTIONAL_HOOK", "label": "Emotional Hook", "placeholder": "Nobody is coming back.",                                    "examples": ["Nobody is coming back.", "Wrong kind of quiet.", "Empty. Waiting.", "Too quiet for a place that looks lived-in."] }
+    ]
+  },
+  {
+    "id": "tight-space",
+    "label": "Enger Raum / Korridor",
+    "desc": "Gasse, Korridor, enger Innenraum. Textur, Lichtlinie, kein Fill.",
+    "source": "DeepSeek1.txt Item 8",
+    "template": "Film still from a [MODIFIER] [GENRE] film shot on location. [SPACE]. [LIGHT_SOURCE] casting [WHAT_WHERE]. [WHAT_IS_DARK]. [SURFACE_TEXTURE]. [EMOTIONAL_HOOK]. [FILMSTOCK], no fill light. --ar 16:9 --raw",
+    "fields": [
+      { "id": "MODIFIER",        "label": "Modifier",         "placeholder": "low-budget / independent",                                     "examples": ["low-budget", "independent", "European"] },
+      { "id": "GENRE",           "label": "Genre",             "placeholder": "thriller / noir",                                              "examples": ["thriller", "noir", "horror"] },
+      { "id": "SPACE",           "label": "Space",             "placeholder": "Narrow concrete corridor, damp walls, single overhead light", "examples": [] },
+      { "id": "LIGHT_SOURCE",    "label": "Light Source",      "placeholder": "Bare bulb at the end of the corridor",                         "examples": [] },
+      { "id": "WHAT_WHERE",      "label": "What / Where",      "placeholder": "a narrow strip of light on the floor tiles",                   "examples": [] },
+      { "id": "WHAT_IS_DARK",    "label": "What is Dark",      "placeholder": "Both ends of the corridor swallowed in darkness",              "examples": [] },
+      { "id": "SURFACE_TEXTURE", "label": "Surface / Texture", "placeholder": "Peeling paint, water stains, iron railing",                   "examples": [] },
+      { "id": "EMOTIONAL_HOOK",  "label": "Emotional Hook",    "placeholder": "Feels like escape. Or exposure.",                              "examples": ["Feels like escape. Or exposure.", "Wrong kind of quiet.", "Not beautiful — exposed."] }
+    ]
+  },
+  {
+    "id": "detail-cu",
+    "label": "Detail / Close-Up",
+    "desc": "Objekt oder Textur im CU. Licht auf das Objekt, Rest im Dunkel.",
+    "source": "DeepSeek1.txt Item 9",
+    "template": "Film still, [TIME_OF_DAY] exterior, [GENRE]. Close-up of [OBJECT] in [CONTEXT]. [LIGHT_SOURCE] illuminates [WHAT], rest in [DARK_BLUR]. [TEXTURE]. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "fields": [
+      { "id": "TIME_OF_DAY",    "label": "Time of Day",    "placeholder": "night / late afternoon",                                    "examples": ["night", "late afternoon", "dusk", "early morning"] },
+      { "id": "GENRE",          "label": "Genre",          "placeholder": "thriller / drama",                                          "examples": ["thriller", "drama", "noir"] },
+      { "id": "OBJECT",         "label": "Object",         "placeholder": "a rusted padlock / a torn photograph / a cracked phone screen", "examples": [] },
+      { "id": "CONTEXT",        "label": "Context",        "placeholder": "the corner of a bare wooden table",                          "examples": [] },
+      { "id": "LIGHT_SOURCE",   "label": "Light Source",   "placeholder": "Sidelight from a half-open window",                         "examples": [] },
+      { "id": "WHAT",           "label": "What it lights", "placeholder": "only the front face of the padlock",                        "examples": [] },
+      { "id": "DARK_BLUR",      "label": "Rest in",        "placeholder": "shallow focus blur / deep black",                           "examples": ["shallow focus blur", "deep black", "soft darkness"] },
+      { "id": "TEXTURE",        "label": "Texture",        "placeholder": "Pitted metal surface, flaking rust",                        "examples": [] },
+      { "id": "EMOTIONAL_HOOK", "label": "Emotional Hook", "placeholder": "The kind of afternoon that never ends.",                    "examples": ["The kind of afternoon that never ends.", "Empty. Waiting."] }
+    ]
+  },
+  {
+    "id": "character-partial",
+    "label": "Charakter (partiell sichtbar)",
+    "desc": "Figur teilweise im Schatten. Verhindert 'Sticker-Effekt'. Nur sichtbarer Bereich lit.",
+    "source": "DeepSeek1.txt Item 10",
+    "template": "Film still from a [MODIFIER] [GENRE] film shot on location. [FIGURE] seen from [PERSPECTIVE] in [LOCATION]. [LIGHT_SOURCE]. Only [VISIBLE_AREA], rest of figure in [SHADOW]. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "fields": [
+      { "id": "MODIFIER",      "label": "Modifier",       "placeholder": "independent / low-budget",                                   "examples": ["independent", "low-budget", "European"] },
+      { "id": "GENRE",         "label": "Genre",           "placeholder": "thriller / drama",                                          "examples": ["thriller", "drama", "noir"] },
+      { "id": "FIGURE",        "label": "Figure",          "placeholder": "A woman in a dark coat",                                    "examples": [] },
+      { "id": "PERSPECTIVE",   "label": "Perspective",     "placeholder": "the back / from the side / partial front",                  "examples": ["the back", "from the side", "partial front"] },
+      { "id": "LOCATION",      "label": "Location",        "placeholder": "a doorway / a narrow stairwell / the edge of a parking lot", "examples": [] },
+      { "id": "LIGHT_SOURCE",  "label": "Light Source",    "placeholder": "Streetlight from the right side",                          "examples": [] },
+      { "id": "VISIBLE_AREA",  "label": "Visible Area",    "placeholder": "one shoulder and the edge of her jaw",                     "examples": [] },
+      { "id": "SHADOW",        "label": "Rest in Shadow",  "placeholder": "near-total darkness",                                      "examples": ["near-total darkness", "deep shadow", "soft darkness"] },
+      { "id": "EMOTIONAL_HOOK","label": "Emotional Hook",  "placeholder": "She doesn't know she's being watched.",                    "examples": ["She doesn't know she's being watched.", "The kind of loneliness you chose."] }
+    ]
+  },
+  {
+    "id": "pillow-shot",
+    "label": "Pillow Shot (kein Mensch)",
+    "desc": "Objekt oder Raum ohne Personen. Häufig vor/nach großer Szene.",
+    "source": "DeepSeek1.txt Item 11",
+    "template": "Film still, [GENRE]. [OBJECT] in [CONTEXT]. [LIGHT_SOURCE]. No people. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "fields": [
+      { "id": "GENRE",          "label": "Genre",          "placeholder": "drama / thriller",                                            "examples": ["drama", "thriller", "noir"] },
+      { "id": "OBJECT",         "label": "Object",         "placeholder": "A telephone off the hook / An unmade bed / A stopped clock",   "examples": [] },
+      { "id": "CONTEXT",        "label": "Context",        "placeholder": "an otherwise empty kitchen",                                  "examples": [] },
+      { "id": "LIGHT_SOURCE",   "label": "Light Source",   "placeholder": "Daylight through frosted glass, flat and grey",               "examples": [] },
+      { "id": "EMOTIONAL_HOOK", "label": "Emotional Hook", "placeholder": "Nobody is coming back.",                                      "examples": ["Nobody is coming back.", "Empty. Waiting.", "The kind of afternoon that never ends."] }
+    ]
+  },
+  {
+    "id": "surface-texture",
+    "label": "Oberfläche / Textur",
+    "desc": "Nur Material und Licht. Starker Hell-Dunkel-Falloff. Kein Subjekt.",
+    "source": "DeepSeek1.txt Item 12",
+    "template": "[TIME_OF_DAY] exterior, [GENRE] film. [SURFACE] lit by [LIGHT_SOURCE] from [DIRECTION]. Strong light-to-shadow falloff. [VISIBLE_AREA], rest in deep black. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "fields": [
+      { "id": "TIME_OF_DAY",    "label": "Time of Day",    "placeholder": "Night / Dawn / Late afternoon",                                  "examples": ["Night", "Dawn", "Late afternoon"] },
+      { "id": "GENRE",          "label": "Genre",          "placeholder": "thriller / horror",                                              "examples": ["thriller", "horror", "noir"] },
+      { "id": "SURFACE",        "label": "Surface",        "placeholder": "A brick wall / A wet cobblestone street / An old wooden door",   "examples": [] },
+      { "id": "LIGHT_SOURCE",   "label": "Light Source",   "placeholder": "A single sodium streetlight",                                   "examples": [] },
+      { "id": "DIRECTION",      "label": "Direction",      "placeholder": "the left / above at 45° / directly below",                      "examples": ["the left", "above at 45°", "directly below", "the right"] },
+      { "id": "VISIBLE_AREA",   "label": "Visible Area",   "placeholder": "Only the top half of the wall in light",                        "examples": [] },
+      { "id": "EMOTIONAL_HOOK", "label": "Emotional Hook", "placeholder": "Not beautiful — exposed.",                                       "examples": ["Not beautiful — exposed.", "Wrong kind of quiet."] }
+    ]
+  }
+]

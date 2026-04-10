@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {
+      "label": "Verschönerungswörter",
+      "reason": "Aktivieren das Postkarten/Stockfoto-Template",
+      "words": ["beautiful", "stunning", "gorgeous", "warm glow", "cozy", "magical", "ethereal"]
+    },
+    {
+      "label": "Generische Lichtbegriffe",
+      "reason": "Zu vage. Konkrete Lichtquelle benennen.",
+      "words": ["cinematic lighting", "dramatic lighting", "moody lighting", "atmospheric"]
+    },
+    {
+      "label": "Technische Kameraparameter",
+      "reason": "MJ interpretiert diese nicht zuverlässig",
+      "words": ["f/2.8", "85mm", "ISO 800", "shallow DOF", "rack focus"]
+    },
+    {
+      "label": "AI-Qualitäts-Tags",
+      "reason": "Aktivieren Stockfoto- oder Videospiel-Ästhetik",
+      "words": ["ultra-photorealistic", "8K", "hyper-detailed", "unreal engine", "octane render"]
+    }
+  ],
+  "rules": [
+    "Wenn etwas schön sein soll: die Szene schön BESCHREIBEN, nicht das Wort 'beautiful' benutzen",
+    "Licht ohne Quelle vermeiden: jedes Licht muss motiviert sein",
+    "Bei schlechten Ergebnissen: KÜRZEN, nicht verlängern (∼60 Wörter als Ausgangspunkt)",
+    "'--raw' ist PFLICHT — reduziert MJs Verschönerung",
+    "Sonderfall 'golden hour': als alleinstehenden Stimmungsbegriff vermeiden"
+  ]
+}

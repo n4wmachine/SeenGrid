@@ -1,0 +1,9 @@
+[
+  { "v": "35mm film grain",          "t": "Allgemein filmisch — organisches Korn, warm, klassisch" },
+  { "v": "35mm Kodak Vision3 500T",   "t": "Warm, organisch, körnig — der Referenz-Standard" },
+  { "v": "underexposed 35mm",         "t": "Dunkel, körnig — rätselhaft, unpoliert" },
+  { "v": "35mm anamorphic",           "t": "Breitbild-Charakter — Oval Bokeh, Lens Flares" },
+  { "v": "16mm film stock",           "t": "Rau, körnig, dokumentarisch — stark, unglamourös" },
+  { "v": "Fuji Eterna",               "t": "Soft, gedämpft, romantisch — japanische Farbpalette" },
+  { "v": "super 8 film",              "t": "Lo-Fi, nostalgisch, retro — warm, flimmernd, verblasst" }
+]
