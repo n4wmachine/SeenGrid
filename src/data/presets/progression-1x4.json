@@ -1,0 +1,20 @@
+{
+  "id": "progression-1x4",
+  "label": "Progression Array",
+  "badge": "SeenGrid Optimized",
+  "rows": 1,
+  "cols": 4,
+  "desc": "Same character across a gradual state change in 4 horizontal panels — transformation, damage, aging.",
+  "layout": "Even",
+  "source": "MISSING_PRESETS.txt — Item 9",
+  "prompt": "Progression Array\n\nYou are given a character reference image.\n\nTASK\nCreate a 4-panel horizontal grid showing the same character moving through a gradual state change.\n\nLOCKED\nSame face, body proportions, hairstyle base, core outfit silhouette, camera angle, camera height, framing in all panels.\n\nVARIABLE\nOnly the state progression. Gradual, controlled, readable left to right.\n\nPANELS\n1. Base state — calm, intact\n2. Lightly altered\n3. Clearly affected\n4. Fully transformed\n\nFORBIDDEN\nNo identity reset between panels. No random redesign.\nNo camera or framing drift.",
+  "panelRoles": [
+    "Base State — Calm, Intact",
+    "Lightly Altered",
+    "Clearly Affected",
+    "Fully Transformed"
+  ],
+  "inputFields": [
+    { "id": "stateType", "label": "State Change Type", "placeholder": "e.g. aging, battle damage, corruption, illness...", "required": false }
+  ]
+}
