@@ -1,65 +1,276 @@
-/* ============================================================
-   GRID OPERATOR — GridOperator.module.css
-   Zwei-Spalten-Layout: Links Controls (scrollbar), rechts Preview
-   ============================================================ */
-
+/* === VIEWPORT-FITTING === */
 .container {
   display: grid;
   grid-template-columns: 420px 1fr;
-  gap: var(--sg-space-3xl);
-  padding: var(--sg-space-3xl);
-  max-width: 1440px;
+  max-width: 1480px;
   margin: 0 auto;
-  min-height: calc(100vh - 72px);
-  align-items: start;
+  height: calc(100vh - var(--sg-header-height, 72px));
+  overflow: hidden;
 }
 
-/* ---- LINKE SPALTE: Controls ---- */
-.controlsColumn {
+.leftColumn {
+  padding: 20px 24px;
+  overflow-y: auto;
+  height: 100%;
+  border-right: 1px solid var(--sg-border-subtle);
+  background: var(--sg-bg-app);
+}
+
+.rightColumn {
+  padding: 20px 28px;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--sg-space-2xl);
+  gap: 16px;
 }
 
-/* ---- Operator Mode Toggle (SeenGrid Optimized / Core) ---- */
+/* Mode Tabs */
+.modeGroup {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--sg-border-subtle);
+  margin-bottom: 16px;
+}
+
+.modeTab {
+  font-family: var(--sg-font-mono);
+  font-size: var(--sg-text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sg-text-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  position: relative;
+  transition: color var(--sg-transition);
+}
+.modeTab:hover { color: var(--sg-text-secondary); }
+.modeTab.active { color: var(--sg-gold-text); }
+.modeTab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 8px; right: 8px;
+  height: 2px;
+  background: var(--sg-gold);
+}
+
+/* Preset List */
+.presetList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.presetCard {
+  font-family: var(--sg-font-body);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-lg);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-align: left;
+}
+.presetCard:hover {
+  border-color: var(--sg-border-default);
+  background: var(--sg-bg-surface-1);
+}
+.presetCard.active {
+  border-color: var(--sg-gold);
+  background: var(--sg-gold-glow);
+}
+
+.presetName {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--sg-text-primary);
+  margin-bottom: 2px;
+}
+.presetDesc {
+  font-size: 11px;
+  color: var(--sg-text-tertiary);
+}
+.presetBadge {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  color: var(--sg-gold-text);
+  background: var(--sg-gold-glow);
+  border-radius: var(--sg-radius-sm);
+  padding: 2px 6px;
+  float: right;
+}
+
+/* Grid Preview */
+.gridPreview {
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-xl);
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridPreviewLabel {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--sg-text-tertiary);
+  margin-bottom: 12px;
+}
+
+.gridContainer {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-height: 200px;
+}
+
+.gridCell {
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  color: var(--sg-text-disabled);
+  text-align: center;
+  padding: 4px;
+}
+
+/* Prompt Output */
+.promptOutput {
+  font-family: var(--sg-font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--sg-text-primary);
+  background: var(--sg-bg-root);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-lg);
+  padding: 14px;
+  min-height: 80px;
+  word-break: break-word;
+}
+
+/* Custom Grid Controls */
+.customControls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controlLabel {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sg-text-tertiary);
+}
+
+.controlSelect {
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  color: var(--sg-text-primary);
+  background: var(--sg-bg-input);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  padding: 6px 10px;
+}
+
+/* Layout Options */
+.layoutGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.layoutOption {
+  font-family: var(--sg-font-body);
+  font-size: 12px;
+  color: var(--sg-text-secondary);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s;
+}
+.layoutOption:hover { border-color: var(--sg-border-default); }
+.layoutOption.active {
+  color: var(--sg-gold-text);
+  border-color: var(--sg-gold);
+  background: var(--sg-gold-glow);
+}
+
+/* Copy Button */
+.copyBtn {
+  width: 100%;
+  font-family: var(--sg-font-mono);
+  font-size: var(--sg-text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sg-text-inverse);
+  background: var(--sg-gold-gradient);
+  border: none;
+  border-radius: var(--sg-radius-lg);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ── Legacy JSX aliases ── */
+.controlsColumn {
+  padding: 20px 24px;
+  overflow-y: auto;
+  height: 100%;
+  border-right: 1px solid var(--sg-border-subtle);
+  background: var(--sg-bg-app);
+}
+
 .modeToggle {
   display: flex;
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   overflow: hidden;
+  margin-bottom: 16px;
 }
 
 .modeToggleBtn {
   flex: 1;
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-sm);
-  font-weight: 400;
+  font-size: var(--sg-text-xs);
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--sg-text-tertiary);
   background: transparent;
   border: none;
-  padding: var(--sg-space-md) var(--sg-space-lg);
+  padding: 10px 12px;
   cursor: pointer;
   transition: all var(--sg-transition);
 }
-.modeToggleBtn:hover {
-  color: var(--sg-text-secondary);
-  background: var(--sg-bg-surface-1);
-}
-.modeToggleBtn.active {
-  color: var(--sg-gold-text);
-  background: var(--sg-chip-bg-active);
-  font-weight: 500;
-}
+.modeToggleBtn:hover { color: var(--sg-text-secondary); background: var(--sg-bg-surface-1); }
+.modeToggleBtn.active { color: var(--sg-gold-text); background: var(--sg-chip-bg-active); font-weight: 600; }
 
-/* ---- SECTION PANELS (Preset, Grid Grösse, Layout, etc.) ---- */
 .section {
-  background: var(--sg-bg-surface-1);
+  background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
-  padding: var(--sg-space-xl);
+  padding: 16px;
+  margin-bottom: 12px;
 }
 
 .sectionTitle {
@@ -67,144 +278,94 @@
   font-size: var(--sg-text-xs);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: var(--sg-text-tertiary);
-  margin-bottom: var(--sg-space-lg);
-}
-
-/* ---- PRESET LIST ---- */
-.presetList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sg-space-xs);
+  margin-bottom: 12px;
 }
 
 .presetItem {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: var(--sg-space-md) var(--sg-space-lg);
-  background: var(--sg-bg-surface-0);
+  padding: 10px 14px;
+  background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-md);
   cursor: pointer;
   transition: all var(--sg-transition);
+  width: 100%;
+  text-align: left;
 }
-.presetItem:hover {
-  border-color: var(--sg-border-default);
-  background: var(--sg-bg-surface-2);
-}
-.presetItem.active {
-  border-color: var(--sg-gold-dim);
-  background: var(--sg-chip-bg-active);
-}
+.presetItem:hover { border-color: var(--sg-border-default); background: var(--sg-bg-surface-2); }
+.presetItem.active { border-color: var(--sg-gold); background: var(--sg-gold-glow); }
+.presetItem.active .presetName { color: var(--sg-gold-text); }
 
-.presetName {
-  font-family: var(--sg-font-body);
-  font-size: var(--sg-text-md);
-  font-weight: 500;
-  color: var(--sg-text-primary);
-  margin-bottom: 2px;
-}
-.presetItem.active .presetName {
-  color: var(--sg-gold-text);
-}
-
-.presetDesc {
-  font-family: var(--sg-font-body);
-  font-size: var(--sg-text-xs);
-  color: var(--sg-text-tertiary);
-  line-height: 1.4;
-}
-
-.presetBadge {
-  font-family: var(--sg-font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--sg-accent-text);
-  background: var(--sg-chip-bg-active);
-  border: 1px solid var(--sg-accent-dim);
-  border-radius: var(--sg-radius-sm);
-  padding: 2px 6px;
-  flex-shrink: 0;
-  margin-left: var(--sg-space-sm);
-}
-
-/* Grid Size Display */
 .gridSize {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-2xl);
   font-weight: 600;
   color: var(--sg-text-primary);
-  letter-spacing: 0.04em;
 }
-
 .gridSizeNote {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
   color: var(--sg-text-disabled);
-  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-left: var(--sg-space-md);
+  letter-spacing: 0.06em;
+  margin-left: 12px;
 }
 
-/* Layout Chips (Even, Letterbox, etc.) — gleiche Chip-Styles wie PromptBuilder */
 .layoutChips {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 6px;
 }
 
-/* ---- RECHTE SPALTE: Grid Preview ---- */
 .previewColumn {
-  position: sticky;
-  top: 80px;
+  padding: 20px 28px;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .previewPanel {
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-lg);
-  padding: var(--sg-space-xl);
-  min-height: 500px;
+  border-radius: var(--sg-radius-xl);
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .previewTitle {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 500;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--sg-text-tertiary);
-  margin-bottom: var(--sg-space-xl);
-}
-
-/* Grid-Zellen im Preview */
-.gridCell {
-  background: var(--sg-bg-surface-1);
-  border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
-  transition: border-color var(--sg-transition);
-}
-.gridCell:hover {
-  border-color: var(--sg-border-default);
+  margin-bottom: 12px;
 }
 
 .gridCellLabel {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 10px;
   color: var(--sg-text-disabled);
-  font-style: italic;
   text-align: center;
-  padding: var(--sg-space-sm);
+  padding: 4px;
 }
 
-/* Prompt Output (unterhalb Preview) */
 .gridOutput {
-  margin-top: var(--sg-space-xl);
+  margin-top: 16px;
+  font-family: var(--sg-font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--sg-text-primary);
+  background: var(--sg-bg-root);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-lg);
+  padding: 14px;
+  word-break: break-word;
 }

@@ -1,13 +1,14 @@
 .header {
   display: flex;
   align-items: center;
-  height: 72px;
+  height: var(--sg-header-height, 72px);
   padding: 0 32px;
   background: var(--sg-bg-app);
   border-bottom: 1px solid var(--sg-border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-shrink: 0;
 }
 
 .headerLogo {
@@ -17,14 +18,14 @@
   flex-shrink: 0;
 }
 
-/* LOGO: Das Bild ist 2752x1536 (Querformat). NICHT als kleines Icon anzeigen.
-   Höhe 48px = sichtbar und lesbar im Header. */
+/* LOGO: 2752×1536 Querformat. 48px Höhe = lesbar. */
 .headerLogoIcon {
   height: 48px;
   width: auto;
   object-fit: contain;
 }
 
+/* Logo-Bild ENTHÄLT den Schriftzug. Kein extra Text nötig. */
 .headerLogoText { display: none; }
 .headerSubtitle { display: none; }
 
@@ -54,18 +55,16 @@
   white-space: nowrap;
 }
 .tabNavItem:hover { color: var(--sg-text-secondary); }
-.tabNavItem.active { color: var(--sg-accent-text); font-weight: 500; }
+.tabNavItem.active { color: var(--sg-gold-text); font-weight: 500; }
 .tabNavItem.active::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 22px; right: 22px;
   height: 2px;
-  background: var(--sg-accent);
+  background: var(--sg-gold);
   border-radius: 2px 2px 0 0;
 }
-
-/* Kein Diamond-Icon vor Tabs */
 .tabNavItem::before { display: none; }
 
 .headerRight {
@@ -89,6 +88,4 @@
 }
 
 .phaseBadge { display: none; }
-
-/* Divider wird nicht mehr gebraucht (kein Text mehr neben Logo) */
 .headerDivider { display: none; }

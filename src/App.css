@@ -1,24 +1,21 @@
 .app-shell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .app-main {
   flex: 1;
-  width: 100%;
+  overflow: hidden;
 }
 
 .tab-loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
+  height: 100%;
   color: var(--sg-text-tertiary);
-  font-size: 13px;
-  letter-spacing: 0.5px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  font-family: var(--sg-font-mono);
+  font-size: 12px;
 }
