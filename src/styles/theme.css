@@ -1,6 +1,6 @@
 /* SeenGrid — Professional Cinema Dark UI
    DaVinci Resolve / Runway ML / Frame.io quality
-   Deep navy blacks. Warm amber accent. JetBrains Mono.
+   Deep navy blacks. Warm amber accent. Local fonts.
    NO purple. NO pastels. NO pill chips.
 */
 
@@ -11,15 +11,15 @@
 }
 
 :root {
-  /* ── Backgrounds (deep navy black) ── */
-  --bg-0: #060609;
-  --bg-1: #090910;
-  --bg-2: #0d0d17;
-  --bg-3: #111120;
-  --bg-4: #161625;
-  --bg-5: #1c1c2e;
+  /* ── Backgrounds ── */
+  --bg-0: #06060a;
+  --bg-1: #09090f;
+  --bg-2: #0d0d18;
+  --bg-3: #111121;
+  --bg-4: #161627;
+  --bg-5: #1c1c30;
 
-  /* ── Warm Amber (primary accent) ── */
+  /* ── Warm Amber ── */
   --gold:        #e8a624;
   --gold-bright: #f5bc3c;
   --gold-dim:    rgba(232,166,36,0.11);
@@ -27,7 +27,7 @@
   --gold-border: rgba(232,166,36,0.36);
   --gold-strong: rgba(232,166,36,0.55);
 
-  /* ── Professional accent palette (no purple, no pastels) ── */
+  /* ── Accent palette (no purple, no pastels) ── */
   --accent-steel:  #5c9fc4;
   --accent-teal:   #3fa8a6;
   --accent-straw:  #c9a040;
@@ -53,24 +53,24 @@
   --chip-active-bg: rgba(232,166,36,0.10);
   --chip-active-bd: rgba(232,166,36,0.42);
 
-  /* ── Radius ── */
+  /* ── Radius — rectangular first ── */
   --r-xs:   3px;
-  --r-sm:   6px;
-  --r-md:   10px;
-  --r-lg:   14px;
+  --r-sm:   5px;
+  --r-md:   8px;
+  --r-lg:   12px;
   --r-pill: 100px;
 
   /* ── Typography ── */
   --font-ui:   'Space Grotesk', system-ui, sans-serif;
   --font-sans: var(--font-ui);
-  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Courier New', monospace;
 
   /* ── Transitions ── */
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --dur:  130ms;
+  --dur:  120ms;
 
   /* ── Layout ── */
-  --max-w:     1400px;
+  --max-w:     1440px;
   --sidebar-w: 320px;
 }
 
@@ -93,7 +93,7 @@ html, body {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--bg-5); border-radius: 2px; }
 * { scrollbar-width: thin; scrollbar-color: var(--bg-5) transparent; }
@@ -106,20 +106,23 @@ html, body {
 
 /* ── Global resets ── */
 button { cursor: pointer; font-family: var(--font-ui); }
+input, textarea { font-family: var(--font-ui); }
 
 /* ── Utility labels ── */
 .label-xs {
-  font-size: 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.9px;
+  letter-spacing: 1.1px;
   text-transform: uppercase;
   color: var(--t-1);
 }
 
 .label-sm {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--t-1);
 }
@@ -133,16 +136,16 @@ button { cursor: pointer; font-family: var(--font-ui); }
   flex-shrink: 0;
 }
 
-/* ── Chip — rectangular, professional ── */
+/* ── Chip — rectangular, industrial ── */
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 4px 9px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--t-1);
   cursor: pointer;
@@ -172,20 +175,21 @@ button { cursor: pointer; font-family: var(--font-ui); }
 .chip[title]:hover::after {
   content: attr(title);
   position: absolute;
-  bottom: calc(100% + 5px);
+  bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-4);
+  background: #0d0d18;
   border: 1px solid var(--b-light);
   color: var(--t-0);
+  font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 400;
   white-space: nowrap;
-  padding: 4px 9px;
+  padding: 5px 10px;
   border-radius: var(--r-xs);
   pointer-events: none;
   z-index: 100;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
 }
 
 /* ── Buttons ── */
@@ -198,25 +202,25 @@ button { cursor: pointer; font-family: var(--font-ui); }
   border-radius: var(--r-sm);
   border: 1px solid transparent;
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.15px;
+  letter-spacing: 0.2px;
   cursor: pointer;
   transition: all var(--dur) var(--ease);
 }
 
 .btn:active:not(:disabled) { transform: scale(0.975); }
-.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn:disabled { opacity: 0.28; cursor: not-allowed; }
 
 .btn-primary {
   background: var(--gold);
   border-color: var(--gold);
-  color: #07070d;
+  color: #05050b;
 }
 .btn-primary:hover:not(:disabled) {
   background: var(--gold-bright);
   border-color: var(--gold-bright);
-  box-shadow: 0 0 18px rgba(232,166,36,0.32);
+  box-shadow: 0 0 20px rgba(232,166,36,0.28);
 }
 
 .btn-ghost {
@@ -231,14 +235,14 @@ button { cursor: pointer; font-family: var(--font-ui); }
 }
 
 .btn-sm {
-  padding: 5px 12px;
-  font-size: 12px;
+  padding: 5px 11px;
+  font-size: 11.5px;
 }
 
-/* ── Textarea / Input ── */
+/* ── Field ── */
 .field {
   width: 100%;
-  padding: 9px 12px;
+  padding: 9px 11px;
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
@@ -255,27 +259,28 @@ button { cursor: pointer; font-family: var(--font-ui); }
 .field::placeholder { color: var(--t-2); font-style: italic; }
 .field:focus {
   border-color: var(--gold-border);
-  background: var(--bg-3);
+  background: #0d0d18;
 }
 
 /* ── Output / code box ── */
 .output-box {
   width: 100%;
   min-height: 80px;
-  padding: 11px 13px;
-  background: var(--bg-2);
+  padding: 12px 14px;
+  background: #08080e;
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
   font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.85;
+  font-size: 11.5px;
+  line-height: 1.9;
   color: var(--t-0);
   word-break: break-word;
   white-space: pre-wrap;
   user-select: all;
 }
 .output-box.has-content {
-  border-color: rgba(232,166,36,0.20);
+  border-color: rgba(232,166,36,0.30);
+  background: #080810;
 }
 
 /* ── Card ── */
@@ -292,21 +297,22 @@ button { cursor: pointer; font-family: var(--font-ui); }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 0;
+  padding: 9px 0;
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
   text-align: left;
 }
-.acc-header:hover { opacity: 0.75; }
+.acc-header:hover { opacity: 0.72; }
 .acc-title {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 10.5px;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.7px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--t-1);
 }
