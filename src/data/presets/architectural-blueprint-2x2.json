@@ -1,0 +1,18 @@
+{
+  "id": "architectural-blueprint-2x2",
+  "label": "Architectural Blueprint",
+  "badge": "SeenGrid Optimized",
+  "rows": 2,
+  "cols": 2,
+  "desc": "Technical 4-view floor plan and elevation diagram of a cinematic scene — hard spatial reference for Kling/Seedance.",
+  "layout": "Even",
+  "source": "MISSING_PRESETS.txt — ARCHITEKTONISCHER 3D BAUPLAN",
+  "prompt": "Architectural 3D Blueprint\n\nYou are given a cinematic scene artwork.\n\nTASK\nCreate a clean, precise technical architectural blueprint / 3D spatial diagram of the exact scene.\nThis is NOT artistic — this is a hard technical reference for later video generation.\n\nLAYOUT\nCombine in one image:\n- Top-left: Top-down floor plan (clear walls, platforms, levels, distances)\n- Top-right: Front elevation view\n- Bottom-left: Side elevation view (most important camera angle)\n- Bottom-right: Isometric 3D overview (30\u00b0 angle)\n\nSTYLE\nBlack clean lines on pure white background, thin precise lines, no shading, no color, no artistic style.\nTechnical architectural diagram style, like a professional production designer floor plan.\nLabel key distances and important elements very lightly if needed.\n\nREFERENCE PRIORITY\nRespect exact proportions, spatial relationships, depth, heights and geometry from the input image.\nEvery wall, platform, throne, column, step and object must be in the exact same position as in the reference.\n\nQUALITY ANCHOR\nMaximum precision and clarity. This image will be used as hard spatial reference in Kling and Seedance.\n\nFORBIDDEN\nNo color, no artistic rendering, no mood, no characters, no atmosphere. No creative interpretation.",
+  "panelRoles": [
+    "Top-Down Floor Plan",
+    "Front Elevation",
+    "Side Elevation",
+    "Isometric 3D Overview"
+  ],
+  "inputFields": []
+}

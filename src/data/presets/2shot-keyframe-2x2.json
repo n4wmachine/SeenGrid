@@ -1,0 +1,21 @@
+{
+  "id": "2shot-keyframe-2x2",
+  "label": "2-Shot Keyframe Pairs",
+  "badge": "SeenGrid Optimized",
+  "rows": 2,
+  "cols": 2,
+  "desc": "Start + End frames for two consecutive independent shots — direct input for Kling/Seedance video generation.",
+  "layout": "Even",
+  "source": "MISSING_PRESETS.txt — 2-SHOT INDEPENDENT KEYFRAME PAIRS",
+  "prompt": "2-Shot Independent Keyframe Pairs\n\nYou are given:\nReference A = character ingredient image (full body)\nReference B = world ingredient image\n\nTASK\nCreate a 2\u00d72 keyframe grid that delivers complete Start + End frames for TWO separate, consecutive shots from the script.\nThe two shots are independent and can have a normal film cut between them.\n\nLAYOUT\n2\u00d72 grid. Even spacing. No text. No labels.\n\nPANEL BREAKDOWN (strict):\nPanel 1 (top-left):  Start frame of Shot 1\nPanel 2 (top-right): End frame of Shot 1\nPanel 3 (bottom-left): Start frame of Shot 2\nPanel 4 (bottom-right): End frame of Shot 2\n\nLOCKED FOR ALL 4 PANELS\n- Exact same character identity, face, proportions, hairstyle, outfit, materials\n- Same world geometry, lighting, atmosphere, color grade (from Ref B)\n- Same overall cinematic quality and depth\n\nVARIABLE\nShot 1 motion: [DESCRIBE MOTION/ACTION FOR SHOT 1 HERE]\nShot 2 motion: [DESCRIBE MOTION/ACTION FOR SHOT 2 HERE]\n\nRULES\n- The two shots are consecutive in the script but have a normal cut between them — NO forced continuity between Panel 2 and Panel 3\n- Each motion must be physically plausible and natural for its own shot\n- Full premium cinematic quality in every panel\n- Consistent lighting and atmosphere across all 4 panels (same scene/world)\n\nFORBIDDEN\nNo face/outfit/world drift. No lighting inconsistency between panels. No pasted look.\nNo forced identical frame between Panel 2 and Panel 3.",
+  "panelRoles": [
+    "Shot 1 — Start Frame",
+    "Shot 1 — End Frame",
+    "Shot 2 — Start Frame",
+    "Shot 2 — End Frame"
+  ],
+  "inputFields": [
+    { "id": "shot1", "label": "Shot 1 — Motion / Action", "placeholder": "Describe the motion or action for Shot 1...", "required": true },
+    { "id": "shot2", "label": "Shot 2 — Motion / Action", "placeholder": "Describe the motion or action for Shot 2...", "required": true }
+  ]
+}
