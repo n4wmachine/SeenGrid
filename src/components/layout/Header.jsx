@@ -58,7 +58,7 @@ export default function Header({ activeTab, tabs, onTabChange }) {
           >DE</button>
           <button
             className={`sg-lang__btn${lang === 'en' ? ' active' : ''}`}
-            onClick={() => setLang('en')
+            onClick={() => setLang('en')}
             title="English"
           >EN</button>
         </div>
