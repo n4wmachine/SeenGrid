@@ -23,18 +23,18 @@ import aspectData    from '../data/aspectratio.json'
 // Rule 6: Format adaptation (single assembled string)
 
 const SECTIONS = [
-  { id: 'style',       label: 'Film Style',          dot: '#a78bfa', mode: 'single',  data: styleData },
-  { id: 'shotsize',    label: 'Shot Size',            dot: '#67e8f9', mode: 'single',  data: shotData },
-  { id: 'cameraangle', label: 'Camera Angle',         dot: '#67e8f9', mode: 'single',  data: angleData },
-  { id: 'camera',      label: 'Camera System',        dot: '#60a5fa', mode: 'single',  data: cameraData },
-  { id: 'lens',        label: 'Lens / Optic',         dot: '#60a5fa', mode: 'single',  data: lensData },
-  { id: 'focal',       label: 'Focal Length',         dot: '#60a5fa', mode: 'single',  data: focalData },
-  { id: 'aperture',    label: 'Aperture / DOF',       dot: '#60a5fa', mode: 'single',  data: apertureData },
-  { id: 'aspectratio', label: 'Aspect Ratio',         dot: '#60a5fa', mode: 'single',  data: aspectData },
-  { id: 'lighting',    label: 'Lighting',             dot: '#fbbf24', mode: 'multi',   data: lightingData },
-  { id: 'colorgrade',  label: 'Color Grade',          dot: '#f472b6', mode: 'single',  data: colorData },
-  { id: 'effects',     label: 'Film Effects',         dot: '#f87171', mode: 'multi',   data: effectsData },
-  { id: 'negative',    label: 'Negative Prompt',      dot: '#6b7280', mode: 'multi',   data: negativeData },
+  { id: 'style',       label: 'Film Style',      dot: '#e8a624', mode: 'single',  data: styleData },
+  { id: 'shotsize',    label: 'Shot Size',        dot: '#7088a8', mode: 'single',  data: shotData },
+  { id: 'cameraangle', label: 'Camera Angle',     dot: '#7088a8', mode: 'single',  data: angleData },
+  { id: 'camera',      label: 'Camera System',    dot: '#5c9fc4', mode: 'single',  data: cameraData },
+  { id: 'lens',        label: 'Lens / Optic',     dot: '#5c9fc4', mode: 'single',  data: lensData },
+  { id: 'focal',       label: 'Focal Length',     dot: '#5c9fc4', mode: 'single',  data: focalData },
+  { id: 'aperture',    label: 'Aperture / DOF',   dot: '#5c9fc4', mode: 'single',  data: apertureData },
+  { id: 'aspectratio', label: 'Aspect Ratio',     dot: '#5c9fc4', mode: 'single',  data: aspectData },
+  { id: 'lighting',    label: 'Lighting',         dot: '#c9a040', mode: 'multi',   data: lightingData },
+  { id: 'colorgrade',  label: 'Color Grade',      dot: '#a07838', mode: 'single',  data: colorData },
+  { id: 'effects',     label: 'Film Effects',     dot: '#9e6050', mode: 'multi',   data: effectsData },
+  { id: 'negative',    label: 'Negative Prompt',  dot: '#52525e', mode: 'multi',   data: negativeData },
 ]
 
 const RANDOM_SCENES = [
