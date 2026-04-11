@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import styles from './MJStartframe.module.css'
 import { useLang } from '../context/LangContext.jsx'
+import { useFavorites } from '../hooks/useFavorites.js'
 
 import templatesData  from '../data/mj/templates.json'
 import filmstockData  from '../data/mj/filmstocks.json'
@@ -42,6 +43,14 @@ export default function MJStartframe() {
   const [state, setState] = useState(initState)
   const [copied, setCopied]     = useState(false)
   const [showForbidden, setShowForbidden] = useState(false)
+  const { addFavorite } = useFavorites()
+  const [savedFav, setSavedFav] = useState(false)
+
+  function handleSaveFav() {
+    addFavorite({ id: 'mj-' + Date.now(), text: output, source: 'mj', imageUrls: [] })
+    setSavedFav(true)
+    setTimeout(() => setSavedFav(false), 2000)
+  }
   const [warnings, setWarnings] = useState([])
 
   function setTemplate(tpl) {
@@ -55,6 +64,7 @@ export default function MJStartframe() {
 
   function updateField(id, value) {
     setState(prev => ({ ...prev, fields: { ...prev.fields, [id]: value } }))
+    // Live anti-pattern check
     checkForForbidden(value)
   }
 
@@ -71,30 +81,36 @@ export default function MJStartframe() {
     setWarnings(found)
   }
 
+  // ── Build MJ prompt ──
   const output = useMemo(() => {
     const tpl    = state.selectedTemplate
     const fields = state.fields
 
     let prompt = tpl.template
 
+    // Replace template placeholders with field values or defaults
     tpl.fields.forEach(f => {
       const val = fields[f.id]?.trim()
       const placeholder = `[${f.id}]`
       if (val) {
         prompt = prompt.replace(placeholder, val)
+      } else {
+        // leave placeholder visible so user knows what's missing
       }
     })
 
+    // Replace MODIFIER and GENRE from the quick-selects (if template uses them)
     prompt = prompt
       .replace('[MODIFIER]',       state.medModifier)
       .replace('[GENRE]',          state.medGenre)
       .replace('[FILMSTOCK]',      state.filmstock)
       .replace('[EMOTIONAL_HOOK]', fields['EMOTIONAL_HOOK'] || '[EMOTIONAL_HOOK]')
 
+    // Swap out the MJ parameter section
     const paramStr = `${state.ar}${state.rawFlag ? ' --raw' : ''}`
     prompt = prompt
       .replace('--ar 16:9 --raw', paramStr)
-      .replace('--ar 16:9 --raw', paramStr)
+      .replace('--ar 16:9 --raw', paramStr) // double-replace safety
 
     return prompt
   }, [state])
@@ -113,6 +129,7 @@ export default function MJStartframe() {
     const stock = filmstockData[Math.floor(Math.random() * filmstockData.length)].v
     const tpl   = templatesData[Math.floor(Math.random() * templatesData.length)]
     const fields = initFields(tpl)
+    // Fill in common field IDs with random scene data
     if ('LOCATION'    in fields) fields['LOCATION']      = scene.location
     if ('TIME_OF_DAY' in fields) fields['TIME_OF_DAY']   = scene.time
     if ('LIGHT_SOURCE'in fields) fields['LIGHT_SOURCE']  = scene.light
@@ -148,8 +165,10 @@ export default function MJStartframe() {
     <div className={styles.root}>
       <div className={styles.layout}>
 
+        {/* ── LEFT: Builder ── */}
         <div className={styles.builder}>
 
+          {/* Architecture explainer */}
           <div className={styles.archCard}>
             <p className={styles.archTitle}>{t('mj.arch_title')}</p>
             <div className={styles.archSteps}>
@@ -166,6 +185,7 @@ export default function MJStartframe() {
             </div>
           </div>
 
+          {/* Template selector */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 10 }}>{t('mj.shot_template')}</p>
             <div className={styles.templateGrid}>
@@ -183,6 +203,7 @@ export default function MJStartframe() {
             <p className={styles.tplDesc}>{state.selectedTemplate.desc}</p>
           </div>
 
+          {/* Medium Anker quick-selects */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>{t('mj.medium_anchor')}</p>
             <div className={styles.quickRow}>
@@ -218,6 +239,7 @@ export default function MJStartframe() {
             </div>
           </div>
 
+          {/* Template field inputs */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 10 }}>{t('mj.fill_fields')}</p>
             {state.selectedTemplate.fields
@@ -234,6 +256,7 @@ export default function MJStartframe() {
             }
           </div>
 
+          {/* Filmstock picker */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>{t('mj.filmstock')}</p>
             <div className={styles.filmstockGrid}>
@@ -251,6 +274,7 @@ export default function MJStartframe() {
             </div>
           </div>
 
+          {/* MJ Parameters */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>{t('mj.mj_params')}</p>
             <div className={styles.paramRow}>
@@ -279,6 +303,7 @@ export default function MJStartframe() {
             </div>
           </div>
 
+          {/* Emotional hooks quick-select */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>{t('mj.hook_label')}</p>
             <div className={styles.hookGrid}>
@@ -297,9 +322,11 @@ export default function MJStartframe() {
 
         </div>
 
+        {/* ── RIGHT: Output + Anti-patterns ── */}
         <div className={styles.outputCol}>
           <div className={styles.outputSticky}>
 
+            {/* Toolbar */}
             <div className={styles.toolbar}>
               <button className="btn btn-ghost btn-sm" onClick={handleRandom}>
                 <DiceIcon /> {t('common.random')}
@@ -309,6 +336,7 @@ export default function MJStartframe() {
               </button>
             </div>
 
+            {/* Anti-pattern warnings */}
             {warnings.length > 0 && (
               <div className={styles.warningBox}>
                 <p className={styles.warningTitle}>{t('mj.warning_title')}</p>
@@ -321,6 +349,7 @@ export default function MJStartframe() {
               </div>
             )}
 
+            {/* Prompt output */}
             <div className={styles.outputBlock}>
               <div className={styles.outputHeader}>
                 <span className="label-xs">{t('mj.output_label')}</span>
@@ -344,8 +373,17 @@ export default function MJStartframe() {
                 <CopyIcon />
                 {copied ? t('common.copied') : t('mj.copy_btn')}
               </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ width: '100%', marginTop: 6 }}
+                onClick={handleSaveFav}
+              >
+                <StarIcon filled={savedFav} />
+                {savedFav ? t('fav.saved') : t('fav.save')}
+              </button>
             </div>
 
+            {/* Anti-pattern reference toggle */}
             <button
               className={styles.forbiddenToggle}
               onClick={() => setShowForbidden(p => !p)}
@@ -381,6 +419,7 @@ export default function MJStartframe() {
   )
 }
 
+// ── Field Input ──
 function FieldInput({ field, value, onChange, lightSourceHint }) {
   return (
     <div className={styles.fieldWrap}>
@@ -414,6 +453,15 @@ function FieldInput({ field, value, onChange, lightSourceHint }) {
   )
 }
 
+// ── Icons ──
+const StarIcon  = ({ filled = false }) => (
+  <svg width="13" height="13" viewBox="0 0 16 16"
+    fill={filled ? 'currentColor' : 'none'}
+    stroke="currentColor" strokeWidth={filled ? 0 : 1.4}
+  >
+    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+  </svg>
+)
 const CopyIcon  = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
 const DiceIcon  = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zm0 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM5.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4-4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
 const ResetIcon = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
