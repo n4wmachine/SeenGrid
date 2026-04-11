@@ -1,36 +1,36 @@
 /* ============================================================
    SEENGRID — THEME.CSS
-   Komplettes Design-System. Referenz: DaVinci Resolve, Runway ML.
-   KEINE Änderungen durch Sonnet — 1:1 übernehmen.
+   Referenz: DaVinci Resolve, Runway ML.
+   Palette: Neutral-Dark (kein Farbstich), Gold-Accent.
    ============================================================ */
 
 :root {
-  /* ---- SURFACE PALETTE (dunkel → hell) ---- */
-  --sg-black:            #050508;
-  --sg-bg-root:          #07070c;
-  --sg-bg-app:           #0a0a12;
-  --sg-bg-surface-0:     #0d0d17;
-  --sg-bg-surface-1:     #11111d;
-  --sg-bg-surface-2:     #161624;
-  --sg-bg-surface-3:     #1b1b2b;
-  --sg-bg-elevated:      #1f1f32;
-  --sg-bg-hover:         #24243a;
-  --sg-bg-input:         #0e0e19;
+  /* ---- SURFACE PALETTE — reines Neutral-Dunkel, kein Lila ---- */
+  --sg-black:            #080808;
+  --sg-bg-root:          #0c0c0c;
+  --sg-bg-app:           #111111;
+  --sg-bg-surface-0:     #141414;
+  --sg-bg-surface-1:     #1a1a1a;
+  --sg-bg-surface-2:     #1f1f1f;
+  --sg-bg-surface-3:     #252525;
+  --sg-bg-elevated:      #2a2a2a;
+  --sg-bg-hover:         #303030;
+  --sg-bg-input:         #141414;
 
   /* ---- BORDERS ---- */
-  --sg-border-subtle:    #1a1a2e;
-  --sg-border-default:   #242440;
-  --sg-border-strong:    #2e2e4d;
+  --sg-border-subtle:    #1e1e1e;
+  --sg-border-default:   #2a2a2a;
+  --sg-border-strong:    #383838;
   --sg-border-focus:     #d4952a;
 
   /* ---- TEXT ---- */
-  --sg-text-primary:     #e8e8f0;
-  --sg-text-secondary:   #9a9ab0;
-  --sg-text-tertiary:    #6a6a82;
-  --sg-text-disabled:    #4a4a60;
-  --sg-text-inverse:     #050508;
+  --sg-text-primary:     #eeeeee;
+  --sg-text-secondary:   #999999;
+  --sg-text-tertiary:    #666666;
+  --sg-text-disabled:    #444444;
+  --sg-text-inverse:     #0c0c0c;
 
-  /* ---- ACCENT: GOLD (primär für alle UI-Interaktionen) ---- */
+  /* ---- ACCENT: GOLD ---- */
   --sg-gold-dim:         #8a6518;
   --sg-gold:             #d4952a;
   --sg-gold-bright:      #e8a420;
@@ -38,41 +38,41 @@
   --sg-gold-glow:        rgba(212, 149, 42, 0.25);
   --sg-gold-glow-strong: rgba(212, 149, 42, 0.45);
   --sg-gold-glow-subtle: rgba(212, 149, 42, 0.10);
-  --sg-gold-gradient:    linear-gradient(135deg, #d4952a 0%, #e8a420 50%, #f0b840 100%);
+  --sg-gold-gradient:    linear-gradient(135deg, #c8881f 0%, #e8a420 50%, #f0b840 100%);
 
-  /* ---- ACCENT: TEAL (sekundär — nur Logo + rare Highlights) ---- */
+  /* ---- ACCENT: TEAL (selten, nur Highlights) ---- */
   --sg-teal:             #2bb5b2;
   --sg-teal-dim:         #1e8785;
   --sg-teal-glow:        rgba(43, 181, 178, 0.20);
 
   /* ---- SEMANTIC ---- */
-  --sg-success:          #2ea043;
+  --sg-success:          #3fb950;
   --sg-warning:          #d4952a;
   --sg-error:            #c44040;
   --sg-info:             #2bb5b2;
 
   /* ---- CHIP STATES ---- */
-  --sg-chip-bg:          #0f0f1e;
-  --sg-chip-bg-hover:    #17172c;
-  --sg-chip-bg-active:   rgba(212, 149, 42, 0.10);
-  --sg-chip-border:      #1c1c34;
-  --sg-chip-border-hover:#28284a;
+  --sg-chip-bg:          #181818;
+  --sg-chip-bg-hover:    #222222;
+  --sg-chip-bg-active:   rgba(212, 149, 42, 0.12);
+  --sg-chip-border:      #252525;
+  --sg-chip-border-hover:#383838;
   --sg-chip-border-active:#d4952a;
-  --sg-chip-text:        #8a8aa0;
-  --sg-chip-text-hover:  #c0c0d0;
+  --sg-chip-text:        #888888;
+  --sg-chip-text-hover:  #cccccc;
   --sg-chip-text-active: #f0b840;
 
   /* ---- TYPOGRAPHY ---- */
   --sg-font-body:        'Space Grotesk', system-ui, sans-serif;
   --sg-font-mono:        'JetBrains Mono', 'Fira Code', monospace;
 
-  --sg-text-xs:          0.6875rem;
-  --sg-text-sm:          0.75rem;
-  --sg-text-base:        0.8125rem;
-  --sg-text-md:          0.875rem;
-  --sg-text-lg:          1rem;
-  --sg-text-xl:          1.25rem;
-  --sg-text-2xl:         1.5rem;
+  --sg-text-xs:          0.6875rem;   /* 11px */
+  --sg-text-sm:          0.75rem;     /* 12px */
+  --sg-text-base:        0.8125rem;   /* 13px */
+  --sg-text-md:          0.875rem;    /* 14px */
+  --sg-text-lg:          1rem;        /* 16px */
+  --sg-text-xl:          1.125rem;    /* 18px */
+  --sg-text-2xl:         1.375rem;    /* 22px */
 
   /* ---- SPACING ---- */
   --sg-space-xs:         4px;
@@ -92,11 +92,11 @@
   --sg-radius-xl:        8px;
 
   /* ---- SHADOWS ---- */
-  --sg-shadow-sm:        0 1px 2px rgba(0,0,0,0.5);
-  --sg-shadow-md:        0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
-  --sg-shadow-lg:        0 4px 16px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
-  --sg-shadow-gold:      0 0 12px rgba(212,149,42,0.15), 0 0 4px rgba(212,149,42,0.10);
-  --sg-shadow-inset:     inset 0 1px 3px rgba(0,0,0,0.4);
+  --sg-shadow-sm:        0 1px 2px rgba(0,0,0,0.6);
+  --sg-shadow-md:        0 2px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.5);
+  --sg-shadow-lg:        0 4px 20px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.5);
+  --sg-shadow-gold:      0 0 16px rgba(212,149,42,0.20), 0 0 6px rgba(212,149,42,0.12);
+  --sg-shadow-inset:     inset 0 1px 3px rgba(0,0,0,0.5);
 
   /* ---- TRANSITIONS ---- */
   --sg-transition-fast:  80ms ease;
@@ -141,7 +141,7 @@ body {
    SCROLLBAR
    ============================================================ */
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: var(--sg-border-default);
@@ -156,7 +156,7 @@ body {
    ============================================================ */
 
 ::selection {
-  background: rgba(212, 149, 42, 0.30);
+  background: rgba(212, 149, 42, 0.28);
   color: var(--sg-text-primary);
 }
 
@@ -192,7 +192,7 @@ input[type="text"]:focus,
 input[type="search"]:focus,
 textarea:focus {
   border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
+  box-shadow: 0 0 0 1px rgba(212,149,42,0.08);
   outline: none;
 }
 input::placeholder,
@@ -213,14 +213,14 @@ button {
   color: inherit;
 }
 
-/* Primary (copy, generate) */
+/* Primary — Gold-Gradient */
 .sg-btn-primary {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--sg-text-inverse);
+  color: #0c0c0c;
   background: var(--sg-gold-gradient);
   border: none;
   border-radius: var(--sg-radius-md);
@@ -234,7 +234,7 @@ button {
 }
 .sg-btn-primary:active { opacity: 0.8; }
 
-/* Ghost (random, reset) */
+/* Ghost */
 .sg-btn-ghost {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);

@@ -1,70 +1,73 @@
 /* ============================================================
-   HEADER + TAB NAVIGATION
-   Ersetze komplett die bestehende Header.css
+   HEADER — SeenGrid
+   Referenz: DaVinci Resolve Menüleiste, RunwayML Top-Bar
    ============================================================ */
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--sg-space-3xl);
-  height: 56px;
+  padding: 0 var(--sg-space-4xl);
+  height: 60px;
   background: var(--sg-bg-app);
   border-bottom: 1px solid var(--sg-border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
-  /* Subtiler Schatten nach unten für Tiefe */
-  box-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 0 var(--sg-border-subtle), 0 2px 12px rgba(0,0,0,0.4);
 }
 
-/* ---- LOGO AREA ---- */
+/* ---- LOGO ---- */
 .headerLogo {
   display: flex;
   align-items: center;
-  gap: var(--sg-space-md);
+  gap: 14px;
+  flex-shrink: 0;
+  min-width: 220px;
+}
+
+.headerLogoIcon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-/* SG Logo-Mark: das Icon aus SGLogo5.png als <img>, 28x28px */
-.headerLogoIcon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
-/* Falls SVG/Text-Logo statt Bild: */
 .headerLogoText {
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-xl);
+  font-size: 1.125rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: var(--sg-text-primary);
+  line-height: 1;
 }
 
 .headerLogoText span {
-  /* "Grid" in leicht gedimmter Farbe für Kontrast */
   color: var(--sg-text-secondary);
   font-weight: 400;
 }
 
-.headerSubtitle {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--sg-text-tertiary);
-  margin-left: var(--sg-space-sm);
-  padding-left: var(--sg-space-md);
-  border-left: 1px solid var(--sg-border-subtle);
+.headerDivider {
+  width: 1px;
+  height: 20px;
+  background: var(--sg-border-default);
+  flex-shrink: 0;
 }
 
-/* ---- TAB NAVIGATION ---- */
+.headerSubtitle {
+  font-family: var(--sg-font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--sg-text-tertiary);
+}
+
+/* ---- TABS ---- */
 .tabNav {
   display: flex;
   align-items: center;
-  gap: 0;
   height: 100%;
+  gap: 0;
 }
 
 .tabNavItem {
@@ -81,6 +84,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  gap: var(--sg-space-sm);
   position: relative;
   transition: color var(--sg-transition);
   white-space: nowrap;
@@ -90,42 +94,48 @@
   color: var(--sg-text-secondary);
 }
 
-/* Aktiver Tab */
 .tabNavItem.active {
   color: var(--sg-gold-text);
   font-weight: 500;
 }
 
-/* Gold-Unterstrich: 2px, nur bei aktivem Tab */
+/* Gold-Linie unten */
 .tabNavItem.active::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: var(--sg-space-xl);
-  right: var(--sg-space-xl);
+  left: 12px;
+  right: 12px;
   height: 2px;
   background: var(--sg-gold-gradient);
   border-radius: 1px 1px 0 0;
 }
 
-/* Optionaler Bullet vor Tab-Name */
+/* Dot vor Tab-Name */
 .tabNavItem::before {
-  content: '◆';
-  font-size: 5px;
-  margin-right: var(--sg-space-sm);
-  opacity: 0.3;
-  color: var(--sg-gold);
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--sg-text-disabled);
+  flex-shrink: 0;
+  transition: background var(--sg-transition);
 }
 .tabNavItem.active::before {
-  opacity: 1;
+  background: var(--sg-gold);
+}
+.tabNavItem:hover::before {
+  background: var(--sg-text-tertiary);
 }
 
-/* ---- HEADER RIGHT (Sprach-Toggle, Phase-Badge) ---- */
+/* ---- RIGHT ---- */
 .headerRight {
   display: flex;
   align-items: center;
-  gap: var(--sg-space-lg);
+  gap: var(--sg-space-md);
   flex-shrink: 0;
+  min-width: 120px;
+  justify-content: flex-end;
 }
 
 .langToggle {
@@ -135,21 +145,25 @@
   letter-spacing: 0.1em;
   color: var(--sg-text-tertiary);
   background: none;
-  border: 1px solid var(--sg-border-subtle);
+  border: 1px solid var(--sg-border-default);
   border-radius: var(--sg-radius-sm);
-  padding: var(--sg-space-xs) var(--sg-space-sm);
+  padding: 3px 8px;
   cursor: pointer;
   transition: all var(--sg-transition);
 }
 .langToggle:hover {
   color: var(--sg-text-secondary);
-  border-color: var(--sg-border-default);
+  border-color: var(--sg-border-strong);
 }
 
 .phaseBadge {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--sg-text-disabled);
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: 3px;
+  padding: 2px 6px;
 }

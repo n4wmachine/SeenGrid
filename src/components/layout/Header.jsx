@@ -8,9 +8,16 @@ export default function Header({ activeTab, tabs, onTabChange }) {
   return (
     <header className="header">
       <div className="headerLogo">
-        <img src={`${import.meta.env.BASE_URL}SGLogo5.png`} className="headerLogoIcon" alt="SG" />
-        <span className="headerLogoText">Seen<span>Grid</span></span>
-        <span className="headerSubtitle">AI Film Operator</span>
+        <img
+          src={`${import.meta.env.BASE_URL}SGLogo5.png`}
+          className="headerLogoIcon"
+          alt="SG"
+        />
+        <div className="headerDivider" />
+        <div>
+          <div className="headerLogoText">Seen<span>Grid</span></div>
+          <div className="headerSubtitle">AI Film Operator</div>
+        </div>
       </div>
 
       <nav className="tabNav" role="tablist">

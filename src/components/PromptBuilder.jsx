@@ -47,7 +47,7 @@ export default function PromptBuilder() {
   const { t } = useLang()
   const [state, setState] = useState(initState)
   const [openSections, setOpenSections] = useState(
-    () => new Set(['style', 'shotsize', 'cameraangle', 'camera', 'lens', 'focal', 'aperture', 'aspectratio', 'lighting', 'colorgrade'])
+    () => new Set(['style', 'shotsize', 'lighting'])
   )
   const [copied, setCopied] = useState(false)
   const { addFavorite } = useFavorites()
