@@ -2,6 +2,10 @@ import React, { useState, useCallback } from 'react'
 import styles from './PromptBuilder.module.css'
 
 import styleData     from '../data/styles.json'
+import settingsData  from '../data/random/settings.json'
+import subjectsData  from '../data/random/subjects.json'
+import actionsData   from '../data/random/actions.json'
+import moodsData     from '../data/random/moods.json'
 import cameraData    from '../data/cameras.json'
 import lensData      from '../data/lenses.json'
 import focalData     from '../data/focal.json'
@@ -37,19 +41,6 @@ const SECTIONS = [
   { id: 'negative',    label: 'Negative Prompt',  dot: '#52525e', mode: 'multi',   data: negativeData },
 ]
 
-const RANDOM_SCENES = [
-  'A detective stands in a rain-soaked alley, collar raised',
-  'An old woman looks out through a frosted window at dusk',
-  'Two figures face each other across a bare concrete room',
-  'A child walks alone down a deserted suburban street at noon',
-  'A man in a suit sits at the edge of a crumbling pier',
-  'A figure disappears into fog at the end of a long corridor',
-  'Hands grip the edge of a car door in a dark parking garage',
-  'A woman reads a letter by the light of a single desk lamp',
-  'An empty chair at a table set for two, candle burning low',
-  'A figure silhouetted against the glow of a burning building',
-]
-
 function initState() {
   const state = { scene: '', negativeCustom: '', qualitySuffix: true }
   SECTIONS.forEach(s => {
@@ -65,6 +56,7 @@ export default function PromptBuilder() {
   )
   const [copied, setCopied] = useState(false)
 
+  // ── Toggle chip ──
   const toggleChip = useCallback((sectionId, value, mode) => {
     setState(prev => {
       const next = { ...prev }
@@ -79,6 +71,7 @@ export default function PromptBuilder() {
     })
   }, [])
 
+  // ── Toggle accordion section ──
   const toggleSection = useCallback((id) => {
     setOpenSections(prev => {
       const next = new Set(prev)
@@ -87,6 +80,7 @@ export default function PromptBuilder() {
     })
   }, [])
 
+  // ── Build prompt string (NanoBanana Core rules) ──
   function buildPrompt() {
     const parts = []
     if (state.scene) parts.push(state.scene)
@@ -117,6 +111,7 @@ export default function PromptBuilder() {
     return parts.join(', ')
   }
 
+  // ── Build negative string ──
   function buildNegative() {
     const neg = [...state.negative]
     if (state.negativeCustom) {
@@ -125,6 +120,7 @@ export default function PromptBuilder() {
     return neg.join(', ')
   }
 
+  // ── Copy ──
   async function handleCopy() {
     const prompt = buildPrompt()
     if (!prompt) return
@@ -141,6 +137,7 @@ export default function PromptBuilder() {
     }
   }
 
+  // ── Random — 90×50×40×50 = 9,000,000 unique combinations ──
   function handleRandom() {
     const pick = (arr, nullable = true) => {
       if (nullable && Math.random() < 0.15) return null
@@ -151,7 +148,8 @@ export default function PromptBuilder() {
       const count = Math.floor(Math.random() * (max + 1))
       return new Set(shuffled.slice(0, count).map(i => i.v))
     }
-    const scene = RANDOM_SCENES[Math.floor(Math.random() * RANDOM_SCENES.length)]
+    const pick1 = arr => arr[Math.floor(Math.random() * arr.length)]
+    const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
     setState(prev => ({
       ...prev,
       scene,
@@ -170,7 +168,10 @@ export default function PromptBuilder() {
     }))
   }
 
-  function handleReset() { setState(initState()) }
+  // ── Reset ──
+  function handleReset() {
+    setState(initState())
+  }
 
   const prompt    = buildPrompt()
   const negative  = buildNegative()
@@ -178,10 +179,13 @@ export default function PromptBuilder() {
 
   return (
     <div className={styles.root}>
+      {/* ── Two-column layout ── */}
       <div className={styles.layout}>
 
         {/* LEFT: Controls */}
         <div className={styles.controls}>
+
+          {/* Scene input */}
           <div className={styles.sceneSection}>
             <div className={styles.sectionHeaderStatic}>
               <span className="label-xs">Szene / Motiv</span>
@@ -197,6 +201,7 @@ export default function PromptBuilder() {
             />
           </div>
 
+          {/* Chip sections */}
           {SECTIONS.map(sec => (
             <ChipSection
               key={sec.id}
@@ -208,6 +213,7 @@ export default function PromptBuilder() {
             />
           ))}
 
+          {/* Negative custom input */}
           <div className={styles.negCustom}>
             <label className="label-xs" style={{ display: 'block', marginBottom: 6 }}>Eigene Negativ-Begriffe</label>
             <input
@@ -223,6 +229,7 @@ export default function PromptBuilder() {
         {/* RIGHT: Output */}
         <div className={styles.outputPanel}>
           <div className={styles.outputSticky}>
+            {/* Toolbar */}
             <div className={styles.toolbar}>
               <button className="btn btn-ghost btn-sm" onClick={handleRandom} title="Zufällige Inspiration generieren">
                 <DiceIcon /> Random
@@ -241,6 +248,7 @@ export default function PromptBuilder() {
               </label>
             </div>
 
+            {/* Prompt output */}
             <div className={styles.outputBlock}>
               <div className={styles.outputLabel}>
                 <span className="label-xs">Generierter Prompt</span>
@@ -262,6 +270,7 @@ export default function PromptBuilder() {
               </button>
             </div>
 
+            {/* Negative prompt output */}
             {negative && (
               <div className={styles.outputBlock}>
                 <div className={styles.outputLabel}>
@@ -271,6 +280,7 @@ export default function PromptBuilder() {
               </div>
             )}
 
+            {/* NanoBanana rules reminder */}
             <div className={styles.rulesCard}>
               <p className={styles.rulesTitle}>NanoBanana Core Regeln</p>
               <ol className={styles.rulesList}>
@@ -292,7 +302,9 @@ export default function PromptBuilder() {
 // ── Chip Section (accordion) ──
 function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
   const { id, label, dot, mode, data } = section
-  const activeCount = mode === 'multi' ? state[id].size : state[id] ? 1 : 0
+  const activeCount = mode === 'multi'
+    ? state[id].size
+    : state[id] ? 1 : 0
 
   return (
     <div className={styles.section}>
@@ -302,7 +314,10 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
         onClick={onToggle}
       >
         <span className={styles.sectionTitle}>
-          <span className={styles.sectionBar} style={{ background: dot }} />
+          <span
+            className={styles.sectionBar}
+            style={{ background: dot }}
+          />
           {label}
           {activeCount > 0 && (
             <span className={styles.activeBadge}>{activeCount}</span>
