@@ -63,11 +63,11 @@
 }
 
 .tabNavItem {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-family: var(--sg-font-body);
+  font-size: 13px;
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: 0;
   color: var(--sg-text-tertiary);
   background: none;
   border: none;
