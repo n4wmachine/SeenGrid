@@ -1,11 +1,9 @@
-.root {
-  width: 100%;
-}
+.root { width: 100%; }
 
 .layout {
   display: grid;
   grid-template-columns: 380px 1fr;
-  gap: 32px;
+  gap: 28px;
   align-items: start;
 }
 
@@ -13,22 +11,22 @@
 .config {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .block {
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 16px 18px;
-  margin-bottom: 4px;
+  padding: 14px 16px;
+  margin-bottom: 3px;
 }
 
-/* ── Mode ── */
+/* ── Mode toggle ── */
 .modeGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 5px;
 }
 
 .modeBtn {
@@ -36,11 +34,11 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 9px 14px;
+  padding: 8px 12px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 500;
   color: var(--t-1);
@@ -55,32 +53,26 @@
   font-weight: 600;
 }
 
-.star {
-  font-size: 10px;
-  color: var(--gold);
-}
+.star { font-size: 10px; color: var(--gold); }
 
 /* ── Preset cards ── */
 .presetGrid {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .presetCard {
   width: 100%;
   text-align: left;
-  padding: 10px 13px;
+  padding: 9px 12px;
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
   cursor: pointer;
   transition: all var(--dur);
 }
-.presetCard:hover {
-  border-color: var(--b-light);
-  background: var(--bg-4);
-}
+.presetCard:hover { border-color: var(--b-light); background: var(--bg-4); }
 .presetCardActive {
   background: var(--gold-dim);
   border-color: var(--gold-border);
@@ -90,12 +82,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .presetLabel {
-  font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-family: var(--font-ui);
+  font-size: 12px;
   font-weight: 600;
   color: var(--t-0);
 }
@@ -104,24 +96,82 @@
   font-size: 10px;
   font-weight: 700;
   font-family: var(--font-mono);
-  padding: 2px 7px;
-  border: 1px solid;
-  border-radius: var(--r-pill);
+  padding: 1px 6px;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-xs);
+  color: var(--gold);
   letter-spacing: 0.3px;
 }
 
 .presetDesc {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 11px;
   color: var(--t-1);
   line-height: 1.4;
 }
 
-/* ── Dimensions ── */
+/* ── Core template buttons ── */
+.templateBtns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.tplBtn {
+  padding: 5px 11px;
+  background: var(--chip-bg);
+  border: 1px solid var(--b-subtle);
+  border-radius: var(--r-xs);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t-1);
+  cursor: pointer;
+  transition: all var(--dur);
+}
+.tplBtn:hover { color: var(--t-0); border-color: var(--b-light); }
+.tplBtnActive {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.tplDesc {
+  font-size: 11px;
+  color: var(--t-1);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+/* ── Grid size — locked state ── */
+.dimLocked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dimLockedBadge {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--t-0);
+  letter-spacing: 1px;
+}
+
+.dimLockedNote {
+  font-size: 11px;
+  color: var(--t-2);
+  font-style: italic;
+}
+
+/* ── Grid size — free state ── */
 .dimRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -132,21 +182,18 @@
 }
 
 .dimLabel {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--t-2);
 }
 
-.dimBtns {
-  display: flex;
-  gap: 3px;
-}
+.dimBtns { display: flex; gap: 3px; }
 
 .dimBtn {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +215,7 @@
 }
 
 .dimX {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--t-2);
   margin-top: 16px;
 }
@@ -178,22 +225,21 @@
   font-family: var(--font-mono);
   color: var(--t-2);
   margin-top: 16px;
-  letter-spacing: 0.3px;
 }
 
 /* ── Layout buttons ── */
 .layoutBtns {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 4px;
 }
 
 .layoutBtn {
-  padding: 5px 12px;
+  padding: 4px 10px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
-  border-radius: var(--r-pill);
-  font-family: var(--font-sans);
+  border-radius: var(--r-xs);
+  font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 500;
   color: var(--t-1);
@@ -202,9 +248,48 @@
 }
 .layoutBtn:hover { color: var(--t-0); border-color: var(--b-light); }
 .layoutBtnActive {
-  background: rgba(103,232,249,0.10);
-  border-color: rgba(103,232,249,0.35);
-  color: #67e8f9;
+  background: rgba(92,159,196,0.10);
+  border-color: rgba(92,159,196,0.35);
+  color: var(--accent-steel);
+}
+
+/* ── Reference note ── */
+.refNote {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.refNoteItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--t-1);
+}
+
+.refTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--bg-3);
+  border: 1px solid var(--b-light);
+  border-radius: var(--r-xs);
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--t-1);
+  flex-shrink: 0;
+}
+
+.refNoteHint {
+  font-size: 10.5px;
+  color: var(--t-2);
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: 2px;
 }
 
 /* ── Input fields ── */
@@ -218,11 +303,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--t-1);
-  margin-bottom: 5px;
-}
-
-.reqDot {
-  color: var(--gold);
+  margin-bottom: 4px;
 }
 
 /* ── Panel role grid ── */
@@ -232,37 +313,38 @@
 }
 
 .roleInput {
-  padding: 5px 8px;
+  padding: 5px 7px;
   font-size: 11px;
   text-align: center;
   resize: none;
+  font-family: var(--font-mono);
 }
 
 /* ── Output (right) ── */
 .output {
   position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
+  top: 72px;
+  max-height: calc(100vh - 92px);
   overflow-y: auto;
 }
 
 .outputSticky {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .previewBlock {
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 16px;
+  padding: 14px 16px;
 }
 
 .outputBlock {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .outputHeader {
@@ -275,7 +357,8 @@
   font-size: 10px;
   font-weight: 700;
   color: var(--gold);
-  letter-spacing: 0.4px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.3px;
 }
 
 .promptOut {
@@ -287,28 +370,26 @@
   cursor: text;
 }
 
-.copyBtn {
-  width: 100%;
-}
+.copyBtn { width: 100%; }
 
 /* ── Info box ── */
 .infoBox {
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
-  border-left: 3px solid var(--gold-border);
+  border-left: 2px solid var(--gold-border);
   border-radius: var(--r-sm);
-  padding: 12px 16px;
+  padding: 11px 14px;
 }
 
 .infoTitle {
   font-size: 12px;
   font-weight: 600;
   color: var(--t-0);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .infoDesc {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--t-1);
   line-height: 1.5;
   margin-bottom: 4px;
