@@ -1,0 +1,15 @@
+{
+  "id": "outfit-swap",
+  "label": "Outfit Swap",
+  "badge": "SeenGrid Optimized",
+  "rows": 1,
+  "cols": 1,
+  "desc": "Change only the outfit on an existing character reference sheet — face, body, pose, and layout stay identical.",
+  "layout": "Even",
+  "source": "MISSING_PRESETS.txt — Item 2",
+  "prompt": "Outfit Swap — Identity Locked\n\nYou are given a character angle study showing the same character from multiple views.\n\nTASK\nCreate an updated version where only the outfit changes. Everything else stays identical.\n\nOUTFIT CHANGE\n[DESCRIBE NEW OUTFIT HERE]\n\nLOCKED\nSame face, body proportions, hairstyle, pose, camera angles, grid layout, background in all panels.\n\nVARIABLE\nOnly the clothing. This is a garment transfer, not a redesign.\n\nOUTFIT RULES\nNatural fit on existing body and pose. Realistic folds, seams, materials.\nConsistent across all panels. Preserve body underneath.\n\nFORBIDDEN\nNo face, body, hairstyle, pose, camera, layout, or background changes.",
+  "panelRoles": ["Outfit Swap — Updated Grid"],
+  "inputFields": [
+    { "id": "outfit", "label": "New Outfit Description", "placeholder": "Describe the new outfit in detail...", "required": true }
+  ]
+}
