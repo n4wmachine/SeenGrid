@@ -65,7 +65,6 @@ export default function PromptBuilder() {
   )
   const [copied, setCopied] = useState(false)
 
-  // ── Toggle chip ──
   const toggleChip = useCallback((sectionId, value, mode) => {
     setState(prev => {
       const next = { ...prev }
@@ -80,7 +79,6 @@ export default function PromptBuilder() {
     })
   }, [])
 
-  // ── Toggle accordion section ──
   const toggleSection = useCallback((id) => {
     setOpenSections(prev => {
       const next = new Set(prev)
@@ -89,23 +87,14 @@ export default function PromptBuilder() {
     })
   }, [])
 
-  // ── Build prompt string (NanoBanana Core rules) ──
   function buildPrompt() {
     const parts = []
-
-    // Scene / subject (sensory stacking free text)
     if (state.scene) parts.push(state.scene)
-
-    // Style (professional term, Rule 1)
     if (state.style) parts.push(`${state.style} cinematic style`)
-
-    // Shot size + camera angle (grouped, Rule 5)
     const framing = []
     if (state.shotsize)    framing.push(state.shotsize)
     if (state.cameraangle) framing.push(`${state.cameraangle} angle`)
     if (framing.length)    parts.push(framing.join(', '))
-
-    // Camera block (Rule 2: parameters not adjectives)
     const cam = []
     if (state.camera)  cam.push(`shot on ${state.camera}`)
     if (state.lens)    cam.push(`${state.lens} lens`)
@@ -117,27 +106,17 @@ export default function PromptBuilder() {
     }
     if (state.aspectratio) cam.push(`${state.aspectratio} aspect ratio`)
     if (cam.length) parts.push(cam.join(', '))
-
-    // Lighting
     if (state.lighting.size > 0)
       parts.push([...state.lighting].join(' + ') + ' lighting')
-
-    // Color grade
     if (state.colorgrade)
       parts.push(`${state.colorgrade} color grade`)
-
-    // Film effects
     if (state.effects.size > 0)
       parts.push([...state.effects].join(', '))
-
-    // Quality suffix (NanoBanana-style, not MJ anti-pattern territory)
     if (state.qualitySuffix && parts.length > 0)
       parts.push('ultra detailed, photorealistic, 8K cinema quality')
-
     return parts.join(', ')
   }
 
-  // ── Build negative string ──
   function buildNegative() {
     const neg = [...state.negative]
     if (state.negativeCustom) {
@@ -146,7 +125,6 @@ export default function PromptBuilder() {
     return neg.join(', ')
   }
 
-  // ── Copy ──
   async function handleCopy() {
     const prompt = buildPrompt()
     if (!prompt) return
@@ -163,7 +141,6 @@ export default function PromptBuilder() {
     }
   }
 
-  // ── Random ──
   function handleRandom() {
     const pick = (arr, nullable = true) => {
       if (nullable && Math.random() < 0.15) return null
@@ -193,10 +170,7 @@ export default function PromptBuilder() {
     }))
   }
 
-  // ── Reset ──
-  function handleReset() {
-    setState(initState())
-  }
+  function handleReset() { setState(initState()) }
 
   const prompt    = buildPrompt()
   const negative  = buildNegative()
@@ -204,13 +178,10 @@ export default function PromptBuilder() {
 
   return (
     <div className={styles.root}>
-      {/* ── Two-column layout ── */}
       <div className={styles.layout}>
 
         {/* LEFT: Controls */}
         <div className={styles.controls}>
-
-          {/* Scene input */}
           <div className={styles.sceneSection}>
             <div className={styles.sectionHeaderStatic}>
               <span className="label-xs">Szene / Motiv</span>
@@ -226,7 +197,6 @@ export default function PromptBuilder() {
             />
           </div>
 
-          {/* Chip sections */}
           {SECTIONS.map(sec => (
             <ChipSection
               key={sec.id}
@@ -238,7 +208,6 @@ export default function PromptBuilder() {
             />
           ))}
 
-          {/* Negative custom input */}
           <div className={styles.negCustom}>
             <label className="label-xs" style={{ display: 'block', marginBottom: 6 }}>Eigene Negativ-Begriffe</label>
             <input
@@ -254,7 +223,6 @@ export default function PromptBuilder() {
         {/* RIGHT: Output */}
         <div className={styles.outputPanel}>
           <div className={styles.outputSticky}>
-            {/* Toolbar */}
             <div className={styles.toolbar}>
               <button className="btn btn-ghost btn-sm" onClick={handleRandom} title="Zufällige Inspiration generieren">
                 <DiceIcon /> Random
@@ -273,7 +241,6 @@ export default function PromptBuilder() {
               </label>
             </div>
 
-            {/* Prompt output */}
             <div className={styles.outputBlock}>
               <div className={styles.outputLabel}>
                 <span className="label-xs">Generierter Prompt</span>
@@ -295,7 +262,6 @@ export default function PromptBuilder() {
               </button>
             </div>
 
-            {/* Negative prompt output */}
             {negative && (
               <div className={styles.outputBlock}>
                 <div className={styles.outputLabel}>
@@ -305,7 +271,6 @@ export default function PromptBuilder() {
               </div>
             )}
 
-            {/* NanoBanana rules reminder */}
             <div className={styles.rulesCard}>
               <p className={styles.rulesTitle}>NanoBanana Core Regeln</p>
               <ol className={styles.rulesList}>
@@ -327,9 +292,7 @@ export default function PromptBuilder() {
 // ── Chip Section (accordion) ──
 function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
   const { id, label, dot, mode, data } = section
-  const activeCount = mode === 'multi'
-    ? state[id].size
-    : state[id] ? 1 : 0
+  const activeCount = mode === 'multi' ? state[id].size : state[id] ? 1 : 0
 
   return (
     <div className={styles.section}>
@@ -339,10 +302,7 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
         onClick={onToggle}
       >
         <span className={styles.sectionTitle}>
-          <span
-            className="section-dot"
-            style={{ background: dot, boxShadow: `0 0 6px ${dot}66` }}
-          />
+          <span className={styles.sectionBar} style={{ background: dot }} />
           {label}
           {activeCount > 0 && (
             <span className={styles.activeBadge}>{activeCount}</span>
