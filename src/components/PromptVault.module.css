@@ -2,50 +2,40 @@
   max-width: 1480px;
   margin: 0 auto;
   padding: 24px 32px;
-  height: calc(100vh - var(--sg-header-height, 72px));
+  height: calc(100vh - var(--sg-header-height, 96px));
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-.header {
-  margin-bottom: 20px;
-  flex-shrink: 0;
-}
+.header { margin-bottom: 16px; flex-shrink: 0; }
 
 .title {
   font-family: var(--sg-font-body);
   font-size: 20px;
   font-weight: 600;
   color: var(--sg-text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .subtitle {
+  font-family: var(--sg-font-body);
   font-size: 13px;
   color: var(--sg-text-tertiary);
 }
 
-/* Search + Filter Bar */
 .filterBar {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
   flex-shrink: 0;
 }
 
-.searchInput {
-  flex: 1;
-  min-width: 200px;
-  padding-left: 36px !important;
-}
+.searchInput { flex: 1; min-width: 200px; }
 
-.sortGroup {
-  display: flex;
-  gap: 6px;
-}
+.sortGroup { display: flex; gap: 6px; }
 
 .sortBtn {
   font-family: var(--sg-font-mono);
@@ -67,12 +57,11 @@
   background: var(--sg-gold-glow);
 }
 
-/* Category Chips */
 .catGroup {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   flex-shrink: 0;
 }
 
@@ -96,7 +85,6 @@
   background: var(--sg-gold-glow);
 }
 
-/* Prompt Cards Grid */
 .promptGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -109,14 +97,14 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-xl);
   overflow: hidden;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
 }
 .promptCard:hover {
   border-color: var(--sg-border-default);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--sg-shadow-md);
 }
 
@@ -217,57 +205,13 @@
   color: var(--sg-text-disabled);
 }
 
-/* ── Legacy JSX aliases ── */
-.vaultHeader {
-  margin-bottom: 20px;
-  flex-shrink: 0;
-}
-
-.vaultTitle {
-  font-family: var(--sg-font-body);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--sg-text-primary);
-  margin-bottom: 4px;
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.vaultCount {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-sm);
-  color: var(--sg-text-tertiary);
-  font-weight: 400;
-}
-
-.vaultSubtitle {
-  font-size: 13px;
-  color: var(--sg-text-tertiary);
-}
-.vaultSubtitle a {
-  color: var(--sg-gold);
-  text-decoration: none;
-}
+/* ── JSX aliases ── */
+.vaultHeader { margin-bottom: 16px; flex-shrink: 0; }
+.vaultTitle { font-family: var(--sg-font-body); font-size: 20px; font-weight: 600; color: var(--sg-text-primary); margin-bottom: 2px; display: flex; align-items: baseline; gap: 12px; }
+.vaultCount { font-family: var(--sg-font-mono); font-size: var(--sg-text-sm); color: var(--sg-text-tertiary); font-weight: 400; }
+.vaultSubtitle { font-family: var(--sg-font-body); font-size: 13px; color: var(--sg-text-tertiary); }
+.vaultSubtitle a { color: var(--sg-gold); text-decoration: none; }
 .vaultSubtitle a:hover { text-decoration: underline; }
-
-.categoryChips {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  flex-shrink: 0;
-}
-
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  flex: 1;
-}
-
-.active {
-  color: var(--sg-gold-text) !important;
-  border-color: var(--sg-gold) !important;
-  background: var(--sg-gold-glow) !important;
-}
+.categoryChips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; flex-shrink: 0; }
+.cardGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; flex: 1; }
+.active { color: var(--sg-gold-text) !important; border-color: var(--sg-gold) !important; background: var(--sg-gold-glow) !important; }

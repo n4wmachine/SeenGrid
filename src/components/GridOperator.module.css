@@ -1,10 +1,9 @@
-/* === VIEWPORT-FITTING === */
 .container {
   display: grid;
   grid-template-columns: 420px 1fr;
   max-width: 1480px;
   margin: 0 auto;
-  height: calc(100vh - var(--sg-header-height, 72px));
+  height: calc(100vh - var(--sg-header-height, 96px));
   overflow: hidden;
 }
 
@@ -25,7 +24,6 @@
   gap: 16px;
 }
 
-/* Mode Tabs */
 .modeGroup {
   display: flex;
   gap: 0;
@@ -57,7 +55,12 @@
   background: var(--sg-gold);
 }
 
-/* Preset List */
+.modeStar {
+  color: var(--sg-gold-text);
+  font-size: 14px;
+  filter: drop-shadow(0 0 4px rgba(43,181,178,0.4));
+}
+
 .presetList {
   display: flex;
   flex-direction: column;
@@ -68,28 +71,34 @@
   font-family: var(--sg-font-body);
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
+  border-left: 3px solid transparent;
   border-radius: var(--sg-radius-lg);
   padding: 12px 16px;
   cursor: pointer;
-  transition: all 0.12s;
+  transition: all 0.15s ease;
   text-align: left;
 }
 .presetCard:hover {
   border-color: var(--sg-border-default);
   background: var(--sg-bg-surface-1);
+  transform: translateY(-1px);
+  box-shadow: var(--sg-shadow-sm);
 }
 .presetCard.active {
+  border-left-color: var(--sg-gold);
   border-color: var(--sg-gold);
   background: var(--sg-gold-glow);
 }
 
 .presetName {
+  font-family: var(--sg-font-body);
   font-weight: 600;
   font-size: 13px;
   color: var(--sg-text-primary);
   margin-bottom: 2px;
 }
 .presetDesc {
+  font-family: var(--sg-font-body);
   font-size: 11px;
   color: var(--sg-text-tertiary);
 }
@@ -98,12 +107,12 @@
   font-size: 10px;
   color: var(--sg-gold-text);
   background: var(--sg-gold-glow);
+  border: 1px solid rgba(43,181,178,0.15);
   border-radius: var(--sg-radius-sm);
-  padding: 2px 6px;
+  padding: 2px 8px;
   float: right;
 }
 
-/* Grid Preview */
 .gridPreview {
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
@@ -112,6 +121,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 300px;
 }
 
 .gridPreviewLabel {
@@ -127,7 +137,6 @@
   display: grid;
   gap: 4px;
   flex: 1;
-  min-height: 200px;
 }
 
 .gridCell {
@@ -141,10 +150,15 @@
   font-size: 10px;
   color: var(--sg-text-disabled);
   text-align: center;
-  padding: 4px;
+  padding: 8px;
+  transition: all 0.12s;
+}
+.gridCell:hover {
+  border-color: var(--sg-border-default);
+  background: var(--sg-bg-surface-2);
+  color: var(--sg-text-tertiary);
 }
 
-/* Prompt Output */
 .promptOutput {
   font-family: var(--sg-font-mono);
   font-size: 12px;
@@ -154,11 +168,10 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: 14px;
-  min-height: 80px;
+  min-height: 60px;
   word-break: break-word;
 }
 
-/* Custom Grid Controls */
 .customControls {
   display: flex;
   gap: 16px;
@@ -184,7 +197,6 @@
   padding: 6px 10px;
 }
 
-/* Layout Options */
 .layoutGroup {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -211,7 +223,6 @@
   background: var(--sg-gold-glow);
 }
 
-/* Copy Button */
 .copyBtn {
   width: 100%;
   font-family: var(--sg-font-mono);
@@ -228,9 +239,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: opacity var(--sg-transition), box-shadow var(--sg-transition);
 }
+.copyBtn:hover { opacity: 0.92; box-shadow: var(--sg-shadow-gold); }
 
-/* ── Legacy JSX aliases ── */
+/* ── JSX aliases (existing component class names) ── */
 .controlsColumn {
   padding: 20px 24px;
   overflow-y: auto;
@@ -238,7 +251,6 @@
   border-right: 1px solid var(--sg-border-subtle);
   background: var(--sg-bg-app);
 }
-
 .modeToggle {
   display: flex;
   background: var(--sg-bg-surface-0);
@@ -247,7 +259,6 @@
   overflow: hidden;
   margin-bottom: 16px;
 }
-
 .modeToggleBtn {
   flex: 1;
   font-family: var(--sg-font-mono);
@@ -264,7 +275,6 @@
 }
 .modeToggleBtn:hover { color: var(--sg-text-secondary); background: var(--sg-bg-surface-1); }
 .modeToggleBtn.active { color: var(--sg-gold-text); background: var(--sg-chip-bg-active); font-weight: 600; }
-
 .section {
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
@@ -272,7 +282,6 @@
   padding: 16px;
   margin-bottom: 12px;
 }
-
 .sectionTitle {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
@@ -282,7 +291,6 @@
   color: var(--sg-text-tertiary);
   margin-bottom: 12px;
 }
-
 .presetItem {
   display: flex;
   justify-content: space-between;
@@ -290,82 +298,21 @@
   padding: 10px 14px;
   background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-border-subtle);
+  border-left: 3px solid transparent;
   border-radius: var(--sg-radius-md);
   cursor: pointer;
-  transition: all var(--sg-transition);
+  transition: all 0.15s;
   width: 100%;
   text-align: left;
 }
-.presetItem:hover { border-color: var(--sg-border-default); background: var(--sg-bg-surface-2); }
-.presetItem.active { border-color: var(--sg-gold); background: var(--sg-gold-glow); }
+.presetItem:hover { border-color: var(--sg-border-default); background: var(--sg-bg-surface-2); transform: translateY(-1px); }
+.presetItem.active { border-left-color: var(--sg-gold); border-color: var(--sg-gold); background: var(--sg-gold-glow); }
 .presetItem.active .presetName { color: var(--sg-gold-text); }
-
-.gridSize {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-2xl);
-  font-weight: 600;
-  color: var(--sg-text-primary);
-}
-.gridSizeNote {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  color: var(--sg-text-disabled);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-left: 12px;
-}
-
-.layoutChips {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 6px;
-}
-
-.previewColumn {
-  padding: 20px 28px;
-  height: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.previewPanel {
-  background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-xl);
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.previewTitle {
-  font-family: var(--sg-font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--sg-text-tertiary);
-  margin-bottom: 12px;
-}
-
-.gridCellLabel {
-  font-family: var(--sg-font-mono);
-  font-size: 10px;
-  color: var(--sg-text-disabled);
-  text-align: center;
-  padding: 4px;
-}
-
-.gridOutput {
-  margin-top: 16px;
-  font-family: var(--sg-font-mono);
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--sg-text-primary);
-  background: var(--sg-bg-root);
-  border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-lg);
-  padding: 14px;
-  word-break: break-word;
-}
+.gridSize { font-family: var(--sg-font-mono); font-size: var(--sg-text-2xl); font-weight: 600; color: var(--sg-text-primary); }
+.gridSizeNote { font-family: var(--sg-font-mono); font-size: var(--sg-text-xs); color: var(--sg-text-disabled); text-transform: uppercase; letter-spacing: 0.06em; margin-left: 12px; }
+.layoutChips { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+.previewColumn { padding: 20px 28px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+.previewPanel { background: var(--sg-bg-surface-0); border: 1px solid var(--sg-border-subtle); border-radius: var(--sg-radius-xl); padding: 20px; flex: 1; display: flex; flex-direction: column; min-height: 300px; }
+.previewTitle { font-family: var(--sg-font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--sg-text-tertiary); margin-bottom: 12px; }
+.gridCellLabel { font-family: var(--sg-font-mono); font-size: 10px; color: var(--sg-text-disabled); text-align: center; padding: 4px; }
+.gridOutput { margin-top: 16px; font-family: var(--sg-font-mono); font-size: 12px; line-height: 1.7; color: var(--sg-text-primary); background: var(--sg-bg-root); border: 1px solid var(--sg-border-subtle); border-radius: var(--sg-radius-lg); padding: 14px; word-break: break-word; }

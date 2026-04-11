@@ -1,7 +1,7 @@
 .header {
   display: flex;
   align-items: center;
-  height: var(--sg-header-height, 72px);
+  height: var(--sg-header-height, 96px);
   padding: 0 32px;
   background: var(--sg-bg-app);
   border-bottom: 1px solid var(--sg-border-subtle);
@@ -9,6 +9,7 @@
   top: 0;
   z-index: 100;
   flex-shrink: 0;
+  box-shadow: 0 1px 0 var(--sg-border-subtle), 0 2px 12px rgba(0,0,0,0.4);
 }
 
 .headerLogo {
@@ -18,22 +19,47 @@
   flex-shrink: 0;
 }
 
-/* LOGO: 2752×1536 Querformat. 48px Höhe = lesbar. */
 .headerLogoIcon {
-  height: 48px;
+  height: 72px;
   width: auto;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-/* Logo-Bild ENTHÄLT den Schriftzug. Kein extra Text nötig. */
-.headerLogoText { display: none; }
-.headerSubtitle { display: none; }
+.headerDivider {
+  width: 1px;
+  height: 32px;
+  background: var(--sg-border-default);
+  flex-shrink: 0;
+}
+
+.headerLogoText {
+  font-family: var(--sg-font-body);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--sg-text-primary);
+  line-height: 1.1;
+}
+.headerLogoText span {
+  color: var(--sg-text-tertiary);
+  font-weight: 400;
+}
+
+.headerSubtitle {
+  font-family: var(--sg-font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--sg-text-tertiary);
+  margin-top: 2px;
+}
 
 .tabNav {
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: auto;
+  margin-left: 48px;
 }
 
 .tabNavItem {
@@ -62,9 +88,10 @@
   bottom: 0;
   left: 22px; right: 22px;
   height: 2px;
-  background: var(--sg-gold);
+  background: var(--sg-gold-gradient);
   border-radius: 2px 2px 0 0;
 }
+
 .tabNavItem::before { display: none; }
 
 .headerRight {
@@ -72,7 +99,7 @@
   align-items: center;
   gap: var(--sg-space-lg);
   flex-shrink: 0;
-  margin-left: 20px;
+  margin-left: auto;
 }
 
 .langToggle {
@@ -85,7 +112,8 @@
   border-radius: var(--sg-radius-sm);
   padding: 4px 10px;
   cursor: pointer;
+  transition: all var(--sg-transition);
 }
+.langToggle:hover { color: var(--sg-text-secondary); border-color: var(--sg-border-default); }
 
 .phaseBadge { display: none; }
-.headerDivider { display: none; }

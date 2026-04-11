@@ -1,10 +1,9 @@
-/* === VIEWPORT-FITTING LAYOUT === */
 .container {
   display: grid;
   grid-template-columns: 1fr 400px;
   max-width: 1480px;
   margin: 0 auto;
-  height: calc(100vh - var(--sg-header-height, 72px));
+  height: calc(100vh - var(--sg-header-height, 96px));
   overflow: hidden;
 }
 
@@ -25,7 +24,6 @@
   background: var(--sg-bg-app);
 }
 
-/* Scene Input */
 .sceneInput { margin-bottom: 16px; }
 .sceneInputLabel {
   display: flex;
@@ -47,19 +45,26 @@
   max-height: 120px;
 }
 
-/* Sections Wrapper */
-.sectionsWrapper { }
+.sectionsWrapper {}
 
-/* Section Accordion */
-.section { border-bottom: 1px solid var(--sg-border-subtle); }
-.section.open { }
-.section.hasActive { }
+/* Section als Karte mit eigenem Hintergrund */
+.section {
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-xl);
+  margin-bottom: 8px;
+  background: var(--sg-bg-surface-0);
+  transition: border-color var(--sg-transition);
+}
+.section.hasActive {
+  border-color: var(--sg-border-default);
+}
+.section.open {}
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 12px 16px;
   cursor: pointer;
   user-select: none;
 }
@@ -83,9 +88,10 @@
 }
 .section.open .sectionChevron { transform: rotate(180deg); }
 
-.sectionBody { padding-bottom: 16px; }
+.sectionBody {
+  padding: 0 16px 16px 16px;
+}
 
-/* CHIPS — Grid statt Flex */
 .chipGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -97,7 +103,7 @@
   font-size: 13px;
   font-weight: 400;
   color: var(--sg-chip-text);
-  background: var(--sg-bg-surface-0);
+  background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-chip-border);
   border-radius: var(--sg-radius-lg);
   padding: 8px 12px;
@@ -109,16 +115,16 @@
 .chip:hover {
   color: var(--sg-chip-text-hover);
   border-color: var(--sg-chip-border-hover);
-  background: var(--sg-chip-bg-hover);
+  background: var(--sg-bg-hover);
+  transform: scale(1.02);
 }
 .chip.active {
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 12px rgba(43,181,178,0.06);
+  box-shadow: 0 0 12px rgba(43,181,178,0.08);
 }
 
-/* Output */
 .outputLabel {
   font-family: var(--sg-font-mono);
   font-size: 10px;
@@ -142,6 +148,7 @@
   word-break: break-word;
   min-height: 100px;
   flex: 1;
+  transition: border-color var(--sg-transition-slow), box-shadow var(--sg-transition-slow);
 }
 .outputBox.empty {
   color: var(--sg-text-disabled);
@@ -149,7 +156,10 @@
   align-items: center;
   justify-content: center;
 }
-.outputBox.filled { border-color: var(--sg-gold-dim); }
+.outputBox.filled {
+  border-color: var(--sg-gold-dim);
+  box-shadow: 0 0 20px rgba(43,181,178,0.06);
+}
 
 .outputControls {
   display: flex;
@@ -179,9 +189,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: opacity var(--sg-transition);
+  transition: opacity var(--sg-transition), box-shadow var(--sg-transition);
 }
-.copyButton:hover { opacity: 0.9; }
+.copyButton:hover { opacity: 0.92; box-shadow: var(--sg-shadow-gold); }
 .copyButton:disabled { opacity: 0.4; cursor: default; }
 
 .suffixToggle {
@@ -206,19 +216,20 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: 12px 14px;
+  opacity: 0.6;
 }
 .rulesBoxTitle {
   font-family: var(--sg-font-mono);
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--sg-text-tertiary);
-  margin-bottom: 6px;
+  color: var(--sg-text-disabled);
+  margin-bottom: 4px;
 }
 .rulesBoxList { list-style: none; padding: 0; }
 .rulesBoxItem {
-  font-size: 11px;
-  color: var(--sg-text-tertiary);
-  padding: 2px 0;
+  font-size: 10px;
+  color: var(--sg-text-disabled);
+  padding: 1px 0;
   font-family: var(--sg-font-body);
 }
