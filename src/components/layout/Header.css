@@ -132,6 +132,43 @@
   border-radius: 3px;
 }
 
+/* ── Language toggle ── */
+.sg-lang {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.sg-lang__btn {
+  padding: 3px 8px;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(228,228,238,0.3);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.sg-lang__btn:hover {
+  color: rgba(228,228,238,0.65);
+  background: rgba(255,255,255,0.05);
+}
+
+.sg-lang__btn.active {
+  background: rgba(232,166,36,0.12);
+  color: #e8a624;
+}
+
 @media (max-width: 900px) {
   .sg-header__inner { padding: 0 20px; gap: 20px; height: 56px; }
   .sg-nav { height: 56px; }

@@ -1,7 +1,10 @@
 import React from 'react'
 import './Header.css'
+import { useLang } from '../../context/LangContext.jsx'
 
 export default function Header({ activeTab, tabs, onTabChange }) {
+  const { lang, setLang } = useLang()
+
   return (
     <header className="sg-header">
       <div className="sg-header__inner">
@@ -45,6 +48,20 @@ export default function Header({ activeTab, tabs, onTabChange }) {
             </button>
           ))}
         </nav>
+
+        {/* Language toggle */}
+        <div className="sg-lang">
+          <button
+            className={`sg-lang__btn${lang === 'de' ? ' active' : ''}`}
+            onClick={() => setLang('de')}
+            title="Deutsch"
+          >DE</button>
+          <button
+            className={`sg-lang__btn${lang === 'en' ? ' active' : ''}`}
+            onClick={() => setLang('en')
+            title="English"
+          >EN</button>
+        </div>
 
         {/* Version badge */}
         <div className="sg-header__badge">Phase 1</div>

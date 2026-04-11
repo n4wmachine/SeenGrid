@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
+import { LangProvider } from './context/LangContext.jsx'
 
 // Local font packages — no Google Fonts CDN dependency
 import '@fontsource/space-grotesk/400.css'
@@ -15,6 +16,8 @@ import './styles/theme.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <LangProvider>
+      <App />
+    </LangProvider>
   </React.StrictMode>
 )
