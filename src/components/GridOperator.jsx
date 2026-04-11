@@ -23,6 +23,7 @@ const LAYOUTS = [
 const MODES = [
   { id: 'seengrid', label: 'SeenGrid Optimized', star: true,  desc: 'Exakte Templates aus DeepSeek1.txt — paste-ready' },
   { id: 'core',     label: 'Core',               star: false, desc: 'Freier Grid mit NanoBanana-Optimierung' },
+  { id: 'custom',   label: 'Custom Grid',         star: false, desc: 'Komplett manuell — kein Template, kein NanoBanana-Overlay. Du schreibst alles selbst.' },
 ]
 
 function buildRoles(preset) {
@@ -41,6 +42,7 @@ export default function GridOperator() {
   const [coreTemplate, setCoreTemplate] = useState(coreTemplates[0])
   const [coreSubject, setCoreSubj]    = useState('')
   const [coreStyle, setCoreStyle]     = useState('')
+  const [customOutput, setCustomOutput] = useState('')
   const [copied, setCopied]           = useState(false)
 
   // Sync dimensions + panel roles when preset changes
@@ -59,9 +61,9 @@ export default function GridOperator() {
     if (defaults.length) setPanelRoles(defaults)
   }, [coreTemplate]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync panel role array size when rows/cols change (Core mode only)
+  // Sync panel role array size when rows/cols change (Core + Custom mode)
   useEffect(() => {
-    if (mode !== 'core') return
+    if (mode !== 'core' && mode !== 'custom') return
     const total = rows * cols
     setPanelRoles(prev => {
       if (prev.length === total) return prev
@@ -86,6 +88,8 @@ export default function GridOperator() {
       if (coreStyle) parts.push(`STYLE OVERRIDE: Apply ${coreStyle}.`)
       return parts.join('\n\n')
     }
+
+    if (mode === 'custom') return customOutput
 
     // CORE mode: NanoBanana structured template
     const panelLines = panelRoles
@@ -189,7 +193,7 @@ export default function GridOperator() {
             </div>
           )}
 
-          {/* Grid size — locked in SeenGrid mode, free in Core */}
+          {/* Grid size — locked in SeenGrid mode, free in Core / Custom */}
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>Grid Größe</p>
             {mode === 'seengrid' ? (
@@ -266,24 +270,26 @@ export default function GridOperator() {
             </div>
           )}
 
-          {/* Style override */}
-          <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>
-              Style Override{' '}
-              <span style={{ color: 'var(--t-2)', fontWeight: 400 }}>optional</span>
-            </p>
-            <input
-              type="text"
-              className="field"
-              value={coreStyle}
-              onChange={e => setCoreStyle(e.target.value)}
-              placeholder={
-                mode === 'seengrid'
-                  ? 'z.B. Neo-Noir Cinematic / Style Asset aus OpenArt'
-                  : 'z.B. Neo-Noir Cinematic Style'
-              }
-            />
-          </div>
+          {/* Style override — SeenGrid and Core only */}
+          {mode !== 'custom' && (
+            <div className={styles.block}>
+              <p className="label-xs" style={{ marginBottom: 8 }}>
+                Style Override{' '}
+                <span style={{ color: 'var(--t-2)', fontWeight: 400 }}>optional</span>
+              </p>
+              <input
+                type="text"
+                className="field"
+                value={coreStyle}
+                onChange={e => setCoreStyle(e.target.value)}
+                placeholder={
+                  mode === 'seengrid'
+                    ? 'z.B. Neo-Noir Cinematic / Style Asset aus OpenArt'
+                    : 'z.B. Neo-Noir Cinematic Style'
+                }
+              />
+            </div>
+          )}
 
           {/* Core mode: subject input */}
           {mode === 'core' && (
@@ -301,7 +307,12 @@ export default function GridOperator() {
 
           {/* Panel roles editor */}
           <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>Panel-Rollen</p>
+            <p className="label-xs" style={{ marginBottom: 8 }}>
+              Panel-Rollen
+              {mode === 'custom' && (
+                <span style={{ color: 'var(--t-2)', fontWeight: 400, marginLeft: 6 }}>— als Referenz</span>
+              )}
+            </p>
             <div
               className={styles.panelRoleGrid}
               style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
@@ -334,23 +345,38 @@ export default function GridOperator() {
             {/* Prompt output */}
             <div className={styles.outputBlock}>
               <div className={styles.outputHeader}>
-                <span className="label-xs">Generierter Prompt</span>
+                <span className="label-xs">
+                  {mode === 'custom' ? 'Freier Prompt — komplett manuell' : 'Generierter Prompt'}
+                </span>
                 {mode === 'seengrid' && (
                   <span className={styles.optimizedBadge}>★ SeenGrid Optimized</span>
                 )}
+                {mode === 'custom' && (
+                  <span className={styles.customBadge}>Kein Template</span>
+                )}
               </div>
-              <div
-                className={`output-box has-content ${styles.promptOut}`}
-                onClick={e => {
-                  const range = document.createRange()
-                  range.selectNodeContents(e.currentTarget)
-                  const sel = window.getSelection()
-                  sel.removeAllRanges()
-                  sel.addRange(range)
-                }}
-              >
-                {output}
-              </div>
+              {mode === 'custom' ? (
+                <textarea
+                  className={`field ${styles.customTextarea}`}
+                  value={customOutput}
+                  onChange={e => setCustomOutput(e.target.value)}
+                  placeholder={`${rows}×${cols} Grid — ${totalPanels} Panels. Schreib deinen Prompt hier komplett manuell. Keine Einschränkungen, kein NanoBanana-Overlay.`}
+                  spellCheck={false}
+                />
+              ) : (
+                <div
+                  className={`output-box has-content ${styles.promptOut}`}
+                  onClick={e => {
+                    const range = document.createRange()
+                    range.selectNodeContents(e.currentTarget)
+                    const sel = window.getSelection()
+                    sel.removeAllRanges()
+                    sel.addRange(range)
+                  }}
+                >
+                  {output}
+                </div>
+              )}
               <button className={`btn btn-primary ${styles.copyBtn}`} onClick={handleCopy}>
                 <CopyIcon />
                 {copied ? '✓ Kopiert!' : 'Paste-Ready Prompt kopieren'}
