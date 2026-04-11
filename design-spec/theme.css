@@ -253,35 +253,3 @@ button {
   border-color: var(--sg-border-strong);
   background: var(--sg-bg-hover);
 }
-
-/* ============================================================
-   GLOBAL CHIP (used outside CSS Modules — PromptVault, GridOperator, MJStartframe)
-   ============================================================ */
-
-.chip {
-  font-family: var(--sg-font-body);
-  font-size: var(--sg-text-sm);
-  font-weight: 400;
-  color: var(--sg-chip-text);
-  background: var(--sg-chip-bg);
-  border: 1px solid var(--sg-chip-border);
-  border-radius: var(--sg-radius-md);
-  padding: var(--sg-space-sm) var(--sg-space-md);
-  cursor: pointer;
-  transition: all var(--sg-transition-fast);
-  white-space: nowrap;
-  user-select: none;
-  line-height: 1.3;
-}
-.chip:hover {
-  color: var(--sg-chip-text-hover);
-  background: var(--sg-chip-bg-hover);
-  border-color: var(--sg-chip-border-hover);
-}
-.chip.active {
-  color: var(--sg-chip-text-active);
-  background: var(--sg-chip-bg-active);
-  border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px rgba(212,149,42,0.10);
-  font-weight: 500;
-}

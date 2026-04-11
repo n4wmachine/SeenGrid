@@ -20,29 +20,20 @@ import effectsData   from '../data/effects.json'
 import negativeData  from '../data/negative.json'
 import aspectData    from '../data/aspectratio.json'
 
-// ── NanoBanana Core optimization rules (from system-prompt-en.md) ──
-// Rule 1: Replace feeling words with professional terms (covered by chip vocabulary)
-// Rule 2: Replace adjectives with parameters (covered by aperture + focal chips)
-// Rule 3: Add negative constraints (negative chip group)
-// Rule 4: Sensory stacking (scene textarea free text)
-// Rule 5: Group & cluster (section structure)
-// Rule 6: Format adaptation (single assembled string)
-
 const SECTIONS = [
-  { id: 'style',       label: 'Film Style',      dot: '#e8a624', mode: 'single',  data: styleData },
-  { id: 'shotsize',    label: 'Shot Size',        dot: '#7088a8', mode: 'single',  data: shotData },
-  { id: 'cameraangle', label: 'Camera Angle',     dot: '#7088a8', mode: 'single',  data: angleData },
-  { id: 'camera',      label: 'Camera System',    dot: '#5c9fc4', mode: 'single',  data: cameraData },
-  { id: 'lens',        label: 'Lens / Optic',     dot: '#5c9fc4', mode: 'single',  data: lensData },
-  { id: 'focal',       label: 'Focal Length',     dot: '#5c9fc4', mode: 'single',  data: focalData },
-  { id: 'aperture',    label: 'Aperture / DOF',   dot: '#5c9fc4', mode: 'single',  data: apertureData },
-  { id: 'aspectratio', label: 'Aspect Ratio',     dot: '#5c9fc4', mode: 'single',  data: aspectData },
-  { id: 'lighting',    label: 'Lighting',         dot: '#c9a040', mode: 'multi',   data: lightingData },
-  { id: 'colorgrade',  label: 'Color Grade',      dot: '#a07838', mode: 'single',  data: colorData },
-  { id: 'effects',     label: 'Film Effects',     dot: '#9e6050', mode: 'multi',   data: effectsData },
-  { id: 'negative',    label: 'Negative Prompt',  dot: '#52525e', mode: 'multi',   data: negativeData },
+  { id: 'style',       label: 'Film Style',      mode: 'single',  data: styleData },
+  { id: 'shotsize',    label: 'Shot Size',        mode: 'single',  data: shotData },
+  { id: 'cameraangle', label: 'Camera Angle',     mode: 'single',  data: angleData },
+  { id: 'camera',      label: 'Camera System',    mode: 'single',  data: cameraData },
+  { id: 'lens',        label: 'Lens / Optic',     mode: 'single',  data: lensData },
+  { id: 'focal',       label: 'Focal Length',     mode: 'single',  data: focalData },
+  { id: 'aperture',    label: 'Aperture / DOF',   mode: 'single',  data: apertureData },
+  { id: 'aspectratio', label: 'Aspect Ratio',     mode: 'single',  data: aspectData },
+  { id: 'lighting',    label: 'Lighting',         mode: 'multi',   data: lightingData },
+  { id: 'colorgrade',  label: 'Color Grade',      mode: 'single',  data: colorData },
+  { id: 'effects',     label: 'Film Effects',     mode: 'multi',   data: effectsData },
+  { id: 'negative',    label: 'Negative Prompt',  mode: 'multi',   data: negativeData },
 ]
-
 
 function initState() {
   const state = { scene: '', negativeCustom: '', qualitySuffix: true }
@@ -69,7 +60,6 @@ export default function PromptBuilder() {
     setTimeout(() => setSavedFav(false), 2000)
   }
 
-  // ── Toggle chip ──
   const toggleChip = useCallback((sectionId, value, mode) => {
     setState(prev => {
       const next = { ...prev }
@@ -84,7 +74,6 @@ export default function PromptBuilder() {
     })
   }, [])
 
-  // ── Toggle accordion section ──
   const toggleSection = useCallback((id) => {
     setOpenSections(prev => {
       const next = new Set(prev)
@@ -93,23 +82,14 @@ export default function PromptBuilder() {
     })
   }, [])
 
-  // ── Build prompt string (NanoBanana Core rules) ──
   function buildPrompt() {
     const parts = []
-
-    // Scene / subject (sensory stacking free text)
     if (state.scene) parts.push(state.scene)
-
-    // Style (professional term, Rule 1)
     if (state.style) parts.push(`${state.style} cinematic style`)
-
-    // Shot size + camera angle (grouped, Rule 5)
     const framing = []
     if (state.shotsize)    framing.push(state.shotsize)
     if (state.cameraangle) framing.push(`${state.cameraangle} angle`)
     if (framing.length)    parts.push(framing.join(', '))
-
-    // Camera block (Rule 2: parameters not adjectives)
     const cam = []
     if (state.camera)  cam.push(`shot on ${state.camera}`)
     if (state.lens)    cam.push(`${state.lens} lens`)
@@ -121,27 +101,17 @@ export default function PromptBuilder() {
     }
     if (state.aspectratio) cam.push(`${state.aspectratio} aspect ratio`)
     if (cam.length) parts.push(cam.join(', '))
-
-    // Lighting
     if (state.lighting.size > 0)
       parts.push([...state.lighting].join(' + ') + ' lighting')
-
-    // Color grade
     if (state.colorgrade)
       parts.push(`${state.colorgrade} color grade`)
-
-    // Film effects
     if (state.effects.size > 0)
       parts.push([...state.effects].join(', '))
-
-    // Quality suffix (NanoBanana-style, not MJ anti-pattern territory)
     if (state.qualitySuffix && parts.length > 0)
       parts.push('ultra detailed, photorealistic, 8K cinema quality')
-
     return parts.join(', ')
   }
 
-  // ── Build negative string ──
   function buildNegative() {
     const neg = [...state.negative]
     if (state.negativeCustom) {
@@ -150,7 +120,6 @@ export default function PromptBuilder() {
     return neg.join(', ')
   }
 
-  // ── Copy ──
   async function handleCopy() {
     const prompt = buildPrompt()
     if (!prompt) return
@@ -167,7 +136,6 @@ export default function PromptBuilder() {
     }
   }
 
-  // ── Random ──
   function handleRandom() {
     const pick = (arr, nullable = true) => {
       if (nullable && Math.random() < 0.15) return null
@@ -198,7 +166,6 @@ export default function PromptBuilder() {
     }))
   }
 
-  // ── Reset ──
   function handleReset() {
     setState(initState())
   }
@@ -207,31 +174,39 @@ export default function PromptBuilder() {
   const negative  = buildNegative()
   const hasPrompt = prompt.length > 0
 
+  const RULES = [
+    t('builder.rule1'),
+    t('builder.rule2'),
+    t('builder.rule3'),
+    t('builder.rule4'),
+    t('builder.rule5'),
+    t('builder.rule6'),
+  ]
+
   return (
-    <div className={styles.root}>
-      {/* ── Two-column layout ── */}
-      <div className={styles.layout}>
+    <div className={styles.container}>
 
-        {/* LEFT: Controls */}
-        <div className={styles.controls}>
+      {/* LINKE SPALTE */}
+      <div className={styles.leftColumn}>
 
-          {/* Scene input */}
-          <div className={styles.sceneSection}>
-            <div className={styles.sectionHeaderStatic}>
-              <span className="label-xs">{t('builder.scene_label')}</span>
-              <span className={styles.hint}>{t('builder.scene_hint')}</span>
-            </div>
-            <textarea
-              className="field"
-              rows={3}
-              value={state.scene}
-              onChange={e => setState(p => ({ ...p, scene: e.target.value }))}
-              placeholder={t('builder.scene_placeholder')}
-              spellCheck={false}
-            />
+        {/* Szene / Motiv Textfeld */}
+        <div className={styles.sceneInput}>
+          <div className={styles.sceneInputLabel}>
+            <span>{t('builder.scene_label')}</span>
+            <span className={styles.sceneInputHint}>{t('builder.scene_hint')}</span>
           </div>
+          <textarea
+            className={styles.sceneTextarea}
+            rows={3}
+            value={state.scene}
+            onChange={e => setState(p => ({ ...p, scene: e.target.value }))}
+            placeholder={t('builder.scene_placeholder')}
+            spellCheck={false}
+          />
+        </div>
 
-          {/* Chip sections */}
+        {/* Chip Sections */}
+        <div className={styles.sectionsWrapper}>
           {SECTIONS.map(sec => (
             <ChipSection
               key={sec.id}
@@ -242,97 +217,99 @@ export default function PromptBuilder() {
               onToggleChip={toggleChip}
             />
           ))}
-
-          {/* Negative custom input */}
-          <div className={styles.negCustom}>
-            <label className="label-xs" style={{ display: 'block', marginBottom: 6 }}>{t('builder.neg_custom_label')}</label>
-            <input
-              type="text"
-              className="field"
-              value={state.negativeCustom}
-              onChange={e => setState(p => ({ ...p, negativeCustom: e.target.value }))}
-              placeholder={t('builder.neg_custom_placeholder')}
-            />
-          </div>
         </div>
 
-        {/* RIGHT: Output */}
-        <div className={styles.outputPanel}>
-          <div className={styles.outputSticky}>
-            {/* Toolbar */}
-            <div className={styles.toolbar}>
-              <button className="btn btn-ghost btn-sm" onClick={handleRandom} title={t('builder.random_title')}>
-                <DiceIcon /> {t('common.random')}
-              </button>
-              <button className="btn btn-ghost btn-sm" onClick={handleReset} title={t('builder.reset_title')}>
-                <ResetIcon /> {t('common.reset')}
-              </button>
-              <label className={styles.qualityToggle} title={t('builder.quality_title')}>
-                <input
-                  type="checkbox"
-                  checked={state.qualitySuffix}
-                  onChange={e => setState(p => ({ ...p, qualitySuffix: e.target.checked }))}
-                />
-                <span className={`${styles.qualDot} ${state.qualitySuffix ? styles.qualDotOn : ''}`} />
-                <span>{t('builder.quality_label')}</span>
-              </label>
+        {/* Negative custom input */}
+        <div>
+          <label style={{
+            display: 'block', marginBottom: 6,
+            fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)',
+            textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--sg-text-tertiary)'
+          }}>
+            {t('builder.neg_custom_label')}
+          </label>
+          <input
+            type="text"
+            value={state.negativeCustom}
+            onChange={e => setState(p => ({ ...p, negativeCustom: e.target.value }))}
+            placeholder={t('builder.neg_custom_placeholder')}
+          />
+        </div>
+      </div>
+
+      {/* RECHTE SPALTE — Sticky Output */}
+      <div className={styles.rightColumn}>
+
+        <div className={styles.outputControls}>
+          <button className="sg-btn-ghost" onClick={handleRandom} title={t('builder.random_title')}>
+            <DiceIcon /> {t('common.random')}
+          </button>
+          <button className="sg-btn-ghost" onClick={handleReset} title={t('builder.reset_title')}>
+            <ResetIcon /> {t('common.reset')}
+          </button>
+          <button
+            className={[styles.suffixToggle, state.qualitySuffix && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setState(p => ({ ...p, qualitySuffix: !p.qualitySuffix }))}
+            title={t('builder.quality_title')}
+          >
+            ● {t('builder.quality_label')}
+          </button>
+        </div>
+
+        <div className={styles.outputLabel}>
+          <span>{t('builder.generated_prompt')}</span>
+          <span className={styles.charCount}>{prompt.length} {t('builder.char_count')}</span>
+        </div>
+
+        <div className={[styles.outputBox, hasPrompt ? styles.filled : styles.empty].filter(Boolean).join(' ')}>
+          {hasPrompt
+            ? <HighlightedPrompt state={state} apertureData={apertureData} />
+            : t('builder.prompt_placeholder')
+          }
+        </div>
+
+        <button
+          className={styles.copyButton}
+          disabled={!hasPrompt}
+          onClick={handleCopy}
+        >
+          <CopyIcon />
+          {copied ? t('common.copied') : t('builder.copy_btn')}
+        </button>
+
+        <button
+          className="sg-btn-ghost"
+          style={{ width: '100%' }}
+          disabled={!hasPrompt}
+          onClick={handleSaveFav}
+        >
+          <StarIcon filled={savedFav} />
+          {' '}{savedFav ? t('fav.saved') : t('fav.save')}
+        </button>
+
+        {negative && (
+          <div>
+            <div className={styles.outputLabel} style={{ marginBottom: 8 }}>
+              <span style={{ color: 'var(--sg-text-disabled)' }}>{t('builder.neg_prompt_label')}</span>
             </div>
-
-            {/* Prompt output */}
-            <div className={styles.outputBlock}>
-              <div className={styles.outputLabel}>
-                <span className="label-xs">{t('builder.generated_prompt')}</span>
-                <span className={styles.charCount}>{prompt.length} {t('builder.char_count')}</span>
-              </div>
-              <div className={`output-box ${hasPrompt ? 'has-content' : ''} ${styles.promptBox}`}>
-                {hasPrompt
-                  ? <HighlightedPrompt state={state} apertureData={apertureData} />
-                  : <span className={styles.placeholder}>{t('builder.prompt_placeholder')}</span>
-                }
-              </div>
-              <button
-                className={`btn btn-primary ${styles.copyBtn}`}
-                disabled={!hasPrompt}
-                onClick={handleCopy}
-              >
-                <CopyIcon />
-                {copied ? t('common.copied') : t('builder.copy_btn')}
-              </button>
-              <button
-                className="btn btn-ghost btn-sm"
-                style={{ width: '100%', marginTop: 6 }}
-                disabled={!hasPrompt}
-                onClick={handleSaveFav}
-              >
-                <StarIcon filled={savedFav} />
-                {savedFav ? t('fav.saved') : t('fav.save')}
-              </button>
-            </div>
-
-            {/* Negative prompt output */}
-            {negative && (
-              <div className={styles.outputBlock}>
-                <div className={styles.outputLabel}>
-                  <span className="label-xs" style={{ color: 'var(--t-2)' }}>{t('builder.neg_prompt_label')}</span>
-                </div>
-                <div className={`output-box ${styles.negBox}`}>{negative}</div>
-              </div>
-            )}
-
-            {/* NanoBanana rules reminder */}
-            <div className={styles.rulesCard}>
-              <p className={styles.rulesTitle}>{t('builder.rules_title')}</p>
-              <ol className={styles.rulesList}>
-                <li>{t('builder.rule1')}</li>
-                <li>{t('builder.rule2')}</li>
-                <li>{t('builder.rule3')}</li>
-                <li>{t('builder.rule4')}</li>
-                <li>{t('builder.rule5')}</li>
-                <li>{t('builder.rule6')}</li>
-              </ol>
+            <div className={[styles.outputBox, styles.filled].join(' ')} style={{ minHeight: 'auto' }}>
+              {negative}
             </div>
           </div>
+        )}
+
+        {/* NanoBanana Core Regeln */}
+        <div className={styles.rulesBox}>
+          <div className={styles.rulesBoxTitle}>{t('builder.rules_title')}</div>
+          <ol className={styles.rulesBoxList}>
+            {RULES.map((rule, i) => (
+              <li key={i} className={styles.rulesBoxItem} data-index={`${i + 1}.`}>
+                {rule}
+              </li>
+            ))}
+          </ol>
         </div>
+
       </div>
     </div>
   )
@@ -340,47 +317,47 @@ export default function PromptBuilder() {
 
 // ── Chip Section (accordion) ──
 function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
-  const { id, label, dot, mode, data } = section
+  const { id, label, mode, data } = section
   const activeCount = mode === 'multi'
     ? state[id].size
     : state[id] ? 1 : 0
 
   return (
-    <div className={styles.section}>
-      <button
-        className={styles.sectionHeader}
-        aria-expanded={isOpen}
-        onClick={onToggle}
-      >
+    <div className={[styles.section, activeCount > 0 && styles.hasActive, isOpen && styles.open].filter(Boolean).join(' ')}>
+      <div className={styles.sectionHeader} onClick={onToggle}>
         <span className={styles.sectionTitle}>
-          <span
-            className={styles.sectionBar}
-            style={{ background: dot }}
-          />
           {label}
           {activeCount > 0 && (
-            <span className={styles.activeBadge}>{activeCount}</span>
+            <span style={{
+              fontSize: 'var(--sg-text-xs)',
+              fontFamily: 'var(--sg-font-mono)',
+              color: 'var(--sg-gold)',
+              background: 'rgba(212,149,42,0.12)',
+              borderRadius: 3,
+              padding: '1px 5px',
+            }}>{activeCount}</span>
           )}
         </span>
-        <ChevronIcon isOpen={isOpen} />
-      </button>
+        <span className={styles.sectionChevron}>▾</span>
+      </div>
       {isOpen && (
         <div className={styles.sectionBody}>
           <div className={styles.chipGrid}>
-            {data.map(item => (
-              <button
-                key={item.v}
-                className={`chip ${
-                  mode === 'multi'
-                    ? state[id].has(item.v) ? 'active' : ''
-                    : state[id] === item.v  ? 'active' : ''
-                }`}
-                title={item.t}
-                onClick={() => onToggleChip(id, item.v, mode)}
-              >
-                {item.v}
-              </button>
-            ))}
+            {data.map(item => {
+              const isActive = mode === 'multi'
+                ? state[id].has(item.v)
+                : state[id] === item.v
+              return (
+                <button
+                  key={item.v}
+                  className={[styles.chip, isActive && styles.active].filter(Boolean).join(' ')}
+                  title={item.t}
+                  onClick={() => onToggleChip(id, item.v, mode)}
+                >
+                  {item.v}
+                </button>
+              )
+            })}
           </div>
         </div>
       )}
@@ -388,15 +365,15 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
   )
 }
 
-// ── Highlighted prompt parts ──
+// ── Highlighted prompt (color-coded parts) ──
 function HighlightedPrompt({ state, apertureData }) {
   const parts = []
-  if (state.scene)      parts.push({ cls: 'scene',    text: state.scene })
-  if (state.style)      parts.push({ cls: 'style',    text: `${state.style} cinematic style` })
+  if (state.scene)      parts.push({ text: state.scene })
+  if (state.style)      parts.push({ text: `${state.style} cinematic style` })
   const framing = []
   if (state.shotsize)    framing.push(state.shotsize)
   if (state.cameraangle) framing.push(`${state.cameraangle} angle`)
-  if (framing.length)    parts.push({ cls: 'shot', text: framing.join(', ') })
+  if (framing.length)    parts.push({ text: framing.join(', ') })
   const cam = []
   if (state.camera)  cam.push(`shot on ${state.camera}`)
   if (state.lens)    cam.push(`${state.lens} lens`)
@@ -407,22 +384,22 @@ function HighlightedPrompt({ state, apertureData }) {
     cam.push(`${state.aperture} aperture${dof}`)
   }
   if (state.aspectratio) cam.push(`${state.aspectratio} aspect ratio`)
-  if (cam.length) parts.push({ cls: 'camera', text: cam.join(', ') })
+  if (cam.length) parts.push({ text: cam.join(', ') })
   if (state.lighting.size > 0)
-    parts.push({ cls: 'lighting', text: [...state.lighting].join(' + ') + ' lighting' })
+    parts.push({ text: [...state.lighting].join(' + ') + ' lighting' })
   if (state.colorgrade)
-    parts.push({ cls: 'color', text: `${state.colorgrade} color grade` })
+    parts.push({ text: `${state.colorgrade} color grade` })
   if (state.effects.size > 0)
-    parts.push({ cls: 'effects', text: [...state.effects].join(', ') })
+    parts.push({ text: [...state.effects].join(', ') })
   if (state.qualitySuffix && parts.length > 0)
-    parts.push({ cls: 'quality', text: 'ultra detailed, photorealistic, 8K cinema quality' })
+    parts.push({ text: 'ultra detailed, photorealistic, 8K cinema quality' })
 
   return (
     <p style={{ margin: 0, lineHeight: 1.9 }}>
       {parts.map((p, i) => (
         <React.Fragment key={i}>
-          <span className={styles[`p_${p.cls}`]}>{p.text}</span>
-          {i < parts.length - 1 && <span style={{ color: 'var(--t-2)' }}>, </span>}
+          <span>{p.text}</span>
+          {i < parts.length - 1 && <span style={{ color: 'var(--sg-text-disabled)' }}>, </span>}
         </React.Fragment>
       ))}
     </p>
@@ -430,7 +407,7 @@ function HighlightedPrompt({ state, apertureData }) {
 }
 
 // ── Icons ──
-const StarIcon  = ({ filled = false }) => (
+const StarIcon = ({ filled = false }) => (
   <svg width="13" height="13" viewBox="0 0 16 16"
     fill={filled ? 'currentColor' : 'none'}
     stroke="currentColor" strokeWidth={filled ? 0 : 1.4}
@@ -438,14 +415,6 @@ const StarIcon  = ({ filled = false }) => (
     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
   </svg>
 )
-const CopyIcon  = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
-const DiceIcon  = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zm0 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM5.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4-4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
+const CopyIcon = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
+const DiceIcon = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zm0 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM5.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-8 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4-4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
 const ResetIcon = () => <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
-const ChevronIcon = ({ isOpen }) => (
-  <svg
-    width="11" height="11" viewBox="0 0 16 16" fill="currentColor"
-    style={{ transform: isOpen ? 'rotate(0)' : 'rotate(-90deg)', transition: 'transform 0.2s', color: 'var(--t-2)', flexShrink: 0 }}
-  >
-    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-  </svg>
-)

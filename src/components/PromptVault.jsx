@@ -21,15 +21,15 @@ export default function PromptVault() {
 
   const ALL_CATEGORIES_LABEL = t('vault.all')
 
-  const [prompts, setPrompts]       = useState([])
-  const [loading, setLoading]       = useState(true)
-  const [error, setError]           = useState(null)
-  const [search, setSearch]         = useState('')
-  const [category, setCategory]     = useState('__all__')
-  const [sort, setSort]             = useState('likes')
-  const [page, setPage]             = useState(1)
-  const [copied, setCopied]         = useState(null)
-  const [expanded, setExpanded]     = useState(null)
+  const [prompts, setPrompts]   = useState([])
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState(null)
+  const [search, setSearch]     = useState('')
+  const [category, setCategory] = useState('__all__')
+  const [sort, setSort]         = useState('likes')
+  const [page, setPage]         = useState(1)
+  const [copied, setCopied]     = useState(null)
+  const [expanded, setExpanded] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -93,33 +93,23 @@ export default function PromptVault() {
 
   const filtered = useMemo(() => {
     if (showFavorites) return []
-
     let result = prompts
-
     if (category !== '__all__') {
       result = result.filter(p => p.categories.includes(category))
     }
-
     if (search.trim()) {
       const q = search.trim().toLowerCase()
       result = result.filter(p =>
-        p.prompt.toLowerCase().includes(q) ||
-        p.author.toLowerCase().includes(q)
+        p.prompt.toLowerCase().includes(q) || p.author.toLowerCase().includes(q)
       )
     }
-
     if (sort === 'likes')  result = [...result].sort((a, b) => b.likes - a.likes)
     if (sort === 'views')  result = [...result].sort((a, b) => b.views - a.views)
     if (sort === 'newest') result = [...result].sort((a, b) => new Date(b.date) - new Date(a.date))
-
     return result
   }, [prompts, category, search, sort, showFavorites])
 
-  const paginated = useMemo(
-    () => filtered.slice(0, page * PAGE_SIZE),
-    [filtered, page]
-  )
-
+  const paginated = useMemo(() => filtered.slice(0, page * PAGE_SIZE), [filtered, page])
   const hasMore = paginated.length < filtered.length
 
   useEffect(() => { setPage(1) }, [search, category, sort])
@@ -144,54 +134,55 @@ export default function PromptVault() {
   }
 
   return (
-    <div className={styles.root}>
+    <div className={styles.container}>
 
-      <div className={styles.topBar}>
-        <div className={styles.topBarLeft}>
-          <div className={styles.titleBlock}>
-            <h2 className={styles.vaultTitle}>Prompt Vault</h2>
-            <span className={styles.vaultCount}>
-              {loading
-                ? 'Lade\u2026'
-                : showFavorites
-                ? `${favorites.length} ${t('fav.tab')}`
-                : `${filtered.length.toLocaleString()} ${t('vault.count_of')} ${prompts.length.toLocaleString()} ${t('vault.prompts')}`
-              }
-            </span>
-          </div>
-          <p className={styles.vaultSub}>
-            Community-Prompts aus <a
-              href="https://github.com/jau123/nanobanana-trending-prompts"
-              target="_blank"
-              rel="noreferrer"
-              className={styles.repoLink}
-            >nanobanana-trending-prompts</a> \u2014 {t('vault.subtitle')}
-          </p>
-        </div>
+      {/* Vault Header */}
+      <div className={styles.vaultHeader}>
+        <h2 className={styles.vaultTitle}>
+          Prompt Vault
+          <span className={styles.vaultCount}>
+            {loading
+              ? 'Lade\u2026'
+              : showFavorites
+              ? `${favorites.length} ${t('fav.tab')}`
+              : `${filtered.length.toLocaleString()} / ${prompts.length.toLocaleString()}`
+            }
+          </span>
+        </h2>
+        <p className={styles.vaultSubtitle}>
+          Community-Prompts aus{' '}
+          <a href="https://github.com/jau123/nanobanana-trending-prompts" target="_blank" rel="noreferrer">
+            nanobanana-trending-prompts
+          </a>{' '}
+          \u2014 {t('vault.subtitle')}
+        </p>
       </div>
 
+      {/* Filter Bar */}
       {!showFavorites && (
-        <div className={styles.controls}>
-          <div className={styles.searchWrap}>
-            <SearchIcon />
+        <div className={styles.filterBar}>
+          <div style={{ position: 'relative', flex: 1, minWidth: 280 }}>
+            <span style={{
+              position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
+              color: 'var(--sg-text-tertiary)', pointerEvents: 'none',
+            }}>
+              <SearchIcon />
+            </span>
             <input
-              type="text"
+              type="search"
               className={styles.searchInput}
               placeholder={t('vault.search_placeholder')}
               value={search}
               onChange={e => setSearch(e.target.value)}
               spellCheck={false}
             />
-            {search && (
-              <button className={styles.clearBtn} onClick={() => setSearch('')}>\u00d7</button>
-            )}
           </div>
 
-          <div className={styles.sortBtns}>
+          <div className={styles.sortGroup}>
             {SORT_OPTIONS.map(s => (
               <button
                 key={s.id}
-                className={`${styles.sortBtn} ${sort === s.id ? styles.sortBtnActive : ''}`}
+                className={[styles.sortBtn, sort === s.id && styles.active].filter(Boolean).join(' ')}
                 onClick={() => setSort(s.id)}
                 title={s.desc}
               >
@@ -202,11 +193,12 @@ export default function PromptVault() {
         </div>
       )}
 
-      <div className={styles.catBar}>
+      {/* Category Chips */}
+      <div className={styles.categoryChips}>
         {allCategories.map(cat => (
           <button
             key={cat}
-            className={`chip ${category === cat ? 'active' : ''}`}
+            className={`chip${category === cat ? ' active' : ''}`}
             onClick={() => setCategory(cat)}
           >
             {cat === FAV_SENTINEL
@@ -219,13 +211,14 @@ export default function PromptVault() {
         ))}
       </div>
 
+      {/* Favorites View */}
       {showFavorites ? (
         favorites.length === 0 ? (
-          <div className={styles.statusBox}>
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--sg-text-tertiary)' }}>
             <p>{t('fav.empty')}</p>
           </div>
         ) : (
-          <div className={styles.gallery}>
+          <div className={styles.cardGrid}>
             {favorites.map(fav => (
               <FavoriteCard
                 key={fav.id}
@@ -243,28 +236,39 @@ export default function PromptVault() {
       ) : (
         <>
           {loading && (
-            <div className={styles.statusBox}>
-              <div className={styles.spinner} />
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--sg-text-tertiary)' }}>
+              <div style={{
+                width: 24, height: 24, border: '2px solid var(--sg-border-subtle)',
+                borderTopColor: 'var(--sg-gold)', borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite', margin: '0 auto 12px',
+              }} />
               <p>{t('vault.loading')}</p>
             </div>
           )}
 
           {error && (
-            <div className={styles.errorBox}>
-              <p className={styles.errorTitle}>{t('vault.error_title')}</p>
-              <p className={styles.errorMsg}>{error}</p>
-              <p className={styles.errorHint}>{t('vault.error_hint')}</p>
+            <div style={{
+              padding: 'var(--sg-space-2xl)', background: 'rgba(196,64,64,0.06)',
+              border: '1px solid rgba(196,64,64,0.2)', borderRadius: 'var(--sg-radius-lg)',
+            }}>
+              <p style={{ color: 'var(--sg-error)', fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-sm)', marginBottom: 8 }}>
+                {t('vault.error_title')}
+              </p>
+              <p style={{ color: 'var(--sg-text-tertiary)', fontSize: 'var(--sg-text-sm)', marginBottom: 8 }}>{error}</p>
+              <p style={{ color: 'var(--sg-text-disabled)', fontSize: 'var(--sg-text-xs)', fontFamily: 'var(--sg-font-mono)' }}>
+                {t('vault.error_hint')}
+              </p>
             </div>
           )}
 
           {!loading && !error && (
             <>
               {paginated.length === 0 ? (
-                <div className={styles.statusBox}>
+                <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--sg-text-tertiary)' }}>
                   <p>{t('vault.no_results')}</p>
                 </div>
               ) : (
-                <div className={styles.gallery}>
+                <div className={styles.cardGrid}>
                   {paginated.map(prompt => (
                     <PromptCard
                       key={prompt.id}
@@ -287,11 +291,8 @@ export default function PromptVault() {
               )}
 
               {hasMore && (
-                <div className={styles.loadMoreRow}>
-                  <button
-                    className="btn btn-ghost"
-                    onClick={() => setPage(p => p + 1)}
-                  >
+                <div style={{ textAlign: 'center', paddingTop: 'var(--sg-space-2xl)' }}>
+                  <button className="sg-btn-ghost" onClick={() => setPage(p => p + 1)}>
                     {t('vault.load_more')} ({filtered.length - paginated.length} {t('vault.more_items')})
                   </button>
                 </div>
@@ -322,77 +323,62 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
 
   return (
     <div className={styles.card}>
-      {hasImage && (
-        <div className={`${styles.imgWrap} ${imgLoaded ? styles.imgLoaded : ''}`}>
+      <div className={styles.cardImageWrapper}>
+        {hasImage && (
           <img
             src={prompt.imageUrls[0]}
             alt=""
-            className={styles.img}
+            className={styles.cardImage}
             loading="lazy"
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
+            style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
           />
-        </div>
-      )}
+        )}
+        <button
+          className={[styles.favStar, starred && styles.active].filter(Boolean).join(' ')}
+          onClick={e => { e.stopPropagation(); onToggleStar() }}
+          title={starred ? removeLabel : saveLabel}
+        >
+          <StarIcon filled={starred} />
+        </button>
+      </div>
 
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>
           {prompt.author && (
             <span className={styles.cardAuthor}>@{prompt.author.replace('@', '')}</span>
           )}
-          {prompt.likes > 0 && (
-            <span className={styles.cardStat} title="Likes">
-              <HeartIcon />{fmtNum(prompt.likes)}
-            </span>
-          )}
-          {prompt.views > 0 && (
-            <span className={styles.cardStat} title="Views">
-              <EyeIcon />{fmtNum(prompt.views)}
-            </span>
-          )}
+          <span className={styles.cardStats}>
+            {prompt.likes > 0 && (
+              <span title="Likes"><HeartIcon />{fmtNum(prompt.likes)}</span>
+            )}
+            {prompt.views > 0 && (
+              <span title="Views"><EyeIcon />{fmtNum(prompt.views)}</span>
+            )}
+          </span>
           {prompt.model && (
-            <span className={styles.cardModel}>{prompt.model}</span>
+            <span className={`${styles.sourceBadge} ${styles.nanobanana}`}>{prompt.model}</span>
           )}
-          <button
-            onClick={e => { e.stopPropagation(); onToggleStar() }}
-            title={starred ? removeLabel : saveLabel}
-            style={{
-              marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
-              color: starred ? 'var(--gold)' : 'var(--t-2)', padding: '0 2px',
-              display: 'flex', alignItems: 'center', transition: 'color 0.15s',
-              flexShrink: 0,
-            }}
-          >
-            <StarIcon filled={starred} />
-          </button>
         </div>
 
-        <p className={styles.cardText}>{displayText}</p>
+        <p className={styles.cardPrompt}>{displayText}</p>
 
         {truncated && (
-          <button className={styles.expandBtn} onClick={onToggleExpand}>
+          <button className={styles.cardShowMore} onClick={onToggleExpand}>
             {expanded ? showLessLabel : showMoreLabel}
           </button>
         )}
 
-        {prompt.categories.filter(c => c !== 'Other').length > 0 && (
-          <div className={styles.cardCats}>
-            {prompt.categories.filter(c => c !== 'Other').map(c => (
-              <span key={c} className={styles.cardCat}>{c}</span>
-            ))}
-          </div>
-        )}
-
-        <div className={styles.cardActions}>
-          <button
-            className={`btn btn-primary btn-sm ${styles.copyBtn}`}
-            onClick={onCopy}
-          >
-            <CopyIcon />
-            {copied ? copiedLabel : copyLabel}
-          </button>
-        </div>
+        {prompt.categories.filter(c => c !== 'Other').map(c => (
+          <span key={c} className={styles.cardCategory}>{c}</span>
+        ))}
       </div>
+
+      <button className={styles.cardCopyBtn} onClick={onCopy}>
+        <CopyIcon />
+        {copied ? copiedLabel : copyLabel}
+      </button>
     </div>
   )
 }
@@ -403,10 +389,10 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
   const hasImage = fav.imageUrls?.length > 0 && !imgError
 
   const sourceColor = {
-    vault:   'var(--accent-teal)',
-    builder: 'var(--gold)',
-    mj:      'var(--accent-steel)',
-  }[fav.source] || 'var(--t-1)'
+    vault:   'var(--sg-teal)',
+    builder: 'var(--sg-gold)',
+    mj:      'var(--sg-text-secondary)',
+  }[fav.source] || 'var(--sg-text-primary)'
 
   const truncated = fav.text.length > 180
   const [expanded, setExpanded] = useState(false)
@@ -414,52 +400,52 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
 
   return (
     <div className={styles.card}>
-      {hasImage && (
-        <div className={`${styles.imgWrap} ${imgLoaded ? styles.imgLoaded : ''}`}>
+      <div className={styles.cardImageWrapper}>
+        {hasImage && (
           <img
             src={fav.imageUrls[0]}
             alt=""
-            className={styles.img}
+            className={styles.cardImage}
             loading="lazy"
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
+            style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
           />
-        </div>
-      )}
+        )}
+        <button
+          className={[styles.favStar, styles.active].filter(Boolean).join(' ')}
+          onClick={onRemove}
+          title={removeLabel}
+        >
+          <StarIcon filled />
+        </button>
+      </div>
+
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>
           {fav.author && (
             <span className={styles.cardAuthor}>@{fav.author.replace('@', '')}</span>
           )}
-          <span className={styles.cardModel} style={{ color: sourceColor }}>
-            {fav.source}
+          <span className={styles.cardStats}>
+            <span style={{ color: sourceColor, fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)' }}>
+              {fav.source}
+            </span>
           </span>
-          <button
-            onClick={onRemove}
-            title={removeLabel}
-            style={{
-              marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--gold)', padding: '0 2px',
-              display: 'flex', alignItems: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <StarIcon filled />
-          </button>
         </div>
-        <p className={styles.cardText}>{displayText}</p>
+
+        <p className={styles.cardPrompt}>{displayText}</p>
+
         {truncated && (
-          <button className={styles.expandBtn} onClick={() => setExpanded(p => !p)}>
+          <button className={styles.cardShowMore} onClick={() => setExpanded(p => !p)}>
             {expanded ? '\u2212 weniger' : '+ mehr'}
           </button>
         )}
-        <div className={styles.cardActions}>
-          <button className={`btn btn-primary btn-sm ${styles.copyBtn}`} onClick={onCopy}>
-            <CopyIcon />
-            {copied ? copiedLabel : copyLabel}
-          </button>
-        </div>
       </div>
+
+      <button className={styles.cardCopyBtn} onClick={onCopy}>
+        <CopyIcon />
+        {copied ? copiedLabel : copyLabel}
+      </button>
     </div>
   )
 }
@@ -467,14 +453,13 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
 const StarIcon = ({ filled = false }) => (
   <svg width="13" height="13" viewBox="0 0 16 16"
     fill={filled ? 'currentColor' : 'none'}
-    stroke="currentColor"
-    strokeWidth={filled ? 0 : 1.4}
+    stroke="currentColor" strokeWidth={filled ? 0 : 1.4}
   >
     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
   </svg>
 )
 const SearchIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style={{ flexShrink: 0, color: 'var(--t-2)' }}>
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.44 1.406a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
   </svg>
 )
