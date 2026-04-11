@@ -18,7 +18,7 @@
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 14px 16px;
+  padding: 13px 15px;
   margin-bottom: 3px;
 }
 
@@ -59,13 +59,13 @@
 .presetGrid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .presetCard {
   width: 100%;
   text-align: left;
-  padding: 9px 12px;
+  padding: 9px 11px;
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
@@ -93,9 +93,9 @@
 }
 
 .presetBadge {
-  font-size: 10px;
-  font-weight: 700;
   font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
   padding: 1px 6px;
   background: var(--gold-dim);
   border: 1px solid var(--gold-border);
@@ -120,12 +120,12 @@
 }
 
 .tplBtn {
-  padding: 5px 11px;
+  padding: 4px 10px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--t-1);
   cursor: pointer;
@@ -146,7 +146,7 @@
   margin-top: 4px;
 }
 
-/* ── Grid size — locked state ── */
+/* ── Grid size — locked ── */
 .dimLocked {
   display: flex;
   align-items: center;
@@ -155,19 +155,21 @@
 
 .dimLockedBadge {
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--t-0);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .dimLockedNote {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   color: var(--t-2);
-  font-style: italic;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-/* ── Grid size — free state ── */
+/* ── Grid size — free ── */
 .dimRow {
   display: flex;
   align-items: center;
@@ -182,9 +184,10 @@
 }
 
 .dimLabel {
-  font-size: 9.5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--t-2);
 }
@@ -215,14 +218,15 @@
 }
 
 .dimX {
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--t-2);
   margin-top: 16px;
 }
 
 .totalPanels {
-  font-size: 11px;
   font-family: var(--font-mono);
+  font-size: 10px;
   color: var(--t-2);
   margin-top: 16px;
 }
@@ -240,7 +244,7 @@
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--t-1);
   cursor: pointer;
@@ -277,25 +281,24 @@
   background: var(--bg-3);
   border: 1px solid var(--b-light);
   border-radius: var(--r-xs);
+  font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
-  font-family: var(--font-mono);
   color: var(--t-1);
   flex-shrink: 0;
 }
 
 .refNoteHint {
-  font-size: 10.5px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   color: var(--t-2);
-  font-style: italic;
-  line-height: 1.4;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
   margin-top: 2px;
 }
 
 /* ── Input fields ── */
-.inputField {
-  margin-bottom: 10px;
-}
+.inputField { margin-bottom: 10px; }
 .inputField:last-child { margin-bottom: 0; }
 
 .fieldLabel {
@@ -314,7 +317,7 @@
 
 .roleInput {
   padding: 5px 7px;
-  font-size: 11px;
+  font-size: 10.5px;
   text-align: center;
   resize: none;
   font-family: var(--font-mono);
@@ -331,14 +334,14 @@
 .outputSticky {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .previewBlock {
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 14px 16px;
+  padding: 13px 15px;
 }
 
 .outputBlock {
@@ -354,18 +357,21 @@
 }
 
 .optimizedBadge {
-  font-size: 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   font-weight: 700;
   color: var(--gold);
-  font-family: var(--font-mono);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .promptOut {
   min-height: 300px;
   max-height: 500px;
   overflow-y: auto;
-  font-size: 12px;
+  background: #05050b;
+  font-size: 11.5px;
+  line-height: 1.9;
   white-space: pre-wrap;
   cursor: text;
 }
@@ -374,11 +380,11 @@
 
 /* ── Info box ── */
 .infoBox {
-  background: var(--bg-2);
+  background: #08080e;
   border: 1px solid var(--b-subtle);
   border-left: 2px solid var(--gold-border);
   border-radius: var(--r-sm);
-  padding: 11px 14px;
+  padding: 11px 13px;
 }
 
 .infoTitle {
@@ -392,13 +398,13 @@
   font-size: 11px;
   color: var(--t-1);
   line-height: 1.5;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .infoSource {
-  font-size: 10px;
-  color: var(--t-2);
   font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--t-2);
 }
 
 @media (max-width: 1100px) {
