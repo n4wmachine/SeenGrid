@@ -1,0 +1,58 @@
+[
+  {
+    "id": "angle-study",
+    "label": "Angle Study",
+    "desc": "Multiple camera angles on the same subject — explores spatial relationships and POV variety",
+    "defaultRows": 2,
+    "defaultCols": 2,
+    "panelRoles": ["Front Wide", "Profile Close", "High Angle", "Low Angle"],
+    "template": "Create a {rows}x{cols} grid of camera angle studies.\n\nTASK: Show the same subject from {count} distinct angles that reveal spatial depth and volume. Each angle must feel deliberately chosen, not random.\n\nPANEL FUNCTIONS:\n{panelLines}\n\nLAYOUT: {rows}x{cols} grid. {layout}. Consistent lighting across all panels.\n\nQUALITY: Premium cinematic rendering. Rich surface detail. Atmospheric depth. Professional color science.\n\nFORBIDDEN: No repeated angles. No disconnected panels. No quality degradation.",
+    "panelRoleDefaults": {
+      "2x2": ["Front Wide", "Profile Close", "High Angle", "Low Angle"],
+      "3x3": ["Extreme Wide", "Front Wide", "Profile", "3/4 Front", "POV", "Over Shoulder", "High Angle", "Low Angle", "Dutch Tilt"],
+      "2x3": ["Front Wide", "Profile", "3/4 Front", "Over Shoulder", "High Angle", "Low Angle"]
+    }
+  },
+  {
+    "id": "multishot",
+    "label": "Multishot",
+    "desc": "Sequential narrative beats — story progression across panels like a film strip",
+    "defaultRows": 3,
+    "defaultCols": 3,
+    "panelRoles": ["Establish", "Approach", "Arrive", "Discover", "React", "Close", "Reveal", "Climax", "Resolve"],
+    "template": "Create a {rows}x{cols} grid of sequential narrative panels.\n\nTASK: Build a coherent visual story across {count} panels. Each panel is a distinct story beat — together they form a complete arc.\n\nPANEL FUNCTIONS:\n{panelLines}\n\nLAYOUT: {rows}x{cols} grid. {layout}. Left-to-right, top-to-bottom reading order.\n\nQUALITY: Cinematic consistency across all panels. Matching color grade, lighting style, and world physics. Professional depth of field.\n\nFORBIDDEN: No disconnected story beats. No style inconsistency between panels. No flat lighting.",
+    "panelRoleDefaults": {
+      "3x3": ["Establish", "Approach", "Arrive", "Discover", "React", "Close", "Reveal", "Climax", "Resolve"],
+      "2x3": ["Establish", "Approach", "Discover", "React", "Reveal", "Resolve"],
+      "1x4": ["Establish", "Build", "Climax", "Resolve"]
+    }
+  },
+  {
+    "id": "character-sheet",
+    "label": "Character Sheet",
+    "desc": "Full character reference — expressions, poses, details across panels",
+    "defaultRows": 2,
+    "defaultCols": 3,
+    "panelRoles": ["Front Neutral", "3/4 Turn", "Profile", "Expression A", "Expression B", "Detail Close"],
+    "template": "Create a {rows}x{cols} character reference sheet.\n\nTASK: Comprehensive character documentation across {count} panels. Consistent character identity across all views — this is the definitive visual reference.\n\nPANEL FUNCTIONS:\n{panelLines}\n\nLAYOUT: {rows}x{cols} grid. Clean studio background. Neutral key light optimized for reference clarity.\n\nQUALITY: Maximum costume and face detail. High resolution rendering. Consistent scale across all panels. Subsurface skin scattering.\n\nFORBIDDEN: No background elements competing with character. No different lighting rigs between panels. No style inconsistency.",
+    "panelRoleDefaults": {
+      "2x3": ["Front Neutral", "3/4 Turn", "Profile", "Expression A", "Expression B", "Detail Close"],
+      "3x3": ["Front Full Body", "3/4 Full Body", "Profile Full Body", "Front Portrait", "3/4 Portrait", "Profile Portrait", "Expression A", "Expression B", "Costume Detail"],
+      "2x2": ["Front Neutral", "Profile", "Expression A", "Costume Detail"]
+    }
+  },
+  {
+    "id": "world-builder",
+    "label": "World Builder",
+    "desc": "Environment exploration — different zones, scales, and atmospheric states",
+    "defaultRows": 3,
+    "defaultCols": 3,
+    "panelRoles": ["Exterior Wide", "Entry Zone", "Interior A", "Interior B", "Detail A", "Detail B", "Atmosphere", "Scale Ref", "Signature Element"],
+    "template": "Create a {rows}x{cols} world-building reference grid.\n\nTASK: Document {count} aspects of the world environment. Together these panels establish the complete visual language of this location — its scale, atmosphere, texture, and identity.\n\nPANEL FUNCTIONS:\n{panelLines}\n\nLAYOUT: {rows}x{cols} grid. Consistent atmospheric conditions across all panels. Same time of day, same weather, same world physics.\n\nQUALITY: Epic environmental rendering. Volumetric atmosphere. Rich material specificity. Architectural or natural detail at professional level.\n\nFORBIDDEN: No inconsistent world physics. No empty panels. No generic stock environments.",
+    "panelRoleDefaults": {
+      "3x3": ["Exterior Wide", "Entry Zone", "Interior A", "Interior B", "Detail A", "Detail B", "Atmosphere", "Scale Ref", "Signature Element"],
+      "2x3": ["Exterior Wide", "Entry Zone", "Interior", "Detail A", "Atmosphere", "Signature"],
+      "2x2": ["Exterior Wide", "Interior Key", "Atmosphere", "Detail Close"]
+    }
+  }
+]
