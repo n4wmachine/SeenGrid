@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './GridOperator.module.css'
+import { useLang } from '../context/LangContext.jsx'
 
 import worldZone     from '../data/presets/world-zone-board-3x3.json'
 import multiSingle   from '../data/presets/multishot-3x3-single-zone.json'
@@ -11,21 +12,6 @@ import coreTemplates from '../data/core-templates.json'
 
 const PRESETS = [worldZone, multiSingle, multiCross, charAngle3x3, charAngle2x2, detailStrip]
 
-const LAYOUTS = [
-  { id: 'even',       label: 'Even',       desc: 'Gleichmäßige Panels' },
-  { id: 'letterbox',  label: 'Letterbox',  desc: '16:9 Breitbild' },
-  { id: 'seamless',   label: 'Seamless',   desc: 'Kein Separator' },
-  { id: 'framed',     label: 'Framed',     desc: 'Schwarze Rahmen' },
-  { id: 'storyboard', label: 'Storyboard', desc: 'Sketch-Look' },
-  { id: 'polaroid',   label: 'Polaroid',   desc: 'Weiße Ränder' },
-]
-
-const MODES = [
-  { id: 'seengrid', label: 'SeenGrid Optimized', star: true,  desc: 'Exakte Templates aus DeepSeek1.txt — paste-ready' },
-  { id: 'core',     label: 'Core',               star: false, desc: 'Freier Grid mit NanoBanana-Optimierung' },
-  { id: 'custom',   label: 'Custom Grid',         star: false, desc: 'Komplett manuell — kein Template, kein NanoBanana-Overlay. Du schreibst alles selbst.' },
-]
-
 function buildRoles(preset) {
   const total = preset.rows * preset.cols
   const roles = preset.panelRoles || []
@@ -33,6 +19,23 @@ function buildRoles(preset) {
 }
 
 export default function GridOperator() {
+  const { t } = useLang()
+
+  const LAYOUTS = [
+    { id: 'even',       label: 'Even',       desc: t('grid.layout_even_desc') },
+    { id: 'letterbox',  label: 'Letterbox',  desc: t('grid.layout_letterbox_desc') },
+    { id: 'seamless',   label: 'Seamless',   desc: t('grid.layout_seamless_desc') },
+    { id: 'framed',     label: 'Framed',     desc: t('grid.layout_framed_desc') },
+    { id: 'storyboard', label: 'Storyboard', desc: t('grid.layout_storyboard_desc') },
+    { id: 'polaroid',   label: 'Polaroid',   desc: t('grid.layout_polaroid_desc') },
+  ]
+
+  const MODES = [
+    { id: 'seengrid', label: 'SeenGrid Optimized', star: true,  desc: t('grid.mode_seengrid_desc') },
+    { id: 'core',     label: 'Core',               star: false, desc: t('grid.mode_core_desc') },
+    { id: 'custom',   label: 'Custom Grid',         star: false, desc: t('grid.mode_custom_desc') },
+  ]
+
   const [mode, setMode]               = useState('seengrid')
   const [rows, setRows]               = useState(3)
   const [cols, setCols]               = useState(3)
@@ -45,7 +48,6 @@ export default function GridOperator() {
   const [customOutput, setCustomOutput] = useState('')
   const [copied, setCopied]           = useState(false)
 
-  // Sync dimensions + panel roles when preset changes
   useEffect(() => {
     setRows(selectedPreset.rows)
     setCols(selectedPreset.cols)
@@ -53,7 +55,6 @@ export default function GridOperator() {
     setPanelRoles(buildRoles(selectedPreset))
   }, [selectedPreset])
 
-  // Update panel roles when core template changes
   useEffect(() => {
     if (mode !== 'core') return
     const key = `${rows}x${cols}`
@@ -61,7 +62,6 @@ export default function GridOperator() {
     if (defaults.length) setPanelRoles(defaults)
   }, [coreTemplate]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync panel role array size when rows/cols change (Core + Custom mode)
   useEffect(() => {
     if (mode !== 'core' && mode !== 'custom') return
     const total = rows * cols
@@ -91,7 +91,6 @@ export default function GridOperator() {
 
     if (mode === 'custom') return customOutput
 
-    // CORE mode: NanoBanana structured template
     const panelLines = panelRoles
       .slice(0, totalPanels)
       .map((role, i) => `  Panel ${i + 1} [${role}]:`)
@@ -129,12 +128,10 @@ export default function GridOperator() {
     <div className={styles.root}>
       <div className={styles.layout}>
 
-        {/* ── LEFT: Configuration ── */}
         <div className={styles.config}>
 
-          {/* Mode toggle */}
           <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>Operator Mode</p>
+            <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.operator_mode')}</p>
             <div className={styles.modeGrid}>
               {MODES.map(m => (
                 <button
@@ -150,10 +147,9 @@ export default function GridOperator() {
             </div>
           </div>
 
-          {/* SeenGrid mode: preset selector */}
           {mode === 'seengrid' && (
             <div className={styles.block}>
-              <p className="label-xs" style={{ marginBottom: 10 }}>Preset</p>
+              <p className="label-xs" style={{ marginBottom: 10 }}>{t('grid.preset_label')}</p>
               <div className={styles.presetGrid}>
                 {PRESETS.map(p => (
                   <button
@@ -173,19 +169,18 @@ export default function GridOperator() {
             </div>
           )}
 
-          {/* Core mode: template selector */}
           {mode === 'core' && (
             <div className={styles.block}>
-              <p className="label-xs" style={{ marginBottom: 8 }}>Core Template</p>
+              <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.core_template')}</p>
               <div className={styles.templateBtns}>
-                {coreTemplates.map(t => (
+                {coreTemplates.map(tpl => (
                   <button
-                    key={t.id}
-                    className={`${styles.tplBtn} ${coreTemplate.id === t.id ? styles.tplBtnActive : ''}`}
-                    onClick={() => setCoreTemplate(t)}
-                    title={t.desc}
+                    key={tpl.id}
+                    className={`${styles.tplBtn} ${coreTemplate.id === tpl.id ? styles.tplBtnActive : ''}`}
+                    onClick={() => setCoreTemplate(tpl)}
+                    title={tpl.desc}
                   >
-                    {t.label}
+                    {tpl.label}
                   </button>
                 ))}
               </div>
@@ -193,13 +188,12 @@ export default function GridOperator() {
             </div>
           )}
 
-          {/* Grid size — locked in SeenGrid mode, free in Core / Custom */}
           <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>Grid Größe</p>
+            <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.grid_size')}</p>
             {mode === 'seengrid' ? (
               <div className={styles.dimLocked}>
                 <span className={styles.dimLockedBadge}>{rows}×{cols}</span>
-                <span className={styles.dimLockedNote}>Gesperrt durch Preset</span>
+                <span className={styles.dimLockedNote}>{t('grid.dim_locked')}</span>
               </div>
             ) : (
               <div className={styles.dimRow}>
@@ -228,14 +222,13 @@ export default function GridOperator() {
                     ))}
                   </div>
                 </div>
-                <span className={styles.totalPanels}>{totalPanels} Panels</span>
+                <span className={styles.totalPanels}>{totalPanels} {t('grid.panels')}</span>
               </div>
             )}
           </div>
 
-          {/* Layout */}
           <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>Layout</p>
+            <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.layout')}</p>
             <div className={styles.layoutBtns}>
               {LAYOUTS.map(l => (
                 <button
@@ -250,32 +243,28 @@ export default function GridOperator() {
             </div>
           </div>
 
-          {/* SeenGrid mode: static reference note */}
           {mode === 'seengrid' && (
             <div className={styles.block}>
-              <p className="label-xs" style={{ marginBottom: 8 }}>Reference Images</p>
+              <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.ref_images')}</p>
               <div className={styles.refNote}>
                 <div className={styles.refNoteItem}>
                   <span className={styles.refTag}>A</span>
-                  <span>character reference</span>
+                  <span>{t('grid.ref_char')}</span>
                 </div>
                 <div className={styles.refNoteItem}>
                   <span className={styles.refTag}>B</span>
-                  <span>style / mood reference</span>
+                  <span>{t('grid.ref_style')}</span>
                 </div>
-                <p className={styles.refNoteHint}>
-                  Upload references directly in NanoBanana — not entered here.
-                </p>
+                <p className={styles.refNoteHint}>{t('grid.ref_hint')}</p>
               </div>
             </div>
           )}
 
-          {/* Style override — SeenGrid and Core only */}
           {mode !== 'custom' && (
             <div className={styles.block}>
               <p className="label-xs" style={{ marginBottom: 8 }}>
-                Style Override{' '}
-                <span style={{ color: 'var(--t-2)', fontWeight: 400 }}>optional</span>
+                {t('grid.style_override')}{' '}
+                <span style={{ color: 'var(--t-2)', fontWeight: 400 }}>{t('common.optional')}</span>
               </p>
               <input
                 type="text"
@@ -284,35 +273,28 @@ export default function GridOperator() {
                 onChange={e => setCoreStyle(e.target.value)}
                 placeholder={
                   mode === 'seengrid'
-                    ? 'z.B. Neo-Noir Cinematic / Style Asset aus OpenArt'
-                    : 'z.B. Neo-Noir Cinematic Style'
+                    ? t('grid.style_ph_sg')
+                    : t('grid.style_ph_core')
                 }
               />
             </div>
           )}
 
-          {/* Core mode: subject input */}
           {mode === 'core' && (
             <div className={styles.block}>
-              <p className="label-xs" style={{ marginBottom: 8 }}>Subjekt / Szene</p>
+              <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.core_subject')}</p>
               <textarea
                 className="field"
                 rows={2}
                 value={coreSubject}
                 onChange={e => setCoreSubj(e.target.value)}
-                placeholder="z.B. 'abandoned Soviet factory, winter, blue dusk'"
+                placeholder={t('grid.core_subject_ph')}
               />
             </div>
           )}
 
-          {/* Panel roles editor */}
           <div className={styles.block}>
-            <p className="label-xs" style={{ marginBottom: 8 }}>
-              Panel-Rollen
-              {mode === 'custom' && (
-                <span style={{ color: 'var(--t-2)', fontWeight: 400, marginLeft: 6 }}>— als Referenz</span>
-              )}
-            </p>
+            <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.panel_roles')}</p>
             <div
               className={styles.panelRoleGrid}
               style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
@@ -332,27 +314,24 @@ export default function GridOperator() {
 
         </div>
 
-        {/* ── RIGHT: Preview + Output ── */}
         <div className={styles.output}>
           <div className={styles.outputSticky}>
 
-            {/* Grid preview */}
             <div className={styles.previewBlock}>
-              <p className="label-xs" style={{ marginBottom: 10 }}>Grid Preview</p>
+              <p className="label-xs" style={{ marginBottom: 10 }}>{t('grid.grid_preview')}</p>
               <GridPreview rows={rows} cols={cols} layout={layout} panelRoles={panelRoles} />
             </div>
 
-            {/* Prompt output */}
             <div className={styles.outputBlock}>
               <div className={styles.outputHeader}>
                 <span className="label-xs">
-                  {mode === 'custom' ? 'Freier Prompt — komplett manuell' : 'Generierter Prompt'}
+                  {mode === 'custom' ? t('grid.free_prompt') : t('grid.generated_prompt')}
                 </span>
                 {mode === 'seengrid' && (
                   <span className={styles.optimizedBadge}>★ SeenGrid Optimized</span>
                 )}
                 {mode === 'custom' && (
-                  <span className={styles.customBadge}>Kein Template</span>
+                  <span className={styles.customBadge}>{t('grid.no_template')}</span>
                 )}
               </div>
               {mode === 'custom' ? (
@@ -360,7 +339,7 @@ export default function GridOperator() {
                   className={`field ${styles.customTextarea}`}
                   value={customOutput}
                   onChange={e => setCustomOutput(e.target.value)}
-                  placeholder={`${rows}×${cols} Grid — ${totalPanels} Panels. Schreib deinen Prompt hier komplett manuell. Keine Einschränkungen, kein NanoBanana-Overlay.`}
+                  placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
                   spellCheck={false}
                 />
               ) : (
@@ -379,11 +358,10 @@ export default function GridOperator() {
               )}
               <button className={`btn btn-primary ${styles.copyBtn}`} onClick={handleCopy}>
                 <CopyIcon />
-                {copied ? '✓ Kopiert!' : 'Paste-Ready Prompt kopieren'}
+                {copied ? t('common.copied') : t('grid.copy_btn')}
               </button>
             </div>
 
-            {/* Preset info */}
             {mode === 'seengrid' && (
               <div className={styles.infoBox}>
                 <p className={styles.infoTitle}>{selectedPreset.label}</p>
@@ -400,7 +378,6 @@ export default function GridOperator() {
   )
 }
 
-// ── Grid Preview ──
 function GridPreview({ rows, cols, layout, panelRoles }) {
   const gap     = layout === 'seamless' ? 0 : layout === 'framed' ? 3 : 2
   const padding = layout === 'polaroid' ? 6 : 0
