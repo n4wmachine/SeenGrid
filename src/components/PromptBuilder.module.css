@@ -1,40 +1,42 @@
-/* ============================================================
-   PROMPT BUILDER — PromptBuilder.module.css
-   Zwei-Spalten-Layout: Links Chips (scrollbar), rechts Output (sticky)
-   ============================================================ */
-
-/* ---- CONTAINER: Zwei-Spalten-Grid ---- */
 .container {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: var(--sg-space-3xl);
-  padding: var(--sg-space-3xl);
-  max-width: 1440px;
+  grid-template-columns: 1fr 400px;
+  max-width: 1480px;
   margin: 0 auto;
-  min-height: calc(100vh - 60px);
-  align-items: start;
+  min-height: calc(100vh - 72px);
 }
 
-/* ---- LINKE SPALTE: Szene-Input + Chip-Sections ---- */
 .leftColumn {
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+
+.rightColumn {
+  border-left: 1px solid var(--sg-border-subtle);
+  padding: 28px;
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
-  gap: var(--sg-space-2xl);
+  background: var(--sg-bg-app);
 }
 
-/* Szene / Motiv Textfeld */
+/* Scene Input */
 .sceneInput {
   width: 100%;
+  font-size: 15px;
+  margin-bottom: 20px;
 }
 
 .sceneInputLabel {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--sg-text-tertiary);
-  margin-bottom: var(--sg-space-sm);
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -42,11 +44,10 @@
 
 .sceneInputHint {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-size: 10px;
   color: var(--sg-text-disabled);
   text-transform: none;
+  letter-spacing: 0.04em;
 }
 
 .sceneTextarea {
@@ -56,161 +57,121 @@
   font-family: var(--sg-font-body);
   font-size: var(--sg-text-md);
   color: var(--sg-text-primary);
-  background: var(--sg-bg-surface-0);
+  background: var(--sg-bg-input);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-lg) var(--sg-space-xl);
   transition: border-color var(--sg-transition), box-shadow var(--sg-transition);
   line-height: 1.6;
-}
-.sceneTextarea:focus {
-  border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
   outline: none;
 }
+.sceneTextarea:focus {
+  border-color: var(--sg-accent-dim);
+  box-shadow: 0 0 0 3px var(--sg-accent-glow-subtle);
+}
 
-/* ---- CHIP SECTIONS WRAPPER ---- */
 .sectionsWrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--sg-space-xs);  /* Sections eng zusammen, Padding intern */
+  gap: 2px;
 }
 
-/* ---- EINZELNE SECTION (Film Style, Camera, etc.) ---- */
+/* Section */
 .section {
-  background: var(--sg-bg-surface-1);
+  background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   overflow: hidden;
-  transition: border-color var(--sg-transition-slow);
 }
+.section.hasActive { border-color: rgba(43, 181, 178, 0.20); }
 
-/* Section mit mindestens einem aktiven Chip: leichter Gold-Border */
-.section.hasActive {
-  border-color: rgba(212, 149, 42, 0.15);
-}
-
-/* Section Header (klickbar zum Auf-/Zuklappen) */
+/* Section Header */
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--sg-space-md) var(--sg-space-xl);
+  padding: 10px 16px;
   cursor: pointer;
-  transition: background var(--sg-transition);
   user-select: none;
+  transition: background var(--sg-transition);
 }
-.sectionHeader:hover {
-  background: var(--sg-bg-surface-2);
-}
+.sectionHeader:hover { background: var(--sg-bg-surface-1); }
 
 .sectionTitle {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--sg-text-secondary);
   display: flex;
   align-items: center;
-  gap: var(--sg-space-sm);
+  gap: 8px;
 }
-
-/* Gold-Strich vor dem Titel */
 .sectionTitle::before {
   content: '';
   display: inline-block;
-  width: 14px;
-  height: 2px;
-  background: var(--sg-gold-dim);
-  border-radius: 1px;
+  width: 12px;
+  height: 1px;
+  background: var(--sg-accent-dim);
   flex-shrink: 0;
 }
+.section.hasActive .sectionTitle { color: var(--sg-accent); }
 
-/* Section mit aktivem Chip: Titel wird gold */
-.section.hasActive .sectionTitle {
-  color: var(--sg-gold);
-}
-
-/* Chevron */
 .sectionChevron {
   color: var(--sg-text-disabled);
-  font-size: var(--sg-text-sm);
+  font-size: 11px;
   transition: transform var(--sg-transition-slow);
 }
-.section.open .sectionChevron {
-  transform: rotate(180deg);
-}
+.section.open .sectionChevron { transform: rotate(180deg); }
 
-/* Section Body (Chips) */
 .sectionBody {
-  padding: var(--sg-space-sm) var(--sg-space-xl) var(--sg-space-xl) var(--sg-space-xl);
+  padding: 8px 16px 16px 16px;
 }
 
-/* ---- CHIPS GRID ---- */
+/* CHIPS — Grid-Layout statt Flex-Wrap */
 .chipGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sg-space-sm);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
 }
 
-/* ---- EINZELNER CHIP ---- */
 .chip {
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-sm);
+  font-size: 13px;
   font-weight: 400;
   color: var(--sg-chip-text);
-  background: var(--sg-chip-bg);
+  background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-chip-border);
-  border-radius: var(--sg-radius-md);   /* eckig, NICHT pillen-rund */
-  padding: var(--sg-space-sm) var(--sg-space-md);
+  border-radius: var(--sg-radius-lg);
+  padding: 10px 14px;
   cursor: pointer;
-  transition: all var(--sg-transition-fast);
-  white-space: nowrap;
-  user-select: none;
+  transition: all 0.12s ease;
+  text-align: left;
   line-height: 1.3;
+  user-select: none;
 }
-
 .chip:hover {
   color: var(--sg-chip-text-hover);
-  background: var(--sg-chip-bg-hover);
   border-color: var(--sg-chip-border-hover);
+  background: var(--sg-bg-surface-2);
 }
-
-/* Aktiver Chip: Gold */
 .chip.active {
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px rgba(212,149,42,0.10);
+  box-shadow: 0 0 12px rgba(43,181,178,0.06);
   font-weight: 500;
 }
 
-/* Tooltip (nativ via title, oder Custom-Tooltip) */
-.chip[title] {
-  position: relative;
-}
-
-
-/* ---- RECHTE SPALTE: Output Panel (STICKY) ---- */
-.rightColumn {
-  position: sticky;
-  top: 80px;  /* 60px Header + 20px Abstand */
-  display: flex;
-  flex-direction: column;
-  gap: var(--sg-space-xl);
-  max-height: calc(100vh - 96px);
-}
-
-/* Buttons über dem Output (Random, Reset, 8K Toggle) */
+/* Right Column — Output */
 .outputControls {
   display: flex;
-  align-items: center;
-  gap: var(--sg-space-sm);
+  gap: 8px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
 
-/* 8K Suffix Toggle */
 .suffixToggle {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
@@ -219,28 +180,24 @@
   color: var(--sg-text-tertiary);
   background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-md);
-  padding: var(--sg-space-xs) var(--sg-space-md);
+  border-radius: var(--sg-radius-lg);
+  padding: var(--sg-space-sm) var(--sg-space-md);
   cursor: pointer;
   transition: all var(--sg-transition);
-  display: flex;
-  align-items: center;
-  gap: var(--sg-space-xs);
 }
 .suffixToggle.active {
-  color: var(--sg-gold-text);
-  border-color: var(--sg-gold-dim);
+  color: var(--sg-accent-text);
+  border-color: var(--sg-accent-dim);
   background: var(--sg-chip-bg-active);
 }
 
-/* Label über Output */
 .outputLabel {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 500;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   color: var(--sg-text-tertiary);
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -248,40 +205,37 @@
 
 .charCount {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 10px;
   color: var(--sg-text-disabled);
   letter-spacing: 0.04em;
 }
 
-/* ---- PROMPT OUTPUT BOX ---- */
 .outputBox {
-  background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-lg);
-  padding: var(--sg-space-xl);
-  min-height: 160px;
+  flex: 1;
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-sm);
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.8;
   color: var(--sg-text-primary);
-  transition: border-color var(--sg-transition-slow), box-shadow var(--sg-transition-slow);
+  background: var(--sg-bg-root);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-xl);
+  padding: 18px;
   overflow-y: auto;
-  max-height: 300px;
+  word-break: break-word;
+  transition: border-color var(--sg-transition-slow);
 }
-
-/* Leere Box */
 .outputBox.empty {
   color: var(--sg-text-disabled);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
   font-style: italic;
 }
-
-/* Box mit Inhalt: Gold-Glow-Border */
 .outputBox.filled {
-  border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 16px rgba(212,149,42,0.08), 0 0 4px rgba(212,149,42,0.06);
+  border-color: var(--sg-accent-dim);
 }
 
-/* Copy Button (unterhalb Output) */
 .copyButton {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
@@ -289,64 +243,61 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--sg-text-inverse);
-  background: var(--sg-gold-gradient);
+  background: var(--sg-accent-gradient);
   border: none;
-  border-radius: var(--sg-radius-md);
-  padding: var(--sg-space-md) 0;
+  border-radius: var(--sg-radius-lg);
+  padding: 12px 0;
   width: 100%;
+  margin-top: 14px;
   cursor: pointer;
   transition: opacity var(--sg-transition), box-shadow var(--sg-transition);
-  box-shadow: var(--sg-shadow-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sg-space-sm);
+  gap: 8px;
 }
-.copyButton:hover {
-  opacity: 0.9;
-  box-shadow: var(--sg-shadow-gold);
-}
-.copyButton:active { opacity: 0.8; }
+.copyButton:hover { box-shadow: var(--sg-shadow-gold); }
+.copyButton:active { opacity: 0.85; }
 
-/* ---- NANOBANANA CORE REGELN BOX ---- */
 .rulesBox {
-  background: var(--sg-bg-surface-1);
+  background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-lg);
+  margin-top: 16px;
 }
 
 .rulesBoxTitle {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 600;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--sg-gold-dim);
-  margin-bottom: var(--sg-space-md);
+  letter-spacing: 0.14em;
+  color: var(--sg-text-tertiary);
+  margin-bottom: 8px;
 }
 
-.rulesBoxList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sg-space-xs);
-}
+.rulesBoxList { list-style: none; }
 
 .rulesBoxItem {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
+  font-size: 11px;
   color: var(--sg-text-tertiary);
-  line-height: 1.5;
-  padding-left: var(--sg-space-lg);
+  padding: 3px 0 3px 16px;
   position: relative;
+  line-height: 1.5;
 }
 .rulesBoxItem::before {
   content: attr(data-index);
   position: absolute;
   left: 0;
   color: var(--sg-text-disabled);
-  font-size: var(--sg-text-xs);
+  font-size: 10px;
 }
+
+/* Sections standardmäßig zugeklappt */
+.section { margin-bottom: 0; }
+.section.open { margin-bottom: 2px; }
+
+/* Unused but referenced in JSX */
+.filled {}
+.hasActive {}

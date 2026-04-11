@@ -46,9 +46,7 @@ function initState() {
 export default function PromptBuilder() {
   const { t } = useLang()
   const [state, setState] = useState(initState)
-  const [openSections, setOpenSections] = useState(
-    () => new Set(['style', 'shotsize', 'lighting'])
-  )
+  const [openSections, setOpenSections] = useState(() => new Set())
   const [copied, setCopied] = useState(false)
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
@@ -136,7 +134,7 @@ export default function PromptBuilder() {
     }
   }
 
-  function handleRandom() {
+  function handleRandom(mode = 'both') {
     const pick = (arr, nullable = true) => {
       if (nullable && Math.random() < 0.15) return null
       return arr[Math.floor(Math.random() * arr.length)].v
@@ -147,23 +145,44 @@ export default function PromptBuilder() {
       return new Set(shuffled.slice(0, count).map(i => i.v))
     }
     const pick1 = arr => arr[Math.floor(Math.random() * arr.length)]
-    const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
-    setState(prev => ({
-      ...prev,
-      scene,
-      style:       pick(styleData, false),
-      camera:      pick(cameraData),
-      lens:        pick(lensData),
-      focal:       pick(focalData),
-      aperture:    pick(apertureData),
-      aspectratio: pick(aspectData),
-      shotsize:    pick(shotData),
-      cameraangle: pick(angleData),
-      colorgrade:  pick(colorData),
-      lighting:    pickMulti(lightingData, 2),
-      effects:     pickMulti(effectsData, 2),
-      negative:    new Set(),
-    }))
+
+    if (mode === 'text') {
+      const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
+      setState(prev => ({ ...prev, scene }))
+    } else if (mode === 'look') {
+      setState(prev => ({
+        ...prev,
+        style:       pick(styleData, false),
+        camera:      pick(cameraData),
+        lens:        pick(lensData),
+        focal:       pick(focalData),
+        aperture:    pick(apertureData),
+        aspectratio: pick(aspectData),
+        shotsize:    pick(shotData),
+        cameraangle: pick(angleData),
+        colorgrade:  pick(colorData),
+        lighting:    pickMulti(lightingData, 2),
+        effects:     pickMulti(effectsData, 2),
+      }))
+    } else {
+      const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
+      setState(prev => ({
+        ...prev,
+        scene,
+        style:       pick(styleData, false),
+        camera:      pick(cameraData),
+        lens:        pick(lensData),
+        focal:       pick(focalData),
+        aperture:    pick(apertureData),
+        aspectratio: pick(aspectData),
+        shotsize:    pick(shotData),
+        cameraangle: pick(angleData),
+        colorgrade:  pick(colorData),
+        lighting:    pickMulti(lightingData, 2),
+        effects:     pickMulti(effectsData, 2),
+        negative:    new Set(),
+      }))
+    }
   }
 
   function handleReset() {
@@ -241,8 +260,14 @@ export default function PromptBuilder() {
       <div className={styles.rightColumn}>
 
         <div className={styles.outputControls}>
-          <button className="sg-btn-ghost" onClick={handleRandom} title={t('builder.random_title')}>
-            <DiceIcon /> {t('common.random')}
+          <button className="sg-btn-ghost" onClick={() => handleRandom('text')} title="Zufälligen Szenentext generieren">
+            ⚄ Text
+          </button>
+          <button className="sg-btn-ghost" onClick={() => handleRandom('look')} title="Zufälligen Look / Stil generieren">
+            ⚄ Look
+          </button>
+          <button className="sg-btn-ghost" onClick={() => handleRandom('both')} title="Text + Look zufällig generieren">
+            ⚄ Both
           </button>
           <button className="sg-btn-ghost" onClick={handleReset} title={t('builder.reset_title')}>
             <ResetIcon /> {t('common.reset')}
@@ -331,8 +356,8 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
             <span style={{
               fontSize: 'var(--sg-text-xs)',
               fontFamily: 'var(--sg-font-mono)',
-              color: 'var(--sg-gold)',
-              background: 'rgba(212,149,42,0.12)',
+              color: 'var(--sg-accent-text)',
+              background: 'var(--sg-chip-bg-active)',
               borderRadius: 3,
               padding: '1px 5px',
             }}>{activeCount}</span>

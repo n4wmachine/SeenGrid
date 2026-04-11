@@ -1,73 +1,38 @@
-/* ============================================================
-   HEADER — SeenGrid
-   Referenz: DaVinci Resolve Menüleiste, RunwayML Top-Bar
-   ============================================================ */
-
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--sg-space-4xl);
-  height: 60px;
+  height: 72px;
+  padding: 0 32px;
   background: var(--sg-bg-app);
   border-bottom: 1px solid var(--sg-border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 1px 0 var(--sg-border-subtle), 0 2px 12px rgba(0,0,0,0.4);
 }
 
-/* ---- LOGO ---- */
 .headerLogo {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   flex-shrink: 0;
-  min-width: 220px;
 }
 
+/* LOGO: Das Bild ist 2752x1536 (Querformat). NICHT als kleines Icon anzeigen.
+   Höhe 48px = sichtbar und lesbar im Header. */
 .headerLogoIcon {
-  width: 36px;
-  height: 36px;
+  height: 48px;
+  width: auto;
   object-fit: contain;
-  flex-shrink: 0;
 }
 
-.headerLogoText {
-  font-family: var(--sg-font-body);
-  font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--sg-text-primary);
-  line-height: 1;
-}
+.headerLogoText { display: none; }
+.headerSubtitle { display: none; }
 
-.headerLogoText span {
-  color: var(--sg-text-secondary);
-  font-weight: 400;
-}
-
-.headerDivider {
-  width: 1px;
-  height: 20px;
-  background: var(--sg-border-default);
-  flex-shrink: 0;
-}
-
-.headerSubtitle {
-  font-family: var(--sg-font-mono);
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--sg-text-tertiary);
-}
-
-/* ---- TABS ---- */
 .tabNav {
   display: flex;
   align-items: center;
   height: 100%;
-  gap: 0;
+  margin-left: auto;
 }
 
 .tabNavItem {
@@ -75,95 +40,55 @@
   font-size: var(--sg-text-xs);
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: var(--sg-text-tertiary);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0 var(--sg-space-xl);
+  padding: 0 22px;
   height: 100%;
   display: flex;
   align-items: center;
-  gap: var(--sg-space-sm);
   position: relative;
   transition: color var(--sg-transition);
   white-space: nowrap;
 }
-
-.tabNavItem:hover {
-  color: var(--sg-text-secondary);
-}
-
-.tabNavItem.active {
-  color: var(--sg-gold-text);
-  font-weight: 500;
-}
-
-/* Gold-Linie unten */
+.tabNavItem:hover { color: var(--sg-text-secondary); }
+.tabNavItem.active { color: var(--sg-accent-text); font-weight: 500; }
 .tabNavItem.active::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 12px;
-  right: 12px;
+  left: 22px; right: 22px;
   height: 2px;
-  background: var(--sg-gold-gradient);
-  border-radius: 1px 1px 0 0;
+  background: var(--sg-accent);
+  border-radius: 2px 2px 0 0;
 }
 
-/* Dot vor Tab-Name */
-.tabNavItem::before {
-  content: '';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--sg-text-disabled);
-  flex-shrink: 0;
-  transition: background var(--sg-transition);
-}
-.tabNavItem.active::before {
-  background: var(--sg-gold);
-}
-.tabNavItem:hover::before {
-  background: var(--sg-text-tertiary);
-}
+/* Kein Diamond-Icon vor Tabs */
+.tabNavItem::before { display: none; }
 
-/* ---- RIGHT ---- */
 .headerRight {
   display: flex;
   align-items: center;
-  gap: var(--sg-space-md);
+  gap: var(--sg-space-lg);
   flex-shrink: 0;
-  min-width: 120px;
-  justify-content: flex-end;
+  margin-left: 20px;
 }
 
 .langToggle {
   font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   color: var(--sg-text-tertiary);
   background: none;
-  border: 1px solid var(--sg-border-default);
+  border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-sm);
-  padding: 3px 8px;
+  padding: 4px 10px;
   cursor: pointer;
-  transition: all var(--sg-transition);
-}
-.langToggle:hover {
-  color: var(--sg-text-secondary);
-  border-color: var(--sg-border-strong);
 }
 
-.phaseBadge {
-  font-family: var(--sg-font-mono);
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--sg-text-disabled);
-  background: var(--sg-bg-surface-1);
-  border: 1px solid var(--sg-border-subtle);
-  border-radius: 3px;
-  padding: 2px 6px;
-}
+.phaseBadge { display: none; }
+
+/* Divider wird nicht mehr gebraucht (kein Text mehr neben Logo) */
+.headerDivider { display: none; }

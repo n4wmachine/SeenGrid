@@ -11,13 +11,8 @@ export default function Header({ activeTab, tabs, onTabChange }) {
         <img
           src={`${import.meta.env.BASE_URL}SGLogo5.png`}
           className="headerLogoIcon"
-          alt="SG"
+          alt="SeenGrid"
         />
-        <div className="headerDivider" />
-        <div>
-          <div className="headerLogoText">Seen<span>Grid</span></div>
-          <div className="headerSubtitle">AI Film Operator</div>
-        </div>
       </div>
 
       <nav className="tabNav" role="tablist">
@@ -43,7 +38,6 @@ export default function Header({ activeTab, tabs, onTabChange }) {
         >
           {lang === 'de' ? 'DE' : 'EN'}
         </button>
-        <span className="phaseBadge">Phase 1</span>
       </div>
     </header>
   )

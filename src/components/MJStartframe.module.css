@@ -10,7 +10,7 @@
   padding: var(--sg-space-3xl);
   max-width: 1440px;
   margin: 0 auto;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 72px);
   align-items: start;
 }
 
@@ -35,7 +35,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--sg-gold);
+  color: var(--sg-accent-text);
   margin-bottom: var(--sg-space-xl);
 }
 
@@ -55,7 +55,7 @@
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
   font-weight: 600;
-  color: var(--sg-gold-dim);
+  color: var(--sg-accent-dim);
   width: 20px;
   flex-shrink: 0;
   text-align: center;
@@ -80,7 +80,7 @@
   display: inline-block;
   width: 5px;
   height: 5px;
-  background: var(--sg-gold);
+  background: var(--sg-accent);
   border-radius: 50%;
   margin-left: var(--sg-space-xs);
   vertical-align: middle;
@@ -117,18 +117,18 @@
 
 /* Chips — gleiche Styles wie PromptBuilder */
 .chipGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sg-space-sm);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
 }
 
 /* Inline-Preview (zeigt den generierten Medium-Anker-String) */
 .inlinePreview {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
-  color: var(--sg-gold-text);
+  color: var(--sg-accent-text);
   background: var(--sg-bg-surface-0);
-  border: 1px solid rgba(212,149,42,0.15);
+  border: 1px solid var(--sg-accent-dim);
   border-radius: var(--sg-radius-md);
   padding: var(--sg-space-md) var(--sg-space-lg);
   margin-top: var(--sg-space-lg);
@@ -205,7 +205,7 @@
 .outputRawBadge {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
-  color: var(--sg-gold);
+  color: var(--sg-accent);
   letter-spacing: 0.06em;
   margin-left: auto;
 }
@@ -223,8 +223,8 @@
   transition: border-color var(--sg-transition-slow), box-shadow var(--sg-transition-slow);
 }
 .outputBox.filled {
-  border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 16px rgba(212,149,42,0.08), 0 0 4px rgba(212,149,42,0.06);
+  border-color: var(--sg-accent-dim);
+  box-shadow: 0 0 16px var(--sg-accent-glow-subtle), 0 0 4px var(--sg-accent-glow-subtle);
 }
 
 .copyButton {
@@ -234,7 +234,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--sg-text-inverse);
-  background: var(--sg-gold-gradient);
+  background: var(--sg-accent-gradient);
   border: none;
   border-radius: var(--sg-radius-md);
   padding: var(--sg-space-md) 0;
