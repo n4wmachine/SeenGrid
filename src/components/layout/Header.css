@@ -2,20 +2,21 @@
   position: sticky;
   top: 0;
   z-index: 200;
-  background: #060609;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(180deg, #08080f 0%, #060609 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 1px 0 rgba(232,166,36,0.04), 0 4px 24px rgba(0,0,0,0.6);
 }
 
 .sg-header__inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 40px;
-  height: 56px;
+  padding: 0 48px;
+  height: 64px;
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 40px;
 }
 
 /* ── Logo ── */
@@ -42,21 +43,22 @@
 
 .sg-logo__name {
   font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: #e4e4ee;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
   line-height: 1.15;
+  text-shadow: 0 0 20px rgba(232,166,36,0.15);
 }
 
 .sg-logo__sub {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 8px;
+  font-size: 8.5px;
   font-weight: 400;
-  letter-spacing: 1.8px;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
   color: #e8a624;
-  opacity: 0.6;
+  opacity: 0.7;
   line-height: 1;
 }
 
@@ -66,38 +68,41 @@
   align-items: stretch;
   gap: 0;
   flex: 1;
-  height: 56px;
+  height: 64px;
 }
 
 .sg-tab {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 0 16px;
+  gap: 8px;
+  padding: 0 22px;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 1.1px;
+  letter-spacing: 1.3px;
   text-transform: uppercase;
-  color: rgba(228,228,238,0.38);
+  color: rgba(228,228,238,0.35);
   cursor: pointer;
   transition:
     color 120ms ease,
-    border-color 120ms ease;
+    border-color 120ms ease,
+    background 120ms ease;
   white-space: nowrap;
   position: relative;
 }
 
 .sg-tab:hover {
-  color: rgba(228,228,238,0.72);
+  color: rgba(228,228,238,0.75);
+  background: rgba(255,255,255,0.024);
 }
 
 .sg-tab.active {
   color: #e4e4ee;
   border-bottom-color: #e8a624;
+  background: rgba(232,166,36,0.04);
 }
 
 .sg-tab__dot {
@@ -128,8 +133,10 @@
 }
 
 @media (max-width: 900px) {
-  .sg-header__inner { padding: 0 20px; gap: 20px; }
+  .sg-header__inner { padding: 0 20px; gap: 20px; height: 56px; }
+  .sg-nav { height: 56px; }
   .sg-logo__sub { display: none; }
-  .sg-tab { padding: 0 12px; font-size: 10px; letter-spacing: 0.7px; }
+  .sg-logo__name { font-size: 15px; }
+  .sg-tab { padding: 0 14px; font-size: 10px; letter-spacing: 0.8px; }
   .sg-header__badge { display: none; }
 }
