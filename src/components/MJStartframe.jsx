@@ -4,6 +4,10 @@ import styles from './MJStartframe.module.css'
 import templatesData  from '../data/mj/templates.json'
 import filmstockData  from '../data/mj/filmstocks.json'
 import forbiddenData  from '../data/mj/forbidden.json'
+import genreData      from '../data/mj/genres.json'
+import modifierData   from '../data/mj/modifiers.json'
+import hookData       from '../data/mj/emotional-hooks.json'
+import randomSceneData from '../data/mj/random-scenes.json'
 
 const AR_OPTIONS = [
   { v: '--ar 16:9',    t: 'Breitbild — Standard' },
@@ -14,34 +18,6 @@ const AR_OPTIONS = [
   { v: '--ar 1:1',     t: 'Quadratisch' },
 ]
 
-const MEDIUM_MODIFIERS = [
-  'low-budget', 'independent', '1970s', 'European', 'Scandinavian', 'Japanese',
-  '2004', 'French', 'Italian', 'shot on location', 'shot on 16mm', 'shot on 35mm',
-]
-
-const GENRES = [
-  'thriller', 'drama', 'noir', 'horror', 'sci-fi', 'western',
-  'romance', 'documentary', 'crime', 'mystery', 'arthouse',
-]
-
-const EMOTIONAL_HOOKS = [
-  'Nobody is coming back.',
-  'Too quiet for a place that looks lived-in.',
-  'Feels like escape. Or exposure.',
-  'Empty. Waiting.',
-  'The kind of afternoon that never ends.',
-  'Wrong kind of quiet.',
-  'Not beautiful — exposed.',
-  "She doesn't know she's being watched.",
-  'The kind of loneliness you chose.',
-]
-
-const RANDOM_SCENES = [
-  { location: 'A crumbling apartment stairwell', time: 'night', modifier: 'low-budget', genre: 'thriller', light: 'Bare bulb at the top of the stairs casting a narrow cone of yellow light', dark: 'The steps below swallowed in near-total darkness', hook: 'Wrong kind of quiet.' },
-  { location: 'Empty highway overpass', time: 'dusk', modifier: 'independent', genre: 'drama', light: 'Late sun from the right casting long orange shadows across the road surface', dark: 'The far end of the overpass lost in haze', hook: 'Nobody is coming back.' },
-  { location: 'A small fishing village seen from a cliff', time: 'early morning', modifier: 'Scandinavian', genre: 'arthouse', light: 'Flat grey overcast daylight. No shadows. Everything equally visible and equally bleak.', dark: 'The horizon dissolves into white fog', hook: 'The kind of afternoon that never ends.' },
-]
-
 function initState() {
   return {
     selectedTemplate: templatesData[0],
@@ -49,8 +25,8 @@ function initState() {
     filmstock: filmstockData[0].v,
     ar: '--ar 16:9',
     rawFlag: true,
-    medModifier: 'low-budget',
-    medGenre: 'thriller',
+    medModifier: modifierData[0].v,
+    medGenre: genreData[0].v,
   }
 }
 
@@ -108,7 +84,7 @@ export default function MJStartframe() {
       if (val) {
         prompt = prompt.replace(placeholder, val)
       } else {
-        // leave placeholder visible so user knows what’s missing
+        // leave placeholder visible so user knows what's missing
       }
     })
 
@@ -137,8 +113,8 @@ export default function MJStartframe() {
   }
 
   function handleRandom() {
-    const scene = RANDOM_SCENES[Math.floor(Math.random() * RANDOM_SCENES.length)]
-    const hook  = EMOTIONAL_HOOKS[Math.floor(Math.random() * EMOTIONAL_HOOKS.length)]
+    const scene = randomSceneData[Math.floor(Math.random() * randomSceneData.length)]
+    const hook  = hookData[Math.floor(Math.random() * hookData.length)].v
     const stock = filmstockData[Math.floor(Math.random() * filmstockData.length)].v
     const tpl   = templatesData[Math.floor(Math.random() * templatesData.length)]
     const fields = initFields(tpl)
@@ -221,26 +197,26 @@ export default function MJStartframe() {
               <div className={styles.quickGroup}>
                 <span className={styles.quickLabel}>Modifier</span>
                 <div className={styles.chipFlex}>
-                  {MEDIUM_MODIFIERS.map(m => (
+                  {modifierData.map(m => (
                     <button
-                      key={m}
-                      className={`chip ${state.medModifier === m ? 'active' : ''}`}
-                      title={`Film still from a ${m} ... film`}
-                      onClick={() => setState(p => ({ ...p, medModifier: m }))}
-                    >{m}</button>
+                      key={m.v}
+                      className={`chip ${state.medModifier === m.v ? 'active' : ''}`}
+                      title={m.t}
+                      onClick={() => setState(p => ({ ...p, medModifier: m.v }))}
+                    >{m.v}</button>
                   ))}
                 </div>
               </div>
               <div className={styles.quickGroup}>
                 <span className={styles.quickLabel}>Genre</span>
                 <div className={styles.chipFlex}>
-                  {GENRES.map(g => (
+                  {genreData.map(g => (
                     <button
-                      key={g}
-                      className={`chip ${state.medGenre === g ? 'active' : ''}`}
-                      title={`... ${g} film`}
-                      onClick={() => setState(p => ({ ...p, medGenre: g }))}
-                    >{g}</button>
+                      key={g.v}
+                      className={`chip ${state.medGenre === g.v ? 'active' : ''}`}
+                      title={g.t}
+                      onClick={() => setState(p => ({ ...p, medGenre: g.v }))}
+                    >{g.v}</button>
                   ))}
                 </div>
               </div>
@@ -317,13 +293,14 @@ export default function MJStartframe() {
           <div className={styles.block}>
             <p className="label-xs" style={{ marginBottom: 8 }}>Emotionaler Hook (Quick-Pick)</p>
             <div className={styles.hookGrid}>
-              {EMOTIONAL_HOOKS.map(h => (
+              {hookData.map(h => (
                 <button
-                  key={h}
-                  className={`${styles.hookBtn} ${state.fields['EMOTIONAL_HOOK'] === h ? styles.hookBtnActive : ''}`}
-                  onClick={() => updateField('EMOTIONAL_HOOK', h)}
+                  key={h.v}
+                  className={`${styles.hookBtn} ${state.fields['EMOTIONAL_HOOK'] === h.v ? styles.hookBtnActive : ''}`}
+                  onClick={() => updateField('EMOTIONAL_HOOK', h.v)}
+                  title={h.t}
                 >
-                  &ldquo;{h}&rdquo;
+                  &ldquo;{h.v}&rdquo;
                 </button>
               ))}
             </div>
@@ -427,7 +404,7 @@ function FieldInput({ field, value, onChange }) {
       <label className={styles.fieldLabel}>
         {field.label}
         {field.id === 'LIGHT_SOURCE' && (
-          <span className={styles.fieldHint}> — Konkrete Quelle, nicht \"cinematic lighting\"</span>
+          <span className={styles.fieldHint}> — Konkrete Quelle, nicht "cinematic lighting"</span>
         )}
       </label>
       {field.examples?.length > 0 && (
