@@ -1,6 +1,7 @@
-/* SeenGrid — Cinema Dark Theme
-   Desktop-first. Wide layout. Space Grotesk.
-   Cinematic gold accent. Deep black backgrounds.
+/* SeenGrid — Professional Cinema Dark UI
+   DaVinci Resolve / Runway ML / Frame.io quality
+   Deep navy blacks. Warm amber accent. JetBrains Mono.
+   NO purple. NO pastels. NO pill chips.
 */
 
 *, *::before, *::after {
@@ -10,75 +11,77 @@
 }
 
 :root {
-  /* ── Backgrounds ── */
-  --bg-0: #07070e;
-  --bg-1: #0d0d18;
-  --bg-2: #111120;
-  --bg-3: #161626;
-  --bg-4: #1c1c30;
-  --bg-5: #22223a;
+  /* ── Backgrounds (deep navy black) ── */
+  --bg-0: #060609;
+  --bg-1: #090910;
+  --bg-2: #0d0d17;
+  --bg-3: #111120;
+  --bg-4: #161625;
+  --bg-5: #1c1c2e;
 
-  /* ── Gold Accent ── */
-  --gold:        #f5a623;
-  --gold-bright: #ffbe4f;
-  --gold-dim:    rgba(245,166,35,0.15);
-  --gold-glow:   rgba(245,166,35,0.10);
-  --gold-border: rgba(245,166,35,0.40);
-  --gold-strong: rgba(245,166,35,0.60);
+  /* ── Warm Amber (primary accent) ── */
+  --gold:        #e8a624;
+  --gold-bright: #f5bc3c;
+  --gold-dim:    rgba(232,166,36,0.11);
+  --gold-glow:   rgba(232,166,36,0.07);
+  --gold-border: rgba(232,166,36,0.36);
+  --gold-strong: rgba(232,166,36,0.55);
 
-  /* ── Accent Colors (section dots) ── */
-  --accent-violet: #a78bfa;
-  --accent-blue:   #60a5fa;
-  --accent-cyan:   #67e8f9;
-  --accent-yellow: #fbbf24;
-  --accent-pink:   #f472b6;
-  --accent-green:  #34d399;
-  --accent-red:    #f87171;
+  /* ── Professional accent palette (no purple, no pastels) ── */
+  --accent-steel:  #5c9fc4;
+  --accent-teal:   #3fa8a6;
+  --accent-straw:  #c9a040;
+  --accent-bronze: #a07838;
+  --accent-sienna: #9e6050;
+  --accent-sage:   #4aab7a;
+  --accent-slate:  #7088a8;
 
   /* ── Text ── */
-  --t-0: #eeeef8;   /* primary */
-  --t-1: #8888a8;   /* secondary */
-  --t-2: #44445e;   /* muted */
+  --t-0: #e4e4ee;
+  --t-1: #72728e;
+  --t-2: #3a3a52;
   --t-gold: var(--gold);
 
   /* ── Borders ── */
-  --b-subtle: rgba(255,255,255,0.055);
-  --b-light:  rgba(255,255,255,0.09);
-  --b-medium: rgba(255,255,255,0.14);
+  --b-subtle: rgba(255,255,255,0.045);
+  --b-light:  rgba(255,255,255,0.08);
+  --b-medium: rgba(255,255,255,0.13);
 
   /* ── Chip ── */
-  --chip-bg:        rgba(255,255,255,0.05);
-  --chip-hover:     rgba(255,255,255,0.085);
-  --chip-active-bg: rgba(245,166,35,0.14);
-  --chip-active-bd: rgba(245,166,35,0.50);
+  --chip-bg:        rgba(255,255,255,0.038);
+  --chip-hover:     rgba(255,255,255,0.068);
+  --chip-active-bg: rgba(232,166,36,0.10);
+  --chip-active-bd: rgba(232,166,36,0.42);
 
   /* ── Radius ── */
-  --r-xs:   4px;
-  --r-sm:   8px;
-  --r-md:   12px;
-  --r-lg:   16px;
+  --r-xs:   3px;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   14px;
   --r-pill: 100px;
 
   /* ── Typography ── */
-  --font-sans: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --font-ui:   'Space Grotesk', system-ui, sans-serif;
+  --font-sans: var(--font-ui);
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 
   /* ── Transitions ── */
-  --ease: cubic-bezier(0.25,0.46,0.45,0.94);
-  --dur:  140ms;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --dur:  130ms;
 
   /* ── Layout ── */
-  --max-w: 1400px;
+  --max-w:     1400px;
   --sidebar-w: 320px;
 }
 
 html, body {
   background: var(--bg-0);
   color: var(--t-0);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 14px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -90,21 +93,21 @@ html, body {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--bg-5); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--bg-5); border-radius: 2px; }
 * { scrollbar-width: thin; scrollbar-color: var(--bg-5) transparent; }
 
 /* ── Focus ring ── */
 :focus-visible {
-  outline: 2px solid var(--gold-border);
+  outline: 1.5px solid var(--gold-border);
   outline-offset: 2px;
 }
 
-/* ── Global button reset ── */
-button { cursor: pointer; font-family: var(--font-sans); }
+/* ── Global resets ── */
+button { cursor: pointer; font-family: var(--font-ui); }
 
-/* ── Utility classes ── */
+/* ── Utility labels ── */
 .label-xs {
   font-size: 10px;
   font-weight: 700;
@@ -121,23 +124,24 @@ button { cursor: pointer; font-family: var(--font-sans); }
   color: var(--t-1);
 }
 
+/* ── Section dot ── */
 .section-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* ── Chip base ── */
+/* ── Chip — rectangular, professional ── */
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 4px 10px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
-  border-radius: var(--r-pill);
-  font-family: var(--font-sans);
+  border-radius: var(--r-xs);
+  font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 500;
   color: var(--t-1);
@@ -147,8 +151,7 @@ button { cursor: pointer; font-family: var(--font-sans); }
   transition:
     color var(--dur) var(--ease),
     background var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+    border-color var(--dur) var(--ease);
   position: relative;
 }
 
@@ -162,16 +165,14 @@ button { cursor: pointer; font-family: var(--font-sans); }
   background: var(--chip-active-bg);
   border-color: var(--chip-active-bd);
   color: var(--gold);
-  box-shadow:
-    inset 0 0 10px rgba(245,166,35,0.08),
-    0 0 10px rgba(245,166,35,0.12);
+  font-weight: 600;
 }
 
 /* ── Tooltip ── */
 .chip[title]:hover::after {
   content: attr(title);
   position: absolute;
-  bottom: calc(100% + 6px);
+  bottom: calc(100% + 5px);
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-4);
@@ -184,43 +185,43 @@ button { cursor: pointer; font-family: var(--font-sans); }
   border-radius: var(--r-xs);
   pointer-events: none;
   z-index: 100;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 }
 
-/* ── Btn primary ── */
+/* ── Buttons ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 9px 18px;
+  gap: 6px;
+  padding: 8px 16px;
   border-radius: var(--r-sm);
   border: 1px solid transparent;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.15px;
   cursor: pointer;
   transition: all var(--dur) var(--ease);
 }
 
-.btn:active:not(:disabled) { transform: scale(0.97); }
-.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn:active:not(:disabled) { transform: scale(0.975); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .btn-primary {
   background: var(--gold);
   border-color: var(--gold);
-  color: #08080e;
+  color: #07070d;
 }
 .btn-primary:hover:not(:disabled) {
   background: var(--gold-bright);
   border-color: var(--gold-bright);
-  box-shadow: 0 0 20px rgba(245,166,35,0.40);
+  box-shadow: 0 0 18px rgba(232,166,36,0.32);
 }
 
 .btn-ghost {
   background: transparent;
-  border-color: var(--b-light);
+  border-color: var(--b-subtle);
   color: var(--t-1);
 }
 .btn-ghost:hover:not(:disabled) {
@@ -230,49 +231,51 @@ button { cursor: pointer; font-family: var(--font-sans); }
 }
 
 .btn-sm {
-  padding: 6px 13px;
+  padding: 5px 12px;
   font-size: 12px;
 }
 
 /* ── Textarea / Input ── */
 .field {
   width: 100%;
-  padding: 10px 14px;
-  background: var(--bg-3);
+  padding: 9px 12px;
+  background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
   color: var(--t-0);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.6;
   outline: none;
   resize: vertical;
-  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  transition:
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
 }
 .field::placeholder { color: var(--t-2); font-style: italic; }
 .field:focus {
   border-color: var(--gold-border);
-  background: var(--bg-4);
+  background: var(--bg-3);
 }
 
-/* ── Output box ── */
+/* ── Output / code box ── */
 .output-box {
   width: 100%;
   min-height: 80px;
-  padding: 12px 14px;
-  background: var(--bg-3);
+  padding: 11px 13px;
+  background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
   font-family: var(--font-mono);
   font-size: 12px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--t-0);
   word-break: break-word;
   white-space: pre-wrap;
   user-select: all;
 }
 .output-box.has-content {
-  border-color: rgba(245,166,35,0.22);
+  border-color: rgba(232,166,36,0.20);
 }
 
 /* ── Card ── */
@@ -280,38 +283,38 @@ button { cursor: pointer; font-family: var(--font-sans); }
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 20px 24px;
+  padding: 18px 22px;
 }
 
-/* ── Section header (accordion) ── */
+/* ── Accordion header ── */
 .acc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 9px 0;
+  padding: 8px 0;
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
   text-align: left;
 }
-.acc-header:hover { opacity: 0.8; }
+.acc-header:hover { opacity: 0.75; }
 .acc-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
+  gap: 7px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--t-1);
 }
 .acc-chevron {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   color: var(--t-2);
-  transition: transform 0.2s var(--ease);
+  transition: transform 0.18s var(--ease);
   flex-shrink: 0;
 }
 .acc-header[aria-expanded="false"] .acc-chevron {
