@@ -2,15 +2,36 @@ import React, { useState, useEffect } from 'react'
 import styles from './GridOperator.module.css'
 import { useLang } from '../context/LangContext.jsx'
 
-import worldZone     from '../data/presets/world-zone-board-3x3.json'
-import multiSingle   from '../data/presets/multishot-3x3-single-zone.json'
-import multiCross    from '../data/presets/multishot-3x3-cross-zone.json'
-import charAngle3x3  from '../data/presets/character-angle-3x3.json'
-import charAngle2x2  from '../data/presets/character-angle-study-2x2.json'
-import detailStrip   from '../data/presets/detail-anchor-strip.json'
-import coreTemplates from '../data/core-templates.json'
+import worldZone       from '../data/presets/world-zone-board-3x3.json'
+import multiSingle     from '../data/presets/multishot-3x3-single-zone.json'
+import multiCross      from '../data/presets/multishot-3x3-cross-zone.json'
+import charAngle3x3    from '../data/presets/character-angle-3x3.json'
+import charAngle2x2    from '../data/presets/character-angle-study-2x2.json'
+import detailStrip     from '../data/presets/detail-anchor-strip.json'
+import twoCharInt      from '../data/presets/two-character-integration.json'
+import outfitSwap      from '../data/presets/outfit-swap.json'
+import envContinuity   from '../data/presets/environment-continuity-2x3.json'
+import expressionTgt   from '../data/presets/expression-target-2x3.json'
+import lightingTest    from '../data/presets/lighting-test-2x2.json'
+import progression     from '../data/presets/progression-1x4.json'
+import cutaway         from '../data/presets/cutaway-worldbuilding.json'
+import knolling        from '../data/presets/knolling-layout.json'
+import twoShotKey      from '../data/presets/2shot-keyframe-2x2.json'
+import archBlueprint   from '../data/presets/architectural-blueprint-2x2.json'
+import sceneSpatial    from '../data/presets/scene-spatial-layout-2x2.json'
+import charSheet8      from '../data/presets/character-sheet-8view.json'
+import coreTemplates   from '../data/core-templates.json'
 
-const PRESETS = [worldZone, multiSingle, multiCross, charAngle3x3, charAngle2x2, detailStrip]
+const PRESETS = [
+  worldZone, multiSingle, multiCross,
+  charAngle3x3, charAngle2x2, detailStrip,
+  twoCharInt, outfitSwap,
+  envContinuity, expressionTgt,
+  lightingTest, progression,
+  cutaway, knolling,
+  twoShotKey, archBlueprint, sceneSpatial,
+  charSheet8,
+]
 
 function buildRoles(preset) {
   const total = preset.rows * preset.cols
@@ -84,7 +105,7 @@ export default function GridOperator() {
 
     if (mode === 'seengrid') {
       const parts = [selectedPreset.prompt]
-      parts.push(`LAYOUT: ${rows}×${cols} grid. ${getLayoutDesc(layout)}.`)
+      parts.push(`LAYOUT: ${rows}\u00d7${cols} grid. ${getLayoutDesc(layout)}.`)
       if (coreStyle) parts.push(`STYLE OVERRIDE: Apply ${coreStyle}.`)
       return parts.join('\n\n')
     }
@@ -160,7 +181,7 @@ export default function GridOperator() {
                   >
                     <div className={styles.presetCardTop}>
                       <span className={styles.presetLabel}>{p.label}</span>
-                      <span className={styles.presetBadge}>{p.rows}×{p.cols}</span>
+                      <span className={styles.presetBadge}>{p.rows}\u00d7{p.cols}</span>
                     </div>
                     <p className={styles.presetDesc}>{p.desc}</p>
                   </button>
@@ -192,7 +213,7 @@ export default function GridOperator() {
             <p className="label-xs" style={{ marginBottom: 8 }}>{t('grid.grid_size')}</p>
             {mode === 'seengrid' ? (
               <div className={styles.dimLocked}>
-                <span className={styles.dimLockedBadge}>{rows}×{cols}</span>
+                <span className={styles.dimLockedBadge}>{rows}\u00d7{cols}</span>
                 <span className={styles.dimLockedNote}>{t('grid.dim_locked')}</span>
               </div>
             ) : (
@@ -209,7 +230,7 @@ export default function GridOperator() {
                     ))}
                   </div>
                 </div>
-                <span className={styles.dimX}>×</span>
+                <span className={styles.dimX}>\u00d7</span>
                 <div className={styles.dimGroup}>
                   <span className={styles.dimLabel}>Cols</span>
                   <div className={styles.dimBtns}>
@@ -339,7 +360,7 @@ export default function GridOperator() {
                   className={`field ${styles.customTextarea}`}
                   value={customOutput}
                   onChange={e => setCustomOutput(e.target.value)}
-                  placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
+                  placeholder={`${rows}\u00d7${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
                   spellCheck={false}
                 />
               ) : (
