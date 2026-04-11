@@ -156,7 +156,9 @@ export default function PromptBuilder() {
     }))
   }
 
-  function handleReset() { setState(initState()) }
+  function handleReset() {
+    setState(initState())
+  }
 
   const prompt    = buildPrompt()
   const negative  = buildNegative()
@@ -165,7 +167,9 @@ export default function PromptBuilder() {
   return (
     <div className={styles.root}>
       <div className={styles.layout}>
+
         <div className={styles.controls}>
+
           <div className={styles.sceneSection}>
             <div className={styles.sectionHeaderStatic}>
               <span className="label-xs">{t('builder.scene_label')}</span>
@@ -274,14 +278,26 @@ export default function PromptBuilder() {
 
 function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
   const { id, label, dot, mode, data } = section
-  const activeCount = mode === 'multi' ? state[id].size : state[id] ? 1 : 0
+  const activeCount = mode === 'multi'
+    ? state[id].size
+    : state[id] ? 1 : 0
+
   return (
     <div className={styles.section}>
-      <button className={styles.sectionHeader} aria-expanded={isOpen} onClick={onToggle}>
+      <button
+        className={styles.sectionHeader}
+        aria-expanded={isOpen}
+        onClick={onToggle}
+      >
         <span className={styles.sectionTitle}>
-          <span className={styles.sectionBar} style={{ background: dot }} />
+          <span
+            className={styles.sectionBar}
+            style={{ background: dot }}
+          />
           {label}
-          {activeCount > 0 && <span className={styles.activeBadge}>{activeCount}</span>}
+          {activeCount > 0 && (
+            <span className={styles.activeBadge}>{activeCount}</span>
+          )}
         </span>
         <ChevronIcon isOpen={isOpen} />
       </button>
@@ -311,8 +327,8 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
 
 function HighlightedPrompt({ state, apertureData }) {
   const parts = []
-  if (state.scene)      parts.push({ cls: 'scene',   text: state.scene })
-  if (state.style)      parts.push({ cls: 'style',   text: `${state.style} cinematic style` })
+  if (state.scene)      parts.push({ cls: 'scene',    text: state.scene })
+  if (state.style)      parts.push({ cls: 'style',    text: `${state.style} cinematic style` })
   const framing = []
   if (state.shotsize)    framing.push(state.shotsize)
   if (state.cameraangle) framing.push(`${state.cameraangle} angle`)
@@ -336,6 +352,7 @@ function HighlightedPrompt({ state, apertureData }) {
     parts.push({ cls: 'effects', text: [...state.effects].join(', ') })
   if (state.qualitySuffix && parts.length > 0)
     parts.push({ cls: 'quality', text: 'ultra detailed, photorealistic, 8K cinema quality' })
+
   return (
     <p style={{ margin: 0, lineHeight: 1.9 }}>
       {parts.map((p, i) => (
