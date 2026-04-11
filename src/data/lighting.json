@@ -14,7 +14,7 @@
   { "v": "Candlelight",           "t": "Kerzenlicht — sehr warm (1800K), flackernd, intimate, period-correct" },
   { "v": "Tungsten Warm",         "t": "Warmes Glühlampenlicht — 3200K, amber shadows, domestic spaces" },
   { "v": "Dappled Light",         "t": "Licht durch Blätter oder Jalousien — bewegte Muster, lebendige Oberflächen" },
-  { "v": "Firelight",             "t": "Flackerndes Feuer- oder Kaminlicht — tief orange, dramatische Schatten" },
+  { "v": "Firelight",             "t": "Flackendes Feuer- oder Kaminlicht — tief orange, dramatische Schatten" },
   { "v": "Mercury Vapor",         "t": "Kalt-grünliches Industrielicht — Fabrikhallen, Parkhäuser, desaturiert" },
   { "v": "Fluorescent Flicker",   "t": "Defekte Neonröhre — intermittierend, harsh, institutionelle Bedrohung" },
   { "v": "Window Light",          "t": "Natürliches Fensterlicht — diffus direktional, soft shadows, painterly quality" },

@@ -5,8 +5,8 @@
 /* ── Two-column layout ── */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 480px;
-  gap: 52px;
+  grid-template-columns: 1fr 420px;
+  gap: 36px;
   align-items: start;
 }
 
@@ -39,15 +39,9 @@
 /* ── Accordion section — horizontal bar style ── */
 .section {
   border-top: 1px solid var(--b-subtle);
-  padding: 0 8px;
-  margin: 0 -8px;
-  border-radius: var(--r-xs);
 }
 .section:last-of-type {
   border-bottom: 1px solid var(--b-subtle);
-}
-.section:nth-child(even) {
-  background: rgba(255,255,255,0.013);
 }
 
 .sectionHeader {
@@ -55,7 +49,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 13px 0 13px 10px;
+  padding: 9px 0 9px 10px;
   background: none;
   border: none;
   border-left: 2px solid transparent;
@@ -107,13 +101,13 @@
 }
 
 .sectionBody {
-  padding: 4px 0 16px 12px;
+  padding: 2px 0 12px 12px;
 }
 
 .chipGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 4px;
 }
 
 /* ── Negative custom ── */
@@ -124,13 +118,9 @@
 /* ── Output panel (right sticky) ── */
 .outputPanel {
   position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
+  top: 72px;
+  max-height: calc(100vh - 92px);
   overflow-y: auto;
-  background: var(--bg-2);
-  border: 1px solid var(--b-subtle);
-  border-radius: var(--r-md);
-  padding: 22px;
 }
 
 .outputSticky {
@@ -200,18 +190,15 @@
   letter-spacing: 0.3px;
 }
 
-/* Dark output box — glow handled by global .output-box.has-content in theme.css */
+/* Dark output box — gold border when content present */
 .promptBox {
-  min-height: 220px;
-  max-height: 420px;
+  min-height: 140px;
+  max-height: 300px;
   overflow-y: auto;
-  background: #04040a;
+  background: #05050b;
   font-family: var(--font-mono);
   font-size: 11.5px;
   line-height: 1.95;
-  transition:
-    border-color 200ms var(--ease),
-    box-shadow 200ms var(--ease);
 }
 
 .negBox {
@@ -277,13 +264,11 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1280px) {
-  .layout { grid-template-columns: minmax(0, 1fr) 420px; gap: 36px; }
-}
 @media (max-width: 1100px) {
-  .layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; }
+  .layout { grid-template-columns: 1fr 360px; }
 }
+
 @media (max-width: 800px) {
-  .layout { grid-template-columns: 1fr; gap: 24px; }
+  .layout { grid-template-columns: 1fr; }
   .outputPanel { position: static; max-height: none; }
 }

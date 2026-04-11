@@ -31,3 +31,8 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*.local
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

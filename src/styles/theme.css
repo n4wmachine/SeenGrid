@@ -140,7 +140,7 @@ input, textarea { font-family: var(--font-ui); }
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 5px 13px;
+  padding: 4px 9px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
@@ -279,12 +279,8 @@ input, textarea { font-family: var(--font-ui); }
   user-select: all;
 }
 .output-box.has-content {
-  border-color: rgba(232,166,36,0.45);
-  background: #04040a;
-  box-shadow:
-    0 0 0 1px rgba(232,166,36,0.10),
-    0 0 36px rgba(232,166,36,0.10),
-    inset 0 0 28px rgba(232,166,36,0.03);
+  border-color: rgba(232,166,36,0.30);
+  background: #080810;
 }
 
 /* ── Card ── */
