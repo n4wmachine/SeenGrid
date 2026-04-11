@@ -1,30 +1,33 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styles from './PromptVault.module.css'
+import { useLang } from '../context/LangContext.jsx'
 
 const REPO_PROMPTS_URL =
   'https://raw.githubusercontent.com/jau123/nanobanana-trending-prompts/main/prompts/prompts.json'
 
-const SORT_OPTIONS = [
-  { id: 'likes',   label: 'Likes ↓',  desc: 'Nach Engagement sortieren' },
-  { id: 'views',   label: 'Views ↓',  desc: 'Meistgesehene zuerst' },
-  { id: 'newest',  label: 'Neu',      desc: 'Neueste zuerst' },
-]
-
-const ALL_CATEGORIES_LABEL = 'Alle'
 const PAGE_SIZE = 30
 
 export default function PromptVault() {
+  const { t } = useLang()
+
+  const SORT_OPTIONS = [
+    { id: 'likes',   label: t('vault.sort_likes'),   desc: t('vault.sort_likes_desc') },
+    { id: 'views',   label: t('vault.sort_views'),   desc: t('vault.sort_views_desc') },
+    { id: 'newest',  label: t('vault.sort_newest'),  desc: t('vault.sort_newest_desc') },
+  ]
+
+  const ALL_CATEGORIES_LABEL = t('vault.all')
+
   const [prompts, setPrompts]       = useState([])
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState(null)
   const [search, setSearch]         = useState('')
-  const [category, setCategory]     = useState(ALL_CATEGORIES_LABEL)
+  const [category, setCategory]     = useState('__all__')
   const [sort, setSort]             = useState('likes')
   const [page, setPage]             = useState(1)
   const [copied, setCopied]         = useState(null)
   const [expanded, setExpanded]     = useState(null)
 
-  // ── Load prompts from GitHub ──
   useEffect(() => {
     let cancelled = false
     setLoading(true)
@@ -37,7 +40,6 @@ export default function PromptVault() {
       })
       .then(data => {
         if (cancelled) return
-        // Normalize the data structure
         const normalized = (Array.isArray(data) ? data : data.prompts || []).map(item => ({
           id:         item.id || item.tweet_id || String(Math.random()),
           prompt:     item.prompt || item.text || '',
@@ -65,7 +67,6 @@ export default function PromptVault() {
     if (item.imageUrls)  return Array.isArray(item.imageUrls) ? item.imageUrls : [item.imageUrls]
     if (item.image_url)  return [item.image_url]
     if (item.images)     return item.images
-    // Construct from tweet ID pattern (meigen.ai)
     if (item.id || item.tweet_id) {
       const tid = item.id || item.tweet_id
       return [`https://images.meigen.ai/tweets/${tid}/0.jpg`]
@@ -79,23 +80,19 @@ export default function PromptVault() {
     return ['Other']
   }
 
-  // ── Derive categories from data ──
   const allCategories = useMemo(() => {
     const cats = new Set()
     prompts.forEach(p => p.categories.forEach(c => cats.add(c)))
-    return [ALL_CATEGORIES_LABEL, ...Array.from(cats).sort()]
+    return ['__all__', ...Array.from(cats).sort()]
   }, [prompts])
 
-  // ── Filter + sort + paginate ──
   const filtered = useMemo(() => {
     let result = prompts
 
-    // Category
-    if (category !== ALL_CATEGORIES_LABEL) {
+    if (category !== '__all__') {
       result = result.filter(p => p.categories.includes(category))
     }
 
-    // Search
     if (search.trim()) {
       const q = search.trim().toLowerCase()
       result = result.filter(p =>
@@ -104,7 +101,6 @@ export default function PromptVault() {
       )
     }
 
-    // Sort
     if (sort === 'likes')  result = [...result].sort((a, b) => b.likes - a.likes)
     if (sort === 'views')  result = [...result].sort((a, b) => b.views - a.views)
     if (sort === 'newest') result = [...result].sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -119,7 +115,6 @@ export default function PromptVault() {
 
   const hasMore = paginated.length < filtered.length
 
-  // Reset page on filter change
   useEffect(() => { setPage(1) }, [search, category, sort])
 
   async function handleCopy(id, text) {
@@ -133,13 +128,15 @@ export default function PromptVault() {
   return (
     <div className={styles.root}>
 
-      {/* ── Header bar ── */}
       <div className={styles.topBar}>
         <div className={styles.topBarLeft}>
           <div className={styles.titleBlock}>
             <h2 className={styles.vaultTitle}>Prompt Vault</h2>
             <span className={styles.vaultCount}>
-              {loading ? 'Lade…' : `${filtered.length.toLocaleString()} von ${prompts.length.toLocaleString()} Prompts`}
+              {loading
+                ? 'Lade…'
+                : `${filtered.length.toLocaleString()} ${t('vault.count_of')} ${prompts.length.toLocaleString()} ${t('vault.prompts')}`
+              }
             </span>
           </div>
           <p className={styles.vaultSub}>
@@ -148,20 +145,18 @@ export default function PromptVault() {
               target="_blank"
               rel="noreferrer"
               className={styles.repoLink}
-            >nanobanana-trending-prompts</a> — sortiert nach Engagement
+            >nanobanana-trending-prompts</a> — {t('vault.subtitle')}
           </p>
         </div>
       </div>
 
-      {/* ── Controls bar ── */}
       <div className={styles.controls}>
-        {/* Search */}
         <div className={styles.searchWrap}>
           <SearchIcon />
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Prompts oder Autoren durchsuchen…"
+            placeholder={t('vault.search_placeholder')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             spellCheck={false}
@@ -171,7 +166,6 @@ export default function PromptVault() {
           )}
         </div>
 
-        {/* Sort */}
         <div className={styles.sortBtns}>
           {SORT_OPTIONS.map(s => (
             <button
@@ -186,7 +180,6 @@ export default function PromptVault() {
         </div>
       </div>
 
-      {/* ── Category filters ── */}
       <div className={styles.catBar}>
         {allCategories.map(cat => (
           <button
@@ -194,36 +187,31 @@ export default function PromptVault() {
             className={`chip ${category === cat ? 'active' : ''}`}
             onClick={() => setCategory(cat)}
           >
-            {cat}
+            {cat === '__all__' ? ALL_CATEGORIES_LABEL : cat}
           </button>
         ))}
       </div>
 
-      {/* ── Loading / Error ── */}
       {loading && (
         <div className={styles.statusBox}>
           <div className={styles.spinner} />
-          <p>Lade Community-Prompts vom GitHub Repo…</p>
+          <p>{t('vault.loading')}</p>
         </div>
       )}
 
       {error && (
         <div className={styles.errorBox}>
-          <p className={styles.errorTitle}>⚠️ Laden fehlgeschlagen</p>
+          <p className={styles.errorTitle}>{t('vault.error_title')}</p>
           <p className={styles.errorMsg}>{error}</p>
-          <p className={styles.errorHint}>
-            Bitte prüfe ob du online bist. Die Prompts werden direkt von
-            github.com/jau123/nanobanana-trending-prompts geladen.
-          </p>
+          <p className={styles.errorHint}>{t('vault.error_hint')}</p>
         </div>
       )}
 
-      {/* ── Gallery grid ── */}
       {!loading && !error && (
         <>
           {paginated.length === 0 ? (
             <div className={styles.statusBox}>
-              <p>Keine Prompts für diese Suche / Kategorie gefunden.</p>
+              <p>{t('vault.no_results')}</p>
             </div>
           ) : (
             <div className={styles.gallery}>
@@ -235,19 +223,22 @@ export default function PromptVault() {
                   expanded={expanded === prompt.id}
                   onCopy={() => handleCopy(prompt.id, prompt.prompt)}
                   onToggleExpand={() => setExpanded(p => p === prompt.id ? null : prompt.id)}
+                  copyLabel={t('vault.copy_btn')}
+                  copiedLabel={t('vault.copied')}
+                  showMoreLabel={t('vault.show_more')}
+                  showLessLabel={t('vault.show_less')}
                 />
               ))}
             </div>
           )}
 
-          {/* Load more */}
           {hasMore && (
             <div className={styles.loadMoreRow}>
               <button
                 className="btn btn-ghost"
                 onClick={() => setPage(p => p + 1)}
               >
-                Mehr laden ({filtered.length - paginated.length} weitere)
+                {t('vault.load_more')} ({filtered.length - paginated.length} {t('vault.more_items')})
               </button>
             </div>
           )}
@@ -257,8 +248,7 @@ export default function PromptVault() {
   )
 }
 
-// ── Prompt Card ──
-function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
+function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand, copyLabel, copiedLabel, showMoreLabel, showLessLabel }) {
   const [imgError, setImgError] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const hasImage = prompt.imageUrls.length > 0 && !imgError
@@ -276,7 +266,6 @@ function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
 
   return (
     <div className={styles.card}>
-      {/* Image */}
       {hasImage && (
         <div className={`${styles.imgWrap} ${imgLoaded ? styles.imgLoaded : ''}`}>
           <img
@@ -290,9 +279,7 @@ function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
         </div>
       )}
 
-      {/* Card body */}
       <div className={styles.cardBody}>
-        {/* Meta */}
         <div className={styles.cardMeta}>
           {prompt.author && (
             <span className={styles.cardAuthor}>@{prompt.author.replace('@', '')}</span>
@@ -312,16 +299,14 @@ function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
           )}
         </div>
 
-        {/* Prompt text */}
         <p className={styles.cardText}>{displayText}</p>
 
         {truncated && (
           <button className={styles.expandBtn} onClick={onToggleExpand}>
-            {expanded ? 'Weniger' : 'Mehr anzeigen'}
+            {expanded ? showLessLabel : showMoreLabel}
           </button>
         )}
 
-        {/* Categories */}
         {prompt.categories.filter(c => c !== 'Other').length > 0 && (
           <div className={styles.cardCats}>
             {prompt.categories.filter(c => c !== 'Other').map(c => (
@@ -330,14 +315,13 @@ function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
           </div>
         )}
 
-        {/* Actions */}
         <div className={styles.cardActions}>
           <button
             className={`btn btn-primary btn-sm ${styles.copyBtn}`}
             onClick={onCopy}
           >
             <CopyIcon />
-            {copied ? '✓ Kopiert' : 'Kopieren'}
+            {copied ? copiedLabel : copyLabel}
           </button>
         </div>
       </div>
@@ -345,7 +329,6 @@ function PromptCard({ prompt, copied, expanded, onCopy, onToggleExpand }) {
   )
 }
 
-// ── Icons ──
 const SearchIcon = () => (
   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style={{ flexShrink: 0, color: 'var(--t-2)' }}>
     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.44 1.406a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
