@@ -8,10 +8,10 @@ const MJStartframe = lazy(() => import('./components/MJStartframe.jsx'))
 const PromptVault = lazy(() => import('./components/PromptVault.jsx'))
 
 const TABS = [
-  { id: 'builder',  label: 'Prompt Builder', dot: '#a78bfa', desc: 'NanoBanana-optimiert' },
-  { id: 'grid',     label: 'Grid Operator',   dot: '#60a5fa', desc: 'World Boards & Multi-Shot' },
-  { id: 'mj',       label: 'MJ Startframe',   dot: '#fbbf24', desc: '5-Element Architektur' },
-  { id: 'vault',    label: 'Prompt Vault',     dot: '#34d399', desc: '1500+ Community Prompts' },
+  { id: 'builder', label: 'Prompt Builder', dot: '#e8a624', desc: 'NanoBanana-optimiert' },
+  { id: 'grid',    label: 'Grid Operator',  dot: '#5c9fc4', desc: 'World Boards & Multi-Shot' },
+  { id: 'mj',      label: 'MJ Startframe',  dot: '#c9a040', desc: '5-Element Architektur' },
+  { id: 'vault',   label: 'Prompt Vault',   dot: '#4aab7a', desc: '1500+ Community Prompts' },
 ]
 
 export default function App() {
