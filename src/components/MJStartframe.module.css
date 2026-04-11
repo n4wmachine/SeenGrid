@@ -10,7 +10,7 @@
 .builder {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 /* ── Architecture card ── */
@@ -18,24 +18,24 @@
   background: var(--bg-2);
   border: 1px solid var(--gold-border);
   border-radius: var(--r-md);
-  padding: 16px 18px;
+  padding: 14px 16px;
   margin-bottom: 4px;
 }
 
 .archTitle {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.9px;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: 0.75;
+  opacity: 0.65;
   margin-bottom: 10px;
 }
 
 .archSteps {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .archStep {
@@ -45,8 +45,8 @@
 }
 
 .archNum {
-  min-width: 20px;
-  height: 20px;
+  min-width: 19px;
+  height: 19px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,38 +66,31 @@
   color: var(--t-0);
 }
 
-.archDesc {
-  font-size: 11.5px;
-  color: var(--t-1);
-}
-
-.archReq {
-  color: var(--gold);
-  font-weight: 700;
-}
+.archDesc { font-size: 11px; color: var(--t-1); }
+.archReq  { color: var(--gold); font-weight: 700; }
 
 /* ── Block ── */
 .block {
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-md);
-  padding: 16px 18px;
+  padding: 14px 16px;
 }
 
-/* ── Template grid ── */
+/* ── Template buttons ── */
 .templateGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 8px;
+  gap: 4px;
+  margin-bottom: 7px;
 }
 
 .tplBtn {
-  padding: 5px 12px;
+  padding: 4px 10px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
-  border-radius: var(--r-pill);
-  font-family: var(--font-sans);
+  border-radius: var(--r-xs);
+  font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 500;
   color: var(--t-1);
@@ -113,12 +106,12 @@
 }
 
 .tplDesc {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--t-1);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
-/* ── Quick row ── */
+/* ── Quick groups ── */
 .quickRow {
   display: flex;
   flex-direction: column;
@@ -128,11 +121,11 @@
 .quickGroup {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .quickLabel {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -146,12 +139,12 @@
 }
 
 .medPreview {
-  margin-top: 10px;
-  padding: 8px 12px;
+  margin-top: 8px;
+  padding: 7px 11px;
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--t-1);
 }
 
@@ -162,9 +155,7 @@
 }
 
 /* ── Field ── */
-.fieldWrap {
-  margin-bottom: 12px;
-}
+.fieldWrap { margin-bottom: 11px; }
 .fieldWrap:last-child { margin-bottom: 0; }
 
 .fieldLabel {
@@ -175,11 +166,7 @@
   margin-bottom: 4px;
 }
 
-.fieldHint {
-  font-weight: 400;
-  color: var(--t-2);
-  font-style: italic;
-}
+.fieldHint { font-weight: 400; color: var(--t-2); font-style: italic; }
 
 .fieldExamples {
   display: flex;
@@ -192,11 +179,11 @@
   padding: 2px 8px;
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
-  border-radius: var(--r-pill);
+  border-radius: var(--r-xs);
   font-size: 10.5px;
   color: var(--t-2);
   cursor: pointer;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   transition: all var(--dur);
 }
 .exampleChip:hover { color: var(--t-0); border-color: var(--b-light); }
@@ -205,7 +192,7 @@
 .filmstockGrid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .fsBtn {
@@ -213,7 +200,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1px;
-  padding: 8px 12px;
+  padding: 7px 11px;
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
@@ -235,21 +222,17 @@
 }
 
 .fsDesc {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 10.5px;
   color: var(--t-1);
 }
 
 /* ── Params ── */
-.paramRow {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.paramRow { display: flex; flex-direction: column; gap: 11px; }
 
 .paramLabel {
   display: block;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -261,10 +244,10 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 12px;
+  padding: 5px 11px;
   background: var(--chip-bg);
   border: 1px solid var(--b-subtle);
-  border-radius: var(--r-pill);
+  border-radius: var(--r-xs);
   font-size: 12px;
   font-weight: 600;
   color: var(--t-1);
@@ -278,21 +261,22 @@
 .rawToggle:hover { border-color: var(--b-light); color: var(--t-0); }
 
 .rawDot {
-  width: 7px; height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--t-2);
   transition: background var(--dur), box-shadow var(--dur);
 }
 .rawDotOn {
   background: var(--gold);
-  box-shadow: 0 0 7px var(--gold);
+  box-shadow: 0 0 6px rgba(232,166,36,0.6);
 }
 
 /* ── Emotional hooks ── */
 .hookGrid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .hookBtn {
@@ -300,7 +284,7 @@
   background: var(--bg-3);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 12px;
   font-style: italic;
   color: var(--t-1);
@@ -310,64 +294,51 @@
 }
 .hookBtn:hover { color: var(--t-0); border-color: var(--b-light); }
 .hookBtnActive {
-  background: rgba(251,191,36,0.08);
-  border-color: rgba(251,191,36,0.30);
-  color: #fbbf24;
+  background: rgba(201,160,64,0.08);
+  border-color: rgba(201,160,64,0.30);
+  color: var(--accent-straw);
 }
 
 /* ── Output column ── */
 .outputCol {
   position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
+  top: 72px;
+  max-height: calc(100vh - 92px);
   overflow-y: auto;
 }
 
 .outputSticky {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 13px;
 }
 
-.toolbar {
-  display: flex;
-  gap: 8px;
-}
+.toolbar { display: flex; gap: 6px; }
 
 /* ── Warning box ── */
 .warningBox {
-  background: rgba(248,113,113,0.08);
-  border: 1px solid rgba(248,113,113,0.30);
+  background: rgba(158,96,80,0.08);
+  border: 1px solid rgba(158,96,80,0.28);
   border-radius: var(--r-sm);
-  padding: 12px 14px;
+  padding: 11px 13px;
 }
 
 .warningTitle {
   font-size: 11px;
   font-weight: 700;
-  color: #f87171;
-  margin-bottom: 6px;
+  color: #c07060;
+  margin-bottom: 5px;
 }
 
-.warningItem {
-  margin-bottom: 3px;
-  font-size: 11.5px;
-}
-
-.warningWord {
-  font-family: var(--font-mono);
-  color: #f87171;
-}
-
-.warningReason {
-  color: var(--t-1);
-}
+.warningItem { margin-bottom: 2px; font-size: 11px; }
+.warningWord { font-family: var(--font-mono); color: #c07060; }
+.warningReason { color: var(--t-1); }
 
 /* ── Output block ── */
 .outputBlock {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .outputHeader {
@@ -379,7 +350,7 @@
 .mjBadge {
   font-size: 10px;
   font-weight: 700;
-  color: #fbbf24;
+  color: var(--accent-straw);
   font-family: var(--font-mono);
 }
 
@@ -400,9 +371,9 @@
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-xs);
   color: var(--t-2);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: 11px;
-  padding: 5px 10px;
+  padding: 4px 9px;
   cursor: pointer;
   transition: all var(--dur);
 }
@@ -413,16 +384,16 @@
   background: var(--bg-2);
   border: 1px solid var(--b-subtle);
   border-radius: var(--r-sm);
-  padding: 14px 16px;
+  padding: 13px 15px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
 }
 
 .forbiddenCat {}
 
 .forbiddenLabel {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--t-1);
   text-transform: uppercase;
@@ -446,21 +417,21 @@
   font-family: var(--font-mono);
   font-size: 10px;
   padding: 2px 6px;
-  background: rgba(248,113,113,0.08);
-  border: 1px solid rgba(248,113,113,0.20);
+  background: rgba(158,96,80,0.08);
+  border: 1px solid rgba(158,96,80,0.22);
   border-radius: var(--r-xs);
-  color: #f87171;
+  color: #c07060;
 }
 
 .forbiddenRules {
   border-top: 1px solid var(--b-subtle);
-  padding-top: 10px;
+  padding-top: 9px;
 }
 
 .forbiddenRule {
   font-size: 11px;
   color: var(--t-2);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   line-height: 1.5;
 }
 
