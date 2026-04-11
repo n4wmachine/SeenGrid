@@ -154,7 +154,7 @@ export default function PromptVault() {
           <a href="https://github.com/jau123/nanobanana-trending-prompts" target="_blank" rel="noreferrer">
             nanobanana-trending-prompts
           </a>{' '}
-          \u2014 {t('vault.subtitle')}
+          — {t('vault.subtitle')}
         </p>
       </div>
 

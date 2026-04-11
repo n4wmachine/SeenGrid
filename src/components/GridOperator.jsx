@@ -105,7 +105,7 @@ export default function GridOperator() {
 
     if (mode === 'seengrid') {
       const parts = [selectedPreset.prompt]
-      parts.push(`LAYOUT: ${rows}\u00d7${cols} grid. ${getLayoutDesc(layout)}.`)
+      parts.push(`LAYOUT: ${rows}×${cols} grid. ${getLayoutDesc(layout)}.`)
       if (coreStyle) parts.push(`STYLE OVERRIDE: Apply ${coreStyle}.`)
       return parts.join('\n\n')
     }
@@ -193,7 +193,7 @@ export default function GridOperator() {
                     <div className={styles.presetName}>{p.label}</div>
                     <div className={styles.presetDesc}>{p.desc}</div>
                   </div>
-                  <span className={styles.presetBadge}>{p.rows}\u00d7{p.cols}</span>
+                  <span className={styles.presetBadge}>{p.rows}×{p.cols}</span>
                 </button>
               ))}
             </div>
@@ -227,7 +227,7 @@ export default function GridOperator() {
           <p className={styles.sectionTitle}>{t('grid.grid_size')}</p>
           {mode === 'seengrid' ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span className={styles.gridSize}>{rows}\u00d7{cols}</span>
+              <span className={styles.gridSize}>{rows}×{cols}</span>
               <span className={styles.gridSizeNote}>{t('grid.dim_locked')}</span>
             </div>
           ) : (
@@ -240,7 +240,7 @@ export default function GridOperator() {
                   ))}
                 </div>
               </div>
-              <span style={{ fontSize: 'var(--sg-text-xl)', color: 'var(--sg-text-disabled)', fontFamily: 'var(--sg-font-mono)' }}>\u00d7</span>
+              <span style={{ fontSize: 'var(--sg-text-xl)', color: 'var(--sg-text-disabled)', fontFamily: 'var(--sg-font-mono)' }}>×</span>
               <div>
                 <div style={{ fontSize: 'var(--sg-text-xs)', fontFamily: 'var(--sg-font-mono)', color: 'var(--sg-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Cols</div>
                 <div style={{ display: 'flex', gap: 4 }}>
@@ -363,7 +363,7 @@ export default function GridOperator() {
             <textarea
               value={customOutput}
               onChange={e => setCustomOutput(e.target.value)}
-              placeholder={`${rows}\u00d7${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
+              placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
               spellCheck={false}
               style={{ minHeight: 200 }}
             />
