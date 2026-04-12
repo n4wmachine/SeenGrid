@@ -15,44 +15,36 @@
 .headerLogo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-shrink: 0;
+  user-select: none;
 }
 
-.headerLogoIcon {
-  height: 72px;
-  width: auto;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.headerDivider {
-  width: 1px;
-  height: 32px;
-  background: var(--sg-border-default);
-  flex-shrink: 0;
-}
-
-.headerLogoText {
-  font-family: var(--sg-font-body);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+.headerMarkSvg {
+  width: 54px;
+  height: 54px;
   color: var(--sg-text-primary);
-  line-height: 1.1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 10px var(--sg-teal-glow));
+  transition: filter var(--sg-transition), transform var(--sg-transition);
 }
-.headerLogoText span {
-  color: var(--sg-text-tertiary);
-  font-weight: 400;
+.headerLogo:hover .headerMarkSvg {
+  filter: drop-shadow(0 0 14px rgba(43, 181, 178, 0.32));
+  transform: translateY(-1px);
 }
 
-.headerSubtitle {
-  font-family: var(--sg-font-mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--sg-text-tertiary);
-  margin-top: 2px;
+.headerWordmark {
+  font-family: var(--sg-font-body);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--sg-text-primary);
+  line-height: 1;
+  padding-bottom: 2px;
+  transition: color var(--sg-transition);
+}
+.headerLogo:hover .headerWordmark {
+  color: var(--sg-gold-text);
 }
 
 .tabNav {
