@@ -154,12 +154,12 @@
 }
 
 .sectionTitle {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 500;
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--sg-text-tertiary);
+  letter-spacing: 0.10em;
+  color: var(--sg-text-secondary);
   margin-bottom: var(--sg-space-lg);
   display: flex;
   align-items: center;
@@ -502,10 +502,48 @@
   box-shadow: 0 0 16px rgba(43, 181, 178, 0.08), 0 0 4px rgba(43, 181, 178, 0.06);
 }
 
-/* Ghost preview for unfilled template */
+/* Ghost preview for unfilled template — kept for partial-fill case where
+   some [FIELD] placeholders still remain after user typed in some inputs. */
 .ghostPreview {
-  color: var(--sg-text-disabled);
+  color: var(--sg-text-tertiary);
   font-style: italic;
+}
+
+/* Friendly empty state — replaces the raw [FIELD]-filled template dump
+   when literally nothing has been filled yet. Communicates "this is where
+   your prompt will appear" instead of looking like a broken placeholder. */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--sg-space-md);
+  padding: var(--sg-space-2xl) var(--sg-space-xl);
+  min-height: 140px;
+  font-family: var(--sg-font-body);
+}
+
+.emptyStateIcon {
+  font-size: 24px;
+  opacity: 0.4;
+  filter: grayscale(0.3);
+}
+
+.emptyStateTitle {
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-md);
+  font-weight: 500;
+  color: var(--sg-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.emptyStateHint {
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  color: var(--sg-text-tertiary);
+  line-height: 1.5;
+  max-width: 280px;
 }
 
 .copyButton {

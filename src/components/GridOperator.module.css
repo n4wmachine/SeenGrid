@@ -116,12 +116,12 @@
 }
 
 .sectionTitle {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 500;
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--sg-text-tertiary);
+  letter-spacing: 0.10em;
+  color: var(--sg-text-secondary);
   margin-bottom: var(--sg-space-lg);
 }
 
@@ -397,6 +397,7 @@
 
 .dimButtons {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
@@ -411,10 +412,23 @@
   cursor: pointer;
   transition: all 120ms ease;
 }
+.dimBtn:hover {
+  color: var(--sg-text-secondary);
+  border-color: var(--sg-border-default);
+}
 .dimBtn.active {
   border-color: var(--sg-gold-dim);
   background: var(--sg-chip-bg-active);
   color: var(--sg-gold-text);
+}
+
+/* Strip-only buttons (5-8) — visually differentiated as "strip mode" so
+   the user understands that clicking them collapses the other axis to 1. */
+.dimBtn.dimBtnStrip {
+  border-style: dashed;
+}
+.dimBtn.dimBtnStrip.active {
+  border-style: solid;
 }
 
 .dimX {
@@ -427,6 +441,23 @@
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
   color: var(--sg-text-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sg-space-sm);
+  flex-wrap: wrap;
+}
+
+.stripBadge {
+  font-family: var(--sg-font-body);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sg-gold-text);
+  background: rgba(43, 181, 178, 0.10);
+  border: 1px solid var(--sg-gold-dim);
+  border-radius: 3px;
+  padding: 1px 6px;
 }
 
 /* Reference images */
@@ -484,24 +515,55 @@
   outline: none;
 }
 
-/* Panel roles grid */
+/* Panel roles grid — auto-fit so each cell is wide enough to read the
+   label, regardless of the actual grid shape (1×8 strip, 4×4 board etc.). */
 .panelGrid {
   display: grid;
-  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
 }
 
-.panelInput {
-  font-family: var(--sg-font-body);
-  font-size: var(--sg-text-xs);
-  color: var(--sg-text-primary);
+.panelInputWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-sm);
-  padding: 6px 8px;
+  padding: 0 8px 0 0;
   transition: border-color var(--sg-transition);
 }
-.panelInput:focus {
+.panelInputWrap:focus-within {
   border-color: var(--sg-gold-dim);
+  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
+}
+
+.panelInputNum {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sg-text-disabled);
+  background: var(--sg-bg-surface-1);
+  border-right: 1px solid var(--sg-border-subtle);
+  padding: 7px 8px;
+  border-radius: var(--sg-radius-sm) 0 0 var(--sg-radius-sm);
+  min-width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.panelInput {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  color: var(--sg-text-primary);
+  background: transparent;
+  border: none;
+  padding: 7px 0;
+  transition: none;
+}
+.panelInput:focus {
   outline: none;
 }
 
@@ -538,12 +600,12 @@
 }
 
 .previewTitle {
-  font-family: var(--sg-font-mono);
-  font-size: var(--sg-text-xs);
-  font-weight: 500;
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--sg-text-tertiary);
+  letter-spacing: 0.10em;
+  color: var(--sg-text-secondary);
   margin-bottom: var(--sg-space-xl);
 }
 
@@ -645,7 +707,16 @@
   white-space: pre-wrap;
   cursor: text;
   transition: max-height var(--sg-transition);
+  /* Even when expanded, cap internal height so long Signature prompts
+     (World Zone Builder, 30+ lines) never push sibling content below the
+     sticky viewport. The expanded box gets its own scroll track. */
+  max-height: 55vh;
+  overflow-y: auto;
 }
+.outputBox::-webkit-scrollbar { width: 6px; }
+.outputBox::-webkit-scrollbar-track { background: transparent; }
+.outputBox::-webkit-scrollbar-thumb { background: var(--sg-border-default); border-radius: 3px; }
+.outputBox::-webkit-scrollbar-thumb:hover { background: var(--sg-border-strong); }
 
 /* Default: compact preview of first ~4 lines with gradient fade.
    Click "Ausklappen" to remove the cap. */

@@ -108,6 +108,8 @@ export default function GridOperator() {
 
   // Clamp dimension changes so we never end up with unbuildable combos like
   // 8x3. Strips (1xN / Nx1) allow up to 8 on the free axis; grids cap at 4x4.
+  // Clicking rows=6 while at 3x3 forces cols to 1 — visible feedback, no
+  // hidden state. User can then scale cols back up (but rows clamps to ≤4).
   function setRows(n) {
     setRowsRaw(n)
     if (n > 4) setColsRaw(1)
@@ -334,14 +336,21 @@ export default function GridOperator() {
               <div>
                 <div className={styles.dimLabel}>Rows</div>
                 <div className={styles.dimButtons}>
-                  {/* Strips allow 1-8 on one axis, grids cap at 4x4.
-                      Rows >4 only valid when cols === 1 (vertical strip). */}
-                  {(cols === 1 ? [1,2,3,4,5,6,7,8] : [1,2,3,4]).map(n => (
+                  {/* Always show 1-8. Clicking 5-8 triggers a clamp in
+                      setRows() that forces cols to 1 (strip layout). Discoverable
+                      by default — user sees all options without pre-clicking. */}
+                  {[1,2,3,4,5,6,7,8].map(n => (
                     <button
                       key={n}
-                      className={[styles.dimBtn, rows === n && styles.active].filter(Boolean).join(' ')}
+                      className={[
+                        styles.dimBtn,
+                        rows === n && styles.active,
+                        n > 4 && styles.dimBtnStrip,
+                      ].filter(Boolean).join(' ')}
                       onClick={() => setRows(n)}
-                      title={t('grid.set_rows_title').replace('{n}', n)}
+                      title={n > 4
+                        ? `${t('grid.set_rows_title').replace('{n}', n)} — ${t('grid.strip_hint')}`
+                        : t('grid.set_rows_title').replace('{n}', n)}
                     >{n}</button>
                   ))}
                 </div>
@@ -350,17 +359,28 @@ export default function GridOperator() {
               <div>
                 <div className={styles.dimLabel}>Cols</div>
                 <div className={styles.dimButtons}>
-                  {(rows === 1 ? [1,2,3,4,5,6,7,8] : [1,2,3,4]).map(n => (
+                  {[1,2,3,4,5,6,7,8].map(n => (
                     <button
                       key={n}
-                      className={[styles.dimBtn, cols === n && styles.active].filter(Boolean).join(' ')}
+                      className={[
+                        styles.dimBtn,
+                        cols === n && styles.active,
+                        n > 4 && styles.dimBtnStrip,
+                      ].filter(Boolean).join(' ')}
                       onClick={() => setCols(n)}
-                      title={t('grid.set_cols_title').replace('{n}', n)}
+                      title={n > 4
+                        ? `${t('grid.set_cols_title').replace('{n}', n)} — ${t('grid.strip_hint')}`
+                        : t('grid.set_cols_title').replace('{n}', n)}
                     >{n}</button>
                   ))}
                 </div>
               </div>
-              <span className={styles.dimTotal}>{totalPanels} {t('grid.panels')}</span>
+              <span className={styles.dimTotal}>
+                {totalPanels} {t('grid.panels')}
+                {(rows > 4 || cols > 4) && (
+                  <span className={styles.stripBadge}>{t('grid.strip_mode')}</span>
+                )}
+              </span>
             </div>
           )}
         </div>
@@ -431,19 +451,25 @@ export default function GridOperator() {
           </div>
         )}
 
-        {/* Panel Roles */}
+        {/* Panel Roles — auto-fit grid so cells stay readable regardless of
+            actual grid dimensions (1×8 strip vs 4×4 board produce the same
+            ~170px-min edit cells). The rendered Grid Preview on the right
+            is the place that shows true structure; this editor prioritizes
+            label legibility. */}
         <div className={styles.section}>
           <p className={styles.sectionTitle}>{t('grid.panel_roles')}</p>
-          <div className={styles.panelGrid} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          <div className={styles.panelGrid}>
             {panelRoles.slice(0, totalPanels).map((role, i) => (
-              <input
-                key={i}
-                type="text"
-                className={styles.panelInput}
-                value={role}
-                onChange={e => updatePanelRole(i, e.target.value)}
-                title={`Panel ${i + 1}`}
-              />
+              <div key={i} className={styles.panelInputWrap}>
+                <span className={styles.panelInputNum}>{i + 1}</span>
+                <input
+                  type="text"
+                  className={styles.panelInput}
+                  value={role}
+                  onChange={e => updatePanelRole(i, e.target.value)}
+                  title={`Panel ${i + 1}`}
+                />
+              </div>
             ))}
           </div>
         </div>

@@ -235,6 +235,10 @@ export default function MJStartframe() {
   const filledFieldCount = Object.values(state.fields).filter(v => v?.trim()).length
   const totalFieldCount = state.selectedTemplate.fields.filter(f => f.id !== 'MODIFIER' && f.id !== 'GENRE' && f.id !== 'FILMSTOCK').length
 
+  // Empty state = zero user-entered fields. Partial-fill still shows the
+  // output with remaining brackets (informative, not broken-looking).
+  const isEmpty = filledFieldCount === 0
+
   return (
     <div className={styles.container}>
 
@@ -515,14 +519,20 @@ export default function MJStartframe() {
         <div
           className={[styles.outputBox, hasContent && styles.filled].filter(Boolean).join(' ')}
           onClick={e => {
+            if (isEmpty) return
             const r = document.createRange()
             r.selectNodeContents(e.currentTarget)
             const s = window.getSelection()
             s.removeAllRanges(); s.addRange(r)
           }}
         >
-          {/* Ghost preview: show template with placeholders in muted style when not filled */}
-          {hasContent ? (
+          {isEmpty ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyStateIcon} aria-hidden="true">◇</div>
+              <p className={styles.emptyStateTitle}>{t('mj.empty_title')}</p>
+              <p className={styles.emptyStateHint}>{t('mj.empty_hint')}</p>
+            </div>
+          ) : hasContent ? (
             <span>{output}</span>
           ) : (
             <span className={styles.ghostPreview}>{output}</span>
