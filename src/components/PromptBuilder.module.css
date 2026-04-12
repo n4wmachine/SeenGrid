@@ -277,6 +277,39 @@
   cursor: default;
 }
 
+/* Random Mode Pills (Beat / Look / Full) */
+.randomModeRow {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--sg-space-sm);
+}
+.randomModeBtn {
+  flex: 1;
+  font-family: var(--sg-font-mono);
+  font-size: var(--sg-text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sg-text-tertiary);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all var(--sg-transition);
+}
+.randomModeBtn:hover {
+  color: var(--sg-text-secondary);
+  border-color: var(--sg-border-default);
+  background: var(--sg-bg-surface-1);
+}
+.randomModeBtn.active {
+  color: var(--sg-gold-text);
+  background: var(--sg-chip-bg-active);
+  border-color: var(--sg-chip-border-active);
+  box-shadow: 0 0 8px var(--sg-gold-glow-subtle);
+}
+
 /* Buttons über dem Output */
 .outputControls {
   display: flex;

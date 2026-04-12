@@ -1,0 +1,20 @@
+[
+  "{setting}. {subject} {action}. {sensory_detail}. {atmosphere}.",
+  "{setting}. {subject} {action}, {sensory_detail}. {mood}",
+  "{setting}, {atmosphere}. {subject} {action}. {texture}.",
+  "{setting}. {subject} {action}. {texture}, {sensory_detail}. {mood}",
+  "{setting} — {texture}. {subject} {action}. {atmosphere}.",
+  "{setting}. {sensory_detail}. {subject} {action}. {mood}",
+  "{setting}, {sensory_detail}. {subject} {action}, {texture}. {atmosphere}.",
+  "{setting}. {subject} {action}. {atmosphere}, {sensory_detail}.",
+  "{setting}. {texture}. {subject} {action}, {sensory_detail}. {mood}",
+  "{setting}, {atmosphere}. {subject} {action}. {mood}",
+  "{setting}. {subject} {action}. {sensory_detail}.",
+  "{setting}. {subject} {action}, {sensory_detail}, {texture}. {mood}",
+  "{setting} — {atmosphere}. {subject} {action}. {texture}.",
+  "{setting}. {sensory_detail}, {texture}. {subject} {action}. {mood}",
+  "{setting}, {texture}. {subject} {action}. {atmosphere}, {sensory_detail}.",
+  "{setting}. {subject} {action}. {mood}",
+  "{setting}. {subject} {action}. {atmosphere}.",
+  "{setting}. {subject}, {action}. {sensory_detail}. {texture}."
+]

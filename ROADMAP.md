@@ -71,14 +71,8 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **4 — Random-Generatoren komplett neu (beide Studios)**
-Stufen 2 + 3 komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `Midjourney Studio` + `Grid Operator` + `Vault` (parallele Brand-Namen statt "Prompt Builder" / "MJ Startframe" — konsistent, skaliert sauber für Kling/Seedance später).
-
-**Stufe 4 deckt BEIDE Random-Generatoren ab** — sowohl NanoBanana Studio als auch Midjourney Studio brauchen denselben Architektur-Umbau: `Beat / Look / Full Scene` Toggle, große Pool-basierte Zufallsquelle statt kleiner vorgebackener Objekte, Anti-Repetition pro Pool. Split in 4a (MJ) + 4b (NB).
-
-**Aktueller Zustand beider `handleRandom`:**
-- **Midjourney Studio** (`MJStartframe.jsx:123`): Pickt EIN `random-scenes.json` Objekt (41 pre-baked Scenes), liest dessen `location/time/light/dark/surfaces/perspective/modifier/genre`. Kein Beat/Look-Toggle, kein Pool-per-Field-Lookup, keine Anti-Repetition. `rawFlag` random 70/30.
-- **NanoBanana Studio** (`PromptBuilder.jsx:141`): Baut Scene als primitive Concat `${setting}. ${subject} ${action}. ${mood}` aus `random/{settings,subjects,actions,moods}.json` (93/121/144/50). Chip-Random mit 15% null-Chance, pickMulti 0-2. Kein Beat/Look-Toggle, keine Anti-Repetition, kein Sensory Stacking im Scene-Text.
+### Aktuelle Stufe: **5 — Header / Logo / Tab-Optik**
+Stufen 2 + 3 + 4 (inkl. 4a MJ Random + 4b NanoBanana Random) komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `Midjourney Studio` + `Grid Operator` + `Vault` (parallele Brand-Namen statt "Prompt Builder" / "MJ Startframe" — konsistent, skaliert sauber für Kling/Seedance später).
 
 **Stufe 3 erledigt:** GridOperator umgebaut zu Core-als-Default + SeenGrid Signature (echtes Gold) + dynamischer Preset-Gruppierung nach Category:
 - **Default-Mode:** `core` statt `seengrid`. MODES-Array Reihenfolge: Core → SeenGrid Signature → Custom Grid.
@@ -94,7 +88,9 @@ Stufen 2 + 3 komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `M
 
 **Stufe 4a abgeschlossen:** MJ Random komplett neu. 22 Pools mit 1433 Einträgen in `src/data/mj/random-pools.json`. `_meta.narrative_fields` / `_meta.visual_fields` Klassifikation für Beat/Look Routing. Neuer `handleRandom(mode)` mit Anti-Repetition (letzte 8 pro Pool). Beat/Look/Full Scene Pills-Toggle über dem Random-Button, Default `full`. Beat = nur narrative Felder (Szene bleibt), Look = nur visuelle Parameter (Motiv bleibt), Full = alles inkl. neues Template. `random-scenes.json` gelöscht, alter Scene-basierter Random-Pfad entfernt. Vite build clean. i18n Keys `mj.random_mode_*` in beiden Sprachen.
 
-Als nächstes kommt Stufe 4b — NanoBanana Studio Random komplett neu (Sensory-Stacking Scene-Patterns + erweiterte Pools + Beat/Look/Full Toggle).
+**Stufe 4b abgeschlossen:** NanoBanana Random komplett neu. Vier neue Pool-Dateien unter `src/data/random/`: `sensory-details.json` (104), `atmospheres.json` (80), `textures.json` (71), `scene-patterns.json` (18 Sensory-Stacking-Muster mit `{setting}/{subject}/{action}/{mood}/{sensory_detail}/{atmosphere}/{texture}` Slots). Bestehende Pools massiv erweitert: `settings.json` 93→198, `subjects.json` 121→202, `actions.json` 144→206, `moods.json` 50→102. Neuer `handleRandom(mode)` in `PromptBuilder.jsx`: `pickFromPool` mit Anti-Repetition (letzte 8 pro Pool, dynamisch an Poolgröße gekappt), `buildScene()` wählt Pattern + fällt 7 Slots, Ersetzung via `pattern.replace(/\{(\w+)\}/g, …)`. Chip-Random mit `pickLookCombo()`: focal length zuerst, Aperture-Kandidaten je nach Brennweite gefiltert (tele ≥85mm → Aperture ≤ f/2.8, wide ≤24mm → Aperture ≥ f/2.8), realistische Kamera-Kombinationen statt rein zufällig. Beat/Look/Full Scene Pills-Toggle über Output-Controls, identisch zum MJ-Pattern (gleiche CSS-Klassen `.randomModeRow`/`.randomModeBtn`, teal active state). `beat` = nur `scene` Textarea, `look` = nur Chips, `full` = alles. i18n Keys `builder.random_mode_*` in beiden Sprachen. useEffect-Dependency für Ctrl+Shift+G auf `[randomMode, recentPicks, state]` aktualisiert. Vite build clean (PromptBuilder bundle 87.24 → 90.56 kB wegen der Pool-Expansion).
+
+Als nächstes kommt Stufe 5 — Header / Logo / Tab-Optik.
 
 Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
 - **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
@@ -133,7 +129,7 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] Mode-Toggle als Pills (einzelne Buttons mit Abstand + Hover-Glow, Signature-Pill Gold-Border)
   - [ ] Section-Icons (SVG) — **vertagt auf Stufe 6** (Icon-Sweep über alle Tabs)
   - [ ] Controls (Layout, Style Override, Panel Roles) nach oben, Preset-Liste collapsible — **offen** (Layout bleibt aktuell wie es ist, da Signature und Core unterschiedliche Controls haben)
-- [ ] **Stufe 4** — Random-Generatoren komplett neu (BEIDE Studios):
+- [x] **Stufe 4** — Random-Generatoren komplett neu (BEIDE Studios):
   - [x] **4a: Midjourney Studio Random** ✅
     - [x] Neue `src/data/mj/random-pools.json` mit 22 Pools (1433 Einträge)
     - [x] Narrative Pools: LOCATION(122), LIGHT_SOURCE(102), DETAILS(102), WHAT_IS_DARK(81), EMOTIONAL_HOOK(80), SPACE(81), WHAT_WHERE(69), SURFACE_TEXTURE(70), OBJECT(102), CONTEXT(81), WHAT(69), TEXTURE(69), FIGURE(80), VISIBLE_AREA(60), SURFACE(70)
@@ -147,16 +143,18 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
     - [x] Full Scene = alles inkl. neuem Template, kompletter Reset
     - [x] `random-scenes.json` gelöscht
     - [x] Vite build clean
-  - [ ] **4b: NanoBanana Studio Random**
-    - Scene-Konstruktion umbauen: statt primitive Concat `${setting}. ${subject} ${action}. ${mood}` jetzt Sensory-Stacking-Template-basiert aus `src/data/random/scene-patterns.json` (mehrere Satzmuster, z.B. `"{setting}. {subject} {action}, {sensory_detail}. {mood}, {atmosphere}"`)
-    - Neue/erweiterte Pools: `sensory-details.json`, `atmospheres.json`, `textures.json` zusätzlich zu bestehenden settings/subjects/actions/moods
-    - Bestehende Pools auffüllen (settings 93→200+, subjects 121→200+, actions 144→200+, moods 50→100+)
-    - Chip-Random mit `Look`-Semantik: zieht aus allen 12 Chip-Daten-Dateien, mit gewichteter Aperture/Focal/Lens-Kombination (realistisch statt rein random)
-    - Anti-Wiederholung: letzte 8 pro Pool
-    - `Beat / Look / Full Scene` Toggle neben Random-Button (identisch zu 4a)
-    - `Beat` = nur Scene-Textarea re-roll (chips bleiben)
-    - `Look` = nur Chips re-roll (Scene bleibt)
-    - `Full Scene` = beides
+  - [x] **4b: NanoBanana Studio Random** ✅
+    - [x] Scene-Konstruktion umgebaut: statt primitive Concat jetzt Sensory-Stacking-Template-basiert aus `src/data/random/scene-patterns.json` (18 Satzmuster mit `{setting}/{subject}/{action}/{mood}/{sensory_detail}/{atmosphere}/{texture}` Slots)
+    - [x] Neue Pools: `sensory-details.json` (104), `atmospheres.json` (80), `textures.json` (71), `scene-patterns.json` (18)
+    - [x] Bestehende Pools erweitert: `settings.json` 93→198, `subjects.json` 121→202, `actions.json` 144→206, `moods.json` 50→102
+    - [x] Chip-Random mit `pickLookCombo()`: focal length zuerst, dann Aperture nach Brennweite gefiltert (tele ≥85mm → ≤ f/2.8, wide ≤24mm → ≥ f/2.8) — realistisch statt rein random
+    - [x] Anti-Wiederholung: letzte 8 pro Pool, dynamisch an Poolgröße gekappt
+    - [x] `Beat / Look / Full Scene` Pills-Toggle über Output-Controls (identisch zu 4a, gleiche CSS-Klassen)
+    - [x] `Beat` = nur Scene-Textarea re-roll (chips bleiben)
+    - [x] `Look` = nur Chips re-roll (Scene bleibt)
+    - [x] `Full Scene` = beides
+    - [x] i18n Keys `builder.random_mode_*` in DE + EN
+    - [x] Vite build clean
 - [ ] **Stufe 5** — Header / Logo / Tab-Optik:
   - Logo-Datei inspizieren (PNG vs SVG?)
   - 2 Varianten bauen: (a) SVG mit currentColor + Glow (b) mix-blend-mode bei PNG

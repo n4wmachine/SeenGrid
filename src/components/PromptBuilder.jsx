@@ -8,6 +8,10 @@ import settingsData  from '../data/random/settings.json'
 import subjectsData  from '../data/random/subjects.json'
 import actionsData   from '../data/random/actions.json'
 import moodsData     from '../data/random/moods.json'
+import sensoryData   from '../data/random/sensory-details.json'
+import atmoData      from '../data/random/atmospheres.json'
+import textureData   from '../data/random/textures.json'
+import patternData   from '../data/random/scene-patterns.json'
 import cameraData    from '../data/cameras.json'
 import lensData      from '../data/lenses.json'
 import focalData     from '../data/focal.json'
@@ -53,6 +57,8 @@ export default function PromptBuilder() {
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [randomMode, setRandomMode] = useState('full')
+  const [recentPicks, setRecentPicks] = useState({})
   const containerRef = useRef(null)
 
   function handleSaveFav() {
@@ -138,34 +144,111 @@ export default function PromptBuilder() {
     }
   }
 
-  function handleRandom() {
-    const pick = (arr, nullable = true) => {
-      if (nullable && Math.random() < 0.15) return null
-      return arr[Math.floor(Math.random() * arr.length)].v
+  function handleRandom(mode = randomMode) {
+    // Anti-repetition: last N picks per pool excluded from next pick
+    const MEMORY = 8
+    const newRecent = { ...recentPicks }
+    function pickFromPool(key, arr) {
+      if (!arr || arr.length === 0) return null
+      const mem = newRecent[key] || []
+      const fresh = arr.filter(v => !mem.includes(v))
+      const src = fresh.length > 0 ? fresh : arr
+      const choice = src[Math.floor(Math.random() * src.length)]
+      newRecent[key] = [...mem, choice].slice(-Math.min(MEMORY, arr.length - 1))
+      return choice
     }
-    const pickMulti = (arr, max = 2) => {
-      const shuffled = [...arr].sort(() => Math.random() - 0.5)
-      const count = Math.floor(Math.random() * (max + 1))
-      return new Set(shuffled.slice(0, count).map(i => i.v))
+
+    // Build a scene via pattern template (Sensory Stacking)
+    function buildScene() {
+      const pattern = pickFromPool('pattern', patternData)
+      const slot = {
+        setting:        pickFromPool('settings', settingsData),
+        subject:        pickFromPool('subjects', subjectsData),
+        action:         pickFromPool('actions',  actionsData),
+        mood:           pickFromPool('moods',    moodsData),
+        sensory_detail: pickFromPool('sensory',  sensoryData),
+        atmosphere:     pickFromPool('atmo',     atmoData),
+        texture:        pickFromPool('textures', textureData),
+      }
+      return pattern.replace(/\{(\w+)\}/g, (_, k) => slot[k] || '')
     }
-    const pick1 = arr => arr[Math.floor(Math.random() * arr.length)]
-    const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
-    setState(prev => ({
-      ...prev,
-      scene,
-      style:       pick(styleData, false),
-      camera:      pick(cameraData),
-      lens:        pick(lensData),
-      focal:       pick(focalData),
-      aperture:    pick(apertureData),
-      aspectratio: pick(aspectData),
-      shotsize:    pick(shotData),
-      cameraangle: pick(angleData),
-      colorgrade:  pick(colorData),
-      lighting:    pickMulti(lightingData, 2),
-      effects:     pickMulti(effectsData, 2),
-      negative:    new Set(),
-    }))
+
+    // Weighted camera + lens + focal + aperture combo (realistic rather than
+    // fully random). Draws the focal length first and derives compatible
+    // aperture ranges from it.
+    function pickLookCombo() {
+      // 85% chance we set camera, lens, focal, aperture. 15% leave some unset.
+      const want = Math.random() < 0.85
+      if (!want) return {
+        camera: null, lens: null, focal: null, aperture: null,
+      }
+      const focal = pickFromPool('focal', focalData)?.v || null
+      // Aperture: wider open for tele, smaller for wide-angle
+      let apertureCandidates = apertureData
+      if (focal) {
+        const num = parseInt((focal.match(/\d+/) || ['50'])[0], 10)
+        if (num >= 85) {
+          apertureCandidates = apertureData.filter(a => {
+            const n = parseFloat((a.v.match(/[\d.]+/) || ['2'])[0])
+            return n <= 2.8
+          })
+        } else if (num <= 24) {
+          apertureCandidates = apertureData.filter(a => {
+            const n = parseFloat((a.v.match(/[\d.]+/) || ['2'])[0])
+            return n >= 2.8
+          })
+        }
+      }
+      if (apertureCandidates.length === 0) apertureCandidates = apertureData
+      return {
+        camera:   pickFromPool('camera',   cameraData)?.v   || null,
+        lens:     pickFromPool('lens',     lensData)?.v     || null,
+        focal,
+        aperture: pickFromPool('aperture', apertureCandidates)?.v || null,
+      }
+    }
+
+    const pickOpt = (key, arr) => {
+      // 85% of the time we set it, 15% leave empty for variety
+      if (Math.random() < 0.15) return null
+      return pickFromPool(key, arr)?.v || null
+    }
+    const pickMulti = (key, arr, maxCount = 2) => {
+      const count = Math.floor(Math.random() * (maxCount + 1)) // 0..max
+      const set = new Set()
+      for (let i = 0; i < count; i++) {
+        const v = pickFromPool(key, arr)?.v
+        if (v) set.add(v)
+      }
+      return set
+    }
+
+    setState(prev => {
+      const next = { ...prev }
+
+      if (mode === 'full' || mode === 'beat') {
+        next.scene = buildScene()
+      }
+
+      if (mode === 'full' || mode === 'look') {
+        const combo = pickLookCombo()
+        next.style       = pickFromPool('style', styleData)?.v || styleData[0].v
+        next.camera      = combo.camera
+        next.lens        = combo.lens
+        next.focal       = combo.focal
+        next.aperture    = combo.aperture
+        next.aspectratio = pickOpt('aspectratio', aspectData)
+        next.shotsize    = pickOpt('shotsize',    shotData)
+        next.cameraangle = pickOpt('cameraangle', angleData)
+        next.colorgrade  = pickOpt('colorgrade',  colorData)
+        next.lighting    = pickMulti('lighting', lightingData, 2)
+        next.effects     = pickMulti('effects',  effectsData, 2)
+        next.negative    = new Set()
+      }
+
+      return next
+    })
+    setRecentPicks(newRecent)
   }
 
   function handleReset() {
@@ -188,7 +271,7 @@ export default function PromptBuilder() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  })
+  }, [randomMode, recentPicks, state])
 
   const prompt    = buildPrompt()
   const negative  = buildNegative()
@@ -272,8 +355,32 @@ export default function PromptBuilder() {
       {/* RECHTE SPALTE — Sticky Output */}
       <div className={styles.rightColumn}>
 
+        <div className={styles.randomModeRow}>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('beat')}
+            title={t('builder.random_mode_beat_title')}
+          >
+            {t('builder.random_mode_beat')}
+          </button>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('look')}
+            title={t('builder.random_mode_look_title')}
+          >
+            {t('builder.random_mode_look')}
+          </button>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('full')}
+            title={t('builder.random_mode_full_title')}
+          >
+            {t('builder.random_mode_full')}
+          </button>
+        </div>
+
         <div className={styles.outputControls}>
-          <button className={styles.ghostBtn} onClick={handleRandom} title={`${t('builder.random_title')} (⌘⇧R)`}>
+          <button className={styles.ghostBtn} onClick={() => handleRandom()} title={`${t('builder.random_title')} (⌘⇧R)`}>
             <DiceIcon /> {t('common.random')}
           </button>
           <button className={styles.ghostBtn} onClick={handleReset} title={t('builder.reset_title')}>
