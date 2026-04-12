@@ -71,7 +71,25 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **5 — Header / Logo / Tab-Optik**
+### Aktuelle Stufe: **UX-Polish-Pass (Grundstruktur) — vor Visual-Overhaul-Chat**
+Kleine, gezielte Fixes an der Grundstruktur, damit der nächste Chat sich komplett auf das Visual-Overhaul konzentrieren kann. Keine neuen Features, kein Refactor — nur Verhalten + Typografie. Fortschritt siehe `OPUS_CODE_HANDOFF.md` → "Pending Grundstruktur".
+
+Erledigt in diesem Pass:
+- **Grid crop-advisory umgebaut** auf per-axis Pixel-Berechnung (`canvas_w/cols` × `canvas_h/rows`) statt `max(rows,cols)`-Shortcut. Quality-Tier liest `min(panelW, panelH)` bei 2K (Engpass). Annahmen (square canvas, floor-Rest, bottleneck-tier) in Tooltip dokumentiert (`grid.advice_tooltip`). Commits: `aefadc0`, `d0053b7`.
+- **Fix #1 — Random-Button Layout-Stabilität** (beide Studios): `.outputBox` in PromptBuilder + MJStartframe auf `flex: 1 1 0` + internen Scroll umgestellt. Die Box absorbiert jetzt den Rest der Spalte, sodass die Random-/Mode-Cluster darüber NIE springen wenn sich der Output ändert. Commit `d7aaec4`.
+- **Fix #5 — Logo-Akzent:** "Seen" bleibt neutral, "Grid" kriegt Teal (`--sg-gold-text`) + subtilen Hover-Glow. Semantischer Akzent statt Dekoration — matcht den Teal des Logo-Marks und liest als "see the grid" / "scene as grid" (Doppeldeutigkeit Seen/Scene vom Nutzer bestätigt). Commit `d7aaec4`.
+- **Fix #6 — Grid-Dim Typografie:** `.dimLabel`, `.dimBtn`, `.dimX`, `.dimTotal` von `--sg-font-mono` auf `--sg-font-body` umgestellt. Sticht nicht mehr heraus gegen die neue body-font Advisory. Commit `d7aaec4`.
+- **Fix #4 quick — NanoBanana Accordion:** `openSections` Set ersetzt durch single-ID `openSection` State. Nur eine Sektion offen zur Zeit — Öffnen einer neuen schließt die vorherige automatisch. Der Chip-Cluster schiebt nicht mehr alles aus dem Viewport. Voller Multi-Column-Rethink bleibt für den Visual-Overhaul. Commit `29c893c`.
+- **Fix #2 — Grid-Builder Quick-Nav:** Horizontale Pill-Row direkt unter dem Mode-Toggle. Zeigt alle Sections des aktuellen Modus (Preset / Core Template / Grid Size / Layout / Ref / Style / Subject / Panel Roles) als klickbare Pills. Klick → smooth-scroll zum Ziel + 1.4s teal border-flash auf der Landing-Section. Section-IDs `grid-sec-*` render nur wenn ihr owning-Mode aktiv ist. Commit `cb92c58`.
+
+**Deferred zum Visual-Overhaul-Chat:**
+- Fix #3 — Grid-Preview Panel-Font/Look (braucht ganzheitlichen Karten-Rethink mit dem Rest des Designs).
+- Fix #4 full — NanoBanana Multi-Column / Icons / Visual Hierarchy Rethink (nicht nur Accordion sondern echte Layout-Reorganisation).
+- Die 6 Visual-Overhaul-Level (Farbtemperatur-Vielfalt, Background-Texturen/Gradients, Display-Fonts, Section-Icons, Cards mit Shadows, Accent-Dividers) — komplett neuer Chat.
+
+---
+
+### Stufe 5 — Header / Logo / Tab-Optik  (abgeschlossen vor dem UX-Polish-Pass)
 Stufen 2 + 3 + 4 (inkl. 4a MJ Random + 4b NanoBanana Random) komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `Midjourney Studio` + `Grid Operator` + `Vault` (parallele Brand-Namen statt "Prompt Builder" / "MJ Startframe" — konsistent, skaliert sauber für Kling/Seedance später).
 
 **Stufe 3 erledigt:** GridOperator umgebaut zu Core-als-Default + SeenGrid Signature (echtes Gold) + dynamischer Preset-Gruppierung nach Category:

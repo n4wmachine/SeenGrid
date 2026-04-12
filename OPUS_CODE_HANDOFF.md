@@ -1,16 +1,18 @@
 # SEENGRID — Opus Code Handoff
 
-> **Last updated:** 2026-04-12, session `claude/read-handoff-context-CPMDU`
+> **Last updated:** 2026-04-12, session `claude/read-handoff-context-CPMDU` — end of Grundstruktur UX-polish pass
 > **Read order for a new Opus:** 1) this doc  2) `ROADMAP.md`  3) `CLAUDE.md`
 > **Rule:** update this doc after every fix. It is the snapshot-of-truth.
+> **Next chat:** Visual Overhaul (new dedicated chat). Base structure is solid. See *Pending: Visual Overhaul* below.
 
 ---
 
 ## Quick Status
 
 - **Branch:** `claude/read-handoff-context-CPMDU`
-- **Latest commit:** `d0053b7` Grid advisory: document math assumptions via tooltip
+- **Latest commit:** `cb92c58` UX polish: grid builder quick-nav pill row
 - **Build:** `npx vite build` green
+- **Status:** All 5 approved Grundstruktur-fixes (#1 / #2 / #4-quick / #5 / #6) completed. Chat is ready to close; next work happens in a new Visual-Overhaul chat.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
@@ -21,12 +23,13 @@
 
 ### NanoBanana Studio (`PromptBuilder.jsx`)
 Solid. Chip clusters, Sensory-Stacking random (Beat / Look / Full), 12 chip data files all migrated to `label_en/_de` + `t_en/_de`. Random pools in `src/data/random/`.
-Recent: `padding-bottom: 22vh` on both scroll columns, section titles moved to body font, placeholder contrast fix via `--sg-placeholder #7a7a7a` token.
-**Known issue to fix in this session:** all chip sections are stacked vertically; opening one pushes others out of viewport. Quick fix planned = accordion (only one open at a time). Full multi-column rethink is deferred to Visual Overhaul.
+Recent: `padding-bottom: 22vh` on both scroll columns, section titles moved to body font, placeholder contrast fix via `--sg-placeholder #7a7a7a` token. Output box now absorbs the remaining column space (`flex: 1 1 0` + internal scroll) so the random cluster above never jumps when the prompt text length changes. **Accordion behavior shipped:** only one chip section is open at a time; opening a new one auto-closes the previous (single-ID `openSection` state). Full multi-column / icon-driven rethink is still deferred to Visual Overhaul.
 
 ### Grid Operator (`GridOperator.jsx`)
 Focus of the current session. Modes: Core (default) / SeenGrid Signature (★ gold) / Custom. 18 presets in `src/data/presets/`, grouped dynamically via `_categories.json` + `groupByCategory()`.
 Dim UX rebuilt: buttons 1–8 always visible, no clamp, every combo freely pickable. Objective pixel-based crop advisory shows real panel dimensions at 2K and 4K.
+Dim labels + buttons moved from mono to body font so they no longer stick out against the new body-font advisory.
+**Quick-nav pill row** sits directly under the Mode Toggle and lists every section of the current mode (Preset / Core Template / Grid Size / Layout / Ref / Style / Subject / Panel Roles) as clickable pills. Click smooth-scrolls to the target section and briefly flashes its border (teal glow, 1.4s one-shot). Section IDs are `grid-sec-*` and only render when their owning mode is active. Implementation: `jumpToSection(key)` → `document.getElementById(...).scrollIntoView({behavior:'smooth'})` + `highlightedSection` state + `sectionFlash` CSS class + `useEffect` cleanup for the flash timer.
 **Advisory math:**
 ```js
 panelW = floor(canvas_w / cols)   // square canvas 2048² / 4096²
@@ -50,6 +53,10 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 | Commit | Summary |
 |---|---|
+| `cb92c58` | **Fix #2** — Grid Builder quick-nav pill row (scroll-to-section + highlight flash) |
+| `29c893c` | **Fix #4-quick** — NanoBanana Studio accordion (only one chip section open at a time) |
+| `d7aaec4` | **Fix #1 / #5 / #6** — stable random buttons (both studios), logo "Grid" in teal, grid dim typography mono→body |
+| `2a65cf5` | Rewrite OPUS_CODE_HANDOFF on current session state |
 | `d0053b7` | Grid advisory: math assumption tooltip |
 | `aefadc0` | Grid advisory: correct per-axis panel math (non-square panels) |
 | `4e3db76` | Grid crop-size advisory + 22vh scroll bottom padding on all 3 modules |
@@ -60,15 +67,17 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 ---
 
-## Pending: Grundstruktur (this chat continues)
+## Pending: Grundstruktur  — ALL DONE ✅
 
-Fix list approved by user (2026-04-12). Classification = "fix now in this session":
+The 5 approved Grundstruktur-fixes are complete. All five below are shipped and covered by commits in the Session Work Log above.
 
-1. **Random button layout stability (both studios).** Clicking Random changes the output text length, which reflows and moves the Random button itself — user has to re-aim the mouse every click. Fix: `min-height` on output container OR put Random cluster in a layout region that doesn't reflow with output content.
-2. **Grid Builder quick-nav bar.** Panel Roles / Style Override / Subject / Scene are only visible after scrolling — no discoverability at the top of the controls column. Fix: horizontal pill-row directly under the Mode Toggle, listing all sections as clickable anchor chips ("Grid Size · Layout · Style Override · Subject · Panel Roles"). Click = smooth-scroll to the target section + brief highlight flash.
-3. **NanoBanana Studio accordion (quick fix).** All chip sections are vertical and expanding one pushes others out of the viewport. Quick fix = only one section open at a time; opening a new one auto-collapses the previously open one. Full multi-column / icon-driven rethink is deferred to Visual Overhaul.
-4. **Logo wordmark — "Grid" in teal.** "Seen" stays white, "Grid" gets the teal accent (matching the logo mark). Rationale: "Grid" is the product's operational anchor, teal matches the mark, reads as "see the grid" / "scene as grid" (user confirmed "Seen" is a double meaning — stylized "Scene" + literal "Seen"). Minimal-invasive, single color change, same weight for both words.
-5. **Grid dim typography consistency.** Dim labels ("Rows", "Cols") and the 1–8 button numbers are still in JetBrains Mono — they stick out now that the new advisory is in body font. Fix: move dim labels + button numbers to body font. ~5 min change, same kind of tweak as the section-title fix in `b421c3a`.
+1. ✅ **Random button layout stability (both studios)** — `d7aaec4`. `.outputBox` in both `PromptBuilder.module.css` and `MJStartframe.module.css` uses `flex: 1 1 0` + internal scroll so the random cluster above the output box never reflows. Verified by resizing output content in both studios.
+2. ✅ **Grid Builder quick-nav pill row** — `cb92c58`. Horizontal pill row under the Mode Toggle lists all sections of the active mode; click smooth-scrolls + flashes the target. See Module Status → Grid Operator for the implementation outline.
+3. ✅ **NanoBanana Studio accordion (quick fix)** — `29c893c`. Single-ID `openSection` state replaces the Set-based multi-open logic. Full multi-column rethink remains deferred to Visual Overhaul.
+4. ✅ **Logo wordmark — "Grid" in teal** — `d7aaec4`. `Header.jsx` wraps "Grid" in `.headerWordmarkAccent` span; `Header.css` sets teal color + hover glow. "Seen" stays neutral so the accent is semantic, not decorative.
+5. ✅ **Grid dim typography consistency** — `d7aaec4`. `.dimLabel`, `.dimBtn`, `.dimX`, `.dimTotal` moved from `--sg-font-mono` to `--sg-font-body` with tweaked weights/sizes for visual parity with the advisory.
+
+No Grundstruktur work is pending. The chat is at a clean handoff point.
 
 ---
 
