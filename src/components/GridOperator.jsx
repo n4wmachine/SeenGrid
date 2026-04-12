@@ -103,6 +103,8 @@ export default function GridOperator() {
   const [mode, setMode]               = useState('core')
   const [rows, setRowsRaw]            = useState(3)
   const [cols, setColsRaw]            = useState(3)
+  const [activeCategory, setActiveCategory] = useState(PRESET_GROUPS[0]?.key || 'character')
+  const [outputExpanded, setOutputExpanded] = useState(false)
 
   // Clamp dimension changes so we never end up with unbuildable combos like
   // 8x3. Strips (1xN / Nx1) allow up to 8 on the free axis; grids cap at 4x4.
@@ -128,6 +130,10 @@ export default function GridOperator() {
     setCols(selectedPreset.cols)
     setLayout(selectedPreset.layout?.toLowerCase() || 'even')
     setPanelRoles(buildRoles(selectedPreset))
+    // Keep the active category tab in sync with the selected preset so
+    // deep-linked / random selections land on the correct tab.
+    const group = PRESET_GROUPS.find(g => g.presets.some(p => p.id === selectedPreset.id))
+    if (group) setActiveCategory(group.key)
   }, [selectedPreset])
 
   useEffect(() => {
@@ -238,44 +244,60 @@ export default function GridOperator() {
           ))}
         </div>
 
-        {/* SeenGrid Signature Presets — grouped by category */}
-        {mode === 'seengrid' && (
-          <div className={[styles.section, styles.signatureSection].join(' ')}>
-            <p className={styles.sectionTitle}>
-              <span className={styles.starIcon}>★</span>{' '}{t('grid.preset_label')}
-            </p>
-            <div className={styles.presetList}>
-              {PRESET_GROUPS.map(group => (
-                <div key={group.key} className={styles.presetGroup}>
-                  <div
-                    className={styles.presetGroupHeader}
+        {/* SeenGrid Signature Presets — category-tab navigation.
+            Matches Core mode's chip-row+body pattern so the two modes feel
+            consistent, and keeps all downstream controls (Layout, Ref,
+            Style Override, Panel Roles) visible without internal scroll. */}
+        {mode === 'seengrid' && (() => {
+          const currentGroup =
+            PRESET_GROUPS.find(g => g.key === activeCategory) || PRESET_GROUPS[0]
+          return (
+            <div className={[styles.section, styles.signatureSection].join(' ')}>
+              <p className={styles.sectionTitle}>
+                <span className={styles.starIcon}>★</span>{' '}{t('grid.preset_label')}
+              </p>
+
+              {/* Category tabs */}
+              <div className={styles.categoryTabs}>
+                {PRESET_GROUPS.map(group => (
+                  <button
+                    key={group.key}
+                    className={[
+                      styles.categoryTab,
+                      activeCategory === group.key && styles.active,
+                    ].filter(Boolean).join(' ')}
+                    onClick={() => setActiveCategory(group.key)}
                     title={tData(group.meta, 'desc')}
                   >
-                    <span className={styles.presetGroupLabel}>{tData(group.meta, 'label')}</span>
-                    <span className={styles.presetGroupCount}>{group.presets.length}</span>
-                  </div>
-                  {group.presets.map(p => (
-                    <button
-                      key={p.id}
-                      className={[styles.presetItem, selectedPreset.id === p.id && styles.active].filter(Boolean).join(' ')}
-                      onClick={() => setPreset(p)}
-                      title={tData(p, 'desc')}
-                    >
-                      <div>
-                        <div className={styles.presetName}>
-                          {p.optimized && <span className={styles.presetStar}>★</span>}
-                          {tData(p, 'label')}
-                        </div>
-                        <div className={styles.presetDesc}>{tData(p, 'desc')}</div>
+                    {tData(group.meta, 'label')}
+                    <span className={styles.categoryTabCount}>{group.presets.length}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Active category's preset items */}
+              <div className={styles.presetList}>
+                {currentGroup?.presets.map(p => (
+                  <button
+                    key={p.id}
+                    className={[styles.presetItem, selectedPreset.id === p.id && styles.active].filter(Boolean).join(' ')}
+                    onClick={() => setPreset(p)}
+                    title={tData(p, 'desc')}
+                  >
+                    <div className={styles.presetItemBody}>
+                      <div className={styles.presetName}>
+                        {p.optimized && <span className={styles.presetStar}>★</span>}
+                        {tData(p, 'label')}
                       </div>
-                      <span className={styles.presetDims}>{p.rows}×{p.cols}</span>
-                    </button>
-                  ))}
-                </div>
-              ))}
+                      <div className={styles.presetDesc}>{tData(p, 'desc')}</div>
+                    </div>
+                    <span className={styles.presetDims}>{p.rows}×{p.cols}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         {/* Core Templates */}
         {mode === 'core' && (
@@ -428,7 +450,10 @@ export default function GridOperator() {
 
       </div>
 
-      {/* RECHTE SPALTE: Preview */}
+      {/* RECHTE SPALTE: Preview — Copy + Info sitzen OBEN, Prompt-Feld
+          darunter als aufklappbarer Vorschaubereich. So ist der primäre
+          Action-Button immer sichtbar, und das potenziell lange Prompt-Feld
+          wird erst auf Anfrage expandiert. */}
       <div className={styles.previewColumn}>
 
         <div className={styles.previewPanel}>
@@ -437,39 +462,8 @@ export default function GridOperator() {
         </div>
 
         <div className={styles.gridOutput}>
-          <div className={styles.outputHeader}>
-            <span className={styles.outputLabel}>
-              {mode === 'custom' ? t('grid.free_prompt') : t('grid.generated_prompt')}
-            </span>
-            {mode === 'seengrid' && (
-              <span className={styles.sgBadge}>★ SeenGrid Signature</span>
-            )}
-          </div>
 
-          {mode === 'custom' ? (
-            <textarea
-              className={styles.textInput}
-              value={customOutput}
-              onChange={e => setCustomOutput(e.target.value)}
-              placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
-              spellCheck={false}
-              style={{ minHeight: 200 }}
-            />
-          ) : (
-            <div
-              className={styles.outputBox}
-              onClick={e => {
-                const range = document.createRange()
-                range.selectNodeContents(e.currentTarget)
-                const sel = window.getSelection()
-                sel.removeAllRanges()
-                sel.addRange(range)
-              }}
-            >
-              {output}
-            </div>
-          )}
-
+          {/* Copy Button — immer oben, immer sichtbar */}
           <button
             className={styles.copyButton}
             onClick={handleCopy}
@@ -479,6 +473,7 @@ export default function GridOperator() {
             {' '}{copied ? t('common.copied') : t('grid.copy_btn')}
           </button>
 
+          {/* Preset Info — sitzt über dem Prompt-Feld statt darunter */}
           {mode === 'seengrid' && (
             <div className={styles.presetInfo}>
               <p className={styles.presetInfoTitle}>
@@ -486,6 +481,55 @@ export default function GridOperator() {
               </p>
               <p className={styles.presetInfoDesc}>{tData(selectedPreset, 'desc')}</p>
               <p className={styles.presetInfoSource}>Source: {selectedPreset.source}</p>
+            </div>
+          )}
+
+          {/* Output-Header mit Expand-Toggle */}
+          <div className={styles.outputHeader}>
+            <span className={styles.outputLabel}>
+              {mode === 'custom' ? t('grid.free_prompt') : t('grid.generated_prompt')}
+            </span>
+            <div className={styles.outputHeaderRight}>
+              {mode === 'seengrid' && (
+                <span className={styles.sgBadge}>★ SeenGrid Signature</span>
+              )}
+              {mode !== 'custom' && (
+                <button
+                  className={styles.expandToggle}
+                  onClick={() => setOutputExpanded(p => !p)}
+                  title={outputExpanded ? t('grid.collapse_title') : t('grid.expand_title')}
+                >
+                  {outputExpanded ? '▴' : '▾'} {outputExpanded ? t('grid.collapse') : t('grid.expand')}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Prompt-Feld — collapsible preview */}
+          {mode === 'custom' ? (
+            <textarea
+              className={styles.textInput}
+              value={customOutput}
+              onChange={e => setCustomOutput(e.target.value)}
+              placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
+              spellCheck={false}
+              style={{ minHeight: 160 }}
+            />
+          ) : (
+            <div
+              className={[
+                styles.outputBox,
+                !outputExpanded && styles.outputBoxCollapsed,
+              ].filter(Boolean).join(' ')}
+              onClick={e => {
+                const range = document.createRange()
+                range.selectNodeContents(e.currentTarget)
+                const sel = window.getSelection()
+                sel.removeAllRanges()
+                sel.addRange(range)
+              }}
+            >
+              {output}
             </div>
           )}
         </div>

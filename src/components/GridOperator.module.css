@@ -99,13 +99,12 @@
   line-height: 1;
 }
 
-/* Signature section: container frame stays neutral teal/subtle so the
-   gold accents (labels, star icons, active item glow) don't drown the
-   whole panel. The gold should be a spotlight on the items themselves,
-   not a wash over the entire frame. */
+/* Signature section: teal border + subtle teal glow so the panel is
+   clearly delineated, but no gold wash across the whole frame. Gold
+   stays as a spotlight on labels/items inside. */
 .section.signatureSection {
-  border-color: var(--sg-border-subtle);
-  box-shadow: none;
+  border-color: var(--sg-gold-dim);
+  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle), 0 0 20px var(--sg-gold-glow-subtle);
 }
 
 /* ---- SECTION PANELS ---- */
@@ -131,56 +130,74 @@
   font-weight: 400;
 }
 
-/* ---- PRESET LIST — GROUPED BY CATEGORY ----
-   Cap the list height + scroll internally so the downstream sections
-   (Layout, Reference Images, Style Override, Panel Roles) stay visible
-   above the fold instead of forcing a 6-turn mouse-wheel pilgrimage. */
-.presetList {
+/* ---- SIGNATURE CATEGORY TABS ----
+   Horizontal row of category buttons above the preset list, matching
+   Core mode's chip-row pattern. Only one category is visible at a time,
+   so downstream sections (Layout, Ref, Style Override, Panel Roles)
+   always stay above the fold. */
+.categoryTabs {
   display: flex;
-  flex-direction: column;
-  gap: var(--sg-space-lg);
-  max-height: 360px;
-  overflow-y: auto;
-  padding-right: 6px;
-  margin-right: -6px;
-}
-.presetList::-webkit-scrollbar { width: 4px; }
-.presetList::-webkit-scrollbar-track { background: transparent; }
-.presetList::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
-.presetList::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
-
-.presetGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sg-space-xs);
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--sg-space-md);
 }
 
-.presetGroupHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--sg-space-sm);
-  padding: var(--sg-space-xs) 0 var(--sg-space-sm) 0;
-  margin-bottom: var(--sg-space-xs);
-  border-bottom: 1px solid var(--sg-signature-glow-subtle);
-}
-
-.presetGroupLabel {
+.categoryTab {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
-  font-weight: 600;
-  color: var(--sg-signature-gold-bright);
-  letter-spacing: 0.1em;
+  font-weight: 500;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sg-text-tertiary);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all var(--sg-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.categoryTab:hover {
+  color: var(--sg-text-secondary);
+  border-color: var(--sg-signature-gold-dim);
+  background: var(--sg-bg-surface-2);
+}
+.categoryTab.active {
+  color: var(--sg-signature-gold-bright);
+  background: rgba(212, 162, 86, 0.08);
+  border-color: var(--sg-signature-gold);
+  box-shadow: 0 0 10px var(--sg-signature-glow);
 }
 
-.presetGroupCount {
+.categoryTabCount {
   font-family: var(--sg-font-mono);
   font-size: 10px;
   color: var(--sg-text-disabled);
-  background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-signature-glow-subtle);
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-subtle);
   border-radius: 3px;
-  padding: 1px 5px;
+  padding: 0 5px;
+  min-width: 14px;
+  text-align: center;
+}
+.categoryTab.active .categoryTabCount {
+  color: var(--sg-signature-gold);
+  border-color: var(--sg-signature-gold-dim);
+  background: var(--sg-bg-surface-0);
+}
+
+/* ---- PRESET LIST (active category only) ---- */
+.presetList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.presetItemBody {
+  flex: 1;
+  min-width: 0;
 }
 
 .presetItem {
@@ -556,16 +573,26 @@
   letter-spacing: 0.3px;
 }
 
-/* Grid Output */
+/* Grid Output — Copy-Button oben, dann Info, dann collapsible Prompt-Feld */
 .gridOutput {
   margin-top: var(--sg-space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sg-space-md);
 }
 
 .outputHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--sg-space-md);
+  gap: var(--sg-space-sm);
+  margin-top: var(--sg-space-sm);
+}
+
+.outputHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: var(--sg-space-md);
 }
 
 .outputLabel {
@@ -585,12 +612,31 @@
   font-weight: 500;
 }
 
+.expandToggle {
+  font-family: var(--sg-font-mono);
+  font-size: var(--sg-text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sg-text-tertiary);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all var(--sg-transition);
+}
+.expandToggle:hover {
+  color: var(--sg-gold-text);
+  border-color: var(--sg-gold-dim);
+  background: var(--sg-chip-bg-active);
+}
+
 .outputBox {
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-gold-dim);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-xl);
-  min-height: 200px;
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
   line-height: 1.7;
@@ -598,6 +644,29 @@
   box-shadow: 0 0 16px rgba(43, 181, 178, 0.08);
   white-space: pre-wrap;
   cursor: text;
+  transition: max-height var(--sg-transition);
+}
+
+/* Default: compact preview of first ~4 lines with gradient fade.
+   Click "Ausklappen" to remove the cap. */
+.outputBoxCollapsed {
+  max-height: 140px;
+  overflow: hidden;
+  position: relative;
+}
+.outputBoxCollapsed::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48px;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0) 0%,
+    var(--sg-bg-surface-0) 100%
+  );
+  pointer-events: none;
 }
 
 .copyButton {
@@ -612,7 +681,6 @@
   border-radius: var(--sg-radius-md);
   padding: var(--sg-space-md) 0;
   width: 100%;
-  margin-top: var(--sg-space-md);
   cursor: pointer;
   transition: opacity var(--sg-transition), box-shadow var(--sg-transition);
   box-shadow: var(--sg-shadow-sm);
@@ -626,10 +694,9 @@
   box-shadow: var(--sg-shadow-gold);
 }
 
-/* Preset info box */
+/* Preset info box — sitzt jetzt über dem Prompt-Feld */
 .presetInfo {
-  margin-top: var(--sg-space-lg);
-  padding: var(--sg-space-lg);
+  padding: var(--sg-space-md) var(--sg-space-lg);
   background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
