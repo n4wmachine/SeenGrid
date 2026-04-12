@@ -68,6 +68,44 @@
   text-shadow: 0 0 18px rgba(43, 181, 178, 0.45);
 }
 
+/* Brand slogan — sits inline right of the wordmark, separated by a faint
+   vertical divider. Plays on the Seen/Scene homophone the SeenGrid name is
+   built on. Typographically subordinate to the wordmark (smaller size,
+   lighter weight, secondary text color, generous letter-spacing for the
+   three hard-stop beats). Hides below 1100px so the tab nav keeps its
+   breathing room on smaller viewports.
+
+   NOTE: this is a minimal first implementation in the body font. The
+   Visual Overhaul chat will revisit typography once a display font
+   (Neue Machina / Space Mono Display / Instrument Serif) is chosen. */
+.headerSlogan {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: 28px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.headerSloganDivider {
+  width: 1px;
+  height: 26px;
+  background: var(--sg-border-subtle);
+  flex-shrink: 0;
+}
+.headerSloganText {
+  font-family: var(--sg-font-body);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--sg-text-secondary);
+  line-height: 1;
+  white-space: nowrap;
+  padding-bottom: 2px;
+}
+@media (max-width: 1100px) {
+  .headerSlogan { display: none; }
+}
+
 .tabNav {
   display: flex;
   align-items: center;

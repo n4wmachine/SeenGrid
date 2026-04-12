@@ -1,6 +1,6 @@
 # SEENGRID — Opus Code Handoff
 
-> **Last updated:** 2026-04-12, session `claude/read-handoff-context-CPMDU` — end of Grundstruktur UX-polish pass
+> **Last updated:** 2026-04-12, session `claude/review-docs-features-Sg7py` — Idea 1 (header slogan) shipped, body-font v1
 > **Read order for a new Opus:** 1) this doc  2) `ROADMAP.md`  3) `CLAUDE.md`
 > **Rule:** update this doc after every fix. It is the snapshot-of-truth.
 > **Next chat:** Visual Overhaul (new dedicated chat). Base structure is solid. See *Pending: Visual Overhaul* below.
@@ -9,11 +9,11 @@
 
 ## Quick Status
 
-- **Branch:** `claude/read-handoff-context-CPMDU`
+- **Branch:** `claude/review-docs-features-Sg7py`
 - **Latest commit:** see `git log --oneline -5`
 - **Build:** `npx vite build` green
-- **Status:** All 5 approved Grundstruktur-fixes (#1 / #2 / #4-quick / #5 / #6) completed. Chat is ready to close; next work happens in a new Visual-Overhaul chat.
-- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
+- **Status:** Idea 1 (header slogan **"Scene. Grid. Seen."**) shipped in body-font v1. Lives inline right of the wordmark with a thin vertical divider. Display-font typography pass deferred to Visual Overhaul chat — see *Pending: Feature Ideas → Idea 1* for the explicit TODO list. Per-tab sublines explicitly NOT built (Muse Spark suggestion) — deferred to Visual Overhaul because they're entangled with the Idea 4 architectural decision.
+- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Idea 1 is now shipped (body-font v1) but still has display-font follow-up items. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
@@ -54,6 +54,11 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 | Commit | Summary |
 |---|---|
+| _pending_ | **Idea 1 ✅** — Header slogan "Scene. Grid. Seen." inline right of wordmark, 13px Space Grotesk + thin vertical divider, hides <1100px. i18n key in DE+EN (same English string, untranslatable wordplay). Display-font pass deferred to Visual Overhaul. |
+| `4e32a5b` | docs: refine feature ideas after user clarifications |
+| `3df9d7e` | docs: capture 4 accumulated feature ideas in handoff |
+| `709561b` | Fix wordmark token + document quick-nav visual defer |
+| `7a6b1ad` | docs: sync handoff + roadmap after UX-polish pass |
 | `cb92c58` | **Fix #2** — Grid Builder quick-nav pill row (scroll-to-section + highlight flash) |
 | `29c893c` | **Fix #4-quick** — NanoBanana Studio accordion (only one chip section open at a time) |
 | `d7aaec4` | **Fix #1 / #5 / #6** — stable random buttons (both studios), logo "Grid" in teal, grid dim typography mono→body |
@@ -111,17 +116,27 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 
 User collected these between sessions. Triage + sequencing guidance by Opus from this session. **These are NOT build orders** — each has an explicit gate and a triage category. Next Opus: read, discuss with user, don't guess priority.
 
-### Idea 1 — Header slogan (cosmetic)
+### Idea 1 — Header slogan ✅ SHIPPED (body-font v1, display-font pass deferred)
 
-**What:** A micro-tagline in the currently-empty header area, ideally under the wordmark. The slogan MUST play on the Seen/Scene double meaning — otherwise the whole point of the name is wasted.
+**Status:** Implemented in this session. **"Scene. Grid. Seen."** lives inline right of the wordmark, separated by a thin vertical divider. See `Header.jsx` + `.headerSlogan*` rules in `Header.css` and `header.slogan` key in `i18n.json` (same English string in both DE and EN — the Seen/Scene wordplay is untranslatable, treated as a brand tagline like Adidas/BMW/Nike).
 
-**User's list of candidates:** "Your scene. Perfectly seen.", "Scene it. See it. Grid it.", "If you can see it, you can scene it.", "Scene. Grid. Seen.", "Make Every Scene Seen", "SeenGrid – See the Scene.", "SeenGrid: Direct Your Vision."
+**Decision rationale (user + Opus, this session):**
+- Three slogans were on the table: **"Scene. Grid. Seen."**, **"Make your scene seen"**, **"From scene to seen."**
+- User picked Scene.Grid.Seen. for rhythm and brand-riff value (the three syllables literally rearrange "Seen|Grid").
+- Grid-only-skew of the slogan was discussed and accepted: it pre-commits to the "Grid Operator = flagship" framing from Idea 4. If Idea 4 lands on a different bridge architecture in the Visual Overhaul chat, the slogan may need to be revisited — but it's a one-string change in `i18n.json`, fully reversible.
+- Per-tab sublines (Muse Spark's secondary suggestion) were **explicitly deferred to Visual Overhaul** because they're entangled with the Idea 4 architectural decision and can't be written cleanly without it. Plan: descriptive (not poetic) one-liners inside each tab's content body, NOT in the header. Reserve the pun for the global slogan only. Reject Muse Spark's specific candidates ("Scene once. Seen forever.", "Direct what gets seen.", "From scene to seen." as MJ-only) — they're either generic, semantically wrong, or recycle the global slogan.
 
-**Opus triage:** ★ Cosmetic, 5-min change, but placement + typography are visual-design decisions → belongs in the Visual Overhaul chat, not before. Pro creator tools (Resolve, Cinema4D, Nuke) mostly don't carry slogans in their header because it reads as marketing on a workingtool — the SeenGrid name's double meaning is the only justification for breaking that convention.
+**Implementation details (relevant for Visual Overhaul Opus):**
+- JSX: `<div className="headerSlogan" aria-hidden="true">` sits between `.headerLogo` and `.tabNav`. `aria-hidden` because it's pure brand decoration, no screen-reader value.
+- CSS: 13px Space Grotesk regular, `--sg-text-secondary` (#909090), letter-spacing 0.04em for the three hard-stop beats, 28px left margin from logo, 18px gap between divider and text, 1px × 26px divider in `--sg-border-subtle`. Hides at `max-width: 1100px` so the tab nav keeps breathing room on smaller viewports.
+- i18n: `header.slogan` key in both DE+EN blocks, identical English value. `Header.jsx` now destructures `t` from `useLang()` (was only `lang, setLang` before).
 
-**Opus's favorite from the list:** **"Scene. Grid. Seen."** — tightest. Three words, each a core verb/concept, reads as a workflow (scene it → grid it → it's seen). Rhythm sits, works in both DE and EN, no grammar traps. Alternatives worth considering: **"Seen as a Grid."** or **"From scene to seen."**
-
-**Gate:** None. Do in Visual Overhaul chat once display-font + typography decisions are made — the slogan must pick up the same typographic treatment as the rest of the display-level text. Don't retrofit after the overhaul is done.
+**⚠ Visual Overhaul TODO (display-font pass):**
+The current implementation uses the body font (Space Grotesk) because it's all that exists right now. Once the Visual Overhaul chat picks a display font (candidates: Neue Machina / Space Mono Display / Instrument Serif), the slogan must be re-typeset to match the rest of the display-level text. **Don't forget the slogan when doing the typography pass — it currently looks "fine" but won't carry the same visual weight as a real display font would give it.** Specifically reconsider:
+1. Font family swap to the chosen display font.
+2. Possibly bump font-size from 13px to 14-15px once the display font's x-height is known.
+3. Possibly switch the divider from a flat 1px line to a gradient-to-transparent stroke matching the rest of the new accent-divider system mentioned in *Pending: Visual Overhaul → Concrete levers #6*.
+4. Re-check responsive breakpoint — 1100px was a guess based on the body-font width; may need adjustment after display-font swap changes the slogan's actual pixel width.
 
 ---
 

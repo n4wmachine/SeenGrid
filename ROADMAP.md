@@ -71,8 +71,29 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **UX-Polish-Pass (Grundstruktur) — vor Visual-Overhaul-Chat**
-Kleine, gezielte Fixes an der Grundstruktur, damit der nächste Chat sich komplett auf das Visual-Overhaul konzentrieren kann. Keine neuen Features, kein Refactor — nur Verhalten + Typografie. Fortschritt siehe `OPUS_CODE_HANDOFF.md` → "Pending Grundstruktur".
+### Aktuelle Stufe: **Idea 1 (Header-Slogan) shipped — Body-Font v1**
+Slogan **"Scene. Grid. Seen."** lebt jetzt inline rechts vom Wordmark, getrennt durch einen dünnen Vertikal-Divider. Implementiert in `Header.jsx` + `Header.css` + `i18n.json` (`header.slogan` Key in DE+EN, identischer englischer String — Brand-Tagline-Konvention, das Seen/Scene-Wortspiel ist nicht übersetzbar).
+
+**Entscheidungs-Kontext:**
+- User hatte drei Kandidaten zur Auswahl: "Scene. Grid. Seen." vs "Make your scene seen" vs "From scene to seen." → "Scene. Grid. Seen." gewählt wegen Rhythmus + Brand-Riff (die Silben sortieren sich aus "Seen|Grid" um).
+- Grid-Lastigkeit des Slogans (er nennt Grid prominent, ignoriert NanoBanana/MJ/Vault) wurde diskutiert und akzeptiert: konsistent mit Idea 4's "Grid Operator = Flagship" Mental Model. Falls Idea 4 im Visual-Overhaul-Chat anders entschieden wird, ist der Slogan eine Ein-String-Edit zurück.
+- Per-Tab-Sublines (Muse Sparks Sekundär-Vorschlag) **explizit zum Visual-Overhaul-Chat verschoben** weil sie mit der Idea-4-Architektur-Entscheidung verzahnt sind und nicht ohne diese sauber formuliert werden können.
+
+**Implementation-Details:**
+- 13px Space Grotesk Regular, `--sg-text-secondary` (#909090), letter-spacing 0.04em für die drei Hard-Stop-Beats
+- Vertical-Divider 1px × 26px in `--sg-border-subtle`
+- 28px margin-left vom Logo, 18px gap zwischen Divider und Text
+- `aria-hidden="true"` weil pure Brand-Dekoration
+- Hide unter `max-width: 1100px` damit die Tab-Nav auf schmaleren Viewports Luft behält
+- `Header.jsx` destrukturiert jetzt `t` aus `useLang()` (vorher nur `lang, setLang`)
+
+**⚠ Display-Font-Pass aussteht für Visual-Overhaul-Chat:**
+Body-Font (Space Grotesk) ist nur v1. Sobald Display-Font entschieden ist (Neue Machina / Space Mono Display / Instrument Serif), Slogan re-typesetten — Font-Family Swap, evtl. Size 13px → 14-15px je nach x-Height der neuen Display-Font, Divider evtl. von flacher 1px-Linie auf Gradient-to-Transparent umstellen (passend zum Accent-Divider-System aus den Visual-Overhaul-Levern), Responsive-Breakpoint 1100px nochmal prüfen.
+
+---
+
+### Vorherige Stufe: **UX-Polish-Pass (Grundstruktur) — abgeschlossen**
+Kleine, gezielte Fixes an der Grundstruktur, damit der nächste Chat sich komplett auf das Visual-Overhaul konzentrieren kann. Keine neuen Features, kein Refactor — nur Verhalten + Typografie.
 
 Erledigt in diesem Pass:
 - **Grid crop-advisory umgebaut** auf per-axis Pixel-Berechnung (`canvas_w/cols` × `canvas_h/rows`) statt `max(rows,cols)`-Shortcut. Quality-Tier liest `min(panelW, panelH)` bei 2K (Engpass). Annahmen (square canvas, floor-Rest, bottleneck-tier) in Tooltip dokumentiert (`grid.advice_tooltip`). Commits: `aefadc0`, `d0053b7`.

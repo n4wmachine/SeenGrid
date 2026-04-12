@@ -55,7 +55,7 @@ function SeenGridMark() {
 }
 
 export default function Header({ activeTab, tabs, onTabChange }) {
-  const { lang, setLang } = useLang()
+  const { lang, setLang, t } = useLang()
 
   return (
     <header className="header">
@@ -64,6 +64,11 @@ export default function Header({ activeTab, tabs, onTabChange }) {
         <span className="headerWordmark">
           Seen<span className="headerWordmarkAccent">Grid</span>
         </span>
+      </div>
+
+      <div className="headerSlogan" aria-hidden="true">
+        <span className="headerSloganDivider" />
+        <span className="headerSloganText">{t('header.slogan')}</span>
       </div>
 
       <nav className="tabNav" role="tablist">
