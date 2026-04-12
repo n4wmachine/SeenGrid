@@ -135,11 +135,19 @@
 }
 
 /* Card Thumbnail */
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: var(--sg-bg-surface-0);
+  flex-shrink: 0;
+}
+
 .cardImage {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
-  background: var(--sg-bg-surface-2);
   display: block;
 }
 
@@ -156,8 +164,16 @@
 .cardMeta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--sg-space-sm);
+  flex-wrap: nowrap;
+}
+
+.cardMetaRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sg-space-xs);
+  flex-shrink: 0;
 }
 
 .cardAuthor {
@@ -202,14 +218,13 @@
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
   color: var(--sg-text-secondary);
-  line-height: 1.5;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  margin: 0;
 }
 
-/* "Mehr anzeigen" Link */
+/* "Mehr anzeigen" Button */
 .cardShowMore {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
@@ -217,10 +232,16 @@
   cursor: pointer;
   background: none;
   border: none;
-  padding: 0;
+  border-top: 1px solid var(--sg-border-subtle);
+  padding: var(--sg-space-sm) 0 0 0;
+  margin-top: var(--sg-space-xs);
   text-align: left;
+  display: block;
+  width: 100%;
+  letter-spacing: 0.03em;
 }
 .cardShowMore:hover {
+  color: var(--sg-gold-bright);
   text-decoration: underline;
 }
 
@@ -288,7 +309,27 @@
   color: var(--sg-gold-bright);
 }
 
-/* Card braucht position:relative für den Stern */
-.cardImageWrapper {
-  position: relative;
+/* Stern-Button für Karten ohne Bild (in Meta-Zeile) */
+.favStarInline {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-sm);
+  color: var(--sg-text-tertiary);
+  cursor: pointer;
+  transition: all var(--sg-transition);
+  flex-shrink: 0;
 }
+.favStarInline:hover {
+  color: var(--sg-gold);
+  border-color: var(--sg-gold-dim);
+}
+.favStarInline.active {
+  color: var(--sg-gold-bright);
+  border-color: var(--sg-gold-dim);
+}
+

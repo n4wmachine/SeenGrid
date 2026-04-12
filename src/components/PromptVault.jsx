@@ -323,8 +323,8 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
 
   return (
     <div className={styles.card}>
-      <div className={styles.cardImageWrapper}>
-        {hasImage && (
+      {hasImage && (
+        <div className={styles.cardImageWrapper}>
           <img
             src={prompt.imageUrls[0]}
             alt=""
@@ -334,15 +334,15 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
             onError={() => setImgError(true)}
             style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
           />
-        )}
-        <button
-          className={[styles.favStar, starred && styles.active].filter(Boolean).join(' ')}
-          onClick={e => { e.stopPropagation(); onToggleStar() }}
-          title={starred ? removeLabel : saveLabel}
-        >
-          <StarIcon filled={starred} />
-        </button>
-      </div>
+          <button
+            className={[styles.favStar, starred && styles.active].filter(Boolean).join(' ')}
+            onClick={e => { e.stopPropagation(); onToggleStar() }}
+            title={starred ? removeLabel : saveLabel}
+          >
+            <StarIcon filled={starred} />
+          </button>
+        </div>
+      )}
 
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>
@@ -357,9 +357,20 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
               <span title="Views"><EyeIcon />{fmtNum(prompt.views)}</span>
             )}
           </span>
-          {prompt.model && (
-            <span className={`${styles.sourceBadge} ${styles.nanobanana}`}>{prompt.model}</span>
-          )}
+          <span className={styles.cardMetaRight}>
+            {prompt.model && (
+              <span className={`${styles.sourceBadge} ${styles.nanobanana}`}>{prompt.model}</span>
+            )}
+            {!hasImage && (
+              <button
+                className={[styles.favStarInline, starred && styles.active].filter(Boolean).join(' ')}
+                onClick={e => { e.stopPropagation(); onToggleStar() }}
+                title={starred ? removeLabel : saveLabel}
+              >
+                <StarIcon filled={starred} />
+              </button>
+            )}
+          </span>
         </div>
 
         <p className={styles.cardPrompt}>{displayText}</p>
@@ -400,8 +411,8 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
 
   return (
     <div className={styles.card}>
-      <div className={styles.cardImageWrapper}>
-        {hasImage && (
+      {hasImage && (
+        <div className={styles.cardImageWrapper}>
           <img
             src={fav.imageUrls[0]}
             alt=""
@@ -411,15 +422,15 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
             onError={() => setImgError(true)}
             style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
           />
-        )}
-        <button
-          className={[styles.favStar, styles.active].filter(Boolean).join(' ')}
-          onClick={onRemove}
-          title={removeLabel}
-        >
-          <StarIcon filled />
-        </button>
-      </div>
+          <button
+            className={[styles.favStar, styles.active].filter(Boolean).join(' ')}
+            onClick={onRemove}
+            title={removeLabel}
+          >
+            <StarIcon filled />
+          </button>
+        </div>
+      )}
 
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>
