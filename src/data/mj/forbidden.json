@@ -2,22 +2,38 @@
   "categories": [
     {
       "label": "Verschönerungswörter",
+      "label_en": "Beautification words",
+      "label_de": "Verschönerungswörter",
       "reason": "Aktivieren das Postkarten/Stockfoto-Template",
+      "reason_en": "They activate the postcard / stock-photo template.",
+      "reason_de": "Aktivieren das Postkarten/Stockfoto-Template.",
       "words": ["beautiful", "stunning", "gorgeous", "warm glow", "cozy", "magical", "ethereal"]
     },
     {
       "label": "Generische Lichtbegriffe",
+      "label_en": "Generic lighting terms",
+      "label_de": "Generische Lichtbegriffe",
       "reason": "Zu vage. Konkrete Lichtquelle benennen.",
+      "reason_en": "Too vague. Name the specific light source instead.",
+      "reason_de": "Zu vage. Konkrete Lichtquelle benennen.",
       "words": ["cinematic lighting", "dramatic lighting", "moody lighting", "atmospheric"]
     },
     {
       "label": "Technische Kameraparameter",
+      "label_en": "Technical camera parameters",
+      "label_de": "Technische Kameraparameter",
       "reason": "MJ interpretiert diese nicht zuverlässig",
+      "reason_en": "MJ does not interpret these reliably.",
+      "reason_de": "MJ interpretiert diese nicht zuverlässig.",
       "words": ["f/2.8", "85mm", "ISO 800", "shallow DOF", "rack focus"]
     },
     {
       "label": "AI-Qualitäts-Tags",
+      "label_en": "AI quality tags",
+      "label_de": "AI-Qualitäts-Tags",
       "reason": "Aktivieren Stockfoto- oder Videospiel-Ästhetik",
+      "reason_en": "They activate stock-photo or video-game aesthetics.",
+      "reason_de": "Aktivieren Stockfoto- oder Videospiel-Ästhetik.",
       "words": ["ultra-photorealistic", "8K", "hyper-detailed", "unreal engine", "octane render"]
     }
   ],
@@ -27,5 +43,19 @@
     "Bei schlechten Ergebnissen: KÜRZEN, nicht verlängern (∼60 Wörter als Ausgangspunkt)",
     "'--raw' ist PFLICHT — reduziert MJs Verschönerung",
     "Sonderfall 'golden hour': als alleinstehenden Stimmungsbegriff vermeiden"
+  ],
+  "rules_en": [
+    "If something should be beautiful: DESCRIBE the scene as beautiful — never use the word 'beautiful'.",
+    "Avoid light without a source: every light must be motivated.",
+    "On bad results: SHORTEN, don't lengthen (~60 words as a starting point).",
+    "'--raw' is MANDATORY — it reduces MJ's beautification.",
+    "Edge case 'golden hour': avoid it as a standalone mood term."
+  ],
+  "rules_de": [
+    "Wenn etwas schön sein soll: die Szene schön BESCHREIBEN, nicht das Wort 'beautiful' benutzen.",
+    "Licht ohne Quelle vermeiden: jedes Licht muss motiviert sein.",
+    "Bei schlechten Ergebnissen: KÜRZEN, nicht verlängern (∼60 Wörter als Ausgangspunkt).",
+    "'--raw' ist PFLICHT — reduziert MJs Verschönerung.",
+    "Sonderfall 'golden hour': als alleinstehenden Stimmungsbegriff vermeiden."
   ]
 }

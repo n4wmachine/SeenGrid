@@ -64,8 +64,10 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **2 — Sprache-Konsistenz (EN/DE)**
-Infrastruktur ist drin (`LangContext` hat jetzt `tData()` Helper mit Fallback-Kette, Default-Sprache auf `'en'` umgestellt). Jetzt kommt der Daten-Umbau: alle JSON-Dateien auf `label_en`/`label_de`/`desc_en`/`desc_de` umstellen, alle Components anpassen um `tData(obj, 'desc')` statt `obj.desc` zu lesen, Tooltips reviewen.
+### Aktuelle Stufe: **2e — Components auf `tData()` umstellen**
+Daten-Umbau ist durch (2b + 2c + 2d): alle 18 Preset-JSONs, `core-templates.json` und alle 7 MJ-Data-Files haben jetzt `label_en`/`label_de`/`desc_en`/`desc_de` (bzw. `t_en`/`t_de` für die MJ-Chip-Tooltips) plus neues `src/data/presets/_categories.json`. Legacy-Felder (`label`, `desc`, `t`) bleiben als Shim drin, damit `GridOperator.jsx` und `MJStartframe.jsx` ohne Änderung weiterlaufen. Vite-Build ist grün.
+
+Jetzt kommt 2e: `GridOperator.jsx`, `MJStartframe.jsx` (und ggf. andere Components) umstellen auf `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Erst wenn alle Components migriert sind, Legacy-Felder aus den JSONs rauswerfen.
 
 ### Stage 1 ✅ erledigt
 - `5607a3f` GridOperator Scroll-Fix (`.previewColumn` max-height + overflow)
@@ -79,10 +81,10 @@ Infrastruktur ist drin (`LangContext` hat jetzt `tData()` Helper mit Fallback-Ke
 - [x] **Stufe 1** — GridOperator CSS Scroll-Fix (`.previewColumn` max-height + overflow) + DE/EN Prompt-Output-Fix + Mode-Toggle sichtbar machen
 - [ ] **Stufe 2** — Sprache-Konsistenz (EN/DE):
   - [x] 2a: LangContext Infrastruktur — Default auf `en`, `tData()` Helper mit Fallback-Kette
-  - [ ] 2b: Preset-JSONs (alle 18 in `src/data/presets/`) auf `label_en`/`label_de`/`desc_en`/`desc_de` + `category` Feld
-  - [ ] 2c: `core-templates.json` auf gleiche Struktur
-  - [ ] 2d: MJ Data-Files (templates, filmstocks, modifiers, genres, emotional-hooks, forbidden, random-scenes)
-  - [ ] 2e: Components anpassen — `obj.label` / `obj.desc` → `tData(obj, 'label')` / `tData(obj, 'desc')`
+  - [x] 2b: Preset-JSONs (alle 18 in `src/data/presets/`) auf `label_en`/`label_de`/`desc_en`/`desc_de` + `category` Feld + neues `_categories.json`
+  - [x] 2c: `core-templates.json` auf gleiche Struktur
+  - [x] 2d: MJ Data-Files — `templates.json` (label/desc + field.label/field.placeholder), `filmstocks.json`, `modifiers.json`, `genres.json`, `emotional-hooks.json` (alle `t_en`/`t_de`), `forbidden.json` (label/reason/rules), `random-scenes.json` (keine Lokalisierung nötig, reine englische Daten)
+  - [ ] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Danach Legacy-Felder aus JSONs entfernen.
   - [ ] 2f: Tooltip-Review — alle `title=` Attribute prüfen, fehlende ergänzen
   - [ ] 2g: i18n.json prüfen ob DE-Block komplett ist, fehlende Keys ergänzen
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:
