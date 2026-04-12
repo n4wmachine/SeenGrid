@@ -112,6 +112,61 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 - **Grid Operator Quick-Nav visual treatment.** The pill row functions correctly (smooth-scroll + 1.4s border flash on landing) but it looks like tags rather than a perceivable navigation bar because it uses the same surface/border treatment as the section cards below it. Needs: "Jump to:" label prefix OR icon prefix per pill OR sticky positioning with backdrop-blur OR distinctly different background tone — decision depends on how the section cards themselves are retreated in the overhaul, so must be designed as one piece with the rest.
 - **Token naming cleanup.** `--sg-gold-*` holds teal values (historical relic from when the accent really was gold). Should be renamed to `--sg-accent-*` or `--sg-teal-ui-*` across ~20 files. Not a behavior change, just a readability / grep-hygiene fix. Do this together with the overhaul so the theme file gets one coherent pass.
 
+### Open exploration items from end of `claude/review-docs-features-Sg7py` — SUGGESTIONS, not rules
+
+> Captured at user request at the end of the slogan-revert session. **Framing:** these are observations and proposals collected at the end of one session, not a build spec. The next Opus should look at all of this with **fresh eyes** and decide what to take, what to leave, and how to orchestrate it inside the Visual Overhaul plan. Nothing in this subsection is a fixed instruction.
+
+#### A. Lessons extracted from two NanoBanana-generated mockup images
+
+User generated two mockups in NanoBanana with the prompt *"zeig mir wie eine professionelle Seite für ein Promptbuilder-Tool aussehen könnte"*. Neither image is a target design — but reading them as a designer next to the current SeenGrid UI surfaced concrete patterns worth considering:
+
+1. **Image previews on tiles instead of plain text labels.** Both mockups used small thumbnail-style preview images on every selection tile (style chips, presets, templates) — like Premiere Pro / Magic Bullet preset libraries. SeenGrid currently shows pure-text chips for Filmstocks, Camera Angles, Lens Looks, Color Grades, Presets, MJ Templates. Visual previews on these tiles would close a real "what does this actually look like" gap and break the current monochrome grid-of-text feeling. Already partially captured in this section above; mockups confirm it.
+
+2. **Three-column DAW-style layout.** One mockup used a left navigation rail / center work area / right inspector layout (think Ableton Live, DaVinci Resolve, Premiere Pro). Currently SeenGrid uses two-column layouts inside each tab (controls + preview/output). A third column for context-aware metadata, hints, or live readouts could give the UI the "professional production tool" silhouette it currently lacks. Worth considering for at least Grid Operator and NanoBanana Studio. **Caveat:** three columns only work at desktop widths; would need a graceful collapse strategy.
+
+3. **Background textures / depth** — already on the lever list above, but the mockups showed how strong the effect is when done right. Subtle radial gradients, faint film-grain noise, soft inner shadows on cards. Current `#141414` flat fill makes everything read as one plane.
+
+4. **Branded interior section names** instead of plain functional labels. Mockup labels read like product copy ("Composition Engine", "Look Reactor", "Frame Studio") rather than functional ("Style", "Camera", "Lens"). For SeenGrid this could mean section titles that lean into film vocabulary ("Lens Stack", "Lighting Grade", "Subject Block") instead of generic chip-category names. **Risk:** can tip into marketing-speak fast — needs taste, not enthusiasm.
+
+**Things from the mockups that the user agreed should NOT be ported:**
+- Drag-and-drop UI metaphors (mockups suggested it; SeenGrid is a prompt builder, not a node editor — adds complexity for no real gain).
+- Fake parameter sliders that don't actually drive anything in NanoBanana (visual lying).
+- Inline "Generate Preview" button that implies the tool runs inference (SeenGrid is intentionally **not** an inference engine — see CLAUDE.md no-backend rule).
+- Seed / Steps / CFG sliders (NanoBanana is closed-source, these don't exist as user-facing knobs).
+
+#### B. Grid Operator preview window — needs structural rethink
+
+**Current state (`GridOperator.jsx:719-746` + `GridOperator.module.css:762-811`):** A grid preview already exists in the right column of Grid Operator. It renders `rows × cols` div cells with `aspect-ratio: 1/1`, layout-aware background colors, and panel-role labels at `font-size: 7px` italic disabled.
+
+**What's broken:**
+- `.gridCell` has `min-height: 56px` — this forces every cell to be at least 56px tall, so an 8×8 grid demands ~448px+ vertical space and the frame grows out of the viewport. User reports having to scroll to see the bottom of the preview at high grid sizes, instead of cells shrinking to fit.
+- `.gridPreviewFrame` has `max-width: 440px` but **no max-height** — width is capped, height is unbounded. The grid drives the frame size instead of the frame containing the grid.
+- Labels at `font-size: 7px` are barely legible — a smell that the implementation knew it was running out of space at high cell counts and solved it by shrinking text instead of by rethinking the layout.
+- Layout-awareness is shallow: per-layout background colors only. Letterbox/Polaroid/Storyboard get a tint, but the geometry and framing don't actually behave like a letterbox or a polaroid would in a real storyboard.
+- User's verbatim assessment: *"sieht aus wie placeholder von 1999"*, *"der ganze approach im moment ist sau weak, da muss grundlegend anders gedacht werden"*.
+
+**Suggestion to consider (not a fixed plan):**
+
+Treat the preview as a **fixed-aspect viewport** that the grid scales **into**, instead of a container that the grid scales **out of**. Concretely (one possible direction — next Opus may pick a different one):
+- Set the frame to a fixed aspect (e.g. 4:3 or square), fixed max-height (~360–400px), no vertical overflow allowed.
+- Compute cell size from `frameSize / max(rows, cols)` so cells shrink proportionally as the grid densifies.
+- Render in **SVG with a `viewBox`** instead of CSS Grid divs — viewBox gives free, mathematically-correct scaling at any density and lets the layout-variants (letterbox, polaroid, framed, storyboard) be drawn as actual shapes rather than approximated with CSS background tricks.
+- Drop `min-height` on cells. Replace fixed-px label sizes with viewBox-relative units that scale with the cell.
+- At high density (e.g. ≥6×6), auto-collapse panel-role labels into hover-only tooltips so the cells stay clean. At low density (≤3×3), show role labels permanently.
+- Layout variants get real geometric treatment: Letterbox cells render at 16:9, Polaroid cells get a real bottom margin rectangle, Framed cells share a black gutter, Storyboard cells get hand-drawn-feel borders, Seamless cells touch with zero gap.
+
+**Why this matters beyond cosmetics:**
+- **Closes a real UX gap.** Right now the Grid Operator tells users "3×3 World Zone Board, Multi-Shot 2×4" as text, but until they paste the prompt into NanoBanana they don't actually see the layout. A real preview makes the choice between presets *visible* instead of *readable*.
+- **Layout decisions become instant.** Switching from Even to Letterbox to Polaroid currently changes a background color. With shape-aware rendering it would change the frame geometry, which is what the user actually cares about.
+- **Half the GridCropper infrastructure (Idea 2) lives here already.** If the preview can render arbitrary `rows × cols × layout` geometry from data, then GridCropper can reuse the same renderer to overlay the user's uploaded grid image and define crop regions on top of it. Building this preview properly is **also** a free down-payment on Idea 2.
+
+**Why this is a suggestion, not a directive:**
+- The next Opus may have a totally different visual direction in mind that makes a different preview shape more sensible (e.g. if they go three-column DAW-style, the preview might live in the inspector column with a different aspect).
+- SVG vs Canvas vs CSS Grid is an implementation choice the next Opus should make based on the broader rendering decisions of the overhaul.
+- The exact label-collapse threshold (at what density do labels go to tooltip-only?) needs play-testing, not pre-specification.
+
+**Anti-pattern to avoid:** Do **not** add any inference / "generate preview button" / random placeholder image to this preview window. The user explicitly considered repurposing the preview window in NanoBanana/MJ tabs for "a random placeholder image showing the current look aesthetic" and after discussion **rejected the idea himself** because: (a) actually generating breaks the no-inference rule, (b) pulling from Vault by tag-match feels arbitrary and adds dependency, (c) a static moodboard reflects nothing about the user's actual settings → it lies. The Grid Operator preview is the only place where a meaningful preview is structurally possible (because the grid layout is real client-side data) — do not extend the pattern to NanoBanana or MJ tabs.
+
 ---
 
 ## Pending: Feature Ideas (accumulated, not yet built)
