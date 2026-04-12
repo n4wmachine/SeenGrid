@@ -48,17 +48,23 @@
   transition: color var(--sg-transition);
 }
 
-/* "Grid" gets the teal accent — matches the logo mark and reads as
-   "see the grid" / "scene as grid". Seen stays neutral so the accent
-   is semantic, not decorative. */
+/* "Grid" gets the teal accent — matches the logo mark exactly
+   (--sg-teal #2bb5b2, the same token the SVG uses for the mark,
+   the center diamond and the eye lens). The brighter teal
+   --sg-gold-text (#5ae0dd) is reserved for ACTIVE states across the
+   UI (tabs, chips, buttons) and would make the wordmark visually
+   disagree with the logo right next to it. On hover both words
+   brighten to --sg-gold-text so the hover effect parallels the
+   logo's drop-shadow intensifying. */
 .headerWordmarkAccent {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal);
   transition: color var(--sg-transition), text-shadow var(--sg-transition);
 }
 .headerLogo:hover .headerWordmark {
   color: var(--sg-gold-text);
 }
 .headerLogo:hover .headerWordmarkAccent {
+  color: var(--sg-gold-text);
   text-shadow: 0 0 18px rgba(43, 181, 178, 0.45);
 }
 

@@ -74,7 +74,7 @@ The 5 approved Grundstruktur-fixes are complete. All five below are shipped and 
 1. ✅ **Random button layout stability (both studios)** — `d7aaec4`. `.outputBox` in both `PromptBuilder.module.css` and `MJStartframe.module.css` uses `flex: 1 1 0` + internal scroll so the random cluster above the output box never reflows. Verified by resizing output content in both studios.
 2. ✅ **Grid Builder quick-nav pill row** — `cb92c58`. Horizontal pill row under the Mode Toggle lists all sections of the active mode; click smooth-scrolls + flashes the target. See Module Status → Grid Operator for the implementation outline.
 3. ✅ **NanoBanana Studio accordion (quick fix)** — `29c893c`. Single-ID `openSection` state replaces the Set-based multi-open logic. Full multi-column rethink remains deferred to Visual Overhaul.
-4. ✅ **Logo wordmark — "Grid" in teal** — `d7aaec4`. `Header.jsx` wraps "Grid" in `.headerWordmarkAccent` span; `Header.css` sets teal color + hover glow. "Seen" stays neutral so the accent is semantic, not decorative.
+4. ✅ **Logo wordmark — "Grid" in teal** — `d7aaec4` (initial) + follow-up commit for color-token correction. `Header.jsx` wraps "Grid" in `.headerWordmarkAccent` span. **Important token detail:** `.headerWordmarkAccent` uses `--sg-teal` (#2bb5b2), **NOT** `--sg-gold-text` (#5ae0dd). The first token matches the logo SVG exactly (same token the mark, diamond and eye lens use). `--sg-gold-text` is the UI's active-state accent (tabs, chips, buttons) — using it on the wordmark made "Grid" visually disagree with the logo right next to it. On hover both words brighten to `--sg-gold-text` so the hover effect parallels the logo's drop-shadow intensifying.
 5. ✅ **Grid dim typography consistency** — `d7aaec4`. `.dimLabel`, `.dimBtn`, `.dimX`, `.dimTotal` moved from `--sg-font-mono` to `--sg-font-body` with tweaked weights/sizes for visual parity with the advisory.
 
 No Grundstruktur work is pending. The chat is at a clean handoff point.
@@ -101,6 +101,8 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 - NanoBanana Studio full layout rethink: multi-column distribution of chip sections, section icons, visual hierarchy. Accordion is only a band-aid until this happens.
 - Vault card grid: thumbnail quality, hover states, the whole gallery look.
 - Image previews on tiles (Filmstocks, Camera Angles, Lens Looks, Color Grades, Presets, MJ Templates) — like Premiere Pro presets / Magic Bullet Looks. See ROADMAP.md Section 5.
+- **Grid Operator Quick-Nav visual treatment.** The pill row functions correctly (smooth-scroll + 1.4s border flash on landing) but it looks like tags rather than a perceivable navigation bar because it uses the same surface/border treatment as the section cards below it. Needs: "Jump to:" label prefix OR icon prefix per pill OR sticky positioning with backdrop-blur OR distinctly different background tone — decision depends on how the section cards themselves are retreated in the overhaul, so must be designed as one piece with the rest.
+- **Token naming cleanup.** `--sg-gold-*` holds teal values (historical relic from when the accent really was gold). Should be renamed to `--sg-accent-*` or `--sg-teal-ui-*` across ~20 files. Not a behavior change, just a readability / grep-hygiene fix. Do this together with the overhaul so the theme file gets one coherent pass.
 
 ---
 
