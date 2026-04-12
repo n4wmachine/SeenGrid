@@ -61,7 +61,9 @@ export default function Header({ activeTab, tabs, onTabChange }) {
     <header className="header">
       <div className="headerLogo" aria-label="SeenGrid">
         <SeenGridMark />
-        <span className="headerWordmark">SeenGrid</span>
+        <span className="headerWordmark">
+          Seen<span className="headerWordmarkAccent">Grid</span>
+        </span>
       </div>
 
       <nav className="tabNav" role="tablist">

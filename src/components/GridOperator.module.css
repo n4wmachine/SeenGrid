@@ -391,11 +391,12 @@
 }
 
 .dimLabel {
-  font-family: var(--sg-font-mono);
+  font-family: var(--sg-font-body);
   font-size: var(--sg-text-xs);
-  color: var(--sg-text-tertiary);
+  font-weight: 600;
+  color: var(--sg-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin-bottom: var(--sg-space-xs);
 }
 
@@ -406,13 +407,15 @@
 }
 
 .dimBtn {
-  font-family: var(--sg-font-mono);
+  font-family: var(--sg-font-body);
   font-size: var(--sg-text-sm);
-  padding: 4px 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 5px 11px;
   border-radius: var(--sg-radius-sm);
   border: 1px solid var(--sg-border-subtle);
   background: var(--sg-bg-surface-0);
-  color: var(--sg-text-tertiary);
+  color: var(--sg-text-secondary);
   cursor: pointer;
   transition: all 120ms ease;
 }
@@ -427,15 +430,19 @@
 }
 
 .dimX {
-  font-family: var(--sg-font-mono);
+  font-family: var(--sg-font-body);
   font-size: var(--sg-text-xl);
-  color: var(--sg-text-disabled);
+  font-weight: 400;
+  color: var(--sg-text-tertiary);
 }
 
 .dimTotal {
-  font-family: var(--sg-font-mono);
+  font-family: var(--sg-font-body);
   font-size: var(--sg-text-xs);
-  color: var(--sg-text-tertiary);
+  font-weight: 500;
+  color: var(--sg-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* ---- DIM ADVISORY ----

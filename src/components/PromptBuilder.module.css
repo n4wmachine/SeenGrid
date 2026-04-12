@@ -419,14 +419,18 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-xl);
-  min-height: 160px;
+  /* Flex absorb: outputBox takes all remaining column space and scrolls
+     internally so the random cluster above it NEVER moves when the prompt
+     text length changes. Every control above keeps a stable viewport
+     position across random clicks. */
+  flex: 1 1 0;
+  min-height: 200px;
+  overflow-y: auto;
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
   line-height: 1.7;
   color: var(--sg-text-primary);
   transition: border-color var(--sg-transition-slow), box-shadow var(--sg-transition-slow);
-  overflow-y: auto;
-  max-height: 300px;
 }
 
 .outputBox.empty {

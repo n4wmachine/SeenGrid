@@ -47,8 +47,19 @@
   padding-bottom: 2px;
   transition: color var(--sg-transition);
 }
+
+/* "Grid" gets the teal accent — matches the logo mark and reads as
+   "see the grid" / "scene as grid". Seen stays neutral so the accent
+   is semantic, not decorative. */
+.headerWordmarkAccent {
+  color: var(--sg-gold-text);
+  transition: color var(--sg-transition), text-shadow var(--sg-transition);
+}
 .headerLogo:hover .headerWordmark {
   color: var(--sg-gold-text);
+}
+.headerLogo:hover .headerWordmarkAccent {
+  text-shadow: 0 0 18px rgba(43, 181, 178, 0.45);
 }
 
 .tabNav {

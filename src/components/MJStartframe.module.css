@@ -493,7 +493,12 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-xl);
-  min-height: 180px;
+  /* Flex absorb: outputBox takes all remaining column space and scrolls
+     internally so the random cluster above it NEVER moves when output
+     text length changes across random clicks. */
+  flex: 1 1 0;
+  min-height: 200px;
+  overflow-y: auto;
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
   line-height: 1.7;
