@@ -64,7 +64,9 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **2g — i18n.json DE-Block Completeness**
+### Aktuelle Stufe: **2h — PromptBuilder-Daten migrieren**
+Stufen 2f + 2g abgeschlossen. 2g war praktisch schon durch: beide i18n.json-Blöcke DE/EN sind symmetrisch mit je 135 Keys. Bleibt noch 2h offen: die Chip-Daten für den PromptBuilder (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) auf `t_en`/`t_de` umstellen. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift — also kein Regressionsrisiko, nur Arbeit.
+
 Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
 - **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
 - **GridOperator:** Row/Col-Dim-Buttons (parameterisierte Keys `grid.set_rows_title` / `grid.set_cols_title` mit `{n}` Placeholder).
@@ -92,7 +94,7 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] 2d: MJ Data-Files — `templates.json` (label/desc + field.label/field.placeholder), `filmstocks.json`, `modifiers.json`, `genres.json`, `emotional-hooks.json` (alle `t_en`/`t_de`), `forbidden.json` (label/reason/rules), `random-scenes.json` (keine Lokalisierung nötig, reine englische Daten)
   - [x] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Legacy-Felder aus den migrierten JSONs entfernt (Presets, core-templates, MJ-Files außer random-scenes).
   - [x] 2f: Tooltip-Review — fehlende `title=` Attribute auf SubTabs, Row/Col-Dim-Buttons, Toggles, Save-Fav, Load-more, Card-Copy ergänzt; hardcodete deutsche `weniger`/`mehr` in PromptVault.FavoriteCard durch i18n ersetzt
-  - [ ] 2g: i18n.json prüfen ob DE-Block komplett ist, fehlende Keys ergänzen
+  - [x] 2g: i18n.json DE/EN-Completeness — beide Blöcke haben 135 Keys, symmetrisch. Sanity-Check nach cross-Language-Strings ergab nur `common.reset: "Reset"` (internationalism, OK)
   - [ ] 2h: PromptBuilder-Daten migrieren — `styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json` auf `t_en`/`t_de`. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift.
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:
   - Default = Core
