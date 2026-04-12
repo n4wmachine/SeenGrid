@@ -6,7 +6,7 @@
     "desc_en": "Wide-angle introduction of a location — space, mood, context.",
     "desc_de": "Weitwinkel-Einführung eines Ortes. Raum, Stimmung, Kontext.",
     "source": "DeepSeek1.txt Item 7",
-    "template": "Film still from a [MODIFIER] [GENRE] film. [LOCATION] seen from [PERSPECTIVE] at [TIME_OF_DAY]. [2-3 DETAILS]. [LIGHT_SOURCE]. [WHAT_IS_DARK]. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
+    "template": "Film still from a [MODIFIER] [GENRE] film. [LOCATION] seen from [PERSPECTIVE] at [TIME_OF_DAY]. [DETAILS]. [LIGHT_SOURCE]. [WHAT_IS_DARK]. [EMOTIONAL_HOOK]. [FILMSTOCK]. --ar 16:9 --raw",
     "fields": [
       {
         "id": "MODIFIER",

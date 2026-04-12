@@ -101,8 +101,19 @@ export default function GridOperator() {
   ]
 
   const [mode, setMode]               = useState('core')
-  const [rows, setRows]               = useState(3)
-  const [cols, setCols]               = useState(3)
+  const [rows, setRowsRaw]            = useState(3)
+  const [cols, setColsRaw]            = useState(3)
+
+  // Clamp dimension changes so we never end up with unbuildable combos like
+  // 8x3. Strips (1xN / Nx1) allow up to 8 on the free axis; grids cap at 4x4.
+  function setRows(n) {
+    setRowsRaw(n)
+    if (n > 4) setColsRaw(1)
+  }
+  function setCols(n) {
+    setColsRaw(n)
+    if (n > 4) setRowsRaw(1)
+  }
   const [layout, setLayout]           = useState('even')
   const [selectedPreset, setPreset]   = useState(ALL_PRESETS[0])
   const [panelRoles, setPanelRoles]   = useState(() => buildRoles(ALL_PRESETS[0]))
@@ -301,7 +312,9 @@ export default function GridOperator() {
               <div>
                 <div className={styles.dimLabel}>Rows</div>
                 <div className={styles.dimButtons}>
-                  {[1,2,3,4,5].map(n => (
+                  {/* Strips allow 1-8 on one axis, grids cap at 4x4.
+                      Rows >4 only valid when cols === 1 (vertical strip). */}
+                  {(cols === 1 ? [1,2,3,4,5,6,7,8] : [1,2,3,4]).map(n => (
                     <button
                       key={n}
                       className={[styles.dimBtn, rows === n && styles.active].filter(Boolean).join(' ')}
@@ -315,7 +328,7 @@ export default function GridOperator() {
               <div>
                 <div className={styles.dimLabel}>Cols</div>
                 <div className={styles.dimButtons}>
-                  {[1,2,3,4,5].map(n => (
+                  {(rows === 1 ? [1,2,3,4,5,6,7,8] : [1,2,3,4]).map(n => (
                     <button
                       key={n}
                       className={[styles.dimBtn, cols === n && styles.active].filter(Boolean).join(' ')}

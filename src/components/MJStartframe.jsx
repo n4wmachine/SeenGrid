@@ -92,24 +92,29 @@ export default function MJStartframe() {
 
     let prompt = tpl.template
 
-    tpl.fields.forEach(f => {
+    // Replace longest field IDs first so WHAT_IS_DARK / WHAT_WHERE beat WHAT.
+    // Use a tolerant regex that allows annotations inside the brackets
+    // (e.g. "[2-3 DETAILS]" still resolves to the DETAILS field) so a
+    // designer typo in the template JSON can't silently break random output.
+    const sortedFields = [...tpl.fields].sort((a, b) => b.id.length - a.id.length)
+    sortedFields.forEach(f => {
       const val = fields[f.id]?.trim()
-      const placeholder = `[${f.id}]`
-      if (val) {
-        prompt = prompt.replace(placeholder, val)
-      }
+      if (!val) return
+      const re = new RegExp('\\[[^\\]]*' + f.id + '\\]', 'g')
+      prompt = prompt.replace(re, val)
     })
 
     prompt = prompt
-      .replace('[MODIFIER]',       state.medModifier)
-      .replace('[GENRE]',          state.medGenre)
-      .replace('[FILMSTOCK]',      state.filmstock)
-      .replace('[EMOTIONAL_HOOK]', fields['EMOTIONAL_HOOK'] || '[EMOTIONAL_HOOK]')
+      .replace(/\[[^\]]*MODIFIER\]/g,  state.medModifier)
+      .replace(/\[[^\]]*GENRE\]/g,     state.medGenre)
+      .replace(/\[[^\]]*FILMSTOCK\]/g, state.filmstock)
+
+    if (fields['EMOTIONAL_HOOK']) {
+      prompt = prompt.replace(/\[[^\]]*EMOTIONAL_HOOK\]/g, fields['EMOTIONAL_HOOK'])
+    }
 
     const paramStr = `${state.ar}${state.rawFlag ? ' --raw' : ''}`
-    prompt = prompt
-      .replace('--ar 16:9 --raw', paramStr)
-      .replace('--ar 16:9 --raw', paramStr)
+    prompt = prompt.replace(/--ar\s+[\d.:]+(\s+--raw)?/g, paramStr)
 
     return prompt
   }, [state])

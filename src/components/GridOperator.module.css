@@ -99,12 +99,13 @@
   line-height: 1;
 }
 
-/* Signature-Section: wenn die Preset-Liste im Signature-Mode angezeigt
-   wird, kriegt sie einen dezenten Gold-Border statt Standard-Subtle.
-   Doppelt-class-Selektor um .section (definiert weiter unten) zu schlagen. */
+/* Signature section: container frame stays neutral teal/subtle so the
+   gold accents (labels, star icons, active item glow) don't drown the
+   whole panel. The gold should be a spotlight on the items themselves,
+   not a wash over the entire frame. */
 .section.signatureSection {
-  border-color: var(--sg-signature-gold-dim);
-  box-shadow: 0 0 0 1px var(--sg-signature-glow-subtle), 0 0 24px var(--sg-signature-glow-subtle);
+  border-color: var(--sg-border-subtle);
+  box-shadow: none;
 }
 
 /* ---- SECTION PANELS ---- */
@@ -130,12 +131,23 @@
   font-weight: 400;
 }
 
-/* ---- PRESET LIST — GROUPED BY CATEGORY ---- */
+/* ---- PRESET LIST — GROUPED BY CATEGORY ----
+   Cap the list height + scroll internally so the downstream sections
+   (Layout, Reference Images, Style Override, Panel Roles) stay visible
+   above the fold instead of forcing a 6-turn mouse-wheel pilgrimage. */
 .presetList {
   display: flex;
   flex-direction: column;
-  gap: var(--sg-space-xl);
+  gap: var(--sg-space-lg);
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-right: -6px;
 }
+.presetList::-webkit-scrollbar { width: 4px; }
+.presetList::-webkit-scrollbar-track { background: transparent; }
+.presetList::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
+.presetList::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
 .presetGroup {
   display: flex;
@@ -175,13 +187,14 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: var(--sg-space-md) var(--sg-space-lg);
+  padding: 8px var(--sg-space-md);
   background: var(--sg-bg-surface-0);
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-md);
   cursor: pointer;
   transition: all var(--sg-transition);
   gap: var(--sg-space-sm);
+  text-align: left;
 }
 .presetItem:hover {
   border-color: var(--sg-signature-gold-dim);
@@ -195,13 +208,14 @@
 
 .presetName {
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-md);
+  font-size: var(--sg-text-sm);
   font-weight: 500;
   color: var(--sg-text-primary);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   display: flex;
   align-items: center;
   gap: var(--sg-space-xs);
+  line-height: 1.25;
 }
 .presetItem.active .presetName {
   color: var(--sg-signature-gold-bright);
@@ -215,9 +229,14 @@
 
 .presetDesc {
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-xs);
+  font-size: 11px;
   color: var(--sg-text-tertiary);
-  line-height: 1.4;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .presetDims {
