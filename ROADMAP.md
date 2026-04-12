@@ -64,12 +64,22 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **3 — GridOperator Komplett-Umbau**
-Stufe 2 (Sprache-Konsistenz EN/DE) komplett abgeschlossen. Alle 2a–2h erledigt. i18n-Infrastruktur, alle Daten-JSONs und alle Components sind durchgehend auf `tData()` + `t_en`/`t_de` umgestellt, Legacy-Felder entfernt.
+### Aktuelle Stufe: **4 — MJ Random komplett neu**
+Stufen 2 + 3 komplett abgeschlossen.
 
-Stufe 2h abgeschlossen: Alle 12 PromptBuilder-Chip-Daten-Dateien migriert (`styles.json` 28 Einträge, `cameras.json` 8, `lenses.json` 8, `focal.json` 9, `aperture.json` 8, `shotsize.json` 12, `cameraangle.json` 7, `lighting.json` 26, `colorgrade.json` 11, `effects.json` 12, `negative.json` 14, `aspectratio.json` 7). Jeder Chip hat jetzt `t_en` + `t_de` statt nur deutschen `t`. PromptBuilder.jsx nutzt `tData(item, 't')`, Fallback-Kette greift, vite build grün (1.32s).
+**Stufe 3 erledigt:** GridOperator umgebaut zu Core-als-Default + SeenGrid Signature (echtes Gold) + dynamischer Preset-Gruppierung nach Category:
+- **Default-Mode:** `core` statt `seengrid`. MODES-Array Reihenfolge: Core → SeenGrid Signature → Custom Grid.
+- **"SeenGrid Signature" Wording** überall: Mode-Button-Label, Badge im Output-Header ("★ SeenGrid Signature"), i18n-Desc-Strings (DE + EN).
+- **Echtes Gold** für Signature-Elemente via neue CSS-Tokens in `theme.css`: `--sg-signature-gold` (#d4a256), `-bright` (#e8bd6b), `-dim` (#a07e3a), `-glow` / `-glow-strong` / `-glow-subtle`, `-gradient`. Teal (`--sg-gold-*`) bleibt Standard für Core/Custom/UI-Chrome.
+- **Mode-Toggle als Pills** statt unauffälliger segmentierter Leiste: einzelne Buttons mit Abstand, Hover-Glow, Border-Color-Transition. Signature-Pill trägt immer dezenten Gold-Border + Gold-Gradient-Background (vor Aktivierung schon erkennbar); wenn aktiv voller Gold-Glow.
+- **Preset-Gruppierung nach Category** statt nach Grid-Size: neue `groupByCategory()`-Funktion liest `_categories.json` (order + label/desc DE/EN), gruppiert die 18 Presets in Character / World / Multi-Shot / Detail / Technical, liest Category-Label via `tData(group.meta, 'label')`. Unbekannte Category fällt automatisch auf "other"-Fallback zurück (robust).
+- **Preset-Item Redesign:** Gold-Border bei hover/active, Gold-Glow bei active, `presetStar` (★) inline vor `presetName` wenn `optimized: true`, `presetDims` Badge (z.B. "3×3") rechts statt Grid-Size-Header.
+- **Signature-Section** mit doppel-class-Selektor (`.section.signatureSection`) kriegt dezenten Gold-Border + Gold-Glow — hebt die Presets-Sektion vom Rest des Controls-Layouts ab.
+- **Vite build grün** (GridOperator bundle 51.32 → 53.22 kB, CSS 11.46 → 13.23 kB wegen neuer Signature-Styles).
 
-Als nächstes kommt Stufe 3 — GridOperator Komplett-Umbau mit Core als Default, "SeenGrid Signature" Wording, goldenem Stern, dynamischer Preset-Gruppierung nach Category.
+**Stufe 2h abgeschlossen:** Alle 12 PromptBuilder-Chip-Daten-Dateien auf `t_en`/`t_de` migriert, Fallback-Kette greift.
+
+Als nächstes kommt Stufe 4 — MJ Random komplett neu mit großen narrativen Pools in `random-pools.json`.
 
 Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
 - **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
@@ -100,14 +110,14 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] 2f: Tooltip-Review — fehlende `title=` Attribute auf SubTabs, Row/Col-Dim-Buttons, Toggles, Save-Fav, Load-more, Card-Copy ergänzt; hardcodete deutsche `weniger`/`mehr` in PromptVault.FavoriteCard durch i18n ersetzt
   - [x] 2g: i18n.json DE/EN-Completeness — beide Blöcke haben 135 Keys, symmetrisch. Sanity-Check nach cross-Language-Strings ergab nur `common.reset: "Reset"` (internationalism, OK)
   - [x] 2h: PromptBuilder-Daten migriert — alle 12 Chip-Daten-Dateien (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) auf `t_en`/`t_de`. Legacy `t` (DE-only) entfernt. Component nutzt `tData(item, 't')`. Vite build grün.
-- [ ] **Stufe 3** — GridOperator Komplett-Umbau:
-  - Default = Core
-  - "SeenGrid Signature" Wording + goldener ★ + Gold-Glow
-  - Preset-Gruppierung nach Use-Case (Character / World / Multi-Shot / Detail / Layout) — dynamisch aus `_categories.json`
-  - Jede Preset-JSON kriegt `category`-Feld
-  - Controls (Layout, Style Override, Panel Roles) nach oben, Preset-Liste collapsible/weiter unten
-  - Mode-Toggle prominenter (Pills statt unauffällige Leiste)
-  - Section-Icons (SVG)
+- [x] **Stufe 3** — GridOperator Komplett-Umbau:
+  - [x] Default = Core
+  - [x] "SeenGrid Signature" Wording + goldener ★ + Gold-Glow (echtes Gold-Token statt Teal)
+  - [x] Preset-Gruppierung nach Category (Character / World / Multi-Shot / Detail / Technical) — dynamisch aus `_categories.json` via `groupByCategory()` + `tData(meta, 'label')`
+  - [x] Jede Preset-JSON hat `category`-Feld (bereits in Stufe 2b erledigt)
+  - [x] Mode-Toggle als Pills (einzelne Buttons mit Abstand + Hover-Glow, Signature-Pill Gold-Border)
+  - [ ] Section-Icons (SVG) — **vertagt auf Stufe 6** (Icon-Sweep über alle Tabs)
+  - [ ] Controls (Layout, Style Override, Panel Roles) nach oben, Preset-Liste collapsible — **offen** (Layout bleibt aktuell wie es ist, da Signature und Core unterschiedliche Controls haben)
 - [ ] **Stufe 4** — MJ Random komplett neu:
   - Neue `src/data/mj/random-pools.json` mit Pools pro Feld-Typ
   - Narrative Pools: 100–200+ Einträge (locations, objects, contexts, figures, hooks, textures, surfaces, details, what-is-dark, what-where, visible-areas, spaces, etc.)

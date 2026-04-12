@@ -21,6 +21,7 @@ import archBlueprint   from '../data/presets/architectural-blueprint-2x2.json'
 import sceneSpatial    from '../data/presets/scene-spatial-layout-2x2.json'
 import charSheet8      from '../data/presets/character-sheet-8view.json'
 import coreTemplates   from '../data/core-templates.json'
+import categoriesData  from '../data/presets/_categories.json'
 
 const ALL_PRESETS = [
   worldZone, multiSingle, multiCross,
@@ -33,26 +34,43 @@ const ALL_PRESETS = [
   charSheet8,
 ]
 
-// Group presets by grid size
-function groupPresets(presets) {
-  const groups = {}
+// Group presets by category using _categories.json metadata.
+// Robust: unknown category → falls into "other". Empty groups not rendered.
+function groupByCategory(presets, catData) {
+  const buckets = {}
   presets.forEach(p => {
-    const key = `${p.rows}×${p.cols}`
-    if (!groups[key]) groups[key] = []
-    groups[key].push(p)
+    const key = p.category && catData.categories[p.category] ? p.category : 'other'
+    if (!buckets[key]) buckets[key] = []
+    buckets[key].push(p)
   })
-  // Sort groups: 3×3 first, then 2×2, then others
-  const order = ['3×3', '2×2', '2×3', '1×4', '1×1', '4×2']
-  const sorted = []
-  order.forEach(k => { if (groups[k]) sorted.push({ key: k, presets: groups[k] }) })
-  // Any remaining
-  Object.keys(groups).forEach(k => {
-    if (!order.includes(k)) sorted.push({ key: k, presets: groups[k] })
+
+  const fallbackMeta = { label_en: 'Other', label_de: 'Andere', desc_en: '', desc_de: '' }
+  const ordered = []
+
+  // Follow explicit order from _categories.json
+  catData.order.forEach(key => {
+    if (buckets[key] && buckets[key].length > 0) {
+      ordered.push({
+        key,
+        meta: catData.categories[key] || fallbackMeta,
+        presets: buckets[key],
+      })
+    }
   })
-  return sorted
+
+  // Append "other" group last if it has items and wasn't in order
+  if (buckets.other && buckets.other.length > 0 && !catData.order.includes('other')) {
+    ordered.push({
+      key: 'other',
+      meta: catData.categories.other || fallbackMeta,
+      presets: buckets.other,
+    })
+  }
+
+  return ordered
 }
 
-const PRESET_GROUPS = groupPresets(ALL_PRESETS)
+const PRESET_GROUPS = groupByCategory(ALL_PRESETS, categoriesData)
 
 function buildRoles(preset) {
   const total = preset.rows * preset.cols
@@ -74,13 +92,15 @@ export default function GridOperator() {
     { id: 'polaroid',   label: 'Polaroid',   promptDesc: 'polaroid-style cells with bottom margin',  desc: t('grid.layout_polaroid_desc') },
   ]
 
+  // Core = Default (ROADMAP Stage 3). Signature steht prominent in der Mitte
+  // mit Gold-Stern; Custom als "kein Overlay"-Option am Ende.
   const MODES = [
-    { id: 'seengrid', label: 'SeenGrid Optimized', star: true,  desc: t('grid.mode_seengrid_desc') },
-    { id: 'core',     label: 'Core',               star: false, desc: t('grid.mode_core_desc') },
-    { id: 'custom',   label: 'Custom Grid',         star: false, desc: t('grid.mode_custom_desc') },
+    { id: 'core',     label: 'Core',              star: false, desc: t('grid.mode_core_desc') },
+    { id: 'seengrid', label: 'SeenGrid Signature', star: true, desc: t('grid.mode_seengrid_desc') },
+    { id: 'custom',   label: 'Custom Grid',       star: false, desc: t('grid.mode_custom_desc') },
   ]
 
-  const [mode, setMode]               = useState('seengrid')
+  const [mode, setMode]               = useState('core')
   const [rows, setRows]               = useState(3)
   const [cols, setCols]               = useState(3)
   const [layout, setLayout]           = useState('even')
@@ -189,12 +209,16 @@ export default function GridOperator() {
       {/* LINKE SPALTE: Controls */}
       <div className={styles.controlsColumn}>
 
-        {/* Mode Toggle */}
+        {/* Mode Toggle — Pills-style. Signature trägt Gold-Glow wenn aktiv. */}
         <div className={styles.modeToggle}>
           {MODES.map(m => (
             <button
               key={m.id}
-              className={[styles.modeToggleBtn, mode === m.id && styles.active].filter(Boolean).join(' ')}
+              className={[
+                styles.modeToggleBtn,
+                m.id === 'seengrid' && styles.signaturePill,
+                mode === m.id && styles.active,
+              ].filter(Boolean).join(' ')}
               onClick={() => setMode(m.id)}
               title={m.desc}
             >
@@ -203,15 +227,20 @@ export default function GridOperator() {
           ))}
         </div>
 
-        {/* SeenGrid Presets — GROUPED */}
+        {/* SeenGrid Signature Presets — grouped by category */}
         {mode === 'seengrid' && (
-          <div className={styles.section}>
-            <p className={styles.sectionTitle}>{t('grid.preset_label')}</p>
+          <div className={[styles.section, styles.signatureSection].join(' ')}>
+            <p className={styles.sectionTitle}>
+              <span className={styles.starIcon}>★</span>{' '}{t('grid.preset_label')}
+            </p>
             <div className={styles.presetList}>
               {PRESET_GROUPS.map(group => (
                 <div key={group.key} className={styles.presetGroup}>
-                  <div className={styles.presetGroupHeader}>
-                    <span className={styles.presetGroupLabel}>{group.key}</span>
+                  <div
+                    className={styles.presetGroupHeader}
+                    title={tData(group.meta, 'desc')}
+                  >
+                    <span className={styles.presetGroupLabel}>{tData(group.meta, 'label')}</span>
                     <span className={styles.presetGroupCount}>{group.presets.length}</span>
                   </div>
                   {group.presets.map(p => (
@@ -222,12 +251,13 @@ export default function GridOperator() {
                       title={tData(p, 'desc')}
                     >
                       <div>
-                        <div className={styles.presetName}>{tData(p, 'label')}</div>
+                        <div className={styles.presetName}>
+                          {p.optimized && <span className={styles.presetStar}>★</span>}
+                          {tData(p, 'label')}
+                        </div>
                         <div className={styles.presetDesc}>{tData(p, 'desc')}</div>
                       </div>
-                      {p.optimized && (
-                        <span className={styles.presetOptBadge}>★</span>
-                      )}
+                      <span className={styles.presetDims}>{p.rows}×{p.cols}</span>
                     </button>
                   ))}
                 </div>
@@ -399,7 +429,7 @@ export default function GridOperator() {
               {mode === 'custom' ? t('grid.free_prompt') : t('grid.generated_prompt')}
             </span>
             {mode === 'seengrid' && (
-              <span className={styles.sgBadge}>★ SeenGrid Optimized</span>
+              <span className={styles.sgBadge}>★ SeenGrid Signature</span>
             )}
           </div>
 

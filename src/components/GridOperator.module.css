@@ -29,19 +29,15 @@
 .controlsColumn::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
 .controlsColumn::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
-/* ---- Operator Mode Toggle ----
-   Hotfix: prominenter machen. Vorher war der Toggle technisch da aber
-   visuell fast unsichtbar (surface-0 bg + subtle border auf app-bg,
-   tertiary text). Wirkte wie leerer Raum zwischen Header und Presets.
-   Stufe 3 verfeinert das später mit Gold-Akzent für SeenGrid Signature. */
+/* ---- Operator Mode Toggle — Pills-style ----
+   Stage 3: Pills mit Hover-Glow, Signature-Pill trägt Gold-Akzent (echtes
+   Gold, nicht Teal). Core + Custom bleiben Teal. Signature ist immer
+   durch den Gold-Stern + Gold-Border hervorgehoben, egal ob aktiv. */
 .modeToggle {
   display: flex;
-  background: var(--sg-bg-surface-2);
-  border: 1px solid var(--sg-border-strong);
-  border-radius: var(--sg-radius-lg);
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
-  min-height: 52px;
+  gap: var(--sg-space-sm);
+  background: transparent;
+  padding: 0;
   flex-shrink: 0;
 }
 
@@ -51,10 +47,11 @@
   font-size: var(--sg-text-md);
   font-weight: 500;
   color: var(--sg-text-secondary);
-  background: transparent;
-  border: none;
-  border-right: 1px solid var(--sg-border-default);
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-default);
+  border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-md) var(--sg-space-lg);
+  min-height: 52px;
   cursor: pointer;
   transition: all var(--sg-transition);
   display: flex;
@@ -62,22 +59,52 @@
   justify-content: center;
   gap: var(--sg-space-sm);
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
-.modeToggleBtn:last-child { border-right: none; }
 .modeToggleBtn:hover {
   color: var(--sg-text-primary);
-  background: var(--sg-bg-surface-3);
+  background: var(--sg-bg-surface-2);
+  border-color: var(--sg-border-strong);
 }
 .modeToggleBtn.active {
   color: var(--sg-text-primary);
-  background: rgba(43, 181, 178, 0.12);
+  background: rgba(43, 181, 178, 0.14);
+  border-color: var(--sg-gold);
   font-weight: 600;
-  box-shadow: inset 0 -2px 0 var(--sg-gold), 0 0 16px rgba(43, 181, 178, 0.12);
+  box-shadow: 0 0 0 1px var(--sg-gold-glow), 0 0 16px var(--sg-gold-glow);
+}
+
+/* Signature pill: echtes Gold statt Teal, sowohl im Ruhezustand
+   (dezenter Gold-Border) als auch aktiv (voller Gold-Glow). */
+.modeToggleBtn.signaturePill {
+  border-color: var(--sg-signature-gold-dim);
+  background: linear-gradient(135deg, rgba(212, 162, 86, 0.04) 0%, rgba(212, 162, 86, 0.08) 100%);
+}
+.modeToggleBtn.signaturePill:hover {
+  border-color: var(--sg-signature-gold);
+  background: linear-gradient(135deg, rgba(212, 162, 86, 0.08) 0%, rgba(212, 162, 86, 0.14) 100%);
+  box-shadow: 0 0 12px var(--sg-signature-glow);
+}
+.modeToggleBtn.signaturePill.active {
+  color: var(--sg-signature-gold-bright);
+  background: linear-gradient(135deg, rgba(212, 162, 86, 0.14) 0%, rgba(212, 162, 86, 0.22) 100%);
+  border-color: var(--sg-signature-gold);
+  box-shadow: 0 0 0 1px var(--sg-signature-glow-strong), 0 0 20px var(--sg-signature-glow-strong);
 }
 
 .starIcon {
-  color: var(--sg-gold);
-  text-shadow: 0 0 6px rgba(43, 181, 178, 0.4);
+  color: var(--sg-signature-gold-bright);
+  text-shadow: 0 0 6px var(--sg-signature-glow-strong);
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+/* Signature-Section: wenn die Preset-Liste im Signature-Mode angezeigt
+   wird, kriegt sie einen dezenten Gold-Border statt Standard-Subtle.
+   Doppelt-class-Selektor um .section (definiert weiter unten) zu schlagen. */
+.section.signatureSection {
+  border-color: var(--sg-signature-gold-dim);
+  box-shadow: 0 0 0 1px var(--sg-signature-glow-subtle), 0 0 24px var(--sg-signature-glow-subtle);
 }
 
 /* ---- SECTION PANELS ---- */
@@ -103,11 +130,11 @@
   font-weight: 400;
 }
 
-/* ---- PRESET LIST — GROUPED ---- */
+/* ---- PRESET LIST — GROUPED BY CATEGORY ---- */
 .presetList {
   display: flex;
   flex-direction: column;
-  gap: var(--sg-space-lg);
+  gap: var(--sg-space-xl);
 }
 
 .presetGroup {
@@ -120,16 +147,18 @@
   display: flex;
   align-items: center;
   gap: var(--sg-space-sm);
-  padding: var(--sg-space-xs) 0;
+  padding: var(--sg-space-xs) 0 var(--sg-space-sm) 0;
   margin-bottom: var(--sg-space-xs);
+  border-bottom: 1px solid var(--sg-signature-glow-subtle);
 }
 
 .presetGroupLabel {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
   font-weight: 600;
-  color: var(--sg-gold);
-  letter-spacing: 0.08em;
+  color: var(--sg-signature-gold-bright);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .presetGroupCount {
@@ -137,8 +166,9 @@
   font-size: 10px;
   color: var(--sg-text-disabled);
   background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-signature-glow-subtle);
   border-radius: 3px;
-  padding: 0 4px;
+  padding: 1px 5px;
 }
 
 .presetItem {
@@ -154,12 +184,13 @@
   gap: var(--sg-space-sm);
 }
 .presetItem:hover {
-  border-color: var(--sg-border-default);
+  border-color: var(--sg-signature-gold-dim);
   background: var(--sg-bg-surface-2);
 }
 .presetItem.active {
-  border-color: var(--sg-gold-dim);
-  background: var(--sg-chip-bg-active);
+  border-color: var(--sg-signature-gold);
+  background: rgba(212, 162, 86, 0.08);
+  box-shadow: 0 0 12px var(--sg-signature-glow);
 }
 
 .presetName {
@@ -168,9 +199,18 @@
   font-weight: 500;
   color: var(--sg-text-primary);
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: var(--sg-space-xs);
 }
 .presetItem.active .presetName {
-  color: var(--sg-gold-text);
+  color: var(--sg-signature-gold-bright);
+}
+
+.presetStar {
+  color: var(--sg-signature-gold-bright);
+  text-shadow: 0 0 6px var(--sg-signature-glow-strong);
+  font-size: 0.85em;
 }
 
 .presetDesc {
@@ -180,10 +220,27 @@
   line-height: 1.4;
 }
 
+.presetDims {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  color: var(--sg-text-disabled);
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: 3px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+.presetItem.active .presetDims {
+  color: var(--sg-signature-gold);
+  border-color: var(--sg-signature-gold-dim);
+}
+
 .presetOptBadge {
   font-size: var(--sg-text-md);
-  color: var(--sg-gold);
-  text-shadow: 0 0 8px rgba(43, 181, 178, 0.4);
+  color: var(--sg-signature-gold-bright);
+  text-shadow: 0 0 8px var(--sg-signature-glow-strong);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -352,9 +409,9 @@
 .refBadge {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
-  color: var(--sg-gold);
-  background: rgba(43, 181, 178, 0.12);
-  border: 1px solid rgba(43, 181, 178, 0.25);
+  color: var(--sg-signature-gold-bright);
+  background: rgba(212, 162, 86, 0.12);
+  border: 1px solid var(--sg-signature-glow-strong);
   border-radius: 3px;
   padding: 1px 6px;
 }
@@ -496,8 +553,10 @@
 .sgBadge {
   font-family: var(--sg-font-body);
   font-size: var(--sg-text-xs);
-  color: var(--sg-gold);
+  color: var(--sg-signature-gold-bright);
+  text-shadow: 0 0 6px var(--sg-signature-glow);
   letter-spacing: 0.02em;
+  font-weight: 500;
 }
 
 .outputBox {
@@ -553,7 +612,7 @@
 .presetInfoTitle {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
-  color: var(--sg-gold);
+  color: var(--sg-signature-gold-bright);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 4px;

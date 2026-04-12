@@ -32,6 +32,17 @@
   --sg-teal-dim:         #1e8785;
   --sg-teal-glow:        rgba(43, 181, 178, 0.15);
 
+  /* SIGNATURE GOLD: echtes Gold für SeenGrid Signature Elemente
+     (Stern, Signature-Mode-Button, Signature-Preset-Gruppen, Badges).
+     Teal bleibt die Standard-Akzentfarbe für Core/Custom/UI. */
+  --sg-signature-gold:        #d4a256;
+  --sg-signature-gold-bright: #e8bd6b;
+  --sg-signature-gold-dim:    #a07e3a;
+  --sg-signature-glow:        rgba(212, 162, 86, 0.14);
+  --sg-signature-glow-strong: rgba(212, 162, 86, 0.28);
+  --sg-signature-glow-subtle: rgba(212, 162, 86, 0.07);
+  --sg-signature-gradient:    linear-gradient(135deg, #d4a256 0%, #e8bd6b 100%);
+
   --sg-success:          #2ea043;
   --sg-warning:          #d4952a;
   --sg-error:            #c44040;
