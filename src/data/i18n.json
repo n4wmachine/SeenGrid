@@ -6,12 +6,12 @@
     "common.reset": "Reset",
     "common.optional": "optional",
 
-    "tabs.builder.label": "Prompt Builder",
-    "tabs.builder.desc": "NanoBanana-optimiert",
+    "tabs.builder.label": "NanoBanana Studio",
+    "tabs.builder.desc": "Chip Prompt Stack \u2014 NanoBanana / Seedream / GPT Image",
     "tabs.grid.label": "Grid Operator",
     "tabs.grid.desc": "World Boards & Multi-Shot",
-    "tabs.mj.label": "MJ Startframe",
-    "tabs.mj.desc": "5-Element Architektur",
+    "tabs.mj.label": "Midjourney Studio",
+    "tabs.mj.desc": "5-Element Startframe Architektur",
     "tabs.vault.label": "Prompt Vault",
     "tabs.vault.desc": "1500+ Community Prompts",
 
@@ -150,12 +150,12 @@
     "common.reset": "Reset",
     "common.optional": "optional",
 
-    "tabs.builder.label": "Prompt Builder",
-    "tabs.builder.desc": "NanoBanana-optimized",
+    "tabs.builder.label": "NanoBanana Studio",
+    "tabs.builder.desc": "Chip Prompt Stack \u2014 NanoBanana / Seedream / GPT Image",
     "tabs.grid.label": "Grid Operator",
     "tabs.grid.desc": "World Boards & Multi-Shot",
-    "tabs.mj.label": "MJ Startframe",
-    "tabs.mj.desc": "5-Element Architecture",
+    "tabs.mj.label": "Midjourney Studio",
+    "tabs.mj.desc": "5-Element Startframe Architecture",
     "tabs.vault.label": "Prompt Vault",
     "tabs.vault.desc": "1500+ Community Prompts",
 

@@ -7,10 +7,17 @@
 ## 1. DESIGN-ENTSCHEIDUNGEN (festgelegt, nicht mehr diskutieren)
 
 ### Naming & Terminologie
+- **Tab-Namen (parallel, brand-basiert):**
+  - `NanoBanana Studio` (vorher "Prompt Builder") — Chip-Stack für NanoBanana/Seedream/GPT Image, alle NanoBanana-optimierten Prompts
+  - `Grid Operator` — Multi-Shot & World Boards (modellagnostisch)
+  - `Midjourney Studio` (vorher "MJ Startframe") — 5-Element Startframe-Architektur, MJ-spezifisch
+  - `Vault` — Community-Prompts
+  - **Regel:** Neue Model-Module kriegen eigene Tabs nach demselben Muster (z.B. später `Kling Studio`, `Seedance Studio`). Kein Merge verschiedener Model-UIs in einen Tab mit Mode-Switch — State-Shapes und UIs sind fundamental unterschiedlich.
 - **Random-Modi:** `Beat` / `Look` / `Full Scene`
   - **Beat** = nur narrative Felder (Location, Object, Figure, Context, Hook). Filmbegriff für Story-Moment.
   - **Look** = nur visuelle Parameter (Filmstock, AR, Modifier, Genre, Light, Perspective, Direction, Time-of-Day). Bildsprache.
   - **Full Scene** = alles zusammen.
+  - **Gilt für BEIDE Studios** (NanoBanana + Midjourney). Beide brauchen den gleichen Toggle-Umbau.
 - **SeenGrid Optimized → `SeenGrid Signature`** (mit goldenem Stern ★)
 - **Grid-Modi:** `Core` (default) / `SeenGrid Signature` / `Custom Grid`
 - **Default-Mode beim Öffnen:** `Core` (Mittelweg — Signature für Anfänger, Custom für Profis, Core für alle dazwischen)
@@ -64,8 +71,14 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **4 — MJ Random komplett neu**
-Stufen 2 + 3 komplett abgeschlossen.
+### Aktuelle Stufe: **4 — Random-Generatoren komplett neu (beide Studios)**
+Stufen 2 + 3 komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `Midjourney Studio` + `Grid Operator` + `Vault` (parallele Brand-Namen statt "Prompt Builder" / "MJ Startframe" — konsistent, skaliert sauber für Kling/Seedance später).
+
+**Stufe 4 deckt BEIDE Random-Generatoren ab** — sowohl NanoBanana Studio als auch Midjourney Studio brauchen denselben Architektur-Umbau: `Beat / Look / Full Scene` Toggle, große Pool-basierte Zufallsquelle statt kleiner vorgebackener Objekte, Anti-Repetition pro Pool. Split in 4a (MJ) + 4b (NB).
+
+**Aktueller Zustand beider `handleRandom`:**
+- **Midjourney Studio** (`MJStartframe.jsx:123`): Pickt EIN `random-scenes.json` Objekt (41 pre-baked Scenes), liest dessen `location/time/light/dark/surfaces/perspective/modifier/genre`. Kein Beat/Look-Toggle, kein Pool-per-Field-Lookup, keine Anti-Repetition. `rawFlag` random 70/30.
+- **NanoBanana Studio** (`PromptBuilder.jsx:141`): Baut Scene als primitive Concat `${setting}. ${subject} ${action}. ${mood}` aus `random/{settings,subjects,actions,moods}.json` (93/121/144/50). Chip-Random mit 15% null-Chance, pickMulti 0-2. Kein Beat/Look-Toggle, keine Anti-Repetition, kein Sensory Stacking im Scene-Text.
 
 **Stufe 3 erledigt:** GridOperator umgebaut zu Core-als-Default + SeenGrid Signature (echtes Gold) + dynamischer Preset-Gruppierung nach Category:
 - **Default-Mode:** `core` statt `seengrid`. MODES-Array Reihenfolge: Core → SeenGrid Signature → Custom Grid.
@@ -118,14 +131,25 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] Mode-Toggle als Pills (einzelne Buttons mit Abstand + Hover-Glow, Signature-Pill Gold-Border)
   - [ ] Section-Icons (SVG) — **vertagt auf Stufe 6** (Icon-Sweep über alle Tabs)
   - [ ] Controls (Layout, Style Override, Panel Roles) nach oben, Preset-Liste collapsible — **offen** (Layout bleibt aktuell wie es ist, da Signature und Core unterschiedliche Controls haben)
-- [ ] **Stufe 4** — MJ Random komplett neu:
-  - Neue `src/data/mj/random-pools.json` mit Pools pro Feld-Typ
-  - Narrative Pools: 100–200+ Einträge (locations, objects, contexts, figures, hooks, textures, surfaces, details, what-is-dark, what-where, visible-areas, spaces, etc.)
-  - Visuelle Pools: 30–60 Einträge (filmstock, modifier, genre, directions, perspectives, times)
-  - Total ~1500–2000 narrative Bausteine
-  - Neuer `handleRandom`: iteriert über `tpl.fields`, zieht pro `field.id` aus passendem Pool, fallback auf `field.examples[0]`
-  - Anti-Wiederholung: letzte 8 gezogene pro Pool im State ausschließen
-  - `Beat / Look / Full Scene` Toggle neben Random-Button
+- [ ] **Stufe 4** — Random-Generatoren komplett neu (BEIDE Studios):
+  - [ ] **4a: Midjourney Studio Random**
+    - Neue `src/data/mj/random-pools.json` mit Pools pro Feld-Typ
+    - Narrative Pools: 100–200+ Einträge (locations, objects, contexts, figures, hooks, textures, surfaces, details, what-is-dark, what-where, visible-areas, spaces, etc.)
+    - Visuelle Pools: 30–60 Einträge (filmstock, modifier, genre, directions, perspectives, times)
+    - Total ~1500–2000 narrative Bausteine
+    - Neuer `handleRandom`: iteriert über `tpl.fields`, zieht pro `field.id` aus passendem Pool, fallback auf `field.examples[0]`
+    - Anti-Wiederholung: letzte 8 gezogene pro Pool im State ausschließen
+    - `Beat / Look / Full Scene` Toggle neben Random-Button
+  - [ ] **4b: NanoBanana Studio Random**
+    - Scene-Konstruktion umbauen: statt primitive Concat `${setting}. ${subject} ${action}. ${mood}` jetzt Sensory-Stacking-Template-basiert aus `src/data/random/scene-patterns.json` (mehrere Satzmuster, z.B. `"{setting}. {subject} {action}, {sensory_detail}. {mood}, {atmosphere}"`)
+    - Neue/erweiterte Pools: `sensory-details.json`, `atmospheres.json`, `textures.json` zusätzlich zu bestehenden settings/subjects/actions/moods
+    - Bestehende Pools auffüllen (settings 93→200+, subjects 121→200+, actions 144→200+, moods 50→100+)
+    - Chip-Random mit `Look`-Semantik: zieht aus allen 12 Chip-Daten-Dateien, mit gewichteter Aperture/Focal/Lens-Kombination (realistisch statt rein random)
+    - Anti-Wiederholung: letzte 8 pro Pool
+    - `Beat / Look / Full Scene` Toggle neben Random-Button (identisch zu 4a)
+    - `Beat` = nur Scene-Textarea re-roll (chips bleiben)
+    - `Look` = nur Chips re-roll (Scene bleibt)
+    - `Full Scene` = beides
 - [ ] **Stufe 5** — Header / Logo / Tab-Optik:
   - Logo-Datei inspizieren (PNG vs SVG?)
   - 2 Varianten bauen: (a) SVG mit currentColor + Glow (b) mix-blend-mode bei PNG
