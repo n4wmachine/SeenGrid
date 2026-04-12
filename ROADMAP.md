@@ -92,7 +92,9 @@ Stufen 2 + 3 komplett abgeschlossen. Tabs umbenannt auf `NanoBanana Studio` + `M
 
 **Stufe 2h abgeschlossen:** Alle 12 PromptBuilder-Chip-Daten-Dateien auf `t_en`/`t_de` migriert, Fallback-Kette greift.
 
-Als nächstes kommt Stufe 4 — MJ Random komplett neu mit großen narrativen Pools in `random-pools.json`.
+**Stufe 4a abgeschlossen:** MJ Random komplett neu. 22 Pools mit 1433 Einträgen in `src/data/mj/random-pools.json`. `_meta.narrative_fields` / `_meta.visual_fields` Klassifikation für Beat/Look Routing. Neuer `handleRandom(mode)` mit Anti-Repetition (letzte 8 pro Pool). Beat/Look/Full Scene Pills-Toggle über dem Random-Button, Default `full`. Beat = nur narrative Felder (Szene bleibt), Look = nur visuelle Parameter (Motiv bleibt), Full = alles inkl. neues Template. `random-scenes.json` gelöscht, alter Scene-basierter Random-Pfad entfernt. Vite build clean. i18n Keys `mj.random_mode_*` in beiden Sprachen.
+
+Als nächstes kommt Stufe 4b — NanoBanana Studio Random komplett neu (Sensory-Stacking Scene-Patterns + erweiterte Pools + Beat/Look/Full Toggle).
 
 Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
 - **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
@@ -132,14 +134,19 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [ ] Section-Icons (SVG) — **vertagt auf Stufe 6** (Icon-Sweep über alle Tabs)
   - [ ] Controls (Layout, Style Override, Panel Roles) nach oben, Preset-Liste collapsible — **offen** (Layout bleibt aktuell wie es ist, da Signature und Core unterschiedliche Controls haben)
 - [ ] **Stufe 4** — Random-Generatoren komplett neu (BEIDE Studios):
-  - [ ] **4a: Midjourney Studio Random**
-    - Neue `src/data/mj/random-pools.json` mit Pools pro Feld-Typ
-    - Narrative Pools: 100–200+ Einträge (locations, objects, contexts, figures, hooks, textures, surfaces, details, what-is-dark, what-where, visible-areas, spaces, etc.)
-    - Visuelle Pools: 30–60 Einträge (filmstock, modifier, genre, directions, perspectives, times)
-    - Total ~1500–2000 narrative Bausteine
-    - Neuer `handleRandom`: iteriert über `tpl.fields`, zieht pro `field.id` aus passendem Pool, fallback auf `field.examples[0]`
-    - Anti-Wiederholung: letzte 8 gezogene pro Pool im State ausschließen
-    - `Beat / Look / Full Scene` Toggle neben Random-Button
+  - [x] **4a: Midjourney Studio Random** ✅
+    - [x] Neue `src/data/mj/random-pools.json` mit 22 Pools (1433 Einträge)
+    - [x] Narrative Pools: LOCATION(122), LIGHT_SOURCE(102), DETAILS(102), WHAT_IS_DARK(81), EMOTIONAL_HOOK(80), SPACE(81), WHAT_WHERE(69), SURFACE_TEXTURE(70), OBJECT(102), CONTEXT(81), WHAT(69), TEXTURE(69), FIGURE(80), VISIBLE_AREA(60), SURFACE(70)
+    - [x] Visuelle Pools: MODIFIER(40), GENRE(30), PERSPECTIVE(30), TIME_OF_DAY(40), DARK_BLUR(15), SHADOW(15), DIRECTION(25)
+    - [x] `_meta.narrative_fields` / `_meta.visual_fields` Klassifikation für Beat/Look Routing
+    - [x] Neuer `handleRandom(mode)`: iteriert über `tpl.fields`, zieht pro `field.id` aus passendem Pool, fallback auf `field.examples`
+    - [x] Anti-Wiederholung: `recentPicks` State, letzte 8 pro Pool ausgeschlossen, dynamisch an Poolgröße angepasst
+    - [x] `Beat / Look / Full Scene` Pills-Toggle über Random-Button; `randomMode` State, Default `full`
+    - [x] Beat = nur narrative Felder (LOCATION, OBJECT, LIGHT_SOURCE, …), Template + Look bleiben
+    - [x] Look = nur visuelle Parameter (Modifier, Genre, Filmstock, AR, Perspective, …), Szene bleibt
+    - [x] Full Scene = alles inkl. neuem Template, kompletter Reset
+    - [x] `random-scenes.json` gelöscht
+    - [x] Vite build clean
   - [ ] **4b: NanoBanana Studio Random**
     - Scene-Konstruktion umbauen: statt primitive Concat `${setting}. ${subject} ${action}. ${mood}` jetzt Sensory-Stacking-Template-basiert aus `src/data/random/scene-patterns.json` (mehrere Satzmuster, z.B. `"{setting}. {subject} {action}, {sensory_detail}. {mood}, {atmosphere}"`)
     - Neue/erweiterte Pools: `sensory-details.json`, `atmospheres.json`, `textures.json` zusätzlich zu bestehenden settings/subjects/actions/moods

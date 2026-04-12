@@ -9,7 +9,7 @@ import forbiddenData  from '../data/mj/forbidden.json'
 import genreData      from '../data/mj/genres.json'
 import modifierData   from '../data/mj/modifiers.json'
 import hookData       from '../data/mj/emotional-hooks.json'
-import randomSceneData from '../data/mj/random-scenes.json'
+import randomPoolsData from '../data/mj/random-pools.json'
 
 const AR_OPTIONS = [
   { v: '--ar 16:9',    t: 'Widescreen — standard',        t_en: 'Widescreen — standard',        t_de: 'Breitbild — Standard' },
@@ -54,6 +54,8 @@ export default function MJStartframe() {
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
   const [warnings, setWarnings] = useState([])
+  const [randomMode, setRandomMode] = useState('full')
+  const [recentPicks, setRecentPicks] = useState({})
 
   function handleSaveFav() {
     addFavorite({ id: 'mj-' + Date.now(), text: output, source: 'mj', imageUrls: [] })
@@ -120,34 +122,77 @@ export default function MJStartframe() {
     } catch { /* noop */ }
   }
 
-  function handleRandom() {
-    const scene = randomSceneData[Math.floor(Math.random() * randomSceneData.length)]
-    const hook  = hookData[Math.floor(Math.random() * hookData.length)].v
-    const stock = filmstockData[Math.floor(Math.random() * filmstockData.length)].v
-    const mod   = modifierData[Math.floor(Math.random() * modifierData.length)].v
-    const genre = genreData[Math.floor(Math.random() * genreData.length)].v
-    const ar    = AR_OPTIONS[Math.floor(Math.random() * AR_OPTIONS.length)].v
-    const tpl   = templatesData[Math.floor(Math.random() * templatesData.length)]
-    const fields = initFields(tpl)
+  function handleRandom(mode = randomMode) {
+    const pools = randomPoolsData
+    const narrative = new Set(pools._meta.narrative_fields)
+    const visual    = new Set(pools._meta.visual_fields)
 
-    // Fill all available fields from random scene data
-    if ('LOCATION'       in fields) fields['LOCATION']       = scene.location  || ''
-    if ('TIME_OF_DAY'    in fields) fields['TIME_OF_DAY']    = scene.time      || ''
-    if ('LIGHT_SOURCE'   in fields) fields['LIGHT_SOURCE']   = scene.light     || ''
-    if ('WHAT_IS_DARK'   in fields) fields['WHAT_IS_DARK']   = scene.dark      || ''
-    if ('EMOTIONAL_HOOK' in fields) fields['EMOTIONAL_HOOK'] = hook
-    if ('SURFACES'       in fields) fields['SURFACES']       = scene.surfaces  || ''
-    if ('PERSPECTIVE'    in fields) fields['PERSPECTIVE']    = scene.perspective || ''
+    // Anti-repetition: track last N picks per pool, exclude them from next pick
+    const MEMORY = 8
+    const newRecent = { ...recentPicks }
+    function pickFromPool(key, arr) {
+      if (!arr || arr.length === 0) return null
+      const mem = newRecent[key] || []
+      const fresh = arr.filter(v => !mem.includes(v))
+      const src = fresh.length > 0 ? fresh : arr
+      const choice = src[Math.floor(Math.random() * src.length)]
+      const nextMem = [...mem, choice].slice(-Math.min(MEMORY, arr.length - 1))
+      newRecent[key] = nextMem
+      return choice
+    }
 
-    setState({
-      selectedTemplate: tpl,
-      fields,
-      filmstock: stock,
-      medModifier: scene.modifier || mod,
-      medGenre: scene.genre || genre,
-      ar,
-      rawFlag: Math.random() > 0.3,
+    // Full mode: also roll a new template. Beat/Look keep the selected template.
+    const tpl = mode === 'full'
+      ? templatesData[Math.floor(Math.random() * templatesData.length)]
+      : state.selectedTemplate
+
+    // Start with fresh fields for full mode, preserve current for beat/look
+    const baseFields = mode === 'full' ? initFields(tpl) : { ...state.fields }
+
+    tpl.fields.forEach(field => {
+      const fid = field.id
+      // MODIFIER / GENRE are handled via medium-anchor state below (visual)
+      if (fid === 'MODIFIER' || fid === 'GENRE') return
+
+      const isNarr = narrative.has(fid)
+      const isVis  = visual.has(fid)
+      const shouldRoll =
+        mode === 'full' ||
+        (mode === 'beat' && isNarr) ||
+        (mode === 'look' && isVis)
+
+      if (!shouldRoll) return
+
+      const pool = pools[fid]
+      const picked = pickFromPool(fid, pool)
+      if (picked) {
+        baseFields[fid] = picked
+      } else if (field.examples?.length > 0) {
+        baseFields[fid] = field.examples[Math.floor(Math.random() * field.examples.length)]
+      }
     })
+
+    // EMOTIONAL_HOOK is narrative — also pull from hookData as a secondary source
+    if ((mode === 'full' || mode === 'beat') && tpl.fields.some(f => f.id === 'EMOTIONAL_HOOK')) {
+      // 50/50 split: pool hooks vs curated hookData
+      if (Math.random() < 0.5 && hookData.length > 0) {
+        baseFields['EMOTIONAL_HOOK'] = pickFromPool('EMOTIONAL_HOOK_HOOKDATA', hookData.map(h => h.v))
+      }
+    }
+
+    const newState = { ...state, selectedTemplate: tpl, fields: baseFields }
+
+    // Visual / look parameters: filmstock, modifier, genre, ar, raw
+    if (mode === 'full' || mode === 'look') {
+      newState.filmstock   = pickFromPool('FILMSTOCK',    filmstockData.map(f => f.v))
+      newState.medModifier = pickFromPool('MED_MODIFIER', modifierData.map(m => m.v))
+      newState.medGenre    = pickFromPool('MED_GENRE',    genreData.map(g => g.v))
+      newState.ar          = pickFromPool('AR',           AR_OPTIONS.map(a => a.v))
+      newState.rawFlag     = Math.random() > 0.2
+    }
+
+    setRecentPicks(newRecent)
+    setState(newState)
     setWarnings([])
   }
 
@@ -170,7 +215,7 @@ export default function MJStartframe() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [output])
+  }, [output, randomMode, state, recentPicks])
 
   const hasContent = !output.includes('[')
 
@@ -394,8 +439,32 @@ export default function MJStartframe() {
       {/* RECHTE SPALTE: Sticky Output */}
       <div className={styles.outputColumn}>
 
+        <div className={styles.randomModeRow}>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('beat')}
+            title={t('mj.random_mode_beat_title')}
+          >
+            {t('mj.random_mode_beat')}
+          </button>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('look')}
+            title={t('mj.random_mode_look_title')}
+          >
+            {t('mj.random_mode_look')}
+          </button>
+          <button
+            className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
+            onClick={() => setRandomMode('full')}
+            title={t('mj.random_mode_full_title')}
+          >
+            {t('mj.random_mode_full')}
+          </button>
+        </div>
+
         <div className={styles.outputControls}>
-          <button className={styles.ghostBtn} onClick={handleRandom} title="⌘⇧R">
+          <button className={styles.ghostBtn} onClick={() => handleRandom()} title="⌘⇧R">
             <DiceIcon /> {t('common.random')}
           </button>
           <button className={styles.ghostBtn} onClick={handleReset} title={t('mj.reset_title')}>
