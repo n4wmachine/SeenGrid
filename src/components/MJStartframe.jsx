@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import styles from './MJStartframe.module.css'
 import { useLang } from '../context/LangContext.jsx'
 import { useFavorites } from '../hooks/useFavorites.js'
@@ -18,6 +18,12 @@ const AR_OPTIONS = [
   { v: '--ar 4:3',     t: 'Enge, Porträt, Retro' },
   { v: '--ar 9:16',    t: 'Vertikal / Mobile' },
   { v: '--ar 1:1',     t: 'Quadratisch' },
+]
+
+const SUB_TABS = [
+  { id: 'fields',    label: 'Felder' },
+  { id: 'templates', label: 'Templates & Medium' },
+  { id: 'params',    label: 'Filmstock & Parameter' },
 ]
 
 function initState() {
@@ -43,6 +49,8 @@ export default function MJStartframe() {
   const [state, setState] = useState(initState)
   const [copied, setCopied]     = useState(false)
   const [showForbidden, setShowForbidden] = useState(false)
+  const [hooksOpen, setHooksOpen] = useState(false)
+  const [activeSubTab, setActiveSubTab] = useState('fields')
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
   const [warnings, setWarnings] = useState([])
@@ -116,14 +124,30 @@ export default function MJStartframe() {
     const scene = randomSceneData[Math.floor(Math.random() * randomSceneData.length)]
     const hook  = hookData[Math.floor(Math.random() * hookData.length)].v
     const stock = filmstockData[Math.floor(Math.random() * filmstockData.length)].v
+    const mod   = modifierData[Math.floor(Math.random() * modifierData.length)].v
+    const genre = genreData[Math.floor(Math.random() * genreData.length)].v
+    const ar    = AR_OPTIONS[Math.floor(Math.random() * AR_OPTIONS.length)].v
     const tpl   = templatesData[Math.floor(Math.random() * templatesData.length)]
     const fields = initFields(tpl)
-    if ('LOCATION'    in fields) fields['LOCATION']      = scene.location
-    if ('TIME_OF_DAY' in fields) fields['TIME_OF_DAY']   = scene.time
-    if ('LIGHT_SOURCE'in fields) fields['LIGHT_SOURCE']  = scene.light
-    if ('WHAT_IS_DARK'in fields) fields['WHAT_IS_DARK']  = scene.dark
+
+    // Fill all available fields from random scene data
+    if ('LOCATION'       in fields) fields['LOCATION']       = scene.location  || ''
+    if ('TIME_OF_DAY'    in fields) fields['TIME_OF_DAY']    = scene.time      || ''
+    if ('LIGHT_SOURCE'   in fields) fields['LIGHT_SOURCE']   = scene.light     || ''
+    if ('WHAT_IS_DARK'   in fields) fields['WHAT_IS_DARK']   = scene.dark      || ''
     if ('EMOTIONAL_HOOK' in fields) fields['EMOTIONAL_HOOK'] = hook
-    setState(prev => ({ ...prev, selectedTemplate: tpl, fields, filmstock: stock, medModifier: scene.modifier, medGenre: scene.genre }))
+    if ('SURFACES'       in fields) fields['SURFACES']       = scene.surfaces  || ''
+    if ('PERSPECTIVE'    in fields) fields['PERSPECTIVE']    = scene.perspective || ''
+
+    setState({
+      selectedTemplate: tpl,
+      fields,
+      filmstock: stock,
+      medModifier: scene.modifier || mod,
+      medGenre: scene.genre || genre,
+      ar,
+      rawFlag: Math.random() > 0.3,
+    })
     setWarnings([])
   }
 
@@ -132,15 +156,27 @@ export default function MJStartframe() {
     setWarnings([])
   }
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    function onKeyDown(e) {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault()
+        handleCopy()
+      }
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'R') {
+        e.preventDefault()
+        handleRandom()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  })
+
   const hasContent = !output.includes('[')
 
-  const ARCH_STEPS = [
-    { n: '1', labelKey: 'mj.step1_label', descKey: 'mj.step1_desc', required: true },
-    { n: '2', labelKey: 'mj.step2_label', descKey: 'mj.step2_desc', required: true },
-    { n: '3', labelKey: 'mj.step3_label', descKey: 'mj.step3_desc', required: true },
-    { n: '4', labelKey: 'mj.step4_label', descKey: 'mj.step4_desc', required: false },
-    { n: '5', labelKey: 'mj.step5_label', descKey: 'mj.step5_desc', required: true },
-  ]
+  // Count filled fields for sub-tab badges
+  const filledFieldCount = Object.values(state.fields).filter(v => v?.trim()).length
+  const totalFieldCount = state.selectedTemplate.fields.filter(f => f.id !== 'MODIFIER' && f.id !== 'GENRE' && f.id !== 'FILMSTOCK').length
 
   return (
     <div className={styles.container}>
@@ -148,154 +184,206 @@ export default function MJStartframe() {
       {/* LINKE SPALTE: Builder */}
       <div className={styles.builderColumn}>
 
-        {/* 5-Element Architektur */}
-        <div className={styles.architectureBox}>
-          <p className={styles.architectureTitle}>{t('mj.arch_title')}</p>
-          <div className={styles.architectureList}>
-            {ARCH_STEPS.map(step => (
-              <div key={step.n} className={styles.architectureItem}>
-                <span className={styles.architectureNumber}>{step.n}</span>
-                <div>
-                  <span className={styles.architectureLabel}>{t(step.labelKey)}</span>
-                  <span className={styles.architectureDesc}> — {t(step.descKey)}</span>
-                  {step.required && <span className={styles.requiredDot} />}
-                </div>
+        {/* Sub-Tab Navigation */}
+        <div className={styles.subTabNav}>
+          {SUB_TABS.map(tab => (
+            <button
+              key={tab.id}
+              className={[styles.subTabBtn, activeSubTab === tab.id && styles.active].filter(Boolean).join(' ')}
+              onClick={() => setActiveSubTab(tab.id)}
+            >
+              {tab.label}
+              {tab.id === 'fields' && filledFieldCount > 0 && (
+                <span className={styles.subTabBadge}>{filledFieldCount}/{totalFieldCount}</span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* ═══ SUB-TAB: Felder ═══ */}
+        {activeSubTab === 'fields' && (
+          <>
+            {/* 5-Element Architektur — compact */}
+            <div className={styles.architectureBox}>
+              <p className={styles.architectureTitle}>{t('mj.arch_title')}</p>
+              <div className={styles.architectureList}>
+                {[
+                  { n: '1', labelKey: 'mj.step1_label', req: true },
+                  { n: '2', labelKey: 'mj.step2_label', req: true },
+                  { n: '3', labelKey: 'mj.step3_label', req: true },
+                  { n: '4', labelKey: 'mj.step4_label', req: false },
+                  { n: '5', labelKey: 'mj.step5_label', req: true },
+                ].map(step => (
+                  <span key={step.n} className={styles.archStep}>
+                    <span className={styles.archNum}>{step.n}</span>
+                    <span className={styles.archLabel}>{t(step.labelKey)}</span>
+                    {step.req && <span className={styles.requiredDot} />}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Shot Template */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.shot_template')}</p>
-          <div className={styles.chipGrid}>
-            {templatesData.map(tpl => (
+            {/* Template Fields */}
+            <div className={styles.section}>
+              <p className={styles.sectionTitle}>{t('mj.fill_fields')}</p>
+              <p className={styles.templateIndicator}>
+                Template: {state.selectedTemplate.label}
+              </p>
+              <div className={styles.fieldGroup}>
+                {state.selectedTemplate.fields
+                  .filter(f => f.id !== 'MODIFIER' && f.id !== 'GENRE' && f.id !== 'FILMSTOCK')
+                  .map(field => (
+                    <FieldInput
+                      key={field.id}
+                      field={field}
+                      value={state.fields[field.id] || ''}
+                      onChange={v => updateField(field.id, v)}
+                      lightSourceHint={t('mj.light_source_hint')}
+                      styles={styles}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+
+            {/* Emotional Hooks — Collapsible */}
+            <div className={styles.section}>
               <button
-                key={tpl.id}
-                className={`chip${state.selectedTemplate.id === tpl.id ? ' active' : ''}`}
-                onClick={() => setTemplate(tpl)}
-                title={tpl.desc}
+                className={styles.collapsibleHeader}
+                onClick={() => setHooksOpen(p => !p)}
               >
-                {tpl.label}
+                <span className={styles.sectionTitle} style={{ marginBottom: 0 }}>
+                  {t('mj.hook_label')}
+                  {state.fields['EMOTIONAL_HOOK'] && (
+                    <span className={styles.hookPreview}>"{state.fields['EMOTIONAL_HOOK']}"</span>
+                  )}
+                </span>
+                <span className={styles.chevron}>{hooksOpen ? '▴' : '▾'}</span>
               </button>
-            ))}
-          </div>
-          <p style={{ marginTop: 10, fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)', fontFamily: 'var(--sg-font-mono)' }}>
-            {state.selectedTemplate.desc}
-          </p>
-        </div>
+              {hooksOpen && (
+                <div className={styles.collapsibleBody}>
+                  <div className={styles.chipGrid}>
+                    {hookData.map(h => (
+                      <button
+                        key={h.v}
+                        className={[styles.chip, state.fields['EMOTIONAL_HOOK'] === h.v && styles.active].filter(Boolean).join(' ')}
+                        onClick={() => updateField('EMOTIONAL_HOOK', h.v)}
+                        title={h.t}
+                      >
+                        &ldquo;{h.v}&rdquo;
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
-        {/* Medium Anker */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.medium_anchor')}</p>
+        {/* ═══ SUB-TAB: Templates & Medium ═══ */}
+        {activeSubTab === 'templates' && (
+          <>
+            {/* Shot Template */}
+            <div className={styles.section}>
+              <p className={styles.sectionTitle}>{t('mj.shot_template')}</p>
+              <div className={styles.chipGrid}>
+                {templatesData.map(tpl => (
+                  <button
+                    key={tpl.id}
+                    className={[styles.chip, state.selectedTemplate.id === tpl.id && styles.active].filter(Boolean).join(' ')}
+                    onClick={() => setTemplate(tpl)}
+                    title={tpl.desc}
+                  >
+                    {tpl.label}
+                  </button>
+                ))}
+              </div>
+              <p className={styles.templateDesc}>
+                {state.selectedTemplate.desc}
+              </p>
+            </div>
 
-          <p className={styles.subLabel}>{t('mj.modifier')}</p>
-          <div className={styles.chipGrid}>
-            {modifierData.map(m => (
+            {/* Medium Anker */}
+            <div className={styles.section}>
+              <p className={styles.sectionTitle}>{t('mj.medium_anchor')}</p>
+
+              <p className={styles.subLabel}>{t('mj.modifier')}</p>
+              <div className={styles.chipGrid}>
+                {modifierData.map(m => (
+                  <button
+                    key={m.v}
+                    className={[styles.chip, state.medModifier === m.v && styles.active].filter(Boolean).join(' ')}
+                    title={m.t}
+                    onClick={() => setState(p => ({ ...p, medModifier: m.v }))}
+                  >{m.v}</button>
+                ))}
+              </div>
+
+              <p className={styles.subLabel}>{t('mj.genre')}</p>
+              <div className={styles.chipGrid}>
+                {genreData.map(g => (
+                  <button
+                    key={g.v}
+                    className={[styles.chip, state.medGenre === g.v && styles.active].filter(Boolean).join(' ')}
+                    title={g.t}
+                    onClick={() => setState(p => ({ ...p, medGenre: g.v }))}
+                  >{g.v}</button>
+                ))}
+              </div>
+
+              <div className={styles.inlinePreview}>
+                <code>{t('mj.medium_preview')} {state.medModifier} {state.medGenre} film…</code>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ═══ SUB-TAB: Filmstock & Parameter ═══ */}
+        {activeSubTab === 'params' && (
+          <>
+            {/* Filmstock */}
+            <div className={styles.section}>
+              <p className={styles.sectionTitle}>{t('mj.filmstock')}</p>
+              <div className={styles.chipGrid}>
+                {filmstockData.map(fs => (
+                  <button
+                    key={fs.v}
+                    className={[styles.chip, state.filmstock === fs.v && styles.active].filter(Boolean).join(' ')}
+                    onClick={() => setState(p => ({ ...p, filmstock: fs.v }))}
+                    title={fs.t}
+                  >
+                    {fs.v}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* MJ Parameters */}
+            <div className={styles.section}>
+              <p className={styles.sectionTitle}>{t('mj.mj_params')}</p>
+
+              <p className={styles.subLabel}>{t('mj.aspect_ratio')}</p>
+              <div className={styles.chipGrid}>
+                {AR_OPTIONS.map(ar => (
+                  <button
+                    key={ar.v}
+                    className={[styles.chip, state.ar === ar.v && styles.active].filter(Boolean).join(' ')}
+                    title={ar.t}
+                    onClick={() => setState(p => ({ ...p, ar: ar.v }))}
+                  >{ar.v.replace('--ar ', '')}</button>
+                ))}
+              </div>
+
+              <p className={styles.subLabel} style={{ marginTop: 'var(--sg-space-lg)' }}>{t('mj.raw_label')}</p>
               <button
-                key={m.v}
-                className={`chip${state.medModifier === m.v ? ' active' : ''}`}
-                title={m.t}
-                onClick={() => setState(p => ({ ...p, medModifier: m.v }))}
-              >{m.v}</button>
-            ))}
-          </div>
-
-          <p className={styles.subLabel}>{t('mj.genre')}</p>
-          <div className={styles.chipGrid}>
-            {genreData.map(g => (
-              <button
-                key={g.v}
-                className={`chip${state.medGenre === g.v ? ' active' : ''}`}
-                title={g.t}
-                onClick={() => setState(p => ({ ...p, medGenre: g.v }))}
-              >{g.v}</button>
-            ))}
-          </div>
-
-          <div className={styles.inlinePreview}>
-            <code>{t('mj.medium_preview')} {state.medModifier} {state.medGenre} film…</code>
-          </div>
-        </div>
-
-        {/* Template Fields */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.fill_fields')}</p>
-          <div className={styles.fieldGroup}>
-            {state.selectedTemplate.fields
-              .filter(f => f.id !== 'MODIFIER' && f.id !== 'GENRE' && f.id !== 'FILMSTOCK')
-              .map(field => (
-                <FieldInput
-                  key={field.id}
-                  field={field}
-                  value={state.fields[field.id] || ''}
-                  onChange={v => updateField(field.id, v)}
-                  lightSourceHint={t('mj.light_source_hint')}
-                  styles={styles}
-                />
-              ))
-            }
-          </div>
-        </div>
-
-        {/* Filmstock */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.filmstock')}</p>
-          <div className={styles.chipGrid}>
-            {filmstockData.map(fs => (
-              <button
-                key={fs.v}
-                className={`chip${state.filmstock === fs.v ? ' active' : ''}`}
-                onClick={() => setState(p => ({ ...p, filmstock: fs.v }))}
-                title={fs.t}
+                className={[styles.chip, state.rawFlag && styles.active].filter(Boolean).join(' ')}
+                onClick={() => setState(p => ({ ...p, rawFlag: !p.rawFlag }))}
               >
-                {fs.v}
+                --raw {state.rawFlag ? '✓' : '○'}
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* MJ Parameters */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.mj_params')}</p>
-
-          <p className={styles.subLabel}>{t('mj.aspect_ratio')}</p>
-          <div className={styles.chipGrid}>
-            {AR_OPTIONS.map(ar => (
-              <button
-                key={ar.v}
-                className={`chip${state.ar === ar.v ? ' active' : ''}`}
-                title={ar.t}
-                onClick={() => setState(p => ({ ...p, ar: ar.v }))}
-              >{ar.v.replace('--ar ', '')}</button>
-            ))}
-          </div>
-
-          <p className={styles.subLabel} style={{ marginTop: 'var(--sg-space-lg)' }}>{t('mj.raw_label')}</p>
-          <button
-            className={`chip${state.rawFlag ? ' active' : ''}`}
-            onClick={() => setState(p => ({ ...p, rawFlag: !p.rawFlag }))}
-          >
-            --raw {state.rawFlag ? '✓' : '○'}
-          </button>
-        </div>
-
-        {/* Emotional Hooks */}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>{t('mj.hook_label')}</p>
-          <div className={styles.chipGrid}>
-            {hookData.map(h => (
-              <button
-                key={h.v}
-                className={`chip${state.fields['EMOTIONAL_HOOK'] === h.v ? ' active' : ''}`}
-                onClick={() => updateField('EMOTIONAL_HOOK', h.v)}
-                title={h.t}
-              >
-                &ldquo;{h.v}&rdquo;
-              </button>
-            ))}
-          </div>
-        </div>
+            </div>
+          </>
+        )}
 
       </div>
 
@@ -303,40 +391,36 @@ export default function MJStartframe() {
       <div className={styles.outputColumn}>
 
         <div className={styles.outputControls}>
-          <button className="sg-btn-ghost" onClick={handleRandom}>
+          <button className={styles.ghostBtn} onClick={handleRandom} title="⌘⇧R">
             <DiceIcon /> {t('common.random')}
           </button>
-          <button className="sg-btn-ghost" onClick={handleReset}>
+          <button className={styles.ghostBtn} onClick={handleReset}>
             <ResetIcon /> {t('common.reset')}
           </button>
         </div>
 
         {/* Anti-pattern warnings */}
         {warnings.length > 0 && (
-          <div style={{
-            background: 'rgba(196, 64, 64, 0.08)',
-            border: '1px solid rgba(196, 64, 64, 0.25)',
-            borderRadius: 'var(--sg-radius-lg)',
-            padding: 'var(--sg-space-lg)',
-          }}>
-            <p style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-error)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
+          <div className={styles.warningBox}>
+            <p className={styles.warningTitle}>
               {t('mj.warning_title')}
             </p>
             {warnings.map((w, i) => (
-              <div key={i} style={{ fontSize: 'var(--sg-text-xs)', marginBottom: 4 }}>
-                <code style={{ color: 'var(--sg-error)', fontFamily: 'var(--sg-font-mono)' }}>"{w.word}"</code>
-                <span style={{ color: 'var(--sg-text-tertiary)' }}> — {w.reason}</span>
+              <div key={i} className={styles.warningItem}>
+                <code className={styles.warningWord}>"{w.word}"</code>
+                <span className={styles.warningReason}> — {w.reason}</span>
               </div>
             ))}
           </div>
         )}
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className={styles.outputLabelRow}>
           <span className={styles.outputLabel}>{t('mj.output_label')}</span>
           <span className={styles.outputRawBadge}>{t('mj.raw_badge')}</span>
         </div>
 
-        <div className={[styles.outputBox, hasContent && styles.filled].filter(Boolean).join(' ')}
+        <div
+          className={[styles.outputBox, hasContent && styles.filled].filter(Boolean).join(' ')}
           onClick={e => {
             const r = document.createRange()
             r.selectNodeContents(e.currentTarget)
@@ -344,16 +428,21 @@ export default function MJStartframe() {
             s.removeAllRanges(); s.addRange(r)
           }}
         >
-          {output}
+          {/* Ghost preview: show template with placeholders in muted style when not filled */}
+          {hasContent ? (
+            <span>{output}</span>
+          ) : (
+            <span className={styles.ghostPreview}>{output}</span>
+          )}
         </div>
 
-        <button className={styles.copyButton} onClick={handleCopy}>
+        <button className={styles.copyButton} onClick={handleCopy} title="⌘⇧C">
           <CopyIcon />
           {copied ? t('common.copied') : t('mj.copy_btn')}
         </button>
 
         <button
-          className="sg-btn-ghost"
+          className={styles.ghostBtn}
           style={{ width: '100%' }}
           onClick={handleSaveFav}
         >
@@ -370,34 +459,23 @@ export default function MJStartframe() {
         </button>
 
         {showForbidden && (
-          <div style={{
-            background: 'var(--sg-bg-surface-1)',
-            border: '1px solid var(--sg-border-subtle)',
-            borderRadius: 'var(--sg-radius-lg)',
-            padding: 'var(--sg-space-lg)',
-          }}>
+          <div className={styles.forbiddenBox}>
             {forbiddenData.categories.map(cat => (
-              <div key={cat.label} style={{ marginBottom: 16 }}>
-                <p style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-gold)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 2 }}>
+              <div key={cat.label} className={styles.forbiddenCategory}>
+                <p className={styles.forbiddenCatTitle}>
                   {cat.label}
                 </p>
-                <p style={{ fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)', marginBottom: 6 }}>{cat.reason}</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                <p className={styles.forbiddenCatReason}>{cat.reason}</p>
+                <div className={styles.forbiddenWords}>
                   {cat.words.map(w => (
-                    <code key={w} style={{
-                      fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)',
-                      color: 'var(--sg-error)',
-                      background: 'rgba(196,64,64,0.08)',
-                      border: '1px solid rgba(196,64,64,0.2)',
-                      borderRadius: 3, padding: '1px 5px',
-                    }}>{w}</code>
+                    <code key={w} className={styles.forbiddenWord}>{w}</code>
                   ))}
                 </div>
               </div>
             ))}
-            <div style={{ borderTop: '1px solid var(--sg-border-subtle)', paddingTop: 12, marginTop: 4 }}>
+            <div className={styles.forbiddenRules}>
               {forbiddenData.rules.map((r, i) => (
-                <p key={i} style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)', marginBottom: 4 }}>→ {r}</p>
+                <p key={i} className={styles.forbiddenRule}>→ {r}</p>
               ))}
             </div>
           </div>
@@ -415,7 +493,7 @@ function FieldInput({ field, value, onChange, lightSourceHint, styles }) {
       <label className={styles.fieldLabel}>
         {field.label}
         {field.id === 'LIGHT_SOURCE' && (
-          <span style={{ fontWeight: 400, color: 'var(--sg-text-tertiary)', fontSize: 'var(--sg-text-sm)' }}> — {lightSourceHint}</span>
+          <span className={styles.fieldHint}> — {lightSourceHint}</span>
         )}
       </label>
       {field.examples?.length > 0 && (
@@ -423,7 +501,7 @@ function FieldInput({ field, value, onChange, lightSourceHint, styles }) {
           {field.examples.map(ex => (
             <button
               key={ex}
-              className="chip"
+              className={[styles.chip, styles.chipSmall].join(' ')}
               onClick={() => onChange(ex)}
               title={`Quick-fill: ${ex}`}
             >{ex}</button>

@@ -22,7 +22,7 @@ import sceneSpatial    from '../data/presets/scene-spatial-layout-2x2.json'
 import charSheet8      from '../data/presets/character-sheet-8view.json'
 import coreTemplates   from '../data/core-templates.json'
 
-const PRESETS = [
+const ALL_PRESETS = [
   worldZone, multiSingle, multiCross,
   charAngle3x3, charAngle2x2, detailStrip,
   twoCharInt, outfitSwap,
@@ -32,6 +32,27 @@ const PRESETS = [
   twoShotKey, archBlueprint, sceneSpatial,
   charSheet8,
 ]
+
+// Group presets by grid size
+function groupPresets(presets) {
+  const groups = {}
+  presets.forEach(p => {
+    const key = `${p.rows}×${p.cols}`
+    if (!groups[key]) groups[key] = []
+    groups[key].push(p)
+  })
+  // Sort groups: 3×3 first, then 2×2, then others
+  const order = ['3×3', '2×2', '2×3', '1×4', '1×1', '4×2']
+  const sorted = []
+  order.forEach(k => { if (groups[k]) sorted.push({ key: k, presets: groups[k] }) })
+  // Any remaining
+  Object.keys(groups).forEach(k => {
+    if (!order.includes(k)) sorted.push({ key: k, presets: groups[k] })
+  })
+  return sorted
+}
+
+const PRESET_GROUPS = groupPresets(ALL_PRESETS)
 
 function buildRoles(preset) {
   const total = preset.rows * preset.cols
@@ -61,8 +82,8 @@ export default function GridOperator() {
   const [rows, setRows]               = useState(3)
   const [cols, setCols]               = useState(3)
   const [layout, setLayout]           = useState('even')
-  const [selectedPreset, setPreset]   = useState(PRESETS[0])
-  const [panelRoles, setPanelRoles]   = useState(() => buildRoles(PRESETS[0]))
+  const [selectedPreset, setPreset]   = useState(ALL_PRESETS[0])
+  const [panelRoles, setPanelRoles]   = useState(() => buildRoles(ALL_PRESETS[0]))
   const [coreTemplate, setCoreTemplate] = useState(coreTemplates[0])
   const [coreSubject, setCoreSubj]    = useState('')
   const [coreStyle, setCoreStyle]     = useState('')
@@ -145,16 +166,16 @@ export default function GridOperator() {
     setPanelRoles(prev => { const n = [...prev]; n[index] = value; return n })
   }
 
-  const dimBtnStyle = (active) => ({
-    fontFamily: 'var(--sg-font-mono)',
-    fontSize: 'var(--sg-text-sm)',
-    padding: '4px 10px',
-    borderRadius: 'var(--sg-radius-sm)',
-    border: `1px solid ${active ? 'var(--sg-gold-dim)' : 'var(--sg-border-subtle)'}`,
-    background: active ? 'var(--sg-chip-bg-active)' : 'var(--sg-bg-surface-0)',
-    color: active ? 'var(--sg-gold-text)' : 'var(--sg-text-tertiary)',
-    cursor: 'pointer',
-    transition: 'all 120ms ease',
+  // Keyboard shortcuts
+  useEffect(() => {
+    function onKeyDown(e) {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault()
+        handleCopy()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
   })
 
   return (
@@ -172,29 +193,39 @@ export default function GridOperator() {
               onClick={() => setMode(m.id)}
               title={m.desc}
             >
-              {m.star && '★ '}{m.label}
+              {m.star && <span className={styles.starIcon}>★</span>}{m.label}
             </button>
           ))}
         </div>
 
-        {/* SeenGrid Presets */}
+        {/* SeenGrid Presets — GROUPED */}
         {mode === 'seengrid' && (
           <div className={styles.section}>
             <p className={styles.sectionTitle}>{t('grid.preset_label')}</p>
             <div className={styles.presetList}>
-              {PRESETS.map(p => (
-                <button
-                  key={p.id}
-                  className={[styles.presetItem, selectedPreset.id === p.id && styles.active].filter(Boolean).join(' ')}
-                  onClick={() => setPreset(p)}
-                  title={p.desc}
-                >
-                  <div>
-                    <div className={styles.presetName}>{p.label}</div>
-                    <div className={styles.presetDesc}>{p.desc}</div>
+              {PRESET_GROUPS.map(group => (
+                <div key={group.key} className={styles.presetGroup}>
+                  <div className={styles.presetGroupHeader}>
+                    <span className={styles.presetGroupLabel}>{group.key}</span>
+                    <span className={styles.presetGroupCount}>{group.presets.length}</span>
                   </div>
-                  <span className={styles.presetBadge}>{p.rows}×{p.cols}</span>
-                </button>
+                  {group.presets.map(p => (
+                    <button
+                      key={p.id}
+                      className={[styles.presetItem, selectedPreset.id === p.id && styles.active].filter(Boolean).join(' ')}
+                      onClick={() => setPreset(p)}
+                      title={p.desc}
+                    >
+                      <div>
+                        <div className={styles.presetName}>{p.label}</div>
+                        <div className={styles.presetDesc}>{p.desc}</div>
+                      </div>
+                      {p.optimized && (
+                        <span className={styles.presetOptBadge}>★</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               ))}
             </div>
           </div>
@@ -204,11 +235,11 @@ export default function GridOperator() {
         {mode === 'core' && (
           <div className={styles.section}>
             <p className={styles.sectionTitle}>{t('grid.core_template')}</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            <div className={styles.chipGrid}>
               {coreTemplates.map(tpl => (
                 <button
                   key={tpl.id}
-                  className={`chip${coreTemplate.id === tpl.id ? ' active' : ''}`}
+                  className={[styles.chip, coreTemplate.id === tpl.id && styles.active].filter(Boolean).join(' ')}
                   onClick={() => setCoreTemplate(tpl)}
                   title={tpl.desc}
                 >
@@ -216,7 +247,7 @@ export default function GridOperator() {
                 </button>
               ))}
             </div>
-            <p style={{ marginTop: 10, fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)', fontFamily: 'var(--sg-font-mono)' }}>
+            <p className={styles.templateDesc}>
               {coreTemplate.desc}
             </p>
           </div>
@@ -226,30 +257,38 @@ export default function GridOperator() {
         <div className={styles.section}>
           <p className={styles.sectionTitle}>{t('grid.grid_size')}</p>
           {mode === 'seengrid' ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className={styles.gridSizeDisplay}>
               <span className={styles.gridSize}>{rows}×{cols}</span>
               <span className={styles.gridSizeNote}>{t('grid.dim_locked')}</span>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <div className={styles.dimControls}>
               <div>
-                <div style={{ fontSize: 'var(--sg-text-xs)', fontFamily: 'var(--sg-font-mono)', color: 'var(--sg-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Rows</div>
-                <div style={{ display: 'flex', gap: 4 }}>
+                <div className={styles.dimLabel}>Rows</div>
+                <div className={styles.dimButtons}>
                   {[1,2,3,4,5].map(n => (
-                    <button key={n} style={dimBtnStyle(rows === n)} onClick={() => setRows(n)}>{n}</button>
+                    <button
+                      key={n}
+                      className={[styles.dimBtn, rows === n && styles.active].filter(Boolean).join(' ')}
+                      onClick={() => setRows(n)}
+                    >{n}</button>
                   ))}
                 </div>
               </div>
-              <span style={{ fontSize: 'var(--sg-text-xl)', color: 'var(--sg-text-disabled)', fontFamily: 'var(--sg-font-mono)' }}>×</span>
+              <span className={styles.dimX}>×</span>
               <div>
-                <div style={{ fontSize: 'var(--sg-text-xs)', fontFamily: 'var(--sg-font-mono)', color: 'var(--sg-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Cols</div>
-                <div style={{ display: 'flex', gap: 4 }}>
+                <div className={styles.dimLabel}>Cols</div>
+                <div className={styles.dimButtons}>
                   {[1,2,3,4,5].map(n => (
-                    <button key={n} style={dimBtnStyle(cols === n)} onClick={() => setCols(n)}>{n}</button>
+                    <button
+                      key={n}
+                      className={[styles.dimBtn, cols === n && styles.active].filter(Boolean).join(' ')}
+                      onClick={() => setCols(n)}
+                    >{n}</button>
                   ))}
                 </div>
               </div>
-              <span style={{ fontSize: 'var(--sg-text-xs)', fontFamily: 'var(--sg-font-mono)', color: 'var(--sg-text-tertiary)' }}>{totalPanels} {t('grid.panels')}</span>
+              <span className={styles.dimTotal}>{totalPanels} {t('grid.panels')}</span>
             </div>
           )}
         </div>
@@ -261,7 +300,7 @@ export default function GridOperator() {
             {LAYOUTS.map(l => (
               <button
                 key={l.id}
-                className={`chip${layout === l.id ? ' active' : ''}`}
+                className={[styles.chip, layout === l.id && styles.active].filter(Boolean).join(' ')}
                 onClick={() => setLayout(l.id)}
                 title={l.desc}
               >
@@ -275,16 +314,16 @@ export default function GridOperator() {
         {mode === 'seengrid' && (
           <div className={styles.section}>
             <p className={styles.sectionTitle}>{t('grid.ref_images')}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-gold)', background: 'rgba(212,149,42,0.12)', border: '1px solid rgba(212,149,42,0.25)', borderRadius: 3, padding: '1px 6px' }}>A</span>
-                <span style={{ fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)' }}>{t('grid.ref_char')}</span>
+            <div className={styles.refList}>
+              <div className={styles.refItem}>
+                <span className={styles.refBadge}>A</span>
+                <span className={styles.refText}>{t('grid.ref_char')}</span>
               </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-gold)', background: 'rgba(212,149,42,0.12)', border: '1px solid rgba(212,149,42,0.25)', borderRadius: 3, padding: '1px 6px' }}>B</span>
-                <span style={{ fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-tertiary)' }}>{t('grid.ref_style')}</span>
+              <div className={styles.refItem}>
+                <span className={styles.refBadge}>B</span>
+                <span className={styles.refText}>{t('grid.ref_style')}</span>
               </div>
-              <p style={{ fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-disabled)', fontFamily: 'var(--sg-font-mono)', marginTop: 4 }}>{t('grid.ref_hint')}</p>
+              <p className={styles.refHint}>{t('grid.ref_hint')}</p>
             </div>
           </div>
         )}
@@ -294,10 +333,11 @@ export default function GridOperator() {
           <div className={styles.section}>
             <p className={styles.sectionTitle}>
               {t('grid.style_override')}{' '}
-              <span style={{ color: 'var(--sg-text-disabled)', fontWeight: 400 }}>{t('common.optional')}</span>
+              <span className={styles.optionalLabel}>{t('common.optional')}</span>
             </p>
             <input
               type="text"
+              className={styles.textInput}
               value={coreStyle}
               onChange={e => setCoreStyle(e.target.value)}
               placeholder={mode === 'seengrid' ? t('grid.style_ph_sg') : t('grid.style_ph_core')}
@@ -310,6 +350,7 @@ export default function GridOperator() {
           <div className={styles.section}>
             <p className={styles.sectionTitle}>{t('grid.core_subject')}</p>
             <textarea
+              className={styles.textInput}
               rows={2}
               value={coreSubject}
               onChange={e => setCoreSubj(e.target.value)}
@@ -321,19 +362,15 @@ export default function GridOperator() {
         {/* Panel Roles */}
         <div className={styles.section}>
           <p className={styles.sectionTitle}>{t('grid.panel_roles')}</p>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${cols}, 1fr)`,
-            gap: 6,
-          }}>
+          <div className={styles.panelGrid} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
             {panelRoles.slice(0, totalPanels).map((role, i) => (
               <input
                 key={i}
                 type="text"
+                className={styles.panelInput}
                 value={role}
                 onChange={e => updatePanelRole(i, e.target.value)}
                 title={`Panel ${i + 1}`}
-                style={{ fontSize: 'var(--sg-text-xs)', padding: '6px 8px' }}
               />
             ))}
           </div>
@@ -346,21 +383,22 @@ export default function GridOperator() {
 
         <div className={styles.previewPanel}>
           <p className={styles.previewTitle}>{t('grid.grid_preview')}</p>
-          <GridPreview rows={rows} cols={cols} layout={layout} panelRoles={panelRoles} />
+          <GridPreview rows={rows} cols={cols} layout={layout} panelRoles={panelRoles} styles={styles} />
         </div>
 
         <div className={styles.gridOutput}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--sg-text-tertiary)' }}>
+          <div className={styles.outputHeader}>
+            <span className={styles.outputLabel}>
               {mode === 'custom' ? t('grid.free_prompt') : t('grid.generated_prompt')}
             </span>
             {mode === 'seengrid' && (
-              <span style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-gold)', letterSpacing: '0.04em' }}>★ SeenGrid Optimized</span>
+              <span className={styles.sgBadge}>★ SeenGrid Optimized</span>
             )}
           </div>
 
           {mode === 'custom' ? (
             <textarea
+              className={styles.textInput}
               value={customOutput}
               onChange={e => setCustomOutput(e.target.value)}
               placeholder={`${rows}×${cols} Grid — ${totalPanels} ${t('grid.panels')}. ${t('grid.custom_ph_suffix')}`}
@@ -369,20 +407,7 @@ export default function GridOperator() {
             />
           ) : (
             <div
-              style={{
-                background: 'var(--sg-bg-surface-0)',
-                border: '1px solid var(--sg-gold-dim)',
-                borderRadius: 'var(--sg-radius-lg)',
-                padding: 'var(--sg-space-xl)',
-                minHeight: 200,
-                fontFamily: 'var(--sg-font-mono)',
-                fontSize: 'var(--sg-text-sm)',
-                lineHeight: 1.7,
-                color: 'var(--sg-text-primary)',
-                boxShadow: '0 0 16px rgba(212,149,42,0.08)',
-                whiteSpace: 'pre-wrap',
-                cursor: 'text',
-              }}
+              className={styles.outputBox}
               onClick={e => {
                 const range = document.createRange()
                 range.selectNodeContents(e.currentTarget)
@@ -396,27 +421,21 @@ export default function GridOperator() {
           )}
 
           <button
-            className="sg-btn-primary"
-            style={{ width: '100%', marginTop: 12 }}
+            className={styles.copyButton}
             onClick={handleCopy}
+            title="⌘⇧C"
           >
             <CopyIcon />
             {' '}{copied ? t('common.copied') : t('grid.copy_btn')}
           </button>
 
           {mode === 'seengrid' && (
-            <div style={{
-              marginTop: 16,
-              padding: 'var(--sg-space-lg)',
-              background: 'var(--sg-bg-surface-1)',
-              border: '1px solid var(--sg-border-subtle)',
-              borderRadius: 'var(--sg-radius-lg)',
-            }}>
-              <p style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-gold)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
+            <div className={styles.presetInfo}>
+              <p className={styles.presetInfoTitle}>
                 {selectedPreset.label}
               </p>
-              <p style={{ fontSize: 'var(--sg-text-sm)', color: 'var(--sg-text-tertiary)' }}>{selectedPreset.desc}</p>
-              <p style={{ fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)', color: 'var(--sg-text-disabled)', marginTop: 6 }}>Source: {selectedPreset.source}</p>
+              <p className={styles.presetInfoDesc}>{selectedPreset.desc}</p>
+              <p className={styles.presetInfoSource}>Source: {selectedPreset.source}</p>
             </div>
           )}
         </div>
@@ -426,7 +445,7 @@ export default function GridOperator() {
   )
 }
 
-function GridPreview({ rows, cols, layout, panelRoles }) {
+function GridPreview({ rows, cols, layout, panelRoles, styles }) {
   const gap     = layout === 'seamless' ? 0 : layout === 'framed' ? 3 : 2
   const padding = layout === 'polaroid' ? 6 : 0
   const wrapBg  = layout === 'polaroid' ? '#f0ece4' : layout === 'framed' ? '#000' : 'var(--sg-bg-surface-1)'
@@ -438,20 +457,14 @@ function GridPreview({ rows, cols, layout, panelRoles }) {
     <div style={{ background: wrapBg, padding, borderRadius: 'var(--sg-radius-md)', border: '1px solid var(--sg-border-subtle)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap }}>
         {Array.from({ length: rows * cols }, (_, i) => (
-          <div key={i} style={{
+          <div key={i} className={styles.gridCell} style={{
             background: panelBg,
-            border: layout === 'framed' ? 'none' : '1px solid var(--sg-border-subtle)',
+            border: layout === 'framed' ? 'none' : undefined,
             padding: layout === 'polaroid' ? '0 0 18px 0' : 0,
             borderRadius: layout === 'polaroid' ? '1px' : '2px',
             aspectRatio: layout === 'letterbox' ? '16/9' : '1/1',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <span style={{
-              fontSize: 7,
-              fontFamily: 'var(--sg-font-mono)',
-              color: layout === 'polaroid' ? '#777' : 'var(--sg-text-disabled)',
-              letterSpacing: '0.3px', textAlign: 'center', padding: '0 4px', lineHeight: 1.3,
-            }}>
+            <span className={styles.gridCellLabel}>
               {panelRoles[i] || `P${i + 1}`}
             </span>
           </div>

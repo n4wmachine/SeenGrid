@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import styles from './PromptBuilder.module.css'
 import { useLang } from '../context/LangContext.jsx'
 import { useFavorites } from '../hooks/useFavorites.js'
@@ -46,10 +46,14 @@ function initState() {
 export default function PromptBuilder() {
   const { t } = useLang()
   const [state, setState] = useState(initState)
-  const [openSections, setOpenSections] = useState(() => new Set())
+  const [openSections, setOpenSections] = useState(
+    () => new Set(['style', 'shotsize', 'lighting'])
+  )
   const [copied, setCopied] = useState(false)
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
+  const [rulesOpen, setRulesOpen] = useState(false)
+  const containerRef = useRef(null)
 
   function handleSaveFav() {
     if (!hasPrompt) return
@@ -134,7 +138,7 @@ export default function PromptBuilder() {
     }
   }
 
-  function handleRandom(mode = 'both') {
+  function handleRandom() {
     const pick = (arr, nullable = true) => {
       if (nullable && Math.random() < 0.15) return null
       return arr[Math.floor(Math.random() * arr.length)].v
@@ -145,49 +149,46 @@ export default function PromptBuilder() {
       return new Set(shuffled.slice(0, count).map(i => i.v))
     }
     const pick1 = arr => arr[Math.floor(Math.random() * arr.length)]
-
-    if (mode === 'text') {
-      const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
-      setState(prev => ({ ...prev, scene }))
-    } else if (mode === 'look') {
-      setState(prev => ({
-        ...prev,
-        style:       pick(styleData, false),
-        camera:      pick(cameraData),
-        lens:        pick(lensData),
-        focal:       pick(focalData),
-        aperture:    pick(apertureData),
-        aspectratio: pick(aspectData),
-        shotsize:    pick(shotData),
-        cameraangle: pick(angleData),
-        colorgrade:  pick(colorData),
-        lighting:    pickMulti(lightingData, 2),
-        effects:     pickMulti(effectsData, 2),
-      }))
-    } else {
-      const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
-      setState(prev => ({
-        ...prev,
-        scene,
-        style:       pick(styleData, false),
-        camera:      pick(cameraData),
-        lens:        pick(lensData),
-        focal:       pick(focalData),
-        aperture:    pick(apertureData),
-        aspectratio: pick(aspectData),
-        shotsize:    pick(shotData),
-        cameraangle: pick(angleData),
-        colorgrade:  pick(colorData),
-        lighting:    pickMulti(lightingData, 2),
-        effects:     pickMulti(effectsData, 2),
-        negative:    new Set(),
-      }))
-    }
+    const scene = `${pick1(settingsData)}. ${pick1(subjectsData)} ${pick1(actionsData)}. ${pick1(moodsData)}`
+    setState(prev => ({
+      ...prev,
+      scene,
+      style:       pick(styleData, false),
+      camera:      pick(cameraData),
+      lens:        pick(lensData),
+      focal:       pick(focalData),
+      aperture:    pick(apertureData),
+      aspectratio: pick(aspectData),
+      shotsize:    pick(shotData),
+      cameraangle: pick(angleData),
+      colorgrade:  pick(colorData),
+      lighting:    pickMulti(lightingData, 2),
+      effects:     pickMulti(effectsData, 2),
+      negative:    new Set(),
+    }))
   }
 
   function handleReset() {
     setState(initState())
   }
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function onKeyDown(e) {
+      // Cmd/Ctrl+Shift+C = copy prompt
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault()
+        handleCopy()
+      }
+      // Cmd/Ctrl+Shift+R = random
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'R') {
+        e.preventDefault()
+        handleRandom()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  })
 
   const prompt    = buildPrompt()
   const negative  = buildNegative()
@@ -202,8 +203,19 @@ export default function PromptBuilder() {
     t('builder.rule6'),
   ]
 
+  // Helper: get active selection labels for a section
+  function getActiveLabels(sec) {
+    if (sec.mode === 'multi') {
+      const active = state[sec.id]
+      if (!active || active.size === 0) return []
+      return [...active]
+    } else {
+      return state[sec.id] ? [state[sec.id]] : []
+    }
+  }
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
 
       {/* LINKE SPALTE */}
       <div className={styles.leftColumn}>
@@ -234,21 +246,21 @@ export default function PromptBuilder() {
               isOpen={openSections.has(sec.id)}
               onToggle={() => toggleSection(sec.id)}
               onToggleChip={toggleChip}
+              activeLabels={getActiveLabels(sec)}
+              styles={styles}
             />
           ))}
         </div>
 
         {/* Negative custom input */}
         <div>
-          <label style={{
-            display: 'block', marginBottom: 6,
-            fontFamily: 'var(--sg-font-mono)', fontSize: 'var(--sg-text-xs)',
-            textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--sg-text-tertiary)'
-          }}>
+          <label className={styles.sceneInputLabel} style={{ marginBottom: 6 }}>
             {t('builder.neg_custom_label')}
           </label>
           <input
             type="text"
+            className={styles.sceneTextarea}
+            style={{ minHeight: 'auto', resize: 'none' }}
             value={state.negativeCustom}
             onChange={e => setState(p => ({ ...p, negativeCustom: e.target.value }))}
             placeholder={t('builder.neg_custom_placeholder')}
@@ -260,16 +272,10 @@ export default function PromptBuilder() {
       <div className={styles.rightColumn}>
 
         <div className={styles.outputControls}>
-          <button className="sg-btn-ghost" onClick={() => handleRandom('text')} title="Zufälligen Szenentext generieren">
-            ⚄ Text
+          <button className={styles.ghostBtn} onClick={handleRandom} title={`${t('builder.random_title')} (⌘⇧R)`}>
+            <DiceIcon /> {t('common.random')}
           </button>
-          <button className="sg-btn-ghost" onClick={() => handleRandom('look')} title="Zufälligen Look / Stil generieren">
-            ⚄ Look
-          </button>
-          <button className="sg-btn-ghost" onClick={() => handleRandom('both')} title="Text + Look zufällig generieren">
-            ⚄ Both
-          </button>
-          <button className="sg-btn-ghost" onClick={handleReset} title={t('builder.reset_title')}>
+          <button className={styles.ghostBtn} onClick={handleReset} title={t('builder.reset_title')}>
             <ResetIcon /> {t('common.reset')}
           </button>
           <button
@@ -297,13 +303,14 @@ export default function PromptBuilder() {
           className={styles.copyButton}
           disabled={!hasPrompt}
           onClick={handleCopy}
+          title="⌘⇧C"
         >
           <CopyIcon />
           {copied ? t('common.copied') : t('builder.copy_btn')}
         </button>
 
         <button
-          className="sg-btn-ghost"
+          className={styles.ghostBtn}
           style={{ width: '100%' }}
           disabled={!hasPrompt}
           onClick={handleSaveFav}
@@ -323,16 +330,27 @@ export default function PromptBuilder() {
           </div>
         )}
 
-        {/* NanoBanana Core Regeln */}
+        {/* NanoBanana Core Regeln — Collapsible */}
         <div className={styles.rulesBox}>
-          <div className={styles.rulesBoxTitle}>{t('builder.rules_title')}</div>
-          <ol className={styles.rulesBoxList}>
-            {RULES.map((rule, i) => (
-              <li key={i} className={styles.rulesBoxItem} data-index={`${i + 1}.`}>
-                {rule}
-              </li>
-            ))}
-          </ol>
+          <button
+            className={styles.rulesToggle}
+            onClick={() => setRulesOpen(p => !p)}
+          >
+            <span className={styles.rulesToggleIcon}>ℹ</span>
+            <span className={styles.rulesToggleLabel}>{t('builder.rules_title')}</span>
+            <span className={styles.rulesChevron}>{rulesOpen ? '▴' : '▾'}</span>
+          </button>
+          {rulesOpen && (
+            <div className={styles.rulesContent}>
+              <ol className={styles.rulesBoxList}>
+                {RULES.map((rule, i) => (
+                  <li key={i} className={styles.rulesBoxItem} data-index={`${i + 1}.`}>
+                    {rule}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
       </div>
@@ -341,26 +359,29 @@ export default function PromptBuilder() {
 }
 
 // ── Chip Section (accordion) ──
-function ChipSection({ section, state, isOpen, onToggle, onToggleChip }) {
+function ChipSection({ section, state, isOpen, onToggle, onToggleChip, activeLabels, styles }) {
   const { id, label, mode, data } = section
-  const activeCount = mode === 'multi'
-    ? state[id].size
-    : state[id] ? 1 : 0
+  const activeCount = activeLabels.length
 
   return (
     <div className={[styles.section, activeCount > 0 && styles.hasActive, isOpen && styles.open].filter(Boolean).join(' ')}>
       <div className={styles.sectionHeader} onClick={onToggle}>
         <span className={styles.sectionTitle}>
           {label}
-          {activeCount > 0 && (
-            <span style={{
-              fontSize: 'var(--sg-text-xs)',
-              fontFamily: 'var(--sg-font-mono)',
-              color: 'var(--sg-accent-text)',
-              background: 'var(--sg-chip-bg-active)',
-              borderRadius: 3,
-              padding: '1px 5px',
-            }}>{activeCount}</span>
+          {/* Show selection tags when section is closed */}
+          {!isOpen && activeCount > 0 && (
+            <span className={styles.selectionTags}>
+              {activeLabels.slice(0, 3).map(val => (
+                <span key={val} className={styles.selectionTag}>{val}</span>
+              ))}
+              {activeLabels.length > 3 && (
+                <span className={styles.selectionTag}>+{activeLabels.length - 3}</span>
+              )}
+            </span>
+          )}
+          {/* Show count badge when section is open */}
+          {isOpen && activeCount > 0 && (
+            <span className={styles.countBadge}>{activeCount}</span>
           )}
         </span>
         <span className={styles.sectionChevron}>▾</span>
