@@ -78,31 +78,39 @@ function buildRoles(preset) {
   return Array.from({ length: total }, (_, i) => roles[i] || `Panel ${i + 1}`)
 }
 
-// Dim advisory: computes objective pixel sizes for a single cropped panel
-// at 2K and 4K total-grid resolution. Users see exactly how large their
-// single crops will end up — no subjective "good/ok/warn" interpretation,
-// just math. Cells are square because the grid is rendered inside a square
-// canvas; the longest axis determines cell edge length.
+// Dim advisory: computes objective panel pixel sizes for a single cropped
+// panel at 2K and 4K total-grid resolution. Users see exactly how large
+// their single crops will end up — no subjective "good/ok/warn"
+// interpretation, just math.
 //
-// Quality tag reads from the 2K cell size:
-//   ≥1024 → Hires  (full-detail final-shot material)
+// Canvas assumption: square (2048×2048 / 4096×4096). Panel dimensions are
+// computed per-axis so non-square grids produce correctly non-square
+// panels (e.g. 2×3 at 4K → 1365×2048). Panels are only square when
+// rows === cols.
+//
+// Quality tag reads from the shorter panel edge at 2K — a very elongated
+// panel can't fit more detail along its narrow axis, so the short edge
+// is what actually limits crop quality:
+//   ≥1024 → Hires     (full-detail final-shot material)
 //   512…1023 → Standard  (solid single-crop quality)
-//   256…511 → Low  (usable as reference, not as finals)
-//   <256 → Tiny  (concept board only)
+//   256…511 → Low     (usable as reference, not as finals)
+//   <256 → Tiny       (concept board only)
 function getDimAdvice(rows, cols) {
   const SIZE_2K = 2048
   const SIZE_4K = 4096
-  const longest = Math.max(rows, cols)
-  const cell2K = Math.floor(SIZE_2K / longest)
-  const cell4K = Math.floor(SIZE_4K / longest)
+  const panelW2K = Math.floor(SIZE_2K / cols)
+  const panelH2K = Math.floor(SIZE_2K / rows)
+  const panelW4K = Math.floor(SIZE_4K / cols)
+  const panelH4K = Math.floor(SIZE_4K / rows)
 
+  const shortest2K = Math.min(panelW2K, panelH2K)
   let quality, icon
-  if (cell2K >= 1024)       { quality = 'Hires';    icon = '✓' }
-  else if (cell2K >= 512)   { quality = 'Standard'; icon = '✓' }
-  else if (cell2K >= 256)   { quality = 'Low';      icon = '→' }
-  else                      { quality = 'Tiny';     icon = '!' }
+  if (shortest2K >= 1024)      { quality = 'Hires';    icon = '✓' }
+  else if (shortest2K >= 512)  { quality = 'Standard'; icon = '✓' }
+  else if (shortest2K >= 256)  { quality = 'Low';      icon = '→' }
+  else                         { quality = 'Tiny';     icon = '!' }
 
-  return { cell2K, cell4K, quality, icon }
+  return { panelW2K, panelH2K, panelW4K, panelH4K, quality, icon }
 }
 
 export default function GridOperator() {
@@ -404,12 +412,12 @@ export default function GridOperator() {
                     <div className={styles.dimAdviceSizes}>
                       <span className={styles.dimAdviceRes}>
                         <span className={styles.dimAdviceResTag}>2K</span>
-                        <span className={styles.dimAdviceSize}>{advice.cell2K} × {advice.cell2K} px</span>
+                        <span className={styles.dimAdviceSize}>{advice.panelW2K} × {advice.panelH2K} px</span>
                       </span>
                       <span className={styles.dimAdviceDivider} aria-hidden="true">·</span>
                       <span className={styles.dimAdviceRes}>
                         <span className={styles.dimAdviceResTag}>4K</span>
-                        <span className={styles.dimAdviceSize}>{advice.cell4K} × {advice.cell4K} px</span>
+                        <span className={styles.dimAdviceSize}>{advice.panelW4K} × {advice.panelH4K} px</span>
                       </span>
                     </div>
                   </div>
