@@ -127,21 +127,23 @@ User collected these between sessions. Triage + sequencing guidance by Opus from
 
 ### Idea 2 — GridCropper ★★★ KILLER FEATURE
 
-**What:** Close the loop. Currently SeenGrid is a one-way prompt generator (build prompt → user leaves → never comes back with anything). User wants: **build prompt → user generates in NanoBanana/MJ → comes back with a finished grid image → uploads it → 1-click gets perfectly cropped individual panels back out.** This is the difference between "SeenGrid is another prompt builder" and "SeenGrid is a closed production system". It is the feature that actually makes SeenGrid unique vs. every other prompt tool on the planet.
+**What:** Close the loop. Currently SeenGrid is a one-way prompt generator (build prompt → user leaves → never comes back with anything). User wants: **build prompt in NanoBanana-optimized Grid Operator → user generates in NanoBanana → comes back with a finished grid image → uploads it → 1-click gets perfectly cropped individual panels back out.** This is the difference between "SeenGrid is another prompt builder" and "SeenGrid is a closed production system". It is the feature that actually makes SeenGrid unique vs. every other prompt tool on the planet.
+
+**⚠ Engine scope — NanoBanana only.** Grid-based workflows are **NanoBanana-exclusive** in SeenGrid. Midjourney is intentionally **excluded from anything grid-related** because MJ is not stable enough in grid contexts — composition consistency across cells breaks down, aspect ratios are unreliable, and panel boundaries are not enforceable. MJ stays as a pure single-image cinematic tool (Midjourney Cinematic tab). The GridCropper therefore only needs to handle NanoBanana outputs — no MJ edge cases to worry about. See also Idea 4 for the product-framing consequences.
 
 **Technical feasibility:** 100% client-side. Canvas API for the crop, JSZip for batch export, FileSaver for download. Zero backend, matches CLAUDE.md's no-backend rule. Size estimate: ~300–500 lines React + Canvas logic + small deps.
 
 **Architecture decision:** Integrate into Grid Operator as a second sub-mode, NOT as a new tab. Reason: grid context (rows/cols, layout, panel-roles) is shared — if the user just built a 3×3 in Build mode, the Crop mode should already know it's 3×3. Ideal UX: sub-mode toggle at the top of Grid Operator: **"Build"** (current prompt-generating flow) | **"Crop"** (upload finished grid, extract panels). State shared between modes.
 
-**Edge cases already identified:**
-- Non-square input (MJ 4:3, NanoBanana 1:1 or 16:9) → per-axis math (lesson learned from the advisory pass).
+**Edge cases already identified (NanoBanana-only):**
+- NanoBanana's common output aspect ratios: 1:1, 16:9, 9:16, 4:5. Per-axis math (canvas_w/cols, canvas_h/rows) — lesson learned from the advisory pass.
 - Layout variants: **v1 only implements "Even" layout.** Seamless/Framed/Letterbox/Storyboard/Polaroid need separate handling and come in v2 when real use cases pile up.
-- Gutters/borders: engines sometimes insert thin lines between panels. Optional "inset crop by N px" slider is useful.
+- Gutters/borders: NanoBanana sometimes inserts thin lines between panels depending on prompt wording. Optional "inset crop by N px" slider is useful.
 - Export modes: per-panel download vs. ZIP. Naming convention suggestion: `{prompt-slug}_r{row}c{col}.png`.
 
 **Opus triage:** ★★★ Killer feature. Large but bounded scope, worth its own dedicated Stage 6 chat. Independent of Visual Overhaul — can happen before or after, but user's strong recommendation is **after Visual Overhaul**, in a dedicated feature chat (don't mix visual work with feature work, context pollution risk).
 
-**Gate:** None. Ready to build whenever user opens a new chat for it. Suggested chat-opening prompt: *"Stage 6: GridCropper. Read OPUS_CODE_HANDOFF.md → Idea 2 for full brief. Start with an implementation plan + architecture sketch, not code."*
+**Gate:** None. Ready to build whenever user opens a new chat for it. Suggested chat-opening prompt: *"Stage 6: GridCropper. Read OPUS_CODE_HANDOFF.md → Idea 2 for full brief. NanoBanana only, no MJ. Start with an implementation plan + architecture sketch, not code."*
 
 ---
 
@@ -149,53 +151,61 @@ User collected these between sessions. Triage + sequencing guidance by Opus from
 
 **What:** A structured multi-grid methodology for maximum character-consistency in Kling/Seedance workflows. Structure: **1 Hero Shot** (perfect single-image, primary identity extraction) anchors **3 reference sheets** around it — **Face Sheet** (3×2, 5–6 angles, corrects face), **Body Sheet** (3×2, 6 angles, corrects body), **Wildcard Sheet** (3×2, situational, corrects specific details). Each reference sheet is anchored back to the Hero Shot via prompt reference, so downstream video engines get maximum identity signal.
 
-This is the concrete form of the **Character Operator** that is already listed as a Phase 2 item in CLAUDE.md ("Character Operator mit Multi-Varianten") — the user just now has the methodology clear in his head.
+This is the concrete form of the **Character Operator** that is already listed as a Phase 2 item in CLAUDE.md ("Character Operator mit Multi-Varianten") — the user just now has the methodology clear in his head but has not yet **field-tested** it end-to-end.
 
-**⚠ HARD BLOCKER:** CLAUDE.md forbids inventing content. Rule 3 ("SeenGrid Signature Presets = exact templates from DeepSeek1.txt, not reinterpreted") and the "don't invent" rule both apply. **Before this can be built**, the exact prompt templates for each of the 4 sheet types (Hero / Face / Body / Wildcard) must exist as text in a source document — either as new entries in DeepSeek1.txt, or as a dedicated `CharacterSheet_methodology.txt` at repo root. If they don't exist yet, the user must write them before the next Opus can touch the feature, otherwise Opus will be forced to invent templates → rule violation.
+**⚠ DOUBLE BLOCKER — both must clear before any build work:**
 
-**Implementation path options (once templates exist):**
-- **A) 4 new presets** in the existing SeenGrid Signature Character category (Hero, Face, Body, Wildcard). Fastest. Loses the "this is ONE unified methodology" framing.
-- **B) New preset group "Character Workflow"** in Grid Operator with a visual workflow representation (Hero at top → Face/Body/Wildcard as children). Medium effort. Recommended starting point.
-- **C) Full Character Operator as its own tab** with a guided step-chain (Step 1: generate Hero, Step 2: generate Face using Hero as reference, Step 3: Body, Step 4: Wildcard). Largest effort. Cleanest match to the 4-layer architecture in CLAUDE.md. Worth it only after B proves the methodology works in real usage.
+1. **User must field-test the 3-sheet methodology** (Hero + Face + Body + Wildcard) in real Kling/Seedance workflows and confirm it actually produces the identity consistency he expects. **User has explicitly said he wants to test this first before shipping it to Opus.** Until testing is done and validated, no implementation.
 
-**Opus triage:** ★★ Medium-large. Strongly aligned with existing Phase 2 plans. Do option B first. **BLOCKED on template availability** — do not build without source text.
+2. **Exact prompt templates must exist as committed text.** CLAUDE.md Rule 3 ("SeenGrid Signature Presets = exact templates from DeepSeek1.txt, not reinterpreted") and the "don't invent" rule both apply. The four Hero/Face/Body/Wildcard templates must exist either as new entries in DeepSeek1.txt or as a dedicated `CharacterSheet_methodology.txt` at repo root **before** Opus can touch the feature. Otherwise Opus is forced to invent templates → rule violation.
 
-**Gate:** User provides the 4 prompt templates as text first. Then new chat: *"Stage 7: Character Operator (Option B). Templates live in `<path>`. Read OPUS_CODE_HANDOFF.md Idea 3 for the methodology. Build the preset group + workflow UI."*
+**Instruction for next Opus:** **Keep this in mind and plan for it in the overall roadmap, but DO NOT start building or pushing for immediate implementation the moment the next chat starts.** It's a later stage, not a next step. If the user hasn't explicitly said "templates are ready, let's build Stage 7", leave Idea 3 alone and focus on whatever the current chat's actual topic is.
+
+**Implementation path options (once BOTH blockers clear, user prefers B or C over A):**
+- ~~**A)** 4 new presets in the existing Character category.~~ — User rejects: loses the "this is ONE unified methodology" framing. Not the preferred path.
+- **B) New preset group "Character Workflow"** in Grid Operator with a visual workflow representation (Hero at top → Face/Body/Wildcard as children). Medium effort. Keeps everything inside Grid Operator.
+- **C) Full Character Operator as its own tab** with a guided step-chain (Step 1: generate Hero, Step 2: generate Face using Hero as reference, Step 3: Body, Step 4: Wildcard). Largest effort. Cleanest match to the 4-layer architecture in CLAUDE.md. Professional, standalone, maximum control.
+
+**User preference:** Either B or C — decision stays open for the next chat. Next Opus presents both with concrete pros/cons and lets user pick.
+
+**Opus triage:** ★★ Medium-large. Strongly aligned with existing Phase 2 plans. **BLOCKED on both field-testing AND template availability** — do not build until user confirms both gates are open.
+
+**Gate:** (1) User confirms field-testing done and methodology works. (2) User provides the 4 prompt templates as committed text. (3) User explicitly opens Stage 7 chat. Until all three: plan for it in Opus's head, never build it.
 
 ---
 
-### Idea 4 — Core + Modules product-framing (architectural, from ChatGPT via user)
+### Idea 4 — Core + Modules product-framing (architectural)
 
-**What:** User (via ChatGPT's suggestion) wants to rethink whether SeenGrid is "four loose tools in four tabs" or "one core system with modules". ChatGPT's proposal: **Grid Operator is the core and the real USP**, NanoBanana Studio should be integrated INTO Grid Operator (because NanoBanana is strongest for grid/consistency work), MJ stays separate, and the guiding flow is **structure/grid/preset → engine/output mode → optional look/style layer**.
+**⚠ IMPORTANT — User has clarified the correct framing. Do not follow any earlier "merge NanoBanana into Grid" reading — that was ChatGPT's original wording and the user has explicitly corrected it.**
 
-**Opus triage, honest:**
+**User's actual mental model (the correct framing):**
 
-ChatGPT is **right on diagnosis, wrong on execution.**
+- **Grid Operator** stands alone. It is its own flagship module for grid-based production workflows.
+- **NanoBanana Studio** stands alone too. It is its own single-prompt builder. **However, the user wants an OPTIONAL bridge:** NanoBanana Studio should be able to combine with the Grid Builder on demand, so a user crafting a NanoBanana prompt can optionally promote it into a grid-capable prompt (rows/cols + NanoBanana-optimized grid instructions) without leaving the Studio. This is not a merge — it's an optional combine-toggle.
+- **Midjourney Cinematic** stays completely separate and **never touches grids**. MJ is not stable in grid contexts (see Idea 2's engine-scope note). MJ is positioned purely as a cinematic single-image tool. No grid integration, no bridge, no combine-toggle.
+- **Vault** stays as the community reference library.
 
-Right: The app currently reads as four separate tools because the product hierarchy is not articulated anywhere in the UI. New users can't tell whether Grid Operator is a bigger version of NanoBanana Studio or a different workflow entirely. That's a real problem.
+**So the product hierarchy is:**
+> Grid Operator = flagship grid workflow. NanoBanana Studio = single-prompt builder, optionally bridgeable into a grid. Midjourney Cinematic = cinematic single-image extra, strictly no grids. Vault = reference library.
 
-Wrong: Merging NanoBanana Studio into Grid Operator would force users through a full grid setup even when they just want a single-image prompt. That's a UX regression. NanoBanana Studio (Core generic builder) and Grid Operator (SeenGrid Signature multi-panel) already encode the Core-vs-Signature duality from CLAUDE.md — just split across two tabs instead of being articulated as one product.
+**Why this matters:** This framing cleanly solves the confusion ChatGPT diagnosed (four loose tools, no articulated hierarchy) without forcing users through a full grid setup when they just want one NanoBanana prompt. It also draws a clean line between stable (NanoBanana × grid) and unstable (MJ × grid) engine behavior.
 
-**The real answer (Opus opinion, not an order):**
+**Open architectural questions for the next chat — present 3–4 concrete options to the user, let user pick:**
 
-The four tabs can stay. But the product needs a clear hierarchy statement baked into the UI copy and tab order:
-> **Grid Operator is the flagship.** NanoBanana Studio is "Quick Single-Prompt mode". Midjourney Cinematic is "Quick Single-Prompt mode with MJ rules". Vault is the community reference library.
+How should the "NanoBanana ↔ Grid bridge" be surfaced in the UI? Some starting points (next Opus should extend/refine):
+- **Option A** — "Promote to Grid" button inside NanoBanana Studio. Clicking it serializes the current prompt state into Grid Operator's Build mode and navigates there. One-way hand-off.
+- **Option B** — Grid-mode toggle inside NanoBanana Studio itself. When enabled, a rows/cols picker appears and the output morphs into a grid-capable prompt. No tab switch, no hand-off. Single module, two output modes.
+- **Option C** — Shared "engine + format" selector at a higher level. User first picks engine (NanoBanana / MJ / Vault) + format (Single / Grid); app routes them into the right module based on the choice. Grid+MJ combination is disabled in the selector.
+- **Option D** — Keep everything as it is, but add a clearly-labeled cross-link chip at the top of NanoBanana Studio: *"Need a grid? → Grid Operator"*. No bridge logic, just navigation. Lowest effort, lowest risk.
 
-Concrete UI consequences if the user picks this framing:
-- **Tab order change:** Grid Operator first (currently second). 10-second code change, big symbolic effect.
-- **Tab tooltip/description refresh:** "NanoBanana Studio" → "Quick NanoBanana prompts — single image mode", "Grid Operator" → "**Flagship.** Multi-panel grid builder with SeenGrid Signature presets", "Midjourney Cinematic" → "Quick Midjourney prompts — cinematic anchor format".
-- **Possibly:** small ★ or "Core" badge on the Grid Operator tab indicating its primary status.
-- **Optional:** a Home/Landing hub as a fifth pseudo-tab — instead of landing straight in a module, show a conceptual map ("Single-Shot Prompts" | "Grid Workflow" | "Inspiration") that routes into the right tab. Only if the Visual Overhaul has room for it.
+**Tab ordering and copy questions (independent of the bridge decision):**
+- Should Grid Operator be the first tab (currently second) to signal its flagship status?
+- Should tabs carry a small badge/label indicating their role? (★ Grid, NanoBanana, MJ, Vault)
+- Should tab tooltips be rewritten to explicitly state the hierarchy? *"Grid Operator — flagship multi-panel workflow"* / *"NanoBanana Studio — single prompt, optionally grid-bridgeable"* / *"Midjourney Cinematic — single-image cinematic, no grids"*
 
-**Options to present to user in the next chat** (do not decide unilaterally):
-- **A)** Keep 4 tabs as-is, add a homepage/hub with a conceptual map.
-- **B)** Promote Grid Operator to primary mode, rename others as "Quick Prompts — NanoBanana" / "Quick Prompts — Midjourney". Minimal structural change, maximum copy change.
-- **C)** Add engine selector INSIDE Grid Operator (NanoBanana / MJ / Kling / Seedance as dropdown) + NanoBanana Studio stays as fast single-image mode. Medium structural change.
-- **D)** Rename tabs + refresh tooltips only. Minimal invasive. Lowest risk.
+**Opus triage:** ★★ Strategic/architectural, not implementation. **Must be the FIRST conversation item in the Visual Overhaul chat** because the answer drives layout, hierarchy, copy, tab order, and badges. Decision must come from the user, not from Opus.
 
-**Opus triage:** ★★ Strategic/architectural, not implementation. **Must be the FIRST conversation item in the Visual Overhaul chat** because the answer drives layout, hierarchy, copy, and badges. Decision must come from the user, not from Opus.
-
-**Gate:** This is a dialogue task, not a build task. Next Opus opens Visual Overhaul chat → starts with this question → presents options A/B/C/D → waits for user decision → feeds decision into the rest of the overhaul.
+**Gate:** This is a dialogue task, not a build task. Next Opus opens Visual Overhaul chat → presents 3–4 bridge options (A/B/C/D above or refined versions) → waits for user decision → feeds decision into the rest of the overhaul. **Do not pick an option unilaterally. Do not build any of them without explicit user approval.**
 
 ---
 
@@ -204,19 +214,21 @@ Concrete UI consequences if the user picks this framing:
 Opus's proposed order (user can override):
 
 1. **Visual Overhaul chat (next):**
-   - Opens with **Idea 4** (architectural product-framing). 3–4 options, user picks.
-   - Flows the decision into the visual work (mockups, tokens, section cards, quick-nav visual treatment, accordion vs multi-column).
+   - Opens with **Idea 4** (architectural product-framing using the user's corrected mental model — Grid Operator standalone, NanoBanana standalone + optional grid-bridge, MJ strictly no grids, Vault separate). 3–4 bridge options, user picks.
+   - Flows the decision into the visual work (mockups, tokens, section cards, quick-nav visual treatment, accordion vs multi-column, tab order, badges, tooltip copy).
    - **Idea 1** (slogan) lands in this chat too, using "Scene. Grid. Seen." as opening proposal.
    - **Explicitly NOT in this chat:** GridCropper and Character Sheet — keeps scope bounded.
 
 2. **Stage 6 chat — GridCropper (dedicated, after Visual Overhaul):**
    - **Idea 2** end to end.
-   - Sub-mode integration into Grid Operator.
+   - **NanoBanana only, no MJ.** MJ is explicitly excluded from all grid-related features.
+   - Sub-mode integration into Grid Operator (Build / Crop toggle).
    - v1 only handles "Even" layout.
 
-3. **Stage 7 chat — Character Operator (blocked until templates exist):**
-   - **Idea 3**, Option B implementation.
-   - Does not start until the 4 Hero/Face/Body/Wildcard templates exist as committed text in the repo.
+3. **Stage 7 chat — Character Operator (LATER, fully blocked):**
+   - **Idea 3**, Option B or C (user decides at that time, A rejected).
+   - **Double-blocked:** (a) user must field-test the 3-sheet methodology first and confirm it works in real Kling/Seedance workflows, (b) the 4 prompt templates must exist as committed text in the repo.
+   - **Instruction for next Opus:** keep this in the back of your head, remember it exists, plan around it in the overall roadmap — but do NOT push for it at the start of the next chat. It is explicitly a later-stage item and the user will say when it's ready.
 
 ---
 
