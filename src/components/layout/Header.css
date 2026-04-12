@@ -25,11 +25,15 @@
   height: 54px;
   color: var(--sg-text-primary);
   flex-shrink: 0;
-  filter: drop-shadow(0 0 10px var(--sg-teal-glow));
+  filter:
+    drop-shadow(0 0 4px rgba(43, 181, 178, 0.55))
+    drop-shadow(0 0 14px rgba(43, 181, 178, 0.28));
   transition: filter var(--sg-transition), transform var(--sg-transition);
 }
 .headerLogo:hover .headerMarkSvg {
-  filter: drop-shadow(0 0 14px rgba(43, 181, 178, 0.32));
+  filter:
+    drop-shadow(0 0 5px rgba(61, 207, 204, 0.75))
+    drop-shadow(0 0 20px rgba(43, 181, 178, 0.42));
   transform: translateY(-1px);
 }
 
