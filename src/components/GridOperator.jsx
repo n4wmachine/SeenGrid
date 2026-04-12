@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './GridOperator.module.css'
 import { useLang } from '../context/LangContext.jsx'
 
@@ -155,6 +155,28 @@ export default function GridOperator() {
   const [coreSubject, setCoreSubj]    = useState('')
   const [coreStyle, setCoreStyle]     = useState('')
   const [customOutput, setCustomOutput] = useState('')
+  // Quick-nav highlight flash — briefly glows the target section after
+  // click-to-scroll so the user's eye locks onto where the nav landed.
+  const [highlightedSection, setHighlightedSection] = useState(null)
+  const flashTimerRef = useRef(null)
+
+  function jumpToSection(key) {
+    const el = document.getElementById(`grid-sec-${key}`)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+    setHighlightedSection(key)
+    flashTimerRef.current = setTimeout(() => {
+      setHighlightedSection(null)
+      flashTimerRef.current = null
+    }, 1400)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+    }
+  }, [])
   const [copied, setCopied]           = useState(false)
 
   useEffect(() => {
@@ -276,6 +298,39 @@ export default function GridOperator() {
           ))}
         </div>
 
+        {/* Quick-Nav — horizontal pill row listing the current mode's
+            sections so everything below is one click away instead of
+            requiring scroll-exploration. Clicking a pill smooth-scrolls
+            to the target section and briefly flashes its border so the
+            eye locks onto the landing spot. */}
+        {(() => {
+          const navItems = [
+            mode === 'seengrid' && { key: 'preset',        label: t('grid.preset_label') },
+            mode === 'core'     && { key: 'core-template', label: t('grid.core_template') },
+            { key: 'size',   label: t('grid.grid_size') },
+            { key: 'layout', label: t('grid.layout') },
+            mode === 'seengrid' && { key: 'ref',     label: t('grid.ref_images') },
+            mode !== 'custom'   && { key: 'style',   label: t('grid.style_override') },
+            mode === 'core'     && { key: 'subject', label: t('grid.core_subject') },
+            { key: 'roles',  label: t('grid.panel_roles') },
+          ].filter(Boolean)
+          return (
+            <nav className={styles.quickNav} aria-label={t('grid.quick_nav_label')}>
+              {navItems.map(item => (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={styles.quickNavPill}
+                  onClick={() => jumpToSection(item.key)}
+                  title={t('grid.quick_nav_tooltip')}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          )
+        })()}
+
         {/* SeenGrid Signature Presets — category-tab navigation.
             Matches Core mode's chip-row+body pattern so the two modes feel
             consistent, and keeps all downstream controls (Layout, Ref,
@@ -284,7 +339,14 @@ export default function GridOperator() {
           const currentGroup =
             PRESET_GROUPS.find(g => g.key === activeCategory) || PRESET_GROUPS[0]
           return (
-            <div className={[styles.section, styles.signatureSection].join(' ')}>
+            <div
+              id="grid-sec-preset"
+              className={[
+                styles.section,
+                styles.signatureSection,
+                highlightedSection === 'preset' && styles.sectionFlash,
+              ].filter(Boolean).join(' ')}
+            >
               <p className={styles.sectionTitle}>
                 <span className={styles.starIcon}>★</span>{' '}{t('grid.preset_label')}
               </p>
@@ -333,7 +395,13 @@ export default function GridOperator() {
 
         {/* Core Templates */}
         {mode === 'core' && (
-          <div className={styles.section}>
+          <div
+            id="grid-sec-core-template"
+            className={[
+              styles.section,
+              highlightedSection === 'core-template' && styles.sectionFlash,
+            ].filter(Boolean).join(' ')}
+          >
             <p className={styles.sectionTitle}>{t('grid.core_template')}</p>
             <div className={styles.chipGrid}>
               {coreTemplates.map(tpl => (
@@ -354,7 +422,13 @@ export default function GridOperator() {
         )}
 
         {/* Grid Size */}
-        <div className={styles.section}>
+        <div
+          id="grid-sec-size"
+          className={[
+            styles.section,
+            highlightedSection === 'size' && styles.sectionFlash,
+          ].filter(Boolean).join(' ')}
+        >
           <p className={styles.sectionTitle}>{t('grid.grid_size')}</p>
           {mode === 'seengrid' ? (
             <div className={styles.gridSizeDisplay}>
@@ -433,7 +507,13 @@ export default function GridOperator() {
         </div>
 
         {/* Layout */}
-        <div className={styles.section}>
+        <div
+          id="grid-sec-layout"
+          className={[
+            styles.section,
+            highlightedSection === 'layout' && styles.sectionFlash,
+          ].filter(Boolean).join(' ')}
+        >
           <p className={styles.sectionTitle}>{t('grid.layout')}</p>
           <div className={styles.layoutChips}>
             {LAYOUTS.map(l => (
@@ -451,7 +531,13 @@ export default function GridOperator() {
 
         {/* Reference Images (SeenGrid mode) */}
         {mode === 'seengrid' && (
-          <div className={styles.section}>
+          <div
+            id="grid-sec-ref"
+            className={[
+              styles.section,
+              highlightedSection === 'ref' && styles.sectionFlash,
+            ].filter(Boolean).join(' ')}
+          >
             <p className={styles.sectionTitle}>{t('grid.ref_images')}</p>
             <div className={styles.refList}>
               <div className={styles.refItem}>
@@ -469,7 +555,13 @@ export default function GridOperator() {
 
         {/* Style Override */}
         {mode !== 'custom' && (
-          <div className={styles.section}>
+          <div
+            id="grid-sec-style"
+            className={[
+              styles.section,
+              highlightedSection === 'style' && styles.sectionFlash,
+            ].filter(Boolean).join(' ')}
+          >
             <p className={styles.sectionTitle}>
               {t('grid.style_override')}{' '}
               <span className={styles.optionalLabel}>{t('common.optional')}</span>
@@ -486,7 +578,13 @@ export default function GridOperator() {
 
         {/* Core Subject */}
         {mode === 'core' && (
-          <div className={styles.section}>
+          <div
+            id="grid-sec-subject"
+            className={[
+              styles.section,
+              highlightedSection === 'subject' && styles.sectionFlash,
+            ].filter(Boolean).join(' ')}
+          >
             <p className={styles.sectionTitle}>{t('grid.core_subject')}</p>
             <textarea
               className={styles.textInput}
@@ -503,7 +601,13 @@ export default function GridOperator() {
             ~170px-min edit cells). The rendered Grid Preview on the right
             is the place that shows true structure; this editor prioritizes
             label legibility. */}
-        <div className={styles.section}>
+        <div
+          id="grid-sec-roles"
+          className={[
+            styles.section,
+            highlightedSection === 'roles' && styles.sectionFlash,
+          ].filter(Boolean).join(' ')}
+        >
           <p className={styles.sectionTitle}>{t('grid.panel_roles')}</p>
           <div className={styles.panelGrid}>
             {panelRoles.slice(0, totalPanels).map((role, i) => (

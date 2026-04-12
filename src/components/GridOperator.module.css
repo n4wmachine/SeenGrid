@@ -111,6 +111,51 @@
   box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle), 0 0 20px var(--sg-gold-glow-subtle);
 }
 
+/* ---- QUICK NAV — horizontal pill row for section jump ----
+   Sits right under the Mode Toggle so every section in the controls
+   column is one click away without scroll-exploration. Pills wrap
+   instead of hscroll so nothing is hidden. */
+.quickNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sg-space-xs);
+  padding: var(--sg-space-sm) 0 var(--sg-space-md);
+  border-bottom: 1px solid var(--sg-border-subtle);
+}
+.quickNavPill {
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--sg-text-tertiary);
+  background: var(--sg-bg-surface-1);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: color var(--sg-transition), border-color var(--sg-transition), background var(--sg-transition), transform var(--sg-transition);
+}
+.quickNavPill:hover {
+  color: var(--sg-text-primary);
+  border-color: var(--sg-teal);
+  background: var(--sg-bg-surface-2);
+  transform: translateY(-1px);
+}
+.quickNavPill:active {
+  transform: translateY(0);
+}
+
+/* Brief highlight flash on the target section after a quick-nav jump.
+   Runs once (no infinite), then state clears and the class is removed. */
+@keyframes sgSectionFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
+  15%  { box-shadow: 0 0 0 2px rgba(43, 181, 178, 0.55), 0 0 22px rgba(43, 181, 178, 0.38); border-color: var(--sg-teal); }
+  100% { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
+}
+.section.sectionFlash {
+  animation: sgSectionFlash 1400ms ease-out;
+}
+
 /* ---- SECTION PANELS ---- */
 .section {
   background: var(--sg-bg-surface-1);
