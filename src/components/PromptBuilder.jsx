@@ -181,7 +181,7 @@ export default function PromptBuilder() {
         handleCopy()
       }
       // Cmd/Ctrl+Shift+R = random
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'R') {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'G') {
         e.preventDefault()
         handleRandom()
       }

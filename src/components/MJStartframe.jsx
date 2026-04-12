@@ -163,7 +163,7 @@ export default function MJStartframe() {
         e.preventDefault()
         handleCopy()
       }
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'R') {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'G') {
         e.preventDefault()
         handleRandom()
       }
