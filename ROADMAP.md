@@ -8,7 +8,7 @@
 
 ### Naming & Terminologie
 - **Tab-Namen (parallel, brand-basiert):**
-  - `NanoBanana Studio` (vorher "Prompt Builder") — Chip-Stack für NanoBanana/Seedream/GPT Image, alle NanoBanana-optimierten Prompts
+  - `NanoBanana Studio` (vorher "Prompt Builder") — Chip-Stack primär für NanoBanana, funktioniert auch für andere Bildgeneratoren (Others); alle NanoBanana-optimierten Prompts
   - `Grid Operator` — Multi-Shot & World Boards (modellagnostisch)
   - `Midjourney Studio` (vorher "MJ Startframe") — 5-Element Startframe-Architektur, MJ-spezifisch
   - `Vault` — Community-Prompts
