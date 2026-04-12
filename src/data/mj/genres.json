@@ -1,29 +1,137 @@
 [
-  { "v": "thriller",             "t": "Spannung, Paranoia, moralische Ambiguität — Hitchcock meets contemporary",       "t_en": "Suspense, paranoia, moral ambiguity — Hitchcock meets contemporary",               "t_de": "Spannung, Paranoia, moralische Ambiguität — Hitchcock meets contemporary" },
-  { "v": "drama",                "t": "Menschliche Konflikte, Emotionen, Realität ohne Genre-Filter",                    "t_en": "Human conflicts, emotions, reality without a genre filter",                          "t_de": "Menschliche Konflikte, Emotionen, Realität ohne Genre-Filter" },
-  { "v": "noir",                 "t": "Fatalism, Schatten, moralische Komplexität — Chandler, Hammett",                  "t_en": "Fatalism, shadow, moral complexity — Chandler, Hammett",                             "t_de": "Fatalismus, Schatten, moralische Komplexität — Chandler, Hammett" },
-  { "v": "horror",               "t": "Angst, das Übernatürliche oder das Menschliche als Monster",                       "t_en": "Fear, the supernatural or the human as monster",                                     "t_de": "Angst, das Übernatürliche oder das Menschliche als Monster" },
-  { "v": "sci-fi",               "t": "Technologie, Zukunft, Gesellschaft — hard SF oder spekulativ",                     "t_en": "Technology, future, society — hard SF or speculative",                                "t_de": "Technologie, Zukunft, Gesellschaft — Hard SF oder spekulativ" },
-  { "v": "western",              "t": "Offene Landschaft, Frontier-Moral, Isolation und Gewalt",                          "t_en": "Open landscape, frontier morality, isolation and violence",                           "t_de": "Offene Landschaft, Frontier-Moral, Isolation und Gewalt" },
-  { "v": "romance",              "t": "Verbindung, Verlust, Sehnsucht — Zeit als Antagonist",                             "t_en": "Connection, loss, longing — time as antagonist",                                     "t_de": "Verbindung, Verlust, Sehnsucht — Zeit als Antagonist" },
-  { "v": "documentary",          "t": "Reales Leben, observational — keine Glamour, nur Wahrheit",                         "t_en": "Real life, observational — no glamour, only truth",                                   "t_de": "Reales Leben, observational — keine Glamour, nur Wahrheit" },
-  { "v": "crime",                "t": "Verbrechen als Prisma für Gesellschaft — Milieu, Moral, Konsequenz",               "t_en": "Crime as a prism for society — milieu, morality, consequence",                        "t_de": "Verbrechen als Prisma für Gesellschaft — Milieu, Moral, Konsequenz" },
-  { "v": "mystery",              "t": "Unerklärtes, Verdächtiges — das Fehlen von Information als Spannung",             "t_en": "The unexplained, the suspicious — absence of information as suspense",                "t_de": "Unerklärtes, Verdächtiges — das Fehlen von Information als Spannung" },
-  { "v": "arthouse",             "t": "Künstlerisch, formal experimentell — Tarkovsky, Bergman, Akerman",                "t_en": "Artistic, formally experimental — Tarkovsky, Bergman, Akerman",                       "t_de": "Künstlerisch, formal experimentell — Tarkovsky, Bergman, Akerman" },
-  { "v": "giallo",               "t": "Vivid color, extreme close-ups, operatic violence — Argento, Bava",                "t_en": "Vivid color, extreme close-ups, operatic violence — Argento, Bava",                    "t_de": "Satte Farben, extreme Close-Ups, operatische Gewalt — Argento, Bava" },
-  { "v": "folk horror",          "t": "Rurales Grauen, alte Rituale, Gemeinde als Bedrohung — The Wicker Man",           "t_en": "Rural dread, old rituals, community as threat — The Wicker Man",                      "t_de": "Rurales Grauen, alte Rituale, Gemeinde als Bedrohung — The Wicker Man" },
-  { "v": "mumblecore",           "t": "Lo-fi, improvisiert, junges urbanes Leben — Swanberg, Duplass",                    "t_en": "Lo-fi, improvised, young urban life — Swanberg, Duplass",                             "t_de": "Lo-Fi, improvisiert, junges urbanes Leben — Swanberg, Duplass" },
-  { "v": "southern gothic",      "t": "Der amerikanische Süden — Verfall, Schuld, das Bizarre im Alltäglichen",          "t_en": "The American South — decay, guilt, the bizarre within the everyday",                  "t_de": "Der amerikanische Süden — Verfall, Schuld, das Bizarre im Alltäglichen" },
-  { "v": "wuxia",                "t": "Martial arts, Ehre, Sacrifice — poetische Kampfchoreografie",                      "t_en": "Martial arts, honor, sacrifice — poetic fight choreography",                          "t_de": "Martial Arts, Ehre, Opfer — poetische Kampfchoreografie" },
-  { "v": "kitchen sink realism", "t": "Britischer Realismus der 1960s — Arbeiterklasse, Frustration, Würde",              "t_en": "British realism of the 1960s — working class, frustration, dignity",                  "t_de": "Britischer Realismus der 1960s — Arbeiterklasse, Frustration, Würde" },
-  { "v": "poetic realism",       "t": "Französisch-vorkriegs, romantisch-fatalistisch — Carné, Renoir, Prévert",          "t_en": "French pre-war, romantic-fatalistic — Carné, Renoir, Prévert",                         "t_de": "Französisch-Vorkriegs, romantisch-fatalistisch — Carné, Renoir, Prévert" },
-  { "v": "acid western",         "t": "Psychedelischer Western — Hallucinogen, Folklore, moralischer Nihilismus",         "t_en": "Psychedelic western — hallucinogens, folklore, moral nihilism",                        "t_de": "Psychedelischer Western — Halluzinogene, Folklore, moralischer Nihilismus" },
-  { "v": "Romanian New Wave",    "t": "Lange Takes, kein Score, staatliche Bürokratie, stille Verzweiflung",              "t_en": "Long takes, no score, state bureaucracy, quiet despair",                              "t_de": "Lange Takes, kein Score, staatliche Bürokratie, stille Verzweiflung" },
-  { "v": "slow cinema",          "t": "Minimale Handlung, lange Takes, Zeit als Erfahrung — Tarr, Weerasethakul",         "t_en": "Minimal plot, long takes, time as experience — Tarr, Weerasethakul",                   "t_de": "Minimale Handlung, lange Takes, Zeit als Erfahrung — Tarr, Weerasethakul" },
-  { "v": "neo-realism",          "t": "Italienischer Nachkriegs-Realismus — Laienakteure, echte Locations",               "t_en": "Italian post-war realism — non-professional actors, real locations",                   "t_de": "Italienischer Nachkriegs-Realismus — Laienakteure, echte Locations" },
-  { "v": "psychological horror", "t": "Das Grauen kommt von innen — Perception, Paranoia, Unreliable Reality",            "t_en": "The horror comes from within — perception, paranoia, unreliable reality",              "t_de": "Das Grauen kommt von innen — Wahrnehmung, Paranoia, Unreliable Reality" },
-  { "v": "euro crime",           "t": "1970s Europäischer Genre-Film — Polizisten, Gangster, Moral im Grau",              "t_en": "1970s European genre film — cops, gangsters, morality in grey",                        "t_de": "1970s europäischer Genre-Film — Polizisten, Gangster, Moral im Grau" },
-  { "v": "coming-of-age",        "t": "Initiation, Verlust der Unschuld — Zeit als irreversible Kraft",                    "t_en": "Initiation, loss of innocence — time as irreversible force",                           "t_de": "Initiation, Verlust der Unschuld — Zeit als irreversible Kraft" },
-  { "v": "immigrant drama",      "t": "Entwurzelung, Identität, Ankunft und Verlust — spezifisch und universal",          "t_en": "Uprooting, identity, arrival and loss — specific and universal",                       "t_de": "Entwurzelung, Identität, Ankunft und Verlust — spezifisch und universal" },
-  { "v": "political thriller",   "t": "Macht, Korruption, Systeme die Menschen zerstören",                                 "t_en": "Power, corruption, systems that destroy people",                                       "t_de": "Macht, Korruption, Systeme die Menschen zerstören" }
+  {
+    "v": "thriller",
+    "t_en": "Suspense, paranoia, moral ambiguity — Hitchcock meets contemporary",
+    "t_de": "Spannung, Paranoia, moralische Ambiguität — Hitchcock meets contemporary"
+  },
+  {
+    "v": "drama",
+    "t_en": "Human conflicts, emotions, reality without a genre filter",
+    "t_de": "Menschliche Konflikte, Emotionen, Realität ohne Genre-Filter"
+  },
+  {
+    "v": "noir",
+    "t_en": "Fatalism, shadow, moral complexity — Chandler, Hammett",
+    "t_de": "Fatalismus, Schatten, moralische Komplexität — Chandler, Hammett"
+  },
+  {
+    "v": "horror",
+    "t_en": "Fear, the supernatural or the human as monster",
+    "t_de": "Angst, das Übernatürliche oder das Menschliche als Monster"
+  },
+  {
+    "v": "sci-fi",
+    "t_en": "Technology, future, society — hard SF or speculative",
+    "t_de": "Technologie, Zukunft, Gesellschaft — Hard SF oder spekulativ"
+  },
+  {
+    "v": "western",
+    "t_en": "Open landscape, frontier morality, isolation and violence",
+    "t_de": "Offene Landschaft, Frontier-Moral, Isolation und Gewalt"
+  },
+  {
+    "v": "romance",
+    "t_en": "Connection, loss, longing — time as antagonist",
+    "t_de": "Verbindung, Verlust, Sehnsucht — Zeit als Antagonist"
+  },
+  {
+    "v": "documentary",
+    "t_en": "Real life, observational — no glamour, only truth",
+    "t_de": "Reales Leben, observational — keine Glamour, nur Wahrheit"
+  },
+  {
+    "v": "crime",
+    "t_en": "Crime as a prism for society — milieu, morality, consequence",
+    "t_de": "Verbrechen als Prisma für Gesellschaft — Milieu, Moral, Konsequenz"
+  },
+  {
+    "v": "mystery",
+    "t_en": "The unexplained, the suspicious — absence of information as suspense",
+    "t_de": "Unerklärtes, Verdächtiges — das Fehlen von Information als Spannung"
+  },
+  {
+    "v": "arthouse",
+    "t_en": "Artistic, formally experimental — Tarkovsky, Bergman, Akerman",
+    "t_de": "Künstlerisch, formal experimentell — Tarkovsky, Bergman, Akerman"
+  },
+  {
+    "v": "giallo",
+    "t_en": "Vivid color, extreme close-ups, operatic violence — Argento, Bava",
+    "t_de": "Satte Farben, extreme Close-Ups, operatische Gewalt — Argento, Bava"
+  },
+  {
+    "v": "folk horror",
+    "t_en": "Rural dread, old rituals, community as threat — The Wicker Man",
+    "t_de": "Rurales Grauen, alte Rituale, Gemeinde als Bedrohung — The Wicker Man"
+  },
+  {
+    "v": "mumblecore",
+    "t_en": "Lo-fi, improvised, young urban life — Swanberg, Duplass",
+    "t_de": "Lo-Fi, improvisiert, junges urbanes Leben — Swanberg, Duplass"
+  },
+  {
+    "v": "southern gothic",
+    "t_en": "The American South — decay, guilt, the bizarre within the everyday",
+    "t_de": "Der amerikanische Süden — Verfall, Schuld, das Bizarre im Alltäglichen"
+  },
+  {
+    "v": "wuxia",
+    "t_en": "Martial arts, honor, sacrifice — poetic fight choreography",
+    "t_de": "Martial Arts, Ehre, Opfer — poetische Kampfchoreografie"
+  },
+  {
+    "v": "kitchen sink realism",
+    "t_en": "British realism of the 1960s — working class, frustration, dignity",
+    "t_de": "Britischer Realismus der 1960s — Arbeiterklasse, Frustration, Würde"
+  },
+  {
+    "v": "poetic realism",
+    "t_en": "French pre-war, romantic-fatalistic — Carné, Renoir, Prévert",
+    "t_de": "Französisch-Vorkriegs, romantisch-fatalistisch — Carné, Renoir, Prévert"
+  },
+  {
+    "v": "acid western",
+    "t_en": "Psychedelic western — hallucinogens, folklore, moral nihilism",
+    "t_de": "Psychedelischer Western — Halluzinogene, Folklore, moralischer Nihilismus"
+  },
+  {
+    "v": "Romanian New Wave",
+    "t_en": "Long takes, no score, state bureaucracy, quiet despair",
+    "t_de": "Lange Takes, kein Score, staatliche Bürokratie, stille Verzweiflung"
+  },
+  {
+    "v": "slow cinema",
+    "t_en": "Minimal plot, long takes, time as experience — Tarr, Weerasethakul",
+    "t_de": "Minimale Handlung, lange Takes, Zeit als Erfahrung — Tarr, Weerasethakul"
+  },
+  {
+    "v": "neo-realism",
+    "t_en": "Italian post-war realism — non-professional actors, real locations",
+    "t_de": "Italienischer Nachkriegs-Realismus — Laienakteure, echte Locations"
+  },
+  {
+    "v": "psychological horror",
+    "t_en": "The horror comes from within — perception, paranoia, unreliable reality",
+    "t_de": "Das Grauen kommt von innen — Wahrnehmung, Paranoia, Unreliable Reality"
+  },
+  {
+    "v": "euro crime",
+    "t_en": "1970s European genre film — cops, gangsters, morality in grey",
+    "t_de": "1970s europäischer Genre-Film — Polizisten, Gangster, Moral im Grau"
+  },
+  {
+    "v": "coming-of-age",
+    "t_en": "Initiation, loss of innocence — time as irreversible force",
+    "t_de": "Initiation, Verlust der Unschuld — Zeit als irreversible Kraft"
+  },
+  {
+    "v": "immigrant drama",
+    "t_en": "Uprooting, identity, arrival and loss — specific and universal",
+    "t_de": "Entwurzelung, Identität, Ankunft und Verlust — spezifisch und universal"
+  },
+  {
+    "v": "political thriller",
+    "t_en": "Power, corruption, systems that destroy people",
+    "t_de": "Macht, Korruption, Systeme die Menschen zerstören"
+  }
 ]

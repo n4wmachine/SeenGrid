@@ -1,13 +1,11 @@
 {
   "id": "scene-spatial-layout-2x2",
   "category": "technical",
-  "label": "Scene Spatial Layout Guide",
   "label_en": "Scene Spatial Layout Guide",
   "label_de": "Szenen-Raumlayout-Guide",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 2,
-  "desc": "Production-ready 4-view spatial diagram of a scene — geometry reference for Kling/Seedance, with camera positions marked.",
   "desc_en": "Production-ready 4-view spatial diagram of a scene — geometry reference for Kling/Seedance, with camera positions marked.",
   "desc_de": "Produktionsreifes 4-Ansicht-Raumlayout einer Szene — Geometrie-Referenz für Kling/Seedance, mit markierten Kamerapositionen.",
   "layout": "Even",

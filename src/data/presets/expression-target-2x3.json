@@ -1,13 +1,11 @@
 {
   "id": "expression-target-2x3",
   "category": "character",
-  "label": "Expression Target",
   "label_en": "Expression Target",
   "label_de": "Ausdrucks-Matrix",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 3,
-  "desc": "6 controlled expression variants of the same character — neutral to exhausted — without identity drift.",
   "desc_en": "6 controlled expression variants of the same character — neutral to exhausted — without identity drift.",
   "desc_de": "6 kontrollierte Ausdrucksvarianten desselben Charakters — von neutral bis erschöpft — ohne Identitäts-Drift.",
   "layout": "Even",

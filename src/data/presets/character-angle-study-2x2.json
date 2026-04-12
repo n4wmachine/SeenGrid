@@ -1,24 +1,34 @@
 {
   "id": "character-angle-study-2x2",
   "category": "character",
-  "label": "Character Angle Study",
   "label_en": "Character Angle Study",
   "label_de": "Charakter-Winkelstudie",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 2,
-  "desc": "4 Kameraperspektiven Ganzkörper. Nicht 'Turnaround' — 4 Filmaufnahmen.",
   "desc_en": "4 full-body camera angles — not a turnaround, four cinematic captures of the same character.",
   "desc_de": "4 Kameraperspektiven Ganzkörper. Nicht 'Turnaround' — 4 Filmaufnahmen.",
   "layout": "Even",
   "source": "DeepSeek1.txt — Angle Study and Detail Anchor.txt",
   "prompt": "Character Angle Study\n\nYou are given:\nReference A = cinematic character ingredient image (full body)\nReference B = upscaled close crop of the character's face\n\nTASK\nCreate four cinematic full-body shots of the same exact character from four different camera angles, arranged in a 2x2 grid.\nEach shot must maintain the same rendering quality and atmospheric depth as Reference A.\n\nThis is NOT a technical reference layout. This is four cinematic captures of the same person.\n\nREFERENCE PRIORITY\nFace identity, facial structure, and fine facial details = Reference B (the face crop is the highest-authority face reference).\nBody proportions, hairstyle, outfit, materials, and footwear = Reference A.\nIf any conflict occurs: preserve face from Reference B first, then body and outfit from Reference A, then materials.\n\nQUALITY ANCHOR\nEach panel must match the rendering quality of the source image.\nPreserve material richness, lighting nuance, atmospheric depth, and surface detail.\nDo not simplify into flat, clean, utilitarian rendering.\n\nLAYOUT\n2x2 grid. Even spacing. No text. No labels.\n\nPANEL CONTENT\nPanel 1: Full-body front view\nPanel 2: Full-body true right profile\nPanel 3: Full-body true left profile\nPanel 4: Full-body back view\n\nEntire figure fully visible in all panels.\nNo cropped head, no cropped feet, no hidden footwear.\n\nVIEW RULES\nUse true profile and true back view — not three-quarter angles.\nSame character scale and camera height in all panels.\n\nPOSE\nNatural relaxed stance. Not rigid, not aggressive.\n\nENVIRONMENT\nKeep the same atmospheric environment from the source image.\nDo not replace it with a neutral studio background.\n\nFORBIDDEN\nNo face drift. No hairstyle drift. No outfit change.\nNo mirrored fake profiles. No crop errors.\nNo flat simplified rendering. No neutral blank background.\nNo quality downgrade from the source image.",
   "panelRoles": [
-    "Front View", "True Right Profile",
-    "True Left Profile", "Back View"
+    "Front View",
+    "True Right Profile",
+    "True Left Profile",
+    "Back View"
   ],
   "inputFields": [
-    { "id": "charFull", "label": "Reference A — Full Body",  "placeholder": "Charakter-Ganzkörper Beschreibung", "required": true },
-    { "id": "faceCrop", "label": "Reference B — Face Crop",  "placeholder": "Face Crop (höchste Autorität für Gesicht)", "required": false }
+    {
+      "id": "charFull",
+      "label": "Reference A — Full Body",
+      "placeholder": "Charakter-Ganzkörper Beschreibung",
+      "required": true
+    },
+    {
+      "id": "faceCrop",
+      "label": "Reference B — Face Crop",
+      "placeholder": "Face Crop (höchste Autorität für Gesicht)",
+      "required": false
+    }
   ]
 }

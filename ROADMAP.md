@@ -64,10 +64,12 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **2e — Components auf `tData()` umstellen**
-Daten-Umbau ist durch (2b + 2c + 2d): alle 18 Preset-JSONs, `core-templates.json` und alle 7 MJ-Data-Files haben jetzt `label_en`/`label_de`/`desc_en`/`desc_de` (bzw. `t_en`/`t_de` für die MJ-Chip-Tooltips) plus neues `src/data/presets/_categories.json`. Legacy-Felder (`label`, `desc`, `t`) bleiben als Shim drin, damit `GridOperator.jsx` und `MJStartframe.jsx` ohne Änderung weiterlaufen. Vite-Build ist grün.
+### Aktuelle Stufe: **2f — Tooltip-Review**
+Stufe 2e ist durch: `GridOperator.jsx`, `MJStartframe.jsx` und `PromptBuilder.jsx` greifen jetzt via `tData(obj, 'label' | 'desc' | 't' | 'placeholder' | 'reason')` auf lokalisierte Felder zu. `SUB_TABS` im MJ-Tab auf `labelKey`-Pattern umgestellt mit neuen i18n-Keys `mj.sub_tab_fields` / `mj.sub_tab_templates` / `mj.sub_tab_params`. `AR_OPTIONS` in MJStartframe hat jetzt `t_en`/`t_de`. `checkForForbidden` speichert jetzt die ganze `cat`-Referenz statt resolved-Text, damit warnings beim Sprachwechsel mitziehen.
 
-Jetzt kommt 2e: `GridOperator.jsx`, `MJStartframe.jsx` (und ggf. andere Components) umstellen auf `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Erst wenn alle Components migriert sind, Legacy-Felder aus den JSONs rauswerfen.
+Legacy-Felder (`label`/`desc`/`t`/`placeholder`/`reason`/`rules`) wurden aus allen 18 Preset-JSONs, `core-templates.json` und den 6 migrierten MJ-JSONs (`templates`, `filmstocks`, `modifiers`, `genres`, `emotional-hooks`, `forbidden`) entfernt. `random-scenes.json` bleibt unverändert (reine englische Prompt-Daten). Vite-Build ist grün (MJStartframe-Bundle von 71.75 kB auf 59.71 kB geschrumpft durch Legacy-Removal).
+
+Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) haben noch nur Legacy `t` — die `tData`-Calls in PromptBuilder fallen via Fallback-Kette aber korrekt zurück, kein Regression. Diese Files kommen in Stufe **2h** dran.
 
 ### Stage 1 ✅ erledigt
 - `5607a3f` GridOperator Scroll-Fix (`.previewColumn` max-height + overflow)
@@ -84,9 +86,10 @@ Jetzt kommt 2e: `GridOperator.jsx`, `MJStartframe.jsx` (und ggf. andere Componen
   - [x] 2b: Preset-JSONs (alle 18 in `src/data/presets/`) auf `label_en`/`label_de`/`desc_en`/`desc_de` + `category` Feld + neues `_categories.json`
   - [x] 2c: `core-templates.json` auf gleiche Struktur
   - [x] 2d: MJ Data-Files — `templates.json` (label/desc + field.label/field.placeholder), `filmstocks.json`, `modifiers.json`, `genres.json`, `emotional-hooks.json` (alle `t_en`/`t_de`), `forbidden.json` (label/reason/rules), `random-scenes.json` (keine Lokalisierung nötig, reine englische Daten)
-  - [ ] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Danach Legacy-Felder aus JSONs entfernen.
+  - [x] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Legacy-Felder aus den migrierten JSONs entfernt (Presets, core-templates, MJ-Files außer random-scenes).
   - [ ] 2f: Tooltip-Review — alle `title=` Attribute prüfen, fehlende ergänzen
   - [ ] 2g: i18n.json prüfen ob DE-Block komplett ist, fehlende Keys ergänzen
+  - [ ] 2h: PromptBuilder-Daten migrieren — `styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json` auf `t_en`/`t_de`. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift.
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:
   - Default = Core
   - "SeenGrid Signature" Wording + goldener ★ + Gold-Glow

@@ -1,22 +1,28 @@
 {
   "id": "detail-anchor-strip",
   "category": "detail",
-  "label": "Detail Anchor Strip",
   "label_en": "Detail Anchor Strip",
   "label_de": "Detail-Anker-Strip",
   "badge": "SeenGrid Optimized",
   "rows": 1,
   "cols": 4,
-  "desc": "3-5 Detail-Crops der wichtigsten Identity-Anker. Verhindert Drift in späteren Generierungen.",
   "desc_en": "3–5 detail crops of the most important identity anchors — prevents drift in later generations.",
   "desc_de": "3–5 Detail-Crops der wichtigsten Identity-Anker. Verhindert Drift in späteren Generierungen.",
   "layout": "Even",
   "source": "DeepSeek1.txt — Angle Study and Detail Anchor.txt STEP 6",
   "prompt": "Detail Anchor Strip\n\nYou are given a character angle study showing the same character from multiple views.\n\nTASK\nCreate 3 to 5 close detail crops of the most important recurring identity anchors from the character.\n\nPURPOSE\nThis preserves the micro-signatures that tend to drift in later generates.\nEach crop must be detailed enough to serve as a correction reference.\n\nDETAIL SELECTION\nChoose only the most identity-critical recurring details, such as:\nhand shape, collar or neckline, footwear, signature accessory, sleeve hem, hair ornament, belt or clasp, earring, fabric texture, weapon detail.\nChoose what matters most for THIS character. Do not pad with generic details.\n\nQUALITY ANCHOR\nEach crop must preserve full material detail and surface quality from the source.\nDo not simplify textures or materials.\n\nLAYOUT\n1 row, 3–5 panels. Even spacing. No text. No labels.\n\nFORBIDDEN\nNo face in the crops (face is already in the Angle Study).\nNo generic or decorative details that don't define this specific character.\nNo quality drop.",
   "panelRoles": [
-    "Detail 1", "Detail 2", "Detail 3", "Detail 4"
+    "Detail 1",
+    "Detail 2",
+    "Detail 3",
+    "Detail 4"
   ],
   "inputFields": [
-    { "id": "charDesc", "label": "Character Angle Study", "placeholder": "Beschreibung des Charakters und der wichtigsten Details", "required": true }
+    {
+      "id": "charDesc",
+      "label": "Character Angle Study",
+      "placeholder": "Beschreibung des Charakters und der wichtigsten Details",
+      "required": true
+    }
   ]
 }

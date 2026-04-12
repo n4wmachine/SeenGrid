@@ -12,18 +12,18 @@ import hookData       from '../data/mj/emotional-hooks.json'
 import randomSceneData from '../data/mj/random-scenes.json'
 
 const AR_OPTIONS = [
-  { v: '--ar 16:9',    t: 'Breitbild — Standard' },
-  { v: '--ar 2.39:1',  t: 'Anamorphic Cinemascope' },
-  { v: '--ar 1.85:1',  t: 'Flat Widescreen' },
-  { v: '--ar 4:3',     t: 'Enge, Porträt, Retro' },
-  { v: '--ar 9:16',    t: 'Vertikal / Mobile' },
-  { v: '--ar 1:1',     t: 'Quadratisch' },
+  { v: '--ar 16:9',    t: 'Widescreen — standard',        t_en: 'Widescreen — standard',        t_de: 'Breitbild — Standard' },
+  { v: '--ar 2.39:1',  t: 'Anamorphic Cinemascope',       t_en: 'Anamorphic Cinemascope',       t_de: 'Anamorphic Cinemascope' },
+  { v: '--ar 1.85:1',  t: 'Flat Widescreen',              t_en: 'Flat Widescreen',              t_de: 'Flat Widescreen' },
+  { v: '--ar 4:3',     t: 'Tight, portrait, retro',       t_en: 'Tight, portrait, retro',       t_de: 'Enge, Porträt, Retro' },
+  { v: '--ar 9:16',    t: 'Vertical / mobile',            t_en: 'Vertical / mobile',            t_de: 'Vertikal / Mobile' },
+  { v: '--ar 1:1',     t: 'Square',                       t_en: 'Square',                       t_de: 'Quadratisch' },
 ]
 
 const SUB_TABS = [
-  { id: 'fields',    label: 'Felder' },
-  { id: 'templates', label: 'Templates & Medium' },
-  { id: 'params',    label: 'Filmstock & Parameter' },
+  { id: 'fields',    labelKey: 'mj.sub_tab_fields' },
+  { id: 'templates', labelKey: 'mj.sub_tab_templates' },
+  { id: 'params',    labelKey: 'mj.sub_tab_params' },
 ]
 
 function initState() {
@@ -45,7 +45,7 @@ function initFields(template) {
 }
 
 export default function MJStartframe() {
-  const { t } = useLang()
+  const { t, tData, lang } = useLang()
   const [state, setState] = useState(initState)
   const [copied, setCopied]     = useState(false)
   const [showForbidden, setShowForbidden] = useState(false)
@@ -77,7 +77,7 @@ export default function MJStartframe() {
     forbiddenData.categories.forEach(cat => {
       cat.words.forEach(w => {
         if (text.toLowerCase().includes(w.toLowerCase())) {
-          found.push({ word: w, reason: cat.reason, label: cat.label })
+          found.push({ word: w, cat })
         }
       })
     })
@@ -192,7 +192,7 @@ export default function MJStartframe() {
               className={[styles.subTabBtn, activeSubTab === tab.id && styles.active].filter(Boolean).join(' ')}
               onClick={() => setActiveSubTab(tab.id)}
             >
-              {tab.label}
+              {t(tab.labelKey)}
               {tab.id === 'fields' && filledFieldCount > 0 && (
                 <span className={styles.subTabBadge}>{filledFieldCount}/{totalFieldCount}</span>
               )}
@@ -227,7 +227,7 @@ export default function MJStartframe() {
             <div className={styles.section}>
               <p className={styles.sectionTitle}>{t('mj.fill_fields')}</p>
               <p className={styles.templateIndicator}>
-                Template: {state.selectedTemplate.label}
+                Template: {tData(state.selectedTemplate, 'label')}
               </p>
               <div className={styles.fieldGroup}>
                 {state.selectedTemplate.fields
@@ -239,6 +239,7 @@ export default function MJStartframe() {
                       value={state.fields[field.id] || ''}
                       onChange={v => updateField(field.id, v)}
                       lightSourceHint={t('mj.light_source_hint')}
+                      tData={tData}
                       styles={styles}
                     />
                   ))
@@ -268,7 +269,7 @@ export default function MJStartframe() {
                         key={h.v}
                         className={[styles.chip, state.fields['EMOTIONAL_HOOK'] === h.v && styles.active].filter(Boolean).join(' ')}
                         onClick={() => updateField('EMOTIONAL_HOOK', h.v)}
-                        title={h.t}
+                        title={tData(h, 't')}
                       >
                         &ldquo;{h.v}&rdquo;
                       </button>
@@ -292,14 +293,14 @@ export default function MJStartframe() {
                     key={tpl.id}
                     className={[styles.chip, state.selectedTemplate.id === tpl.id && styles.active].filter(Boolean).join(' ')}
                     onClick={() => setTemplate(tpl)}
-                    title={tpl.desc}
+                    title={tData(tpl, 'desc')}
                   >
-                    {tpl.label}
+                    {tData(tpl, 'label')}
                   </button>
                 ))}
               </div>
               <p className={styles.templateDesc}>
-                {state.selectedTemplate.desc}
+                {tData(state.selectedTemplate, 'desc')}
               </p>
             </div>
 
@@ -313,7 +314,7 @@ export default function MJStartframe() {
                   <button
                     key={m.v}
                     className={[styles.chip, state.medModifier === m.v && styles.active].filter(Boolean).join(' ')}
-                    title={m.t}
+                    title={tData(m, 't')}
                     onClick={() => setState(p => ({ ...p, medModifier: m.v }))}
                   >{m.v}</button>
                 ))}
@@ -325,7 +326,7 @@ export default function MJStartframe() {
                   <button
                     key={g.v}
                     className={[styles.chip, state.medGenre === g.v && styles.active].filter(Boolean).join(' ')}
-                    title={g.t}
+                    title={tData(g, 't')}
                     onClick={() => setState(p => ({ ...p, medGenre: g.v }))}
                   >{g.v}</button>
                 ))}
@@ -350,7 +351,7 @@ export default function MJStartframe() {
                     key={fs.v}
                     className={[styles.chip, state.filmstock === fs.v && styles.active].filter(Boolean).join(' ')}
                     onClick={() => setState(p => ({ ...p, filmstock: fs.v }))}
-                    title={fs.t}
+                    title={tData(fs, 't')}
                   >
                     {fs.v}
                   </button>
@@ -368,7 +369,7 @@ export default function MJStartframe() {
                   <button
                     key={ar.v}
                     className={[styles.chip, state.ar === ar.v && styles.active].filter(Boolean).join(' ')}
-                    title={ar.t}
+                    title={tData(ar, 't')}
                     onClick={() => setState(p => ({ ...p, ar: ar.v }))}
                   >{ar.v.replace('--ar ', '')}</button>
                 ))}
@@ -408,7 +409,7 @@ export default function MJStartframe() {
             {warnings.map((w, i) => (
               <div key={i} className={styles.warningItem}>
                 <code className={styles.warningWord}>"{w.word}"</code>
-                <span className={styles.warningReason}> — {w.reason}</span>
+                <span className={styles.warningReason}> — {tData(w.cat, 'reason')}</span>
               </div>
             ))}
           </div>
@@ -461,11 +462,11 @@ export default function MJStartframe() {
         {showForbidden && (
           <div className={styles.forbiddenBox}>
             {forbiddenData.categories.map(cat => (
-              <div key={cat.label} className={styles.forbiddenCategory}>
+              <div key={cat.label_en} className={styles.forbiddenCategory}>
                 <p className={styles.forbiddenCatTitle}>
-                  {cat.label}
+                  {tData(cat, 'label')}
                 </p>
-                <p className={styles.forbiddenCatReason}>{cat.reason}</p>
+                <p className={styles.forbiddenCatReason}>{tData(cat, 'reason')}</p>
                 <div className={styles.forbiddenWords}>
                   {cat.words.map(w => (
                     <code key={w} className={styles.forbiddenWord}>{w}</code>
@@ -474,7 +475,7 @@ export default function MJStartframe() {
               </div>
             ))}
             <div className={styles.forbiddenRules}>
-              {forbiddenData.rules.map((r, i) => (
+              {(forbiddenData[`rules_${lang}`] || forbiddenData.rules_en || forbiddenData.rules).map((r, i) => (
                 <p key={i} className={styles.forbiddenRule}>→ {r}</p>
               ))}
             </div>
@@ -487,11 +488,11 @@ export default function MJStartframe() {
 }
 
 // ── Field Input ──
-function FieldInput({ field, value, onChange, lightSourceHint, styles }) {
+function FieldInput({ field, value, onChange, lightSourceHint, tData, styles }) {
   return (
     <div>
       <label className={styles.fieldLabel}>
-        {field.label}
+        {tData(field, 'label')}
         {field.id === 'LIGHT_SOURCE' && (
           <span className={styles.fieldHint}> — {lightSourceHint}</span>
         )}
@@ -513,7 +514,7 @@ function FieldInput({ field, value, onChange, lightSourceHint, styles }) {
         rows={2}
         value={value}
         onChange={e => onChange(e.target.value)}
-        placeholder={field.placeholder}
+        placeholder={tData(field, 'placeholder')}
         spellCheck={false}
       />
     </div>

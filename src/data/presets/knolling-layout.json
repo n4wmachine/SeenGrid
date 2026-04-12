@@ -1,20 +1,25 @@
 {
   "id": "knolling-layout",
   "category": "detail",
-  "label": "Knolling / Inventory Layout",
   "label_en": "Knolling / Inventory Layout",
   "label_de": "Knolling / Inventar-Layout",
   "badge": "SeenGrid Optimized",
   "rows": 1,
   "cols": 1,
-  "desc": "Break down an outfit or prop set into clean flat-lay components for asset reference and consistency.",
   "desc_en": "Break down an outfit or prop set into clean flat-lay components for asset reference and consistency.",
   "desc_de": "Zerlegt ein Outfit oder Prop-Set in saubere Flat-Lay-Komponenten für Asset-Referenz und Konsistenz.",
   "layout": "Even",
   "source": "MISSING_PRESETS.txt — Item 11",
   "prompt": "Knolling / Inventory Layout\n\nYou are given a character, outfit, or prop set reference.\n\nTASK\nCreate a clean inventory layout breaking the outfit or prop set into readable individual components.\n\nSUBJECT\n[DESCRIBE THE OUTFIT OR PROP SET HERE]\n\nLAYOUT\nKnolling / flat lay from above. All items clearly separated, fully visible.\nBalanced spacing. Clean alignment. Neutral background. No text.\n\nRULES\nEach item shown as individual component. Orderly and readable.\nNo merged pieces. No invented extra props. Design consistency across all items.\n\nFORBIDDEN\nNo perspective scene view. No character wearing items (unless requested).\nNo cluttered composition.",
-  "panelRoles": ["Knolling Inventory"],
+  "panelRoles": [
+    "Knolling Inventory"
+  ],
   "inputFields": [
-    { "id": "subject", "label": "Subject (Outfit / Prop Set)", "placeholder": "Describe the outfit or prop set to break down...", "required": true }
+    {
+      "id": "subject",
+      "label": "Subject (Outfit / Prop Set)",
+      "placeholder": "Describe the outfit or prop set to break down...",
+      "required": true
+    }
   ]
 }

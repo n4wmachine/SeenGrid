@@ -1,25 +1,39 @@
 {
   "id": "multishot-3x3-cross-zone",
   "category": "multishot",
-  "label": "3x3 Multi-Shot (Cross Zone)",
   "label_en": "3x3 Multi-Shot (Cross Zone)",
   "label_de": "3x3 Multi-Shot (Zonen-übergreifend)",
   "badge": "SeenGrid Optimized",
   "rows": 3,
   "cols": 3,
-  "desc": "Mini-Story: Bewegung durch 3 Zonen. Location Journey, räumliche Progression.",
   "desc_en": "Mini-story moving through multiple zones — a location journey with spatial progression.",
   "desc_de": "Mini-Story: Bewegung durch 3 Zonen. Location Journey, räumliche Progression.",
   "layout": "Even",
   "source": "DeepSeek1.txt — 3x3GRIDS.txt PROMPT 2B",
   "prompt": "3x3 Multi-Shot Grid — Cross-Zone Version\nYou are given:\nReference A = character master reference\nReference B = world zone board (3x3 zones)\n\nTASK\nCreate a cinematic 3x3 sequence showing a short location journey that moves through the zones from Reference B. Use the zone board as a believable spatial path. This is a mini-story / location progression, not random shots.\n\nREFERENCE PRIORITY\nCharacter = Reference A (Face Crop highest).\nWorld identity, zone relationships, materials, light, atmosphere = Reference B.\n\nPANEL FUNCTIONS (sequential reading order):\nPanel 1–3: Arrival & First Contact (entrance / outer zones)\nPanel 4–6: Transition & Deepening (thresholds, passages, rising tension)\nPanel 7–9: Core Confrontation & Aftermath (main locus → hidden depth → lingering consequence)\n\nCONTINUITY RULE\nThe viewer must believe the character physically moved through connected terrain from Panel 1 to Panel 9. Zones must feel like a natural progression. What happens in earlier panels influences later ones.\n\nLAYOUT\n3x3 grid. Even spacing. Thin subtle separators. No text. No labels.\n\nLOCKED\nSame character identity, same outfit, same overall world logic and lighting continuity.\n\nVARIABLE\nZone progression, camera angle, distance, composition, character position and action.\n\nFORBIDDEN\nNo face or outfit drift. No disconnected location jumps. No duplicated shots. No pasted-in character feeling.",
   "panelRoles": [
-    "Arrival", "First Contact", "Outer Zone",
-    "Transition", "Threshold / Passage", "Rising Tension",
-    "Core Confrontation", "Hidden Depth", "Aftermath"
+    "Arrival",
+    "First Contact",
+    "Outer Zone",
+    "Transition",
+    "Threshold / Passage",
+    "Rising Tension",
+    "Core Confrontation",
+    "Hidden Depth",
+    "Aftermath"
   ],
   "inputFields": [
-    { "id": "charRef", "label": "Reference A — Character",        "placeholder": "Charakter-Beschreibung", "required": true },
-    { "id": "boardRef", "label": "Reference B — World Zone Board", "placeholder": "Beschreibung des 3x3 Zone Boards", "required": true }
+    {
+      "id": "charRef",
+      "label": "Reference A — Character",
+      "placeholder": "Charakter-Beschreibung",
+      "required": true
+    },
+    {
+      "id": "boardRef",
+      "label": "Reference B — World Zone Board",
+      "placeholder": "Beschreibung des 3x3 Zone Boards",
+      "required": true
+    }
   ]
 }

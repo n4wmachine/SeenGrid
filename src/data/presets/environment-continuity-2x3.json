@@ -1,13 +1,11 @@
 {
   "id": "environment-continuity-2x3",
   "category": "world",
-  "label": "Environment Continuity",
   "label_en": "Environment Continuity",
   "label_de": "Environment-Kontinuität",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 3,
-  "desc": "Show the same location from 6 camera positions to establish spatial consistency for video generation.",
   "desc_en": "Show the same location from 6 camera positions to establish spatial consistency for video generation.",
   "desc_de": "Zeigt denselben Ort aus 6 Kamerapositionen — räumliche Konsistenz für die Video-Generierung.",
   "layout": "Even",

@@ -1,20 +1,25 @@
 {
   "id": "cutaway-worldbuilding",
   "category": "world",
-  "label": "Cutaway Worldbuilding",
   "label_en": "Cutaway Worldbuilding",
   "label_de": "Querschnitt-Worldbuilding",
   "badge": "SeenGrid Optimized",
   "rows": 1,
   "cols": 1,
-  "desc": "Reveal multiple connected layers of one location in a single cross-section composition with spatial logic.",
   "desc_en": "Reveal multiple connected layers of one location in a single cross-section composition with spatial logic.",
   "desc_de": "Mehrere verbundene Ebenen eines Ortes in einer einzigen Querschnitt-Komposition mit räumlicher Logik sichtbar machen.",
   "layout": "Even",
   "source": "MISSING_PRESETS.txt — Item 10",
   "prompt": "Cross-Section / Cutaway Worldbuilding\n\nTASK\nCreate a single cross-section composition revealing multiple connected layers of one location.\n\nSUBJECT\n[DESCRIBE THE LOCATION HERE]\n\nSTRUCTURE\nCutaway view revealing connected layers. Each layer physically connected.\nThe world must read as one coherent environment with believable spatial logic.\nClean readable edges and clear spatial relationships.\n\nFORBIDDEN\nNo disconnected layers. No random perspective shifts.\nNo repeated copied rooms. No chaotic overlap.",
-  "panelRoles": ["Cross-Section Cutaway"],
+  "panelRoles": [
+    "Cross-Section Cutaway"
+  ],
   "inputFields": [
-    { "id": "location", "label": "Location", "placeholder": "Describe the location and its layers...", "required": true }
+    {
+      "id": "location",
+      "label": "Location",
+      "placeholder": "Describe the location and its layers...",
+      "required": true
+    }
   ]
 }

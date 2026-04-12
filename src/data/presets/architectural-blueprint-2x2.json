@@ -1,13 +1,11 @@
 {
   "id": "architectural-blueprint-2x2",
   "category": "technical",
-  "label": "Architectural Blueprint",
   "label_en": "Architectural Blueprint",
   "label_de": "Architektonischer Bauplan",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 2,
-  "desc": "Technical 4-view floor plan and elevation diagram of a cinematic scene — hard spatial reference for Kling/Seedance.",
   "desc_en": "Technical 4-view floor plan and elevation diagram of a cinematic scene — hard spatial reference for Kling/Seedance.",
   "desc_de": "Technischer 4-Ansicht-Grundriss und Aufriss einer Filmszene — harte räumliche Referenz für Kling/Seedance.",
   "layout": "Even",

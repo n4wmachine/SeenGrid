@@ -1,21 +1,31 @@
 {
   "id": "two-character-integration",
   "category": "character",
-  "label": "Two Character Integration",
   "label_en": "Two Character Integration",
   "label_de": "Zwei-Charakter-Integration",
   "badge": "SeenGrid Optimized",
   "rows": 1,
   "cols": 1,
-  "desc": "Place two separate character references into one coherent cinematic scene with locked individual identities.",
   "desc_en": "Place two separate character references into one coherent cinematic scene with locked individual identities.",
   "desc_de": "Führt zwei separate Charakter-Referenzen in einer kohärenten Filmszene zusammen — mit fixierten Einzel-Identitäten.",
   "layout": "Even",
   "source": "MISSING_PRESETS.txt — Item 1",
   "prompt": "Two Character Integration\n\nYou are given two reference images of two different characters.\nReference A = Character A identity.\nReference B = Character B identity.\n\nTASK\nPlace both characters into the same cinematic scene. Maintain perfect identity separation.\n\nSCENE\n[DESCRIBE SCENE HERE]\n\nACTION\n[DESCRIBE WHAT THEY ARE DOING]\n\nREFERENCE PRIORITY\nCharacter A face, body, hair, outfit, materials = Reference A only.\nCharacter B face, body, hair, outfit, materials = Reference B only.\nEnvironment and atmosphere = scene description or scene reference.\n\nCRITICAL\nDo not blend identities. Do not average faces. Do not transfer hairstyle or outfit elements between characters.\n\nINTEGRATION\nBoth characters share the same lighting, perspective, atmosphere, and world depth.\nNatural relative scale. Natural positioning. Consistent shadow direction.\nThe scene must feel like one coherent cinematic shot.\n\nFORBIDDEN\nNo face blending. No identity drift. No pasted look.\nNo mismatched scale or perspective.",
-  "panelRoles": ["Scene — Character A + B"],
+  "panelRoles": [
+    "Scene — Character A + B"
+  ],
   "inputFields": [
-    { "id": "scene", "label": "Scene Description", "placeholder": "Describe the cinematic scene...", "required": true },
-    { "id": "action", "label": "Action / Interaction", "placeholder": "What are the characters doing?", "required": true }
+    {
+      "id": "scene",
+      "label": "Scene Description",
+      "placeholder": "Describe the cinematic scene...",
+      "required": true
+    },
+    {
+      "id": "action",
+      "label": "Action / Interaction",
+      "placeholder": "What are the characters doing?",
+      "required": true
+    }
   ]
 }

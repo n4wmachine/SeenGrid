@@ -1,24 +1,33 @@
 {
   "id": "world-zone-board-3x3",
   "category": "world",
-  "label": "World Zone Board",
   "label_en": "World Zone Board",
   "label_de": "Welt-Zonen-Board",
   "badge": "SeenGrid Optimized",
   "rows": 3,
   "cols": 3,
-  "desc": "9 räumlich verbundene Zonen eines Filmschauplatzes. Jede Zone = begehbarer Bereich.",
   "desc_en": "9 spatially connected zones of a single film location — each zone a walkable area of the same place.",
   "desc_de": "9 räumlich verbundene Zonen eines Filmschauplatzes. Jede Zone = begehbarer Bereich.",
   "layout": "Even",
   "source": "DeepSeek1.txt — 3x3GRIDS.txt PROMPT 1",
   "prompt": "World Zone Builder 3x3\nYou are given a reference image or a location description.\n\nTASK\nCreate a 3x3 world zone board of one physically connected cinematic location. Treat this place like a real film set — the viewer must clearly understand how a character could physically move between the zones.\n\nREFERENCE PRIORITY\nPreserve: world identity, material family, lighting family, atmosphere, terrain/architectural logic, spatial relationships.\n\nZONE DESIGN\nEach of the 9 panels shows a distinct but logically connected zone of the same location.\nAdapt the zones naturally to your scene (examples: entrance, narrow passage, threshold, main locus, observation point, hidden depth, side alley, elevated vantage, aftermath area).\n\nCOHERENCE RULE\nAll 9 zones must feel like believable parts of ONE single place. Same materials, same light logic, same atmosphere, same time of day. Each zone should feel like the most natural continuation of the previous one.\n\nLAYOUT\n3x3 grid. Clean alignment. Even spacing. Thin subtle separators. No text. No labels.\n\nQUALITY ANCHOR\nPremium cinematic rendering, rich material detail, atmospheric depth, correct perspective and scale across all panels.\n\nFORBIDDEN\nNo disconnected zones. No architecture or geology drift. No random fantasy clutter without spatial logic. No quality downgrade.",
   "panelRoles": [
-    "Entrance", "Narrow Passage", "Threshold",
-    "Main Locus", "Observation Point", "Hidden Depth",
-    "Side Alley", "Elevated Vantage", "Aftermath Area"
+    "Entrance",
+    "Narrow Passage",
+    "Threshold",
+    "Main Locus",
+    "Observation Point",
+    "Hidden Depth",
+    "Side Alley",
+    "Elevated Vantage",
+    "Aftermath Area"
   ],
   "inputFields": [
-    { "id": "location", "label": "Location / Reference", "placeholder": "z.B. \"abandoned Soviet factory, winter, blue dusk\" oder Referenzbild-Beschreibung", "required": true }
+    {
+      "id": "location",
+      "label": "Location / Reference",
+      "placeholder": "z.B. \"abandoned Soviet factory, winter, blue dusk\" oder Referenzbild-Beschreibung",
+      "required": true
+    }
   ]
 }

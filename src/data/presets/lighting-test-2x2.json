@@ -1,13 +1,11 @@
 {
   "id": "lighting-test-2x2",
   "category": "technical",
-  "label": "Lighting Test Matrix",
   "label_en": "Lighting Test Matrix",
   "label_de": "Lichttest-Matrix",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 2,
-  "desc": "Same character under 4 different lighting conditions — identity, pose, and background locked.",
   "desc_en": "Same character under 4 different lighting conditions — identity, pose, and background locked.",
   "desc_de": "Derselbe Charakter unter 4 verschiedenen Lichtsituationen — Identität, Pose und Hintergrund bleiben fixiert.",
   "layout": "Even",

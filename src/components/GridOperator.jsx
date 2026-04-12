@@ -61,7 +61,7 @@ function buildRoles(preset) {
 }
 
 export default function GridOperator() {
-  const { t } = useLang()
+  const { t, tData } = useLang()
 
   const LAYOUTS = [
     // promptDesc = fest englisch, landet im generierten Prompt
@@ -219,11 +219,11 @@ export default function GridOperator() {
                       key={p.id}
                       className={[styles.presetItem, selectedPreset.id === p.id && styles.active].filter(Boolean).join(' ')}
                       onClick={() => setPreset(p)}
-                      title={p.desc}
+                      title={tData(p, 'desc')}
                     >
                       <div>
-                        <div className={styles.presetName}>{p.label}</div>
-                        <div className={styles.presetDesc}>{p.desc}</div>
+                        <div className={styles.presetName}>{tData(p, 'label')}</div>
+                        <div className={styles.presetDesc}>{tData(p, 'desc')}</div>
                       </div>
                       {p.optimized && (
                         <span className={styles.presetOptBadge}>★</span>
@@ -246,14 +246,14 @@ export default function GridOperator() {
                   key={tpl.id}
                   className={[styles.chip, coreTemplate.id === tpl.id && styles.active].filter(Boolean).join(' ')}
                   onClick={() => setCoreTemplate(tpl)}
-                  title={tpl.desc}
+                  title={tData(tpl, 'desc')}
                 >
-                  {tpl.label}
+                  {tData(tpl, 'label')}
                 </button>
               ))}
             </div>
             <p className={styles.templateDesc}>
-              {coreTemplate.desc}
+              {tData(coreTemplate, 'desc')}
             </p>
           </div>
         )}
@@ -437,9 +437,9 @@ export default function GridOperator() {
           {mode === 'seengrid' && (
             <div className={styles.presetInfo}>
               <p className={styles.presetInfoTitle}>
-                {selectedPreset.label}
+                {tData(selectedPreset, 'label')}
               </p>
-              <p className={styles.presetInfoDesc}>{selectedPreset.desc}</p>
+              <p className={styles.presetInfoDesc}>{tData(selectedPreset, 'desc')}</p>
               <p className={styles.presetInfoSource}>Source: {selectedPreset.source}</p>
             </div>
           )}

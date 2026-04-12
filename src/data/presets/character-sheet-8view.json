@@ -1,13 +1,11 @@
 {
   "id": "character-sheet-8view",
   "category": "character",
-  "label": "8-View Character Sheet",
   "label_en": "8-View Character Sheet",
   "label_de": "8-Ansichten-Charakterbogen",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 4,
-  "desc": "Professional 8-view character turnaround — 4 portrait views + 4 full-body views for consistent multi-angle generation.",
   "desc_en": "Professional 8-view character turnaround — 4 portrait views + 4 full-body views for consistent multi-angle generation.",
   "desc_de": "Professioneller 8-View-Turnaround — 4 Porträt-Ansichten + 4 Ganzkörper-Ansichten für konsistente Multi-Angle-Generierung.",
   "layout": "Even",

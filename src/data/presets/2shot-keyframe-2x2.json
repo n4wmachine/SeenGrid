@@ -1,13 +1,11 @@
 {
   "id": "2shot-keyframe-2x2",
   "category": "multishot",
-  "label": "2-Shot Keyframe Pairs",
   "label_en": "2-Shot Keyframe Pairs",
   "label_de": "2-Shot Keyframe-Paare",
   "badge": "SeenGrid Optimized",
   "rows": 2,
   "cols": 2,
-  "desc": "Start + End frames for two consecutive independent shots — direct input for Kling/Seedance video generation.",
   "desc_en": "Start + End frames for two consecutive independent shots — direct input for Kling/Seedance video generation.",
   "desc_de": "Start- und End-Frames für zwei aufeinanderfolgende unabhängige Shots — direkter Input für Kling/Seedance-Videogenerierung.",
   "layout": "Even",
@@ -20,7 +18,17 @@
     "Shot 2 — End Frame"
   ],
   "inputFields": [
-    { "id": "shot1", "label": "Shot 1 — Motion / Action", "placeholder": "Describe the motion or action for Shot 1...", "required": true },
-    { "id": "shot2", "label": "Shot 2 — Motion / Action", "placeholder": "Describe the motion or action for Shot 2...", "required": true }
+    {
+      "id": "shot1",
+      "label": "Shot 1 — Motion / Action",
+      "placeholder": "Describe the motion or action for Shot 1...",
+      "required": true
+    },
+    {
+      "id": "shot2",
+      "label": "Shot 2 — Motion / Action",
+      "placeholder": "Describe the motion or action for Shot 2...",
+      "required": true
+    }
   ]
 }

@@ -1,25 +1,117 @@
 [
-  { "v": "35mm film grain",          "t": "Allgemein filmisch — organisches Korn, warm, klassisch",                              "t_en": "Generally cinematic — organic grain, warm, classical",                                  "t_de": "Allgemein filmisch — organisches Korn, warm, klassisch" },
-  { "v": "35mm Kodak Vision3 500T",  "t": "Warm, organisch, körnig — der Referenz-Standard für Nacht-Innenaufnahmen",              "t_en": "Warm, organic, grainy — the reference standard for night interiors",                   "t_de": "Warm, organisch, körnig — der Referenz-Standard für Nacht-Innenaufnahmen" },
-  { "v": "Kodak Vision3 200T",       "t": "Tageslicht-Pendant — saubererer Ton, weniger Korn, warme Schatten",                    "t_en": "Daylight counterpart — cleaner tone, less grain, warm shadows",                         "t_de": "Tageslicht-Pendant — saubererer Ton, weniger Korn, warme Schatten" },
-  { "v": "Kodak Portra 400",         "t": "Hautfarben-optimiert, sanfte Gradation — das Portraitfilm-Ideal",                      "t_en": "Skin-tone optimized, soft gradation — the portrait-film ideal",                         "t_de": "Hautfarben-optimiert, sanfte Gradation — das Portraitfilm-Ideal" },
-  { "v": "Kodak Ektachrome E100",    "t": "Reversal, satte Farben, hoher Kontrast — Sättigung ohne Aggressivität",                 "t_en": "Reversal, rich colors, high contrast — saturation without aggression",                  "t_de": "Reversal, satte Farben, hoher Kontrast — Sättigung ohne Aggressivität" },
-  { "v": "Kodachrome 64",            "t": "Warm, golden, leicht gesättigt — National Geographic, 1970s Nostalgie",                "t_en": "Warm, golden, lightly saturated — National Geographic, 1970s nostalgia",                "t_de": "Warm, golden, leicht gesättigt — National Geographic, 1970s Nostalgie" },
-  { "v": "Kodak Tri-X 400",          "t": "Schwarz-Weiß, stark körnig, hoher Kontrast — Reportage-Ikone",                          "t_en": "Black & white, heavily grainy, high contrast — the reportage icon",                     "t_de": "Schwarz-Weiß, stark körnig, hoher Kontrast — Reportage-Ikone" },
-  { "v": "Kodak Gold 200",           "t": "Consumer-Wärme, erhöhte Rötung, nostalgisch — Urlaubsfotos der 1990s",                 "t_en": "Consumer warmth, elevated reds, nostalgic — 1990s vacation snapshots",                  "t_de": "Consumer-Wärme, erhöhte Rötung, nostalgisch — Urlaubsfotos der 1990s" },
-  { "v": "Ilford HP5 Plus",          "t": "Schwarz-Weiß, vielseitig, mildes Korn — professioneller Dokumentar-Standard",           "t_en": "Black & white, versatile, mild grain — professional documentary standard",              "t_de": "Schwarz-Weiß, vielseitig, mildes Korn — professioneller Dokumentar-Standard" },
-  { "v": "Ilford Delta 3200",        "t": "Extrem körnig, stark, dunkel — Nachtaufnahmen ohne Licht",                              "t_en": "Extremely grainy, heavy, dark — night shots without available light",                   "t_de": "Extrem körnig, stark, dunkel — Nachtaufnahmen ohne Licht" },
-  { "v": "Fuji Eterna",              "t": "Soft, gedämpft, romantisch — japanische Farbpalette, kühlere Schatten",                 "t_en": "Soft, muted, romantic — Japanese color palette, cooler shadows",                        "t_de": "Soft, gedämpft, romantisch — japanische Farbpalette, kühlere Schatten" },
-  { "v": "Fuji Superia 400",         "t": "Grün-tendierendes Licht, saubere Mitteltöne — lebendiges Consumer-Korn",                "t_en": "Green-leaning light, clean midtones — lively consumer grain",                           "t_de": "Grün-tendierendes Licht, saubere Mitteltöne — lebendiges Consumer-Korn" },
-  { "v": "Fuji Velvia 50",           "t": "Reversal, extreme Farbsättigung — hyper-real Natur und Landschaft",                     "t_en": "Reversal, extreme color saturation — hyper-real nature and landscape",                  "t_de": "Reversal, extreme Farbsättigung — hyper-real Natur und Landschaft" },
-  { "v": "CineStill 800T",           "t": "Tungsten-balance, Neon Halation, urban Nacht — der Cyberpunk-Film-Look",                "t_en": "Tungsten balance, neon halation, urban night — the cyberpunk film look",                "t_de": "Tungsten-Balance, Neon-Halation, urbane Nacht — der Cyberpunk-Film-Look" },
-  { "v": "CineStill 50D",            "t": "Tageslicht, fine grain, subtle film base — elegantes, sauberes Bild",                   "t_en": "Daylight, fine grain, subtle film base — elegant, clean image",                         "t_de": "Tageslicht, feines Korn, subtile Film-Base — elegantes, sauberes Bild" },
-  { "v": "Agfa Vista 200",           "t": "Leicht erhöhter Gelbstich, weiches Korn — günstig, charaktervoll",                      "t_en": "Slightly elevated yellow cast, soft grain — cheap, characterful",                       "t_de": "Leicht erhöhter Gelbstich, weiches Korn — günstig, charaktervoll" },
-  { "v": "Lomography 400",           "t": "Lo-Fi, unvorhersehbare Sättigung, Vignettierung — bewusste Imperfektheit",              "t_en": "Lo-fi, unpredictable saturation, vignetting — deliberate imperfection",                 "t_de": "Lo-Fi, unvorhersehbare Sättigung, Vignettierung — bewusste Imperfektheit" },
-  { "v": "underexposed 35mm",        "t": "Dunkel, körnig, rätselhaft — absichtliche Unterbelichtung als Stil",                    "t_en": "Dark, grainy, enigmatic — intentional under-exposure as a style",                       "t_de": "Dunkel, körnig, rätselhaft — absichtliche Unterbelichtung als Stil" },
-  { "v": "35mm anamorphic",          "t": "Breitbild-Charakter — ovales Bokeh, horizontale Lens Flares",                           "t_en": "Widescreen character — oval bokeh, horizontal lens flares",                              "t_de": "Breitbild-Charakter — ovales Bokeh, horizontale Lens Flares" },
-  { "v": "16mm film stock",          "t": "Rau, körnig, dokumentarisch — stark, unglamourös, direkt",                              "t_en": "Rough, grainy, documentary — strong, unglamorous, direct",                               "t_de": "Rau, körnig, dokumentarisch — stark, unglamourös, direkt" },
-  { "v": "super 8 film",             "t": "Lo-Fi, nostalgisch, retro — warm, flimmernd, verblasst",                                "t_en": "Lo-fi, nostalgic, retro — warm, flickering, faded",                                       "t_de": "Lo-Fi, nostalgisch, retro — warm, flimmernd, verblasst" },
-  { "v": "expired 35mm",             "t": "Color shift, Schleier, unvorhersehbare Sättigung — Zeit als Ästhetik",                   "t_en": "Color shift, veiling, unpredictable saturation — time as aesthetic",                    "t_de": "Color Shift, Schleier, unvorhersehbare Sättigung — Zeit als Ästhetik" },
-  { "v": "ARRI Alexa LF",            "t": "Digital, filmisch, große Dynamic Range — modernes Kino-Referenzbild",                   "t_en": "Digital, cinematic, wide dynamic range — the modern reference image",                   "t_de": "Digital, filmisch, große Dynamic Range — modernes Kino-Referenzbild" }
+  {
+    "v": "35mm film grain",
+    "t_en": "Generally cinematic — organic grain, warm, classical",
+    "t_de": "Allgemein filmisch — organisches Korn, warm, klassisch"
+  },
+  {
+    "v": "35mm Kodak Vision3 500T",
+    "t_en": "Warm, organic, grainy — the reference standard for night interiors",
+    "t_de": "Warm, organisch, körnig — der Referenz-Standard für Nacht-Innenaufnahmen"
+  },
+  {
+    "v": "Kodak Vision3 200T",
+    "t_en": "Daylight counterpart — cleaner tone, less grain, warm shadows",
+    "t_de": "Tageslicht-Pendant — saubererer Ton, weniger Korn, warme Schatten"
+  },
+  {
+    "v": "Kodak Portra 400",
+    "t_en": "Skin-tone optimized, soft gradation — the portrait-film ideal",
+    "t_de": "Hautfarben-optimiert, sanfte Gradation — das Portraitfilm-Ideal"
+  },
+  {
+    "v": "Kodak Ektachrome E100",
+    "t_en": "Reversal, rich colors, high contrast — saturation without aggression",
+    "t_de": "Reversal, satte Farben, hoher Kontrast — Sättigung ohne Aggressivität"
+  },
+  {
+    "v": "Kodachrome 64",
+    "t_en": "Warm, golden, lightly saturated — National Geographic, 1970s nostalgia",
+    "t_de": "Warm, golden, leicht gesättigt — National Geographic, 1970s Nostalgie"
+  },
+  {
+    "v": "Kodak Tri-X 400",
+    "t_en": "Black & white, heavily grainy, high contrast — the reportage icon",
+    "t_de": "Schwarz-Weiß, stark körnig, hoher Kontrast — Reportage-Ikone"
+  },
+  {
+    "v": "Kodak Gold 200",
+    "t_en": "Consumer warmth, elevated reds, nostalgic — 1990s vacation snapshots",
+    "t_de": "Consumer-Wärme, erhöhte Rötung, nostalgisch — Urlaubsfotos der 1990s"
+  },
+  {
+    "v": "Ilford HP5 Plus",
+    "t_en": "Black & white, versatile, mild grain — professional documentary standard",
+    "t_de": "Schwarz-Weiß, vielseitig, mildes Korn — professioneller Dokumentar-Standard"
+  },
+  {
+    "v": "Ilford Delta 3200",
+    "t_en": "Extremely grainy, heavy, dark — night shots without available light",
+    "t_de": "Extrem körnig, stark, dunkel — Nachtaufnahmen ohne Licht"
+  },
+  {
+    "v": "Fuji Eterna",
+    "t_en": "Soft, muted, romantic — Japanese color palette, cooler shadows",
+    "t_de": "Soft, gedämpft, romantisch — japanische Farbpalette, kühlere Schatten"
+  },
+  {
+    "v": "Fuji Superia 400",
+    "t_en": "Green-leaning light, clean midtones — lively consumer grain",
+    "t_de": "Grün-tendierendes Licht, saubere Mitteltöne — lebendiges Consumer-Korn"
+  },
+  {
+    "v": "Fuji Velvia 50",
+    "t_en": "Reversal, extreme color saturation — hyper-real nature and landscape",
+    "t_de": "Reversal, extreme Farbsättigung — hyper-real Natur und Landschaft"
+  },
+  {
+    "v": "CineStill 800T",
+    "t_en": "Tungsten balance, neon halation, urban night — the cyberpunk film look",
+    "t_de": "Tungsten-Balance, Neon-Halation, urbane Nacht — der Cyberpunk-Film-Look"
+  },
+  {
+    "v": "CineStill 50D",
+    "t_en": "Daylight, fine grain, subtle film base — elegant, clean image",
+    "t_de": "Tageslicht, feines Korn, subtile Film-Base — elegantes, sauberes Bild"
+  },
+  {
+    "v": "Agfa Vista 200",
+    "t_en": "Slightly elevated yellow cast, soft grain — cheap, characterful",
+    "t_de": "Leicht erhöhter Gelbstich, weiches Korn — günstig, charaktervoll"
+  },
+  {
+    "v": "Lomography 400",
+    "t_en": "Lo-fi, unpredictable saturation, vignetting — deliberate imperfection",
+    "t_de": "Lo-Fi, unvorhersehbare Sättigung, Vignettierung — bewusste Imperfektheit"
+  },
+  {
+    "v": "underexposed 35mm",
+    "t_en": "Dark, grainy, enigmatic — intentional under-exposure as a style",
+    "t_de": "Dunkel, körnig, rätselhaft — absichtliche Unterbelichtung als Stil"
+  },
+  {
+    "v": "35mm anamorphic",
+    "t_en": "Widescreen character — oval bokeh, horizontal lens flares",
+    "t_de": "Breitbild-Charakter — ovales Bokeh, horizontale Lens Flares"
+  },
+  {
+    "v": "16mm film stock",
+    "t_en": "Rough, grainy, documentary — strong, unglamorous, direct",
+    "t_de": "Rau, körnig, dokumentarisch — stark, unglamourös, direkt"
+  },
+  {
+    "v": "super 8 film",
+    "t_en": "Lo-fi, nostalgic, retro — warm, flickering, faded",
+    "t_de": "Lo-Fi, nostalgisch, retro — warm, flimmernd, verblasst"
+  },
+  {
+    "v": "expired 35mm",
+    "t_en": "Color shift, veiling, unpredictable saturation — time as aesthetic",
+    "t_de": "Color Shift, Schleier, unvorhersehbare Sättigung — Zeit als Ästhetik"
+  },
+  {
+    "v": "ARRI Alexa LF",
+    "t_en": "Digital, cinematic, wide dynamic range — the modern reference image",
+    "t_de": "Digital, filmisch, große Dynamic Range — modernes Kino-Referenzbild"
+  }
 ]

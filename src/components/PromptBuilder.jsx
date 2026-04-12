@@ -44,7 +44,7 @@ function initState() {
 }
 
 export default function PromptBuilder() {
-  const { t } = useLang()
+  const { t, tData } = useLang()
   const [state, setState] = useState(initState)
   const [openSections, setOpenSections] = useState(
     () => new Set(['style', 'shotsize', 'lighting'])
@@ -247,6 +247,7 @@ export default function PromptBuilder() {
               onToggle={() => toggleSection(sec.id)}
               onToggleChip={toggleChip}
               activeLabels={getActiveLabels(sec)}
+              tData={tData}
               styles={styles}
             />
           ))}
@@ -359,7 +360,7 @@ export default function PromptBuilder() {
 }
 
 // ── Chip Section (accordion) ──
-function ChipSection({ section, state, isOpen, onToggle, onToggleChip, activeLabels, styles }) {
+function ChipSection({ section, state, isOpen, onToggle, onToggleChip, activeLabels, tData, styles }) {
   const { id, label, mode, data } = section
   const activeCount = activeLabels.length
 
@@ -397,7 +398,7 @@ function ChipSection({ section, state, isOpen, onToggle, onToggleChip, activeLab
                 <button
                   key={item.v}
                   className={[styles.chip, isActive && styles.active].filter(Boolean).join(' ')}
-                  title={item.t}
+                  title={tData(item, 't')}
                   onClick={() => onToggleChip(id, item.v, mode)}
                 >
                   {item.v}
