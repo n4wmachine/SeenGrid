@@ -401,11 +401,22 @@
   outline: none;
 }
 
-/* ---- RECHTE SPALTE: Grid Preview ---- */
+/* ---- RECHTE SPALTE: Grid Preview ----
+   max-height + overflow-y zwingend, sonst hängt der Output-Bereich
+   bei hohem Content unter dem Viewport und ist unerreichbar.
+   Analog zu MJStartframe .outputColumn. */
 .previewColumn {
   position: sticky;
   top: 96px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding-right: var(--sg-space-md);
 }
+
+.previewColumn::-webkit-scrollbar { width: 4px; }
+.previewColumn::-webkit-scrollbar-track { background: transparent; }
+.previewColumn::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
+.previewColumn::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
 .previewPanel {
   background: var(--sg-bg-surface-0);
