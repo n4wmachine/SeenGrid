@@ -16,8 +16,6 @@
     "tabs.vault.label": "Prompt Vault",
     "tabs.vault.desc": "1500+ Community Prompts",
 
-    "header.slogan": "Scene. Grid. Seen.",
-
     "builder.scene_label": "Szene / Motiv",
     "builder.scene_hint": "Freitext \u2014 Sensory Stacking",
     "builder.scene_placeholder": "Beschreibe deine Szene\u2026 z.B. 'A detective stands in a rain-soaked alley, collar raised, breath visible in cold air'",
@@ -188,8 +186,6 @@
     "tabs.mj.desc": "5-Element Cinematic Startframe Architecture",
     "tabs.vault.label": "Prompt Vault",
     "tabs.vault.desc": "1500+ Community Prompts",
-
-    "header.slogan": "Scene. Grid. Seen.",
 
     "builder.scene_label": "Scene / Subject",
     "builder.scene_hint": "Free text \u2014 Sensory Stacking",

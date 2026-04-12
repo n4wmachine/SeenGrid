@@ -71,8 +71,10 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **Idea 1 (Header-Slogan) shipped — Body-Font v1**
-Slogan **"Scene. Grid. Seen."** lebt jetzt inline rechts vom Wordmark, getrennt durch einen dünnen Vertikal-Divider. Implementiert in `Header.jsx` + `Header.css` + `i18n.json` (`header.slogan` Key in DE+EN, identischer englischer String — Brand-Tagline-Konvention, das Seen/Scene-Wortspiel ist nicht übersetzbar).
+### Aktuelle Stufe: **Idea 1 (Header-Slogan) shipped — Body-Font v2**
+Slogan **"Scene. Grid. Seen."** lebt jetzt inline rechts vom Wordmark, getrennt durch einen dünnen Vertikal-Divider. Das Wort "Grid." ist in Teal gesetzt (gleicher Token wie der Wordmark-"Grid" Akzent) — der Slogan wird damit zum typografischen Echo des Wordmarks. **Hardcoded in JSX** analog zum Wordmark-Pattern, kein i18n-Key (Brand-Identität, nicht lokalisierbar).
+
+**v1 → v2 Typografie-Fix:** v1 hatte 13px / Weight 400 / dimgray — landete damit visuell in derselben Kategorie wie die Tab-Nav (auch 13px / 400 / dim), sah aus wie ein nicht-anklickbarer Tab. v2 stapelt fünf Differentiatoren um aus der Tab-Kategorie rauszukommen: 17px Größe / Weight 500 / `--sg-text-primary` (#e0e0e0, voller Wordmark-Helligkeit) / "Grid." in `--sg-teal` / Letter-Spacing 0.015em.
 
 **Entscheidungs-Kontext:**
 - User hatte drei Kandidaten zur Auswahl: "Scene. Grid. Seen." vs "Make your scene seen" vs "From scene to seen." → "Scene. Grid. Seen." gewählt wegen Rhythmus + Brand-Riff (die Silben sortieren sich aus "Seen|Grid" um).

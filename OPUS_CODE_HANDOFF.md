@@ -54,7 +54,8 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 | Commit | Summary |
 |---|---|
-| _pending_ | **Idea 1 ✅** — Header slogan "Scene. Grid. Seen." inline right of wordmark, 13px Space Grotesk + thin vertical divider, hides <1100px. i18n key in DE+EN (same English string, untranslatable wordplay). Display-font pass deferred to Visual Overhaul. |
+| _pending_ | **Idea 1 v2** — Header slogan typography fix: 17px / weight 500 / `--sg-text-primary`, "Grid." in `--sg-teal` matching wordmark accent. v1 was 13px / 400 / dim and read as another tab — five differentiators now pull it out of the tab-nav category. Hardcoded in JSX (mirrors wordmark pattern), `header.slogan` i18n key removed. |
+| `8e2eebe` | **Idea 1 v1** — Header slogan "Scene. Grid. Seen." inline right of wordmark with thin vertical divider, hides <1100px. Body-font v1, superseded immediately by v2 typography fix after user feedback "wirkt überhaupt nicht, wie ein nicht-anklickbarer tab". |
 | `4e32a5b` | docs: refine feature ideas after user clarifications |
 | `3df9d7e` | docs: capture 4 accumulated feature ideas in handoff |
 | `709561b` | Fix wordmark token + document quick-nav visual defer |
@@ -116,9 +117,9 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 
 User collected these between sessions. Triage + sequencing guidance by Opus from this session. **These are NOT build orders** — each has an explicit gate and a triage category. Next Opus: read, discuss with user, don't guess priority.
 
-### Idea 1 — Header slogan ✅ SHIPPED (body-font v1, display-font pass deferred)
+### Idea 1 — Header slogan ✅ SHIPPED v2 (body-font, display-font pass deferred)
 
-**Status:** Implemented in this session. **"Scene. Grid. Seen."** lives inline right of the wordmark, separated by a thin vertical divider. See `Header.jsx` + `.headerSlogan*` rules in `Header.css` and `header.slogan` key in `i18n.json` (same English string in both DE and EN — the Seen/Scene wordplay is untranslatable, treated as a brand tagline like Adidas/BMW/Nike).
+**Status:** Implemented in this session. **"Scene. Grid. Seen."** lives inline right of the wordmark, separated by a thin vertical divider. The word "Grid." is rendered in `--sg-teal` matching the wordmark's "Grid" accent — the slogan reads as a typographic echo of the wordmark itself. Hardcoded in JSX (mirroring the wordmark's hardcoded `Seen<accent>Grid</accent>` structure) — the slogan is brand identity, not a localizable UI string. **No `header.slogan` i18n key exists (intentionally — was added in v1 then removed in v2).**
 
 **Decision rationale (user + Opus, this session):**
 - Three slogans were on the table: **"Scene. Grid. Seen."**, **"Make your scene seen"**, **"From scene to seen."**
@@ -126,10 +127,17 @@ User collected these between sessions. Triage + sequencing guidance by Opus from
 - Grid-only-skew of the slogan was discussed and accepted: it pre-commits to the "Grid Operator = flagship" framing from Idea 4. If Idea 4 lands on a different bridge architecture in the Visual Overhaul chat, the slogan may need to be revisited — but it's a one-string change in `i18n.json`, fully reversible.
 - Per-tab sublines (Muse Spark's secondary suggestion) were **explicitly deferred to Visual Overhaul** because they're entangled with the Idea 4 architectural decision and can't be written cleanly without it. Plan: descriptive (not poetic) one-liners inside each tab's content body, NOT in the header. Reserve the pun for the global slogan only. Reject Muse Spark's specific candidates ("Scene once. Seen forever.", "Direct what gets seen.", "From scene to seen." as MJ-only) — they're either generic, semantically wrong, or recycle the global slogan.
 
+**v1 → v2 typography fix (this session):** v1 used 13px / weight 400 / #909090, which put the slogan in the exact same visual category as the tab nav (also 13px / 400 / dim). User reported it looked like "another tool tab that can't be clicked" — accurate diagnosis, my mistake was being too cautious about "subordinate to wordmark" and rolling straight into the tab-nav category. v2 stacks five differentiators to pull it OUT of the tab category:
+1. **Size 17px** (between wordmark 26 and tabs 13 — its own visual layer)
+2. **Weight 500** (heavier than tabs at 400, lighter than wordmark at 600)
+3. **Color `--sg-text-primary` (#e0e0e0)** — full brightness, same as wordmark, NOT the dim secondary
+4. **"Grid." in `--sg-teal`** — matches the wordmark "Grid" accent exactly. The slogan becomes a typographic echo of the wordmark itself.
+5. **Letter-spacing 0.015em** (down from 0.04em — at 17px the periods carry their own rhythm)
+
 **Implementation details (relevant for Visual Overhaul Opus):**
-- JSX: `<div className="headerSlogan" aria-hidden="true">` sits between `.headerLogo` and `.tabNav`. `aria-hidden` because it's pure brand decoration, no screen-reader value.
-- CSS: 13px Space Grotesk regular, `--sg-text-secondary` (#909090), letter-spacing 0.04em for the three hard-stop beats, 28px left margin from logo, 18px gap between divider and text, 1px × 26px divider in `--sg-border-subtle`. Hides at `max-width: 1100px` so the tab nav keeps breathing room on smaller viewports.
-- i18n: `header.slogan` key in both DE+EN blocks, identical English value. `Header.jsx` now destructures `t` from `useLang()` (was only `lang, setLang` before).
+- JSX: `<div className="headerSlogan" aria-hidden="true">` sits between `.headerLogo` and `.tabNav`. `aria-hidden` because it's pure brand decoration, no screen-reader value. Three text spans inside: `Scene. ` + `<span className="headerSloganAccent">Grid.</span>` + ` Seen.` — mirrors the wordmark's `Seen<span class="headerWordmarkAccent">Grid</span>` pattern.
+- CSS: 17px Space Grotesk weight 500, `--sg-text-primary` (#e0e0e0), letter-spacing 0.015em, 30px left margin from logo, 20px gap between divider and text, 1px × 32px divider in `--sg-border-subtle`. `.headerSloganAccent` uses `--sg-teal` (#2bb5b2 — same token as wordmark Grid accent and the SVG logo mark/diamond/eye). Hides at `max-width: 1100px`.
+- `Header.jsx` does NOT destructure `t` from `useLang()` — slogan is hardcoded in JSX, no i18n needed. (v1 briefly used `t('header.slogan')`; v2 reverted that.)
 
 **⚠ Visual Overhaul TODO (display-font pass):**
 The current implementation uses the body font (Space Grotesk) because it's all that exists right now. Once the Visual Overhaul chat picks a display font (candidates: Neue Machina / Space Mono Display / Instrument Serif), the slogan must be re-typeset to match the rest of the display-level text. **Don't forget the slogan when doing the typography pass — it currently looks "fine" but won't carry the same visual weight as a real display font would give it.** Specifically reconsider:
