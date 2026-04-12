@@ -12,8 +12,8 @@
 - **Branch:** `claude/review-docs-features-Sg7py`
 - **Latest commit:** see `git log --oneline -5`
 - **Build:** `npx vite build` green
-- **Status:** Idea 1 (header slogan **"Scene. Grid. Seen."**) shipped in body-font v1. Lives inline right of the wordmark with a thin vertical divider. Display-font typography pass deferred to Visual Overhaul chat — see *Pending: Feature Ideas → Idea 1* for the explicit TODO list. Per-tab sublines explicitly NOT built (Muse Spark suggestion) — deferred to Visual Overhaul because they're entangled with the Idea 4 architectural decision.
-- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Idea 1 is now shipped (body-font v1) but still has display-font follow-up items. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
+- **Status:** **Idea 1 (header slogan) was attempted twice in this session, both attempts failed user review, both reverted in the same session. Header is back to its pre-`8e2eebe` state.** The original Opus's gate ("don't build before display-font is chosen") was correct — bypassing it cost two failed iterations. See *Pending: Feature Ideas → Idea 1* for the full anti-pattern record (commits `8e2eebe` v1 and `869169f` v2 are kept in history as documentation of what NOT to do). **Do not re-attempt the slogan until display-font decision is locked in the Visual Overhaul chat.**
+- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Idea 1 is back to "deferred to Visual Overhaul" status with full lessons-learned attached. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
@@ -54,8 +54,9 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 | Commit | Summary |
 |---|---|
-| _pending_ | **Idea 1 v2** — Header slogan typography fix: 17px / weight 500 / `--sg-text-primary`, "Grid." in `--sg-teal` matching wordmark accent. v1 was 13px / 400 / dim and read as another tab — five differentiators now pull it out of the tab-nav category. Hardcoded in JSX (mirrors wordmark pattern), `header.slogan` i18n key removed. |
-| `8e2eebe` | **Idea 1 v1** — Header slogan "Scene. Grid. Seen." inline right of wordmark with thin vertical divider, hides <1100px. Body-font v1, superseded immediately by v2 typography fix after user feedback "wirkt überhaupt nicht, wie ein nicht-anklickbarer tab". |
+| _pending_ | **Idea 1 cleanup / revert** — both v1 and v2 reverted after user pointed out that ongoing iteration before the display-font decision is token-waste. Header back to pre-`8e2eebe` state. Idea 1 status restored to "deferred to Visual Overhaul" with full anti-pattern record + lessons learned for the next Opus. The two failed commits stay in git history as documented anti-patterns. |
+| `869169f` | **Idea 1 v2 (REVERTED)** — Header slogan typography overcorrection: 17px / weight 500 / `--sg-text-primary`, "Grid." in `--sg-teal` matching wordmark accent. Resulted in two new failures: (1) double-brand-echo (white-teal-white pattern duplicated next to wordmark), (2) gaming-clan / esports vibe (colored accent on single word + three-beat staccato). |
+| `8e2eebe` | **Idea 1 v1 (REVERTED)** — Header slogan "Scene. Grid. Seen." 13px / 400 / dim, inline right of wordmark with thin vertical divider. Sat in the same visual category as the tab nav — user reported it "looked like another tool tab that can't be clicked". |
 | `4e32a5b` | docs: refine feature ideas after user clarifications |
 | `3df9d7e` | docs: capture 4 accumulated feature ideas in handoff |
 | `709561b` | Fix wordmark token + document quick-nav visual defer |
@@ -117,34 +118,38 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 
 User collected these between sessions. Triage + sequencing guidance by Opus from this session. **These are NOT build orders** — each has an explicit gate and a triage category. Next Opus: read, discuss with user, don't guess priority.
 
-### Idea 1 — Header slogan ✅ SHIPPED v2 (body-font, display-font pass deferred)
+### Idea 1 — Header slogan ⛔ ATTEMPTED EARLY, FAILED, REVERTED — gate restored
 
-**Status:** Implemented in this session. **"Scene. Grid. Seen."** lives inline right of the wordmark, separated by a thin vertical divider. The word "Grid." is rendered in `--sg-teal` matching the wordmark's "Grid" accent — the slogan reads as a typographic echo of the wordmark itself. Hardcoded in JSX (mirroring the wordmark's hardcoded `Seen<accent>Grid</accent>` structure) — the slogan is brand identity, not a localizable UI string. **No `header.slogan` i18n key exists (intentionally — was added in v1 then removed in v2).**
+**Status:** Attempted in session `claude/review-docs-features-Sg7py`. Two implementations shipped, both failed user review, both reverted in the same session. The original Opus's gate ("don't build before display-font is chosen, don't retrofit after the overhaul is done") was correct. **Do not re-attempt until display-font decision is locked in the Visual Overhaul chat.**
 
-**Decision rationale (user + Opus, this session):**
-- Three slogans were on the table: **"Scene. Grid. Seen."**, **"Make your scene seen"**, **"From scene to seen."**
-- User picked Scene.Grid.Seen. for rhythm and brand-riff value (the three syllables literally rearrange "Seen|Grid").
-- Grid-only-skew of the slogan was discussed and accepted: it pre-commits to the "Grid Operator = flagship" framing from Idea 4. If Idea 4 lands on a different bridge architecture in the Visual Overhaul chat, the slogan may need to be revisited — but it's a one-string change in `i18n.json`, fully reversible.
-- Per-tab sublines (Muse Spark's secondary suggestion) were **explicitly deferred to Visual Overhaul** because they're entangled with the Idea 4 architectural decision and can't be written cleanly without it. Plan: descriptive (not poetic) one-liners inside each tab's content body, NOT in the header. Reserve the pun for the global slogan only. Reject Muse Spark's specific candidates ("Scene once. Seen forever.", "Direct what gets seen.", "From scene to seen." as MJ-only) — they're either generic, semantically wrong, or recycle the global slogan.
+**Slogan choice (user-decided, still valid for the Visual Overhaul chat):**
+- Three candidates were on the table: **"Scene. Grid. Seen."**, **"Make your scene seen"**, **"From scene to seen."**
+- User picked **"Scene. Grid. Seen."** for rhythm and brand-riff value (the three syllables literally rearrange "Seen|Grid").
+- Grid-only-skew was discussed and accepted: it pre-commits to the "Grid Operator = flagship" framing from Idea 4. If Idea 4 lands on a different bridge architecture in the Visual Overhaul chat, the slogan may need to be revisited.
+- Per-tab sublines (Muse Spark's secondary suggestion) were **explicitly deferred to Visual Overhaul** because they're entangled with the Idea 4 architectural decision. Plan: descriptive (not poetic) one-liners inside each tab's content body, NOT in the header. Reserve the pun for the global slogan only.
 
-**v1 → v2 typography fix (this session):** v1 used 13px / weight 400 / #909090, which put the slogan in the exact same visual category as the tab nav (also 13px / 400 / dim). User reported it looked like "another tool tab that can't be clicked" — accurate diagnosis, my mistake was being too cautious about "subordinate to wordmark" and rolling straight into the tab-nav category. v2 stacks five differentiators to pull it OUT of the tab category:
-1. **Size 17px** (between wordmark 26 and tabs 13 — its own visual layer)
-2. **Weight 500** (heavier than tabs at 400, lighter than wordmark at 600)
-3. **Color `--sg-text-primary` (#e0e0e0)** — full brightness, same as wordmark, NOT the dim secondary
-4. **"Grid." in `--sg-teal`** — matches the wordmark "Grid" accent exactly. The slogan becomes a typographic echo of the wordmark itself.
-5. **Letter-spacing 0.015em** (down from 0.04em — at 17px the periods carry their own rhythm)
+**⚠ ANTI-PATTERN RECORD — what NOT to do (read commits `8e2eebe` v1 and `869169f` v2 for full code):**
 
-**Implementation details (relevant for Visual Overhaul Opus):**
-- JSX: `<div className="headerSlogan" aria-hidden="true">` sits between `.headerLogo` and `.tabNav`. `aria-hidden` because it's pure brand decoration, no screen-reader value. Three text spans inside: `Scene. ` + `<span className="headerSloganAccent">Grid.</span>` + ` Seen.` — mirrors the wordmark's `Seen<span class="headerWordmarkAccent">Grid</span>` pattern.
-- CSS: 17px Space Grotesk weight 500, `--sg-text-primary` (#e0e0e0), letter-spacing 0.015em, 30px left margin from logo, 20px gap between divider and text, 1px × 32px divider in `--sg-border-subtle`. `.headerSloganAccent` uses `--sg-teal` (#2bb5b2 — same token as wordmark Grid accent and the SVG logo mark/diamond/eye). Hides at `max-width: 1100px`.
-- `Header.jsx` does NOT destructure `t` from `useLang()` — slogan is hardcoded in JSX, no i18n needed. (v1 briefly used `t('header.slogan')`; v2 reverted that.)
+**v1 (commit `8e2eebe`)** — 13px / Space Grotesk weight 400 / `--sg-text-secondary` (#909090) / letter-spacing 0.04em / inline right of wordmark with thin divider. **Result: invisible.** Sat in the exact same visual category as the tab nav (also 13px / 400 / dim) — user reported it looked like "another tool tab that can't be clicked". Accurate diagnosis: rolling straight into the tab-nav typography category created a tab-lookalike.
 
-**⚠ Visual Overhaul TODO (display-font pass):**
-The current implementation uses the body font (Space Grotesk) because it's all that exists right now. Once the Visual Overhaul chat picks a display font (candidates: Neue Machina / Space Mono Display / Instrument Serif), the slogan must be re-typeset to match the rest of the display-level text. **Don't forget the slogan when doing the typography pass — it currently looks "fine" but won't carry the same visual weight as a real display font would give it.** Specifically reconsider:
-1. Font family swap to the chosen display font.
-2. Possibly bump font-size from 13px to 14-15px once the display font's x-height is known.
-3. Possibly switch the divider from a flat 1px line to a gradient-to-transparent stroke matching the rest of the new accent-divider system mentioned in *Pending: Visual Overhaul → Concrete levers #6*.
-4. Re-check responsive breakpoint — 1100px was a guess based on the body-font width; may need adjustment after display-font swap changes the slogan's actual pixel width.
+**v2 (commit `869169f`)** — overcorrection. Stacked five differentiators: 17px / weight 500 / `--sg-text-primary` (#e0e0e0) / "Grid." in `--sg-teal` matching wordmark accent / letter-spacing 0.015em. **Result: two new failures, both real:**
+1. **Double-brand-echo.** Putting "Grid." in `--sg-teal` next to the wordmark's `Seen[Grid]` (also white + teal-Grid) created two sequential `white-TEAL-white` color patterns. Eye reads "doubled brand marker" instead of "wordmark + complementary tagline". Brand-echo theory was too literal — duplicated the wordmark's color DNA instead of complementing it.
+2. **Gaming-clan / esports vibe.** Three contributing factors: (a) colored accent on a single word in an otherwise white tag is the exact treatment Faze/OpTic/NRG/C9 etc. have used since ~2010, (b) the three-beat hard-stop cadence rhymes with esports taglines ("Land. Loot. Win.", "Survive. Adapt. Conquer."), (c) bright + bold + mid-size typography reads as designed brand piece, not subtle pro-tool tagline. The slogan content itself carries (b), but (a) and (c) are typography choices that amplified it.
+
+**v3 / cleanup (this commit)** — both attempts reverted, slogan removed from Header.jsx and Header.css entirely. `header.slogan` i18n key does NOT exist (was added in v1, removed in v2, never restored). Header is back to its pre-`8e2eebe` state.
+
+**Lessons learned for the Visual Overhaul Opus:**
+1. **Pro tools that DO carry a header tagline use uniform muted color, NEVER a colored accent on a single word.** Notion ("The connected workspace"), Adobe ("Photo and design") — all uniform gray, no per-word accent. The colored-accent treatment is the trigger for "designed brand piece" reading.
+2. **Inline-right of wordmark is structurally risky** because the slogan shares a baseline with the tab nav. Even with size differentiation, the eye groups elements on the same scan line. Stacked layout (slogan UNDER the wordmark, part of the brand block) is the convention used by Notion/Linear/Adobe and may be the safer structural choice.
+3. **The display-font decision really does matter.** Both failed attempts used Space Grotesk (body font). A real display font (Neue Machina / Space Mono Display / Instrument Serif) would change the slogan's character enough that the size/weight/color decisions would land differently. Building before the display font is chosen forces guesswork that doesn't transfer.
+4. **The gate ("do this in Visual Overhaul chat") existed for a reason. Don't bypass it just because the user wants to "see how it looks".** Two failed attempts and a revert is more token-waste than waiting for the right context. If the user pushes to ship a gated item early, push back with the gate's reasoning instead of building on speculation.
+
+**What the Visual Overhaul Opus should do:**
+- Decide display font first (with the rest of the typography pass).
+- THEN design the slogan treatment as part of the display-font system, not as an isolated header tweak.
+- Strongly consider stacked-below-wordmark layout instead of inline-right.
+- Strongly consider uniform color (no per-word accent) — match the Notion/Adobe convention.
+- The slogan content **"Scene. Grid. Seen."** is user-approved and stays. Only the typographic treatment needs designing.
 
 ---
 

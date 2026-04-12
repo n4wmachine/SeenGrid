@@ -68,59 +68,10 @@
   text-shadow: 0 0 18px rgba(43, 181, 178, 0.45);
 }
 
-/* Brand slogan — sits inline right of the wordmark, separated by a faint
-   vertical divider. Plays on the Seen/Scene homophone the SeenGrid name is
-   built on. Sits in its own visual layer between the wordmark (26px/600)
-   and the tab nav (13px/400) to avoid being mistaken for a tab.
-
-   Five differentiators that pull it OUT of the tab-nav visual category:
-   1. Size (17px, between wordmark and tabs)
-   2. Weight (500, heavier than tabs, lighter than wordmark)
-   3. Color (primary, not the dim secondary)
-   4. "Grid." accent in --sg-teal — same token the wordmark "Grid" uses,
-      so the slogan becomes a typographic echo of the wordmark itself.
-      The slogan is hardcoded in JSX (mirroring the wordmark's hardcoded
-      Seen[Grid] structure) — both are brand identity, not localizable
-      UI strings.
-   5. Tighter letter-spacing (0.015em) — at 17px the periods carry
-      their own rhythm and don't need artificial breathing room.
-
-   Hides below 1100px so the tab nav keeps breathing room on smaller
-   viewports.
-
-   NOTE: this is a body-font v1. The Visual Overhaul chat will revisit
-   typography once a display font (Neue Machina / Space Mono Display /
-   Instrument Serif) is chosen. */
-.headerSlogan {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-left: 30px;
-  flex-shrink: 0;
-  user-select: none;
-}
-.headerSloganDivider {
-  width: 1px;
-  height: 32px;
-  background: var(--sg-border-subtle);
-  flex-shrink: 0;
-}
-.headerSloganText {
-  font-family: var(--sg-font-body);
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: 0.015em;
-  color: var(--sg-text-primary);
-  line-height: 1;
-  white-space: nowrap;
-  padding-bottom: 2px;
-}
-.headerSloganAccent {
-  color: var(--sg-teal);
-}
-@media (max-width: 1100px) {
-  .headerSlogan { display: none; }
-}
+/* Brand slogan: REMOVED in this session after two failed attempts.
+   See OPUS_CODE_HANDOFF.md → Idea 1 for the lessons learned and the
+   anti-pattern record. Do not re-attempt until display-font decision
+   is locked in the Visual Overhaul chat. */
 
 .tabNav {
   display: flex;

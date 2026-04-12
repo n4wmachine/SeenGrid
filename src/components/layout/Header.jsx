@@ -66,13 +66,6 @@ export default function Header({ activeTab, tabs, onTabChange }) {
         </span>
       </div>
 
-      <div className="headerSlogan" aria-hidden="true">
-        <span className="headerSloganDivider" />
-        <span className="headerSloganText">
-          Scene. <span className="headerSloganAccent">Grid.</span> Seen.
-        </span>
-      </div>
-
       <nav className="tabNav" role="tablist">
         {tabs.map(tab => (
           <button

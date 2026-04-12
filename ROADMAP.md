@@ -71,10 +71,16 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **Idea 1 (Header-Slogan) shipped — Body-Font v2**
-Slogan **"Scene. Grid. Seen."** lebt jetzt inline rechts vom Wordmark, getrennt durch einen dünnen Vertikal-Divider. Das Wort "Grid." ist in Teal gesetzt (gleicher Token wie der Wordmark-"Grid" Akzent) — der Slogan wird damit zum typografischen Echo des Wordmarks. **Hardcoded in JSX** analog zum Wordmark-Pattern, kein i18n-Key (Brand-Identität, nicht lokalisierbar).
+### Aktuelle Stufe: **Idea 1 (Header-Slogan) versucht, gescheitert, zurückgerollt — zurück auf "deferred to Visual Overhaul"**
 
-**v1 → v2 Typografie-Fix:** v1 hatte 13px / Weight 400 / dimgray — landete damit visuell in derselben Kategorie wie die Tab-Nav (auch 13px / 400 / dim), sah aus wie ein nicht-anklickbarer Tab. v2 stapelt fünf Differentiatoren um aus der Tab-Kategorie rauszukommen: 17px Größe / Weight 500 / `--sg-text-primary` (#e0e0e0, voller Wordmark-Helligkeit) / "Grid." in `--sg-teal` / Letter-Spacing 0.015em.
+Slogan **"Scene. Grid. Seen."** wurde in dieser Session zweimal gebaut, beide Versuche scheiterten am User-Review, beide wurden in derselben Session zurückgerollt. Der Header ist jetzt zurück auf dem Stand vor `8e2eebe`. Das ursprüngliche Opus-Gate ("nicht bauen bevor Display-Font entschieden ist") war korrekt — das Bypassen kostete zwei gescheiterte Iterationen.
+
+**Anti-Pattern-Trail (vollständige Lessons Learned in `OPUS_CODE_HANDOFF.md` → Idea 1):**
+- **v1 (commit `8e2eebe`, REVERTED):** 13px / 400 / dimgray. Sah aus wie ein nicht-anklickbarer Tab weil identisch zur Tab-Nav-Kategorie.
+- **v2 (commit `869169f`, REVERTED):** Überkorrektur. 17px / 500 / primary + "Grid." in Teal. Zwei neue Probleme: (1) Double-Brand-Echo (Farbmuster `weiß-TEAL-weiß` direkt neben dem Wordmark, der genau dasselbe Muster trägt → Auge liest doppelten Brand-Marker), (2) Gaming-Clan-Vibe (farbiger Akzent auf einzelnem Wort + Drei-Beat-Staccato = Esports-Tagline-Territorium à la Faze/OpTic/Cloud9 seit ~2010).
+- **v3 (this commit):** beide Reverts. Slogan komplett raus aus `Header.jsx` und `Header.css`. Header zurück auf pre-`8e2eebe`.
+
+**Slogan-Inhalt bleibt gewählt:** "Scene. Grid. Seen." — der Inhalt ist nicht das Problem, nur die Umsetzung. Im Visual-Overhaul-Chat darf der Slogan wieder auf den Tisch, aber **erst nachdem die Display-Font entschieden ist**, und dann mit zwei Lehren aus den Reverts: (a) keine farbigen Akzente auf einzelnen Wörtern, (b) eher gestackt unter dem Wordmark als inline rechts daneben.
 
 **Entscheidungs-Kontext:**
 - User hatte drei Kandidaten zur Auswahl: "Scene. Grid. Seen." vs "Make your scene seen" vs "From scene to seen." → "Scene. Grid. Seen." gewählt wegen Rhythmus + Brand-Riff (die Silben sortieren sich aus "Seen|Grid" um).
