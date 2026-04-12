@@ -355,34 +355,42 @@ export default function PromptBuilder() {
       {/* RECHTE SPALTE — Sticky Output */}
       <div className={styles.rightColumn}>
 
-        <div className={styles.randomModeRow}>
+        <div className={styles.randomCluster}>
           <button
-            className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('beat')}
-            title={t('builder.random_mode_beat_title')}
+            className={styles.randomDiceBtn}
+            onClick={() => handleRandom()}
+            title={`${t('builder.random_title')} (⌘⇧R)`}
           >
-            {t('builder.random_mode_beat')}
+            <DiceIcon /> {t('common.random')}
           </button>
-          <button
-            className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('look')}
-            title={t('builder.random_mode_look_title')}
-          >
-            {t('builder.random_mode_look')}
-          </button>
-          <button
-            className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('full')}
-            title={t('builder.random_mode_full_title')}
-          >
-            {t('builder.random_mode_full')}
-          </button>
+          <span className={styles.randomDivider} aria-hidden="true" />
+          <span className={styles.randomModeLabel}>{t('common.mode') || 'MODE'}</span>
+          <div className={styles.randomModeGroup}>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('beat'); handleRandom('beat') }}
+              title={t('builder.random_mode_beat_title')}
+            >
+              {t('builder.random_mode_beat')}
+            </button>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('look'); handleRandom('look') }}
+              title={t('builder.random_mode_look_title')}
+            >
+              {t('builder.random_mode_look')}
+            </button>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('full'); handleRandom('full') }}
+              title={t('builder.random_mode_full_title')}
+            >
+              {t('builder.random_mode_full')}
+            </button>
+          </div>
         </div>
 
         <div className={styles.outputControls}>
-          <button className={styles.ghostBtn} onClick={() => handleRandom()} title={`${t('builder.random_title')} (⌘⇧R)`}>
-            <DiceIcon /> {t('common.random')}
-          </button>
           <button className={styles.ghostBtn} onClick={handleReset} title={t('builder.reset_title')}>
             <ResetIcon /> {t('common.reset')}
           </button>

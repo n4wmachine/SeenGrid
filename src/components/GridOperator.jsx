@@ -491,7 +491,7 @@ function GridPreview({ rows, cols, layout, panelRoles, styles }) {
     : 'var(--sg-bg-surface-2)'
 
   return (
-    <div style={{ background: wrapBg, padding, borderRadius: 'var(--sg-radius-md)', border: '1px solid var(--sg-border-subtle)' }}>
+    <div className={styles.gridPreviewFrame} style={{ background: wrapBg, padding, borderRadius: 'var(--sg-radius-md)', border: '1px solid var(--sg-border-subtle)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap }}>
         {Array.from({ length: rows * cols }, (_, i) => (
           <div key={i} className={styles.gridCell} style={{

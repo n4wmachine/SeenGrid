@@ -156,10 +156,17 @@ export default function MJStartframe() {
 
       const isNarr = narrative.has(fid)
       const isVis  = visual.has(fid)
+      // Empty-seed check: on the very first random roll the template fields
+      // are all "" (initFields). Without this, Beat would only fill narrative
+      // fields while visual fields stay empty → the template falls back to
+      // [FIELD_NAME] placeholders, which looks like the random generator is
+      // broken. Always fill empty fields regardless of mode.
+      const isEmpty = !baseFields[fid] || String(baseFields[fid]).trim() === ''
       const shouldRoll =
         mode === 'full' ||
         (mode === 'beat' && isNarr) ||
-        (mode === 'look' && isVis)
+        (mode === 'look' && isVis) ||
+        isEmpty
 
       if (!shouldRoll) return
 
@@ -439,34 +446,42 @@ export default function MJStartframe() {
       {/* RECHTE SPALTE: Sticky Output */}
       <div className={styles.outputColumn}>
 
-        <div className={styles.randomModeRow}>
+        <div className={styles.randomCluster}>
           <button
-            className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('beat')}
-            title={t('mj.random_mode_beat_title')}
+            className={styles.randomDiceBtn}
+            onClick={() => handleRandom()}
+            title={`${t('mj.random_title') || 'Random'} (⌘⇧R)`}
           >
-            {t('mj.random_mode_beat')}
+            <DiceIcon /> {t('common.random')}
           </button>
-          <button
-            className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('look')}
-            title={t('mj.random_mode_look_title')}
-          >
-            {t('mj.random_mode_look')}
-          </button>
-          <button
-            className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
-            onClick={() => setRandomMode('full')}
-            title={t('mj.random_mode_full_title')}
-          >
-            {t('mj.random_mode_full')}
-          </button>
+          <span className={styles.randomDivider} aria-hidden="true" />
+          <span className={styles.randomModeLabel}>{t('common.mode') || 'MODE'}</span>
+          <div className={styles.randomModeGroup}>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'beat' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('beat'); handleRandom('beat') }}
+              title={t('mj.random_mode_beat_title')}
+            >
+              {t('mj.random_mode_beat')}
+            </button>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'look' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('look'); handleRandom('look') }}
+              title={t('mj.random_mode_look_title')}
+            >
+              {t('mj.random_mode_look')}
+            </button>
+            <button
+              className={[styles.randomModeBtn, randomMode === 'full' && styles.active].filter(Boolean).join(' ')}
+              onClick={() => { setRandomMode('full'); handleRandom('full') }}
+              title={t('mj.random_mode_full_title')}
+            >
+              {t('mj.random_mode_full')}
+            </button>
+          </div>
         </div>
 
         <div className={styles.outputControls}>
-          <button className={styles.ghostBtn} onClick={() => handleRandom()} title="⌘⇧R">
-            <DiceIcon /> {t('common.random')}
-          </button>
           <button className={styles.ghostBtn} onClick={handleReset} title={t('mj.reset_title')}>
             <ResetIcon /> {t('common.reset')}
           </button>

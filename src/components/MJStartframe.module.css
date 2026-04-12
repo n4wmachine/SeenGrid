@@ -357,10 +357,62 @@
   gap: var(--sg-space-sm);
 }
 
-.randomModeRow {
+/* Random cluster: Dice button + vertical divider + MODE label + 3 pills,
+   all grouped in one bordered container so the pills read as modes OF
+   the random button next to them, not as a standalone section heading. */
+.randomCluster {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
   margin-bottom: var(--sg-space-sm);
+  background: var(--sg-bg-surface-0);
+  border: 1px solid var(--sg-border-subtle);
+  border-radius: var(--sg-radius-md);
+  flex-wrap: wrap;
+}
+.randomDiceBtn {
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-sm);
+  font-weight: 500;
+  color: var(--sg-gold-text);
+  background: var(--sg-chip-bg-active);
+  border: 1px solid var(--sg-chip-border-active);
+  border-radius: var(--sg-radius-md);
+  padding: 7px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--sg-transition);
+  box-shadow: 0 0 10px var(--sg-gold-glow-subtle);
+  flex-shrink: 0;
+}
+.randomDiceBtn:hover {
+  border-color: var(--sg-gold-dim);
+  box-shadow: 0 0 14px var(--sg-gold-glow);
+  transform: translateY(-1px);
+}
+.randomDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--sg-border-default);
+  flex-shrink: 0;
+}
+.randomModeLabel {
+  font-family: var(--sg-font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--sg-text-tertiary);
+  flex-shrink: 0;
+}
+.randomModeGroup {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
 }
 .randomModeBtn {
   flex: 1;
@@ -370,23 +422,23 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--sg-text-tertiary);
-  background: var(--sg-bg-surface-0);
+  background: var(--sg-bg-surface-1);
   border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-md);
-  padding: 6px 8px;
+  border-radius: var(--sg-radius-sm);
+  padding: 6px 10px;
   cursor: pointer;
   transition: all var(--sg-transition);
+  white-space: nowrap;
 }
 .randomModeBtn:hover {
   color: var(--sg-text-secondary);
   border-color: var(--sg-border-default);
-  background: var(--sg-bg-surface-1);
+  background: var(--sg-bg-surface-2);
 }
 .randomModeBtn.active {
   color: var(--sg-gold-text);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px var(--sg-gold-glow-subtle);
 }
 
 .ghostBtn {

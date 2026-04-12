@@ -5,6 +5,7 @@
     "common.random": "Zufall",
     "common.reset": "Reset",
     "common.optional": "optional",
+    "common.mode": "MODUS",
 
     "tabs.builder.label": "NanoBanana Studio",
     "tabs.builder.desc": "Chip Prompt Stack \u2014 NanoBanana & Others",
@@ -161,6 +162,7 @@
     "common.random": "Random",
     "common.reset": "Reset",
     "common.optional": "optional",
+    "common.mode": "MODE",
 
     "tabs.builder.label": "NanoBanana Studio",
     "tabs.builder.desc": "Chip Prompt Stack \u2014 NanoBanana & Others",

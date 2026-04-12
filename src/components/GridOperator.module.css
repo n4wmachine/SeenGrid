@@ -491,7 +491,14 @@
   border: 1px solid var(--sg-border-subtle);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-xl);
-  min-height: 500px;
+  min-height: 280px;
+}
+
+/* Cap the actual grid render so 3x3 / 4x4 etc. stay visually compact
+   and the preview column doesn't turn into a 1500px scroll tunnel. */
+.gridPreviewFrame {
+  max-width: 440px;
+  margin: 0 auto;
 }
 
 .previewTitle {
@@ -512,7 +519,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
+  min-height: 56px;
   transition: border-color var(--sg-transition);
 }
 .gridCell:hover {
