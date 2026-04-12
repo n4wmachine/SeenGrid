@@ -68,6 +68,11 @@
   text-shadow: 0 0 18px rgba(43, 181, 178, 0.45);
 }
 
+/* Brand slogan: REMOVED in this session after two failed attempts.
+   See OPUS_CODE_HANDOFF.md → Idea 1 for the lessons learned and the
+   anti-pattern record. Do not re-attempt until display-font decision
+   is locked in the Visual Overhaul chat. */
+
 .tabNav {
   display: flex;
   align-items: center;

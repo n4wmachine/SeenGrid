@@ -71,8 +71,37 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **UX-Polish-Pass (Grundstruktur) — vor Visual-Overhaul-Chat**
-Kleine, gezielte Fixes an der Grundstruktur, damit der nächste Chat sich komplett auf das Visual-Overhaul konzentrieren kann. Keine neuen Features, kein Refactor — nur Verhalten + Typografie. Fortschritt siehe `OPUS_CODE_HANDOFF.md` → "Pending Grundstruktur".
+### Aktuelle Stufe: **Idea 1 (Header-Slogan) versucht, gescheitert, zurückgerollt — zurück auf "deferred to Visual Overhaul"**
+
+Slogan **"Scene. Grid. Seen."** wurde in dieser Session zweimal gebaut, beide Versuche scheiterten am User-Review, beide wurden in derselben Session zurückgerollt. Der Header ist jetzt zurück auf dem Stand vor `8e2eebe`. Das ursprüngliche Opus-Gate ("nicht bauen bevor Display-Font entschieden ist") war korrekt — das Bypassen kostete zwei gescheiterte Iterationen.
+
+**Anti-Pattern-Trail (vollständige Lessons Learned in `OPUS_CODE_HANDOFF.md` → Idea 1):**
+- **v1 (commit `8e2eebe`, REVERTED):** 13px / 400 / dimgray. Sah aus wie ein nicht-anklickbarer Tab weil identisch zur Tab-Nav-Kategorie.
+- **v2 (commit `869169f`, REVERTED):** Überkorrektur. 17px / 500 / primary + "Grid." in Teal. Zwei neue Probleme: (1) Double-Brand-Echo (Farbmuster `weiß-TEAL-weiß` direkt neben dem Wordmark, der genau dasselbe Muster trägt → Auge liest doppelten Brand-Marker), (2) Gaming-Clan-Vibe (farbiger Akzent auf einzelnem Wort + Drei-Beat-Staccato = Esports-Tagline-Territorium à la Faze/OpTic/Cloud9 seit ~2010).
+- **v3 (this commit):** beide Reverts. Slogan komplett raus aus `Header.jsx` und `Header.css`. Header zurück auf pre-`8e2eebe`.
+
+**Slogan-Inhalt bleibt gewählt:** "Scene. Grid. Seen." — der Inhalt ist nicht das Problem, nur die Umsetzung. Im Visual-Overhaul-Chat darf der Slogan wieder auf den Tisch, aber **erst nachdem die Display-Font entschieden ist**, und dann mit zwei Lehren aus den Reverts: (a) keine farbigen Akzente auf einzelnen Wörtern, (b) eher gestackt unter dem Wordmark als inline rechts daneben.
+
+**Entscheidungs-Kontext:**
+- User hatte drei Kandidaten zur Auswahl: "Scene. Grid. Seen." vs "Make your scene seen" vs "From scene to seen." → "Scene. Grid. Seen." gewählt wegen Rhythmus + Brand-Riff (die Silben sortieren sich aus "Seen|Grid" um).
+- Grid-Lastigkeit des Slogans (er nennt Grid prominent, ignoriert NanoBanana/MJ/Vault) wurde diskutiert und akzeptiert: konsistent mit Idea 4's "Grid Operator = Flagship" Mental Model. Falls Idea 4 im Visual-Overhaul-Chat anders entschieden wird, ist der Slogan eine Ein-String-Edit zurück.
+- Per-Tab-Sublines (Muse Sparks Sekundär-Vorschlag) **explizit zum Visual-Overhaul-Chat verschoben** weil sie mit der Idea-4-Architektur-Entscheidung verzahnt sind und nicht ohne diese sauber formuliert werden können.
+
+**Implementation-Details:**
+- 13px Space Grotesk Regular, `--sg-text-secondary` (#909090), letter-spacing 0.04em für die drei Hard-Stop-Beats
+- Vertical-Divider 1px × 26px in `--sg-border-subtle`
+- 28px margin-left vom Logo, 18px gap zwischen Divider und Text
+- `aria-hidden="true"` weil pure Brand-Dekoration
+- Hide unter `max-width: 1100px` damit die Tab-Nav auf schmaleren Viewports Luft behält
+- `Header.jsx` destrukturiert jetzt `t` aus `useLang()` (vorher nur `lang, setLang`)
+
+**⚠ Display-Font-Pass aussteht für Visual-Overhaul-Chat:**
+Body-Font (Space Grotesk) ist nur v1. Sobald Display-Font entschieden ist (Neue Machina / Space Mono Display / Instrument Serif), Slogan re-typesetten — Font-Family Swap, evtl. Size 13px → 14-15px je nach x-Height der neuen Display-Font, Divider evtl. von flacher 1px-Linie auf Gradient-to-Transparent umstellen (passend zum Accent-Divider-System aus den Visual-Overhaul-Levern), Responsive-Breakpoint 1100px nochmal prüfen.
+
+---
+
+### Vorherige Stufe: **UX-Polish-Pass (Grundstruktur) — abgeschlossen**
+Kleine, gezielte Fixes an der Grundstruktur, damit der nächste Chat sich komplett auf das Visual-Overhaul konzentrieren kann. Keine neuen Features, kein Refactor — nur Verhalten + Typografie.
 
 Erledigt in diesem Pass:
 - **Grid crop-advisory umgebaut** auf per-axis Pixel-Berechnung (`canvas_w/cols` × `canvas_h/rows`) statt `max(rows,cols)`-Shortcut. Quality-Tier liest `min(panelW, panelH)` bei 2K (Engpass). Annahmen (square canvas, floor-Rest, bottleneck-tier) in Tooltip dokumentiert (`grid.advice_tooltip`). Commits: `aefadc0`, `d0053b7`.
