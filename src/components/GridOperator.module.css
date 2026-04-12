@@ -29,39 +29,50 @@
 .controlsColumn::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
 .controlsColumn::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
-/* ---- Operator Mode Toggle ---- */
+/* ---- Operator Mode Toggle ----
+   Hotfix: prominenter machen. Vorher war der Toggle technisch da aber
+   visuell fast unsichtbar (surface-0 bg + subtle border auf app-bg,
+   tertiary text). Wirkte wie leerer Raum zwischen Header und Presets.
+   Stufe 3 verfeinert das später mit Gold-Akzent für SeenGrid Signature. */
 .modeToggle {
   display: flex;
-  background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-border-subtle);
+  background: var(--sg-bg-surface-2);
+  border: 1px solid var(--sg-border-strong);
   border-radius: var(--sg-radius-lg);
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  min-height: 52px;
+  flex-shrink: 0;
 }
 
 .modeToggleBtn {
   flex: 1;
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-sm);
-  font-weight: 400;
-  color: var(--sg-text-tertiary);
+  font-size: var(--sg-text-md);
+  font-weight: 500;
+  color: var(--sg-text-secondary);
   background: transparent;
   border: none;
+  border-right: 1px solid var(--sg-border-default);
   padding: var(--sg-space-md) var(--sg-space-lg);
   cursor: pointer;
   transition: all var(--sg-transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sg-space-xs);
+  gap: var(--sg-space-sm);
+  white-space: nowrap;
 }
+.modeToggleBtn:last-child { border-right: none; }
 .modeToggleBtn:hover {
-  color: var(--sg-text-secondary);
-  background: var(--sg-bg-surface-1);
+  color: var(--sg-text-primary);
+  background: var(--sg-bg-surface-3);
 }
 .modeToggleBtn.active {
-  color: var(--sg-gold-text);
-  background: var(--sg-chip-bg-active);
-  font-weight: 500;
+  color: var(--sg-text-primary);
+  background: rgba(43, 181, 178, 0.12);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--sg-gold), 0 0 16px rgba(43, 181, 178, 0.12);
 }
 
 .starIcon {
