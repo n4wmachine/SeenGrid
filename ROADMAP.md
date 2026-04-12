@@ -45,12 +45,15 @@
   - Neue Preset-Datei hinzufügen → nur Import + JSON-Datei, keine Logik-Änderung nötig
 - **Gleiche Regel für:** Core-Templates, MJ-Templates, Random-Pools, Filmstocks, Modifier, Genre, etc.
 
-### Sprache-Konsistenz (DE/EN)
-- **UI-Strings:** via `useLang().t('key')` aus `LangContext`
-- **Daten-Beschreibungen:** jede JSON hat `label_de` / `label_en` und `desc_de` / `desc_en` statt nur `label` / `desc`
-- **Prompts selbst bleiben IMMER englisch** (werden in MJ/NanoBanana gepastet — Zielsystem ist englisch)
+### Sprache-Konsistenz (EN/DE)
+- **Englisch ist Hauptsprache.** Zielgruppe ist primär englisch-sprachig. Default-Lang beim Öffnen der App = `'en'`.
+- **Deutsch ist Sekundär-Übersetzung.** Bei fehlenden DE-Strings wird auf EN zurückgefallen, nie andersrum.
+- **UI-Strings:** via `useLang().t('key')` aus `LangContext` — liest aus `src/data/i18n.json`
+- **Daten-Strings (Preset-Labels, Descriptions, etc.):** via `useLang().tData(obj, field)` — liest `obj[field_<lang>]` mit Fallback-Kette `<lang>` → `en` → legacy `field` → leer
+- **JSON-Schema:** jede Daten-Datei hat `label_en` / `label_de` und `desc_en` / `desc_de` statt nur `label` / `desc`. Legacy `label`/`desc` wird toleriert während der Migration (Fallback-Kette im `tData`).
+- **Prompts selbst (der Output der nach MJ/NanoBanana/Kling gepastet wird) bleiben IMMER englisch**, egal welche UI-Sprache aktiv ist. Im Component-Code: nichts aus `t()` oder `tData()` in den Prompt-Output einbauen — dort nur feste englische Strings oder i18n-entkoppelte Felder (z.B. `promptDesc` wie in `GridOperator.jsx` LAYOUTS).
 - **Tooltips überall:** jeder interaktive Button/Chip/Input hat einen `title=` der durch i18n läuft
-- Beim Sprachwechsel DE↔EN darf NICHTS im UI englisch bleiben (außer die generierten Prompts).
+- Beim Sprachwechsel EN↔DE darf NICHTS im UI englisch hängenbleiben (außer die generierten Prompts, die MÜSSEN englisch bleiben).
 
 ### Tooltips
 - Jeder interaktive Element MUSS einen Tooltip haben
@@ -61,15 +64,27 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **1 — GridOperator Scroll-Fix**
-CSS-Bug in `GridOperator.module.css:405-408`. Die `.previewColumn` hat `position: sticky` aber kein `max-height` / `overflow-y: auto`. Bei hohem Content ist der Output-Bereich unerreichbar. 5-Zeilen-Fix.
+### Aktuelle Stufe: **2 — Sprache-Konsistenz (EN/DE)**
+Infrastruktur ist drin (`LangContext` hat jetzt `tData()` Helper mit Fallback-Kette, Default-Sprache auf `'en'` umgestellt). Jetzt kommt der Daten-Umbau: alle JSON-Dateien auf `label_en`/`label_de`/`desc_en`/`desc_de` umstellen, alle Components anpassen um `tData(obj, 'desc')` statt `obj.desc` zu lesen, Tooltips reviewen.
+
+### Stage 1 ✅ erledigt
+- `5607a3f` GridOperator Scroll-Fix (`.previewColumn` max-height + overflow)
+- `688e3ae` Prompt-Output bleibt bei DE/EN-Switch englisch (LAYOUTS promptDesc split)
+- `6edba1d` Mode-Toggle visuell prominent (surface-2 bg, border-strong, tab-separators, teal underline active)
 
 ---
 
 ## 4. NÄCHSTE STUFEN (Checkliste, der Reihe nach)
 
-- [ ] **Stufe 1** — GridOperator CSS Scroll-Fix (`.previewColumn` max-height + overflow)
-- [ ] **Stufe 2** — Sprache-Konsistenz: alle JSON-Dateien auf `desc_de`/`desc_en`/`label_de`/`label_en` umstellen, alle Tooltips reviewen, LangContext-Mapping prüfen
+- [x] **Stufe 1** — GridOperator CSS Scroll-Fix (`.previewColumn` max-height + overflow) + DE/EN Prompt-Output-Fix + Mode-Toggle sichtbar machen
+- [ ] **Stufe 2** — Sprache-Konsistenz (EN/DE):
+  - [x] 2a: LangContext Infrastruktur — Default auf `en`, `tData()` Helper mit Fallback-Kette
+  - [ ] 2b: Preset-JSONs (alle 18 in `src/data/presets/`) auf `label_en`/`label_de`/`desc_en`/`desc_de` + `category` Feld
+  - [ ] 2c: `core-templates.json` auf gleiche Struktur
+  - [ ] 2d: MJ Data-Files (templates, filmstocks, modifiers, genres, emotional-hooks, forbidden, random-scenes)
+  - [ ] 2e: Components anpassen — `obj.label` / `obj.desc` → `tData(obj, 'label')` / `tData(obj, 'desc')`
+  - [ ] 2f: Tooltip-Review — alle `title=` Attribute prüfen, fehlende ergänzen
+  - [ ] 2g: i18n.json prüfen ob DE-Block komplett ist, fehlende Keys ergänzen
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:
   - Default = Core
   - "SeenGrid Signature" Wording + goldener ★ + Gold-Glow
