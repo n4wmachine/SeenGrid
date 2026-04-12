@@ -10,9 +10,10 @@
 ## Quick Status
 
 - **Branch:** `claude/read-handoff-context-CPMDU`
-- **Latest commit:** `cb92c58` UX polish: grid builder quick-nav pill row
+- **Latest commit:** see `git log --oneline -5`
 - **Build:** `npx vite build` green
 - **Status:** All 5 approved Grundstruktur-fixes (#1 / #2 / #4-quick / #5 / #6) completed. Chat is ready to close; next work happens in a new Visual-Overhaul chat.
+- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
@@ -103,6 +104,119 @@ User will start a dedicated new chat for this. Process rule: mockup plan first, 
 - Image previews on tiles (Filmstocks, Camera Angles, Lens Looks, Color Grades, Presets, MJ Templates) — like Premiere Pro presets / Magic Bullet Looks. See ROADMAP.md Section 5.
 - **Grid Operator Quick-Nav visual treatment.** The pill row functions correctly (smooth-scroll + 1.4s border flash on landing) but it looks like tags rather than a perceivable navigation bar because it uses the same surface/border treatment as the section cards below it. Needs: "Jump to:" label prefix OR icon prefix per pill OR sticky positioning with backdrop-blur OR distinctly different background tone — decision depends on how the section cards themselves are retreated in the overhaul, so must be designed as one piece with the rest.
 - **Token naming cleanup.** `--sg-gold-*` holds teal values (historical relic from when the accent really was gold). Should be renamed to `--sg-accent-*` or `--sg-teal-ui-*` across ~20 files. Not a behavior change, just a readability / grep-hygiene fix. Do this together with the overhaul so the theme file gets one coherent pass.
+
+---
+
+## Pending: Feature Ideas (accumulated, not yet built)
+
+User collected these between sessions. Triage + sequencing guidance by Opus from this session. **These are NOT build orders** — each has an explicit gate and a triage category. Next Opus: read, discuss with user, don't guess priority.
+
+### Idea 1 — Header slogan (cosmetic)
+
+**What:** A micro-tagline in the currently-empty header area, ideally under the wordmark. The slogan MUST play on the Seen/Scene double meaning — otherwise the whole point of the name is wasted.
+
+**User's list of candidates:** "Your scene. Perfectly seen.", "Scene it. See it. Grid it.", "If you can see it, you can scene it.", "Scene. Grid. Seen.", "Make Every Scene Seen", "SeenGrid – See the Scene.", "SeenGrid: Direct Your Vision."
+
+**Opus triage:** ★ Cosmetic, 5-min change, but placement + typography are visual-design decisions → belongs in the Visual Overhaul chat, not before. Pro creator tools (Resolve, Cinema4D, Nuke) mostly don't carry slogans in their header because it reads as marketing on a workingtool — the SeenGrid name's double meaning is the only justification for breaking that convention.
+
+**Opus's favorite from the list:** **"Scene. Grid. Seen."** — tightest. Three words, each a core verb/concept, reads as a workflow (scene it → grid it → it's seen). Rhythm sits, works in both DE and EN, no grammar traps. Alternatives worth considering: **"Seen as a Grid."** or **"From scene to seen."**
+
+**Gate:** None. Do in Visual Overhaul chat once display-font + typography decisions are made — the slogan must pick up the same typographic treatment as the rest of the display-level text. Don't retrofit after the overhaul is done.
+
+---
+
+### Idea 2 — GridCropper ★★★ KILLER FEATURE
+
+**What:** Close the loop. Currently SeenGrid is a one-way prompt generator (build prompt → user leaves → never comes back with anything). User wants: **build prompt → user generates in NanoBanana/MJ → comes back with a finished grid image → uploads it → 1-click gets perfectly cropped individual panels back out.** This is the difference between "SeenGrid is another prompt builder" and "SeenGrid is a closed production system". It is the feature that actually makes SeenGrid unique vs. every other prompt tool on the planet.
+
+**Technical feasibility:** 100% client-side. Canvas API for the crop, JSZip for batch export, FileSaver for download. Zero backend, matches CLAUDE.md's no-backend rule. Size estimate: ~300–500 lines React + Canvas logic + small deps.
+
+**Architecture decision:** Integrate into Grid Operator as a second sub-mode, NOT as a new tab. Reason: grid context (rows/cols, layout, panel-roles) is shared — if the user just built a 3×3 in Build mode, the Crop mode should already know it's 3×3. Ideal UX: sub-mode toggle at the top of Grid Operator: **"Build"** (current prompt-generating flow) | **"Crop"** (upload finished grid, extract panels). State shared between modes.
+
+**Edge cases already identified:**
+- Non-square input (MJ 4:3, NanoBanana 1:1 or 16:9) → per-axis math (lesson learned from the advisory pass).
+- Layout variants: **v1 only implements "Even" layout.** Seamless/Framed/Letterbox/Storyboard/Polaroid need separate handling and come in v2 when real use cases pile up.
+- Gutters/borders: engines sometimes insert thin lines between panels. Optional "inset crop by N px" slider is useful.
+- Export modes: per-panel download vs. ZIP. Naming convention suggestion: `{prompt-slug}_r{row}c{col}.png`.
+
+**Opus triage:** ★★★ Killer feature. Large but bounded scope, worth its own dedicated Stage 6 chat. Independent of Visual Overhaul — can happen before or after, but user's strong recommendation is **after Visual Overhaul**, in a dedicated feature chat (don't mix visual work with feature work, context pollution risk).
+
+**Gate:** None. Ready to build whenever user opens a new chat for it. Suggested chat-opening prompt: *"Stage 6: GridCropper. Read OPUS_CODE_HANDOFF.md → Idea 2 for full brief. Start with an implementation plan + architecture sketch, not code."*
+
+---
+
+### Idea 3 — Professional Character Sheet (Character Operator, Phase 2)
+
+**What:** A structured multi-grid methodology for maximum character-consistency in Kling/Seedance workflows. Structure: **1 Hero Shot** (perfect single-image, primary identity extraction) anchors **3 reference sheets** around it — **Face Sheet** (3×2, 5–6 angles, corrects face), **Body Sheet** (3×2, 6 angles, corrects body), **Wildcard Sheet** (3×2, situational, corrects specific details). Each reference sheet is anchored back to the Hero Shot via prompt reference, so downstream video engines get maximum identity signal.
+
+This is the concrete form of the **Character Operator** that is already listed as a Phase 2 item in CLAUDE.md ("Character Operator mit Multi-Varianten") — the user just now has the methodology clear in his head.
+
+**⚠ HARD BLOCKER:** CLAUDE.md forbids inventing content. Rule 3 ("SeenGrid Signature Presets = exact templates from DeepSeek1.txt, not reinterpreted") and the "don't invent" rule both apply. **Before this can be built**, the exact prompt templates for each of the 4 sheet types (Hero / Face / Body / Wildcard) must exist as text in a source document — either as new entries in DeepSeek1.txt, or as a dedicated `CharacterSheet_methodology.txt` at repo root. If they don't exist yet, the user must write them before the next Opus can touch the feature, otherwise Opus will be forced to invent templates → rule violation.
+
+**Implementation path options (once templates exist):**
+- **A) 4 new presets** in the existing SeenGrid Signature Character category (Hero, Face, Body, Wildcard). Fastest. Loses the "this is ONE unified methodology" framing.
+- **B) New preset group "Character Workflow"** in Grid Operator with a visual workflow representation (Hero at top → Face/Body/Wildcard as children). Medium effort. Recommended starting point.
+- **C) Full Character Operator as its own tab** with a guided step-chain (Step 1: generate Hero, Step 2: generate Face using Hero as reference, Step 3: Body, Step 4: Wildcard). Largest effort. Cleanest match to the 4-layer architecture in CLAUDE.md. Worth it only after B proves the methodology works in real usage.
+
+**Opus triage:** ★★ Medium-large. Strongly aligned with existing Phase 2 plans. Do option B first. **BLOCKED on template availability** — do not build without source text.
+
+**Gate:** User provides the 4 prompt templates as text first. Then new chat: *"Stage 7: Character Operator (Option B). Templates live in `<path>`. Read OPUS_CODE_HANDOFF.md Idea 3 for the methodology. Build the preset group + workflow UI."*
+
+---
+
+### Idea 4 — Core + Modules product-framing (architectural, from ChatGPT via user)
+
+**What:** User (via ChatGPT's suggestion) wants to rethink whether SeenGrid is "four loose tools in four tabs" or "one core system with modules". ChatGPT's proposal: **Grid Operator is the core and the real USP**, NanoBanana Studio should be integrated INTO Grid Operator (because NanoBanana is strongest for grid/consistency work), MJ stays separate, and the guiding flow is **structure/grid/preset → engine/output mode → optional look/style layer**.
+
+**Opus triage, honest:**
+
+ChatGPT is **right on diagnosis, wrong on execution.**
+
+Right: The app currently reads as four separate tools because the product hierarchy is not articulated anywhere in the UI. New users can't tell whether Grid Operator is a bigger version of NanoBanana Studio or a different workflow entirely. That's a real problem.
+
+Wrong: Merging NanoBanana Studio into Grid Operator would force users through a full grid setup even when they just want a single-image prompt. That's a UX regression. NanoBanana Studio (Core generic builder) and Grid Operator (SeenGrid Signature multi-panel) already encode the Core-vs-Signature duality from CLAUDE.md — just split across two tabs instead of being articulated as one product.
+
+**The real answer (Opus opinion, not an order):**
+
+The four tabs can stay. But the product needs a clear hierarchy statement baked into the UI copy and tab order:
+> **Grid Operator is the flagship.** NanoBanana Studio is "Quick Single-Prompt mode". Midjourney Cinematic is "Quick Single-Prompt mode with MJ rules". Vault is the community reference library.
+
+Concrete UI consequences if the user picks this framing:
+- **Tab order change:** Grid Operator first (currently second). 10-second code change, big symbolic effect.
+- **Tab tooltip/description refresh:** "NanoBanana Studio" → "Quick NanoBanana prompts — single image mode", "Grid Operator" → "**Flagship.** Multi-panel grid builder with SeenGrid Signature presets", "Midjourney Cinematic" → "Quick Midjourney prompts — cinematic anchor format".
+- **Possibly:** small ★ or "Core" badge on the Grid Operator tab indicating its primary status.
+- **Optional:** a Home/Landing hub as a fifth pseudo-tab — instead of landing straight in a module, show a conceptual map ("Single-Shot Prompts" | "Grid Workflow" | "Inspiration") that routes into the right tab. Only if the Visual Overhaul has room for it.
+
+**Options to present to user in the next chat** (do not decide unilaterally):
+- **A)** Keep 4 tabs as-is, add a homepage/hub with a conceptual map.
+- **B)** Promote Grid Operator to primary mode, rename others as "Quick Prompts — NanoBanana" / "Quick Prompts — Midjourney". Minimal structural change, maximum copy change.
+- **C)** Add engine selector INSIDE Grid Operator (NanoBanana / MJ / Kling / Seedance as dropdown) + NanoBanana Studio stays as fast single-image mode. Medium structural change.
+- **D)** Rename tabs + refresh tooltips only. Minimal invasive. Lowest risk.
+
+**Opus triage:** ★★ Strategic/architectural, not implementation. **Must be the FIRST conversation item in the Visual Overhaul chat** because the answer drives layout, hierarchy, copy, and badges. Decision must come from the user, not from Opus.
+
+**Gate:** This is a dialogue task, not a build task. Next Opus opens Visual Overhaul chat → starts with this question → presents options A/B/C/D → waits for user decision → feeds decision into the rest of the overhaul.
+
+---
+
+## Recommended sequencing across the next chats
+
+Opus's proposed order (user can override):
+
+1. **Visual Overhaul chat (next):**
+   - Opens with **Idea 4** (architectural product-framing). 3–4 options, user picks.
+   - Flows the decision into the visual work (mockups, tokens, section cards, quick-nav visual treatment, accordion vs multi-column).
+   - **Idea 1** (slogan) lands in this chat too, using "Scene. Grid. Seen." as opening proposal.
+   - **Explicitly NOT in this chat:** GridCropper and Character Sheet — keeps scope bounded.
+
+2. **Stage 6 chat — GridCropper (dedicated, after Visual Overhaul):**
+   - **Idea 2** end to end.
+   - Sub-mode integration into Grid Operator.
+   - v1 only handles "Even" layout.
+
+3. **Stage 7 chat — Character Operator (blocked until templates exist):**
+   - **Idea 3**, Option B implementation.
+   - Does not start until the 4 Hero/Face/Body/Wildcard templates exist as committed text in the repo.
 
 ---
 
