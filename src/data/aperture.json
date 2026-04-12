@@ -1,10 +1,10 @@
 [
-  { "v": "f/1.2",  "t": "Extrem flache Tiefenschärfe", "dof": "extrem flach" },
-  { "v": "f/1.8",  "t": "Sehr flache Tiefenschärfe",   "dof": "sehr flach" },
-  { "v": "f/2.8",  "t": "Flache Tiefenschärfe",        "dof": "flach" },
-  { "v": "f/4",    "t": "Mittlere Tiefenschärfe",       "dof": "mittel" },
-  { "v": "f/5.6",  "t": "Mittel-tiefe Schärfe",        "dof": "mittel-tief" },
-  { "v": "f/8",    "t": "Tiefe Schärfe",                "dof": "tief" },
-  { "v": "f/11",   "t": "Sehr tiefe Schärfe",           "dof": "sehr tief" },
-  { "v": "f/16",   "t": "Alles scharf",                 "dof": "alles scharf" }
+  { "v": "f/1.2",  "t_en": "Extremely shallow depth of field", "t_de": "Extrem flache Tiefenschärfe", "dof": "extrem flach" },
+  { "v": "f/1.8",  "t_en": "Very shallow depth of field",       "t_de": "Sehr flache Tiefenschärfe",   "dof": "sehr flach" },
+  { "v": "f/2.8",  "t_en": "Shallow depth of field",            "t_de": "Flache Tiefenschärfe",        "dof": "flach" },
+  { "v": "f/4",    "t_en": "Medium depth of field",             "t_de": "Mittlere Tiefenschärfe",       "dof": "mittel" },
+  { "v": "f/5.6",  "t_en": "Medium-deep focus",                 "t_de": "Mittel-tiefe Schärfe",        "dof": "mittel-tief" },
+  { "v": "f/8",    "t_en": "Deep focus",                        "t_de": "Tiefe Schärfe",                "dof": "tief" },
+  { "v": "f/11",   "t_en": "Very deep focus",                   "t_de": "Sehr tiefe Schärfe",           "dof": "sehr tief" },
+  { "v": "f/16",   "t_en": "Everything in focus",               "t_de": "Alles scharf",                 "dof": "alles scharf" }
 ]

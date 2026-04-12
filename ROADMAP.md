@@ -64,8 +64,12 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **2h — PromptBuilder-Daten migrieren**
-Stufen 2f + 2g abgeschlossen. 2g war praktisch schon durch: beide i18n.json-Blöcke DE/EN sind symmetrisch mit je 135 Keys. Bleibt noch 2h offen: die Chip-Daten für den PromptBuilder (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) auf `t_en`/`t_de` umstellen. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift — also kein Regressionsrisiko, nur Arbeit.
+### Aktuelle Stufe: **3 — GridOperator Komplett-Umbau**
+Stufe 2 (Sprache-Konsistenz EN/DE) komplett abgeschlossen. Alle 2a–2h erledigt. i18n-Infrastruktur, alle Daten-JSONs und alle Components sind durchgehend auf `tData()` + `t_en`/`t_de` umgestellt, Legacy-Felder entfernt.
+
+Stufe 2h abgeschlossen: Alle 12 PromptBuilder-Chip-Daten-Dateien migriert (`styles.json` 28 Einträge, `cameras.json` 8, `lenses.json` 8, `focal.json` 9, `aperture.json` 8, `shotsize.json` 12, `cameraangle.json` 7, `lighting.json` 26, `colorgrade.json` 11, `effects.json` 12, `negative.json` 14, `aspectratio.json` 7). Jeder Chip hat jetzt `t_en` + `t_de` statt nur deutschen `t`. PromptBuilder.jsx nutzt `tData(item, 't')`, Fallback-Kette greift, vite build grün (1.32s).
+
+Als nächstes kommt Stufe 3 — GridOperator Komplett-Umbau mit Core als Default, "SeenGrid Signature" Wording, goldenem Stern, dynamischer Preset-Gruppierung nach Category.
 
 Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
 - **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
@@ -95,7 +99,7 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Legacy-Felder aus den migrierten JSONs entfernt (Presets, core-templates, MJ-Files außer random-scenes).
   - [x] 2f: Tooltip-Review — fehlende `title=` Attribute auf SubTabs, Row/Col-Dim-Buttons, Toggles, Save-Fav, Load-more, Card-Copy ergänzt; hardcodete deutsche `weniger`/`mehr` in PromptVault.FavoriteCard durch i18n ersetzt
   - [x] 2g: i18n.json DE/EN-Completeness — beide Blöcke haben 135 Keys, symmetrisch. Sanity-Check nach cross-Language-Strings ergab nur `common.reset: "Reset"` (internationalism, OK)
-  - [ ] 2h: PromptBuilder-Daten migrieren — `styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json` auf `t_en`/`t_de`. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift.
+  - [x] 2h: PromptBuilder-Daten migriert — alle 12 Chip-Daten-Dateien (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) auf `t_en`/`t_de`. Legacy `t` (DE-only) entfernt. Component nutzt `tData(item, 't')`. Vite build grün.
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:
   - Default = Core
   - "SeenGrid Signature" Wording + goldener ★ + Gold-Glow

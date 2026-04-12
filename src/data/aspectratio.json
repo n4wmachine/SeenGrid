@@ -1,9 +1,9 @@
 [
-  { "v": "2.39:1", "t": "Anamorphic Cinemascope — klassisches Kinoformat, weit und episch" },
-  { "v": "2.35:1", "t": "Scope-Format — großes Kino der 60er–90er, Leone, Kubrick" },
-  { "v": "1.85:1", "t": "Flat Widescreen — modernes Kinoformat, Nolan, Fincher" },
-  { "v": "16:9",   "t": "Standard Widescreen — Streaming & TV, digital native" },
-  { "v": "4:3",    "t": "Klassisch retro — Vintage Film & TV, Enge, Portrait" },
-  { "v": "1:1",    "t": "Quadratisch — Social Media / Art House / Instagram" },
-  { "v": "9:16",   "t": "Vertikal — Reels, Shorts, TikTok, Mobile-First" }
+  { "v": "2.39:1", "t_en": "Anamorphic Cinemascope — classic cinematic format, wide and epic",       "t_de": "Anamorphic Cinemascope — klassisches Kinoformat, weit und episch" },
+  { "v": "2.35:1", "t_en": "Scope format — grand cinema of the 60s–90s, Leone, Kubrick",             "t_de": "Scope-Format — großes Kino der 60er–90er, Leone, Kubrick" },
+  { "v": "1.85:1", "t_en": "Flat widescreen — modern theatrical format, Nolan, Fincher",             "t_de": "Flat Widescreen — modernes Kinoformat, Nolan, Fincher" },
+  { "v": "16:9",   "t_en": "Standard widescreen — streaming & TV, digital native",                    "t_de": "Standard Widescreen — Streaming & TV, digital native" },
+  { "v": "4:3",    "t_en": "Classic retro — vintage film & TV, tightness, portrait feel",             "t_de": "Klassisch retro — Vintage Film & TV, Enge, Portrait" },
+  { "v": "1:1",    "t_en": "Square — social media / art house / Instagram",                           "t_de": "Quadratisch — Social Media / Art House / Instagram" },
+  { "v": "9:16",   "t_en": "Vertical — Reels, Shorts, TikTok, mobile-first",                          "t_de": "Vertikal — Reels, Shorts, TikTok, Mobile-First" }
 ]

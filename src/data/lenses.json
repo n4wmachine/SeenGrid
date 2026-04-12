@@ -1,10 +1,10 @@
 [
-  { "v": "Anamorphic",          "t": "Ovale Bokeh, horizontale Lens Flares, 2.39:1 Charakter" },
-  { "v": "Spherical Prime",     "t": "Scharf, clean, neutral — kein optischer Charakter" },
-  { "v": "Vintage Character",   "t": "Weich, glühen, retro — swirly bokeh, breathing at edges" },
-  { "v": "Cinema Zoom",         "t": "Flexibel, leichter Schärfeverlust — Kompromiss für Operator" },
-  { "v": "Macro",               "t": "Extreme Nahaufnahmen, flache DOF — Insekten-Nahaufnahmen" },
-  { "v": "Tilt-Shift",          "t": "Selektive Unschärfe — Miniatur-Effekt oder Perspektiv-Kontrolle" },
-  { "v": "Cooke S7/i",          "t": "Cremig, warm, klassisch britisch — The Cooke Look" },
-  { "v": "Leica Summilux",      "t": "Präzise, leuchtkräftig — Stills-Character in Film" }
+  { "v": "Anamorphic",          "t_en": "Oval bokeh, horizontal lens flares, 2.39:1 character",              "t_de": "Ovale Bokeh, horizontale Lens Flares, 2.39:1 Charakter" },
+  { "v": "Spherical Prime",     "t_en": "Sharp, clean, neutral — no optical character",                     "t_de": "Scharf, clean, neutral — kein optischer Charakter" },
+  { "v": "Vintage Character",   "t_en": "Soft, glowy, retro — swirly bokeh, breathing at edges",            "t_de": "Weich, glühend, retro — swirly Bokeh, Atmen an den Rändern" },
+  { "v": "Cinema Zoom",         "t_en": "Flexible, slight softness — a compromise for the operator",         "t_de": "Flexibel, leichter Schärfeverlust — Kompromiss für Operator" },
+  { "v": "Macro",               "t_en": "Extreme close-ups, shallow DOF — insect-level proximity",           "t_de": "Extreme Nahaufnahmen, flache DOF — Insekten-Nahaufnahmen" },
+  { "v": "Tilt-Shift",          "t_en": "Selective blur — miniature effect or perspective control",          "t_de": "Selektive Unschärfe — Miniatur-Effekt oder Perspektiv-Kontrolle" },
+  { "v": "Cooke S7/i",          "t_en": "Creamy, warm, classic British — The Cooke Look",                    "t_de": "Cremig, warm, klassisch britisch — The Cooke Look" },
+  { "v": "Leica Summilux",      "t_en": "Precise, luminous — stills character in motion",                    "t_de": "Präzise, leuchtkräftig — Stills-Charakter in Film" }
 ]

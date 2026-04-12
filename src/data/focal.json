@@ -1,11 +1,11 @@
 [
-  { "v": "14mm",   "t": "Ultra-Weitwinkel — dramatische Verzerrung, Überwältigung, Einsamkeit" },
-  { "v": "24mm",   "t": "Weitwinkel — Umgebung betonen, großes Kino der 90er" },
-  { "v": "28mm",   "t": "Leicht weitwinklig — Reporter-Style, beobachtend, nah dran" },
-  { "v": "35mm",   "t": "Normales Weitwinkel — klassisch dokumentarisch, natürlich" },
-  { "v": "50mm",   "t": "Normal — nah am menschlichen Auge, Objektivität" },
-  { "v": "85mm",   "t": "Porträt — schmeichelhaft, Isolation, Intimität, Sehnsucht" },
-  { "v": "105mm",  "t": "Kurzes Tele — flache Tiefenschärfe, sanfte Kompression" },
-  { "v": "135mm",  "t": "Tele — sehr flache DOF, extreme Trennung Subjekt/Hintergrund" },
-  { "v": "200mm",  "t": "Langes Tele — maximale Kompression, voyeuristische Distanz" }
+  { "v": "14mm",   "t_en": "Ultra wide — dramatic distortion, overwhelm, loneliness",         "t_de": "Ultra-Weitwinkel — dramatische Verzerrung, Überwältigung, Einsamkeit" },
+  { "v": "24mm",   "t_en": "Wide — emphasize the environment, big 90s cinema",                "t_de": "Weitwinkel — Umgebung betonen, großes Kino der 90er" },
+  { "v": "28mm",   "t_en": "Slightly wide — reporter style, observational, close-in",         "t_de": "Leicht weitwinklig — Reporter-Style, beobachtend, nah dran" },
+  { "v": "35mm",   "t_en": "Normal wide — classic documentary, natural",                      "t_de": "Normales Weitwinkel — klassisch dokumentarisch, natürlich" },
+  { "v": "50mm",   "t_en": "Normal — close to the human eye, objectivity",                    "t_de": "Normal — nah am menschlichen Auge, Objektivität" },
+  { "v": "85mm",   "t_en": "Portrait — flattering, isolation, intimacy, longing",             "t_de": "Porträt — schmeichelhaft, Isolation, Intimität, Sehnsucht" },
+  { "v": "105mm",  "t_en": "Short tele — shallow DOF, gentle compression",                    "t_de": "Kurzes Tele — flache Tiefenschärfe, sanfte Kompression" },
+  { "v": "135mm",  "t_en": "Tele — very shallow DOF, extreme subject/background separation",  "t_de": "Tele — sehr flache DOF, extreme Trennung Subjekt/Hintergrund" },
+  { "v": "200mm",  "t_en": "Long tele — maximum compression, voyeuristic distance",           "t_de": "Langes Tele — maximale Kompression, voyeuristische Distanz" }
 ]

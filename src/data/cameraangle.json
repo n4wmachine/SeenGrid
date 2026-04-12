@@ -1,9 +1,9 @@
 [
-  { "v": "Eye Level",    "t": "Auf Augenhöhe — neutral, natürlich, kein Kommentar" },
-  { "v": "High Angle",   "t": "Von oben — Figur wirkt klein, schwach, verletzlich" },
-  { "v": "Low Angle",    "t": "Von unten — Figur wirkt mächtig, bedrohlich, heroisch" },
-  { "v": "Bird's Eye",   "t": "Vogelperspektive — direkt senkrecht von oben, God-view" },
-  { "v": "Worm's Eye",   "t": "Wurmperspektive — extrem nah am Boden, maximale Größe" },
-  { "v": "Dutch Angle",  "t": "Schräggestellte Kamera — Unbehagen, Instabilität, Wahnsinn" },
-  { "v": "Aerial",       "t": "Aus der Luft — Drohne / Helikopter, Landschaft, Kontext" }
+  { "v": "Eye Level",    "t_en": "At eye level — neutral, natural, no comment",                     "t_de": "Auf Augenhöhe — neutral, natürlich, kein Kommentar" },
+  { "v": "High Angle",   "t_en": "From above — figure looks small, weak, vulnerable",                "t_de": "Von oben — Figur wirkt klein, schwach, verletzlich" },
+  { "v": "Low Angle",    "t_en": "From below — figure looks powerful, threatening, heroic",          "t_de": "Von unten — Figur wirkt mächtig, bedrohlich, heroisch" },
+  { "v": "Bird's Eye",   "t_en": "Bird's-eye view — straight down from above, god-view",             "t_de": "Vogelperspektive — direkt senkrecht von oben, God-View" },
+  { "v": "Worm's Eye",   "t_en": "Worm's-eye view — extremely close to the ground, maximum scale",   "t_de": "Wurmperspektive — extrem nah am Boden, maximale Größe" },
+  { "v": "Dutch Angle",  "t_en": "Tilted camera — unease, instability, madness",                     "t_de": "Schräggestellte Kamera — Unbehagen, Instabilität, Wahnsinn" },
+  { "v": "Aerial",       "t_en": "From the air — drone / helicopter, landscape, context",            "t_de": "Aus der Luft — Drohne / Helikopter, Landschaft, Kontext" }
 ]

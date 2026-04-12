@@ -1,14 +1,14 @@
 [
-  { "v": "Heavy Film Grain",        "t": "Starkes Filmkorn — 16mm Look, grob, dokumentarisch" },
-  { "v": "Light Film Grain",        "t": "Subtiles Korn — 35mm Look, organisch, nicht digital" },
-  { "v": "Anamorphic Lens Flares",  "t": "Horizontale Lens Flares — Sci-Fi, polished cinema" },
-  { "v": "Subtle Lens Flare",       "t": "Leichte Gegenlicht-Blendfackeln — natürlich, nicht aufgesetzt" },
-  { "v": "Creamy Bokeh",            "t": "Weiches, cremiges Unschärfebild — portrait, dreamy" },
-  { "v": "Strong Vignette",         "t": "Starke Randabdunkelung — focus center, noir feeling" },
-  { "v": "Soft Vignette",           "t": "Sanfte Randabdunkelung — barely noticeable, subtle depth" },
-  { "v": "Chromatic Aberration",    "t": "Farbsäume an Kontrastkanten — vintage lens character" },
-  { "v": "Halation",                "t": "Filmisches Leuchten um helle Stellen — Kodak warmth" },
-  { "v": "Soft Glow",               "t": "Sanfter Schimmer auf Lichtern — ethereal, romantic" },
-  { "v": "Sharp / Clinical",        "t": "Ultra-scharf, keine Weichheit — digital precision" },
-  { "v": "Motion Blur",             "t": "Bewegungsunschärfe bei Dynamik — energy, speed" }
+  { "v": "Heavy Film Grain",        "t_en": "Strong film grain — 16mm look, coarse, documentary",                "t_de": "Starkes Filmkorn — 16mm Look, grob, dokumentarisch" },
+  { "v": "Light Film Grain",        "t_en": "Subtle grain — 35mm look, organic, not digital",                    "t_de": "Subtiles Korn — 35mm Look, organisch, nicht digital" },
+  { "v": "Anamorphic Lens Flares",  "t_en": "Horizontal lens flares — sci-fi, polished cinema",                  "t_de": "Horizontale Lens Flares — Sci-Fi, polished cinema" },
+  { "v": "Subtle Lens Flare",       "t_en": "Light backlight flares — natural, not forced",                      "t_de": "Leichte Gegenlicht-Blendfackeln — natürlich, nicht aufgesetzt" },
+  { "v": "Creamy Bokeh",            "t_en": "Soft, creamy out-of-focus — portrait, dreamy",                      "t_de": "Weiches, cremiges Unschärfebild — portrait, dreamy" },
+  { "v": "Strong Vignette",         "t_en": "Strong edge darkening — focus center, noir feeling",                "t_de": "Starke Randabdunkelung — focus center, noir feeling" },
+  { "v": "Soft Vignette",           "t_en": "Gentle edge darkening — barely noticeable, subtle depth",            "t_de": "Sanfte Randabdunkelung — barely noticeable, subtle depth" },
+  { "v": "Chromatic Aberration",    "t_en": "Color fringing at contrast edges — vintage lens character",         "t_de": "Farbsäume an Kontrastkanten — vintage lens character" },
+  { "v": "Halation",                "t_en": "Filmic glow around bright spots — Kodak warmth",                   "t_de": "Filmisches Leuchten um helle Stellen — Kodak warmth" },
+  { "v": "Soft Glow",               "t_en": "Gentle shimmer on highlights — ethereal, romantic",                  "t_de": "Sanfter Schimmer auf Lichtern — ethereal, romantic" },
+  { "v": "Sharp / Clinical",        "t_en": "Ultra-sharp, no softness — digital precision",                      "t_de": "Ultra-scharf, keine Weichheit — digital precision" },
+  { "v": "Motion Blur",             "t_en": "Motion blur during movement — energy, speed",                       "t_de": "Bewegungsunschärfe bei Dynamik — energy, speed" }
 ]

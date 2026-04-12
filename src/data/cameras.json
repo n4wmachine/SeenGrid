@@ -1,10 +1,10 @@
 [
-  { "v": "ARRI Alexa 35",     "t": "Industrie-Standard — organisch, filmisches Highlight-Rolloff" },
-  { "v": "RED V-RAPTOR 8K",   "t": "Hochauflösend, präzise — scharf, sauber, digital" },
-  { "v": "Sony Venice 2",     "t": "Dual ISO, filmisch — exzellente Hauttöne, tiefer Farbraum" },
-  { "v": "Blackmagic URSA",   "t": "RAW, cost-efficient — populär in Indies" },
-  { "v": "Canon Cinema EOS",  "t": "Warm, vielseitig — Canon color science, skintone-freundlich" },
-  { "v": "35mm Filmkamera",   "t": "Klassischer Film-Look — Korn, Textur, organisches Licht" },
-  { "v": "16mm Filmkamera",   "t": "Indie-Look — stark körnig, dokumentarisch, roh" },
-  { "v": "Super 8",           "t": "Lo-Fi, nostalgisch, retro — flickering warmth, soft edges" }
+  { "v": "ARRI Alexa 35",     "t_en": "Industry standard — organic, filmic highlight rolloff",                "t_de": "Industrie-Standard — organisch, filmisches Highlight-Rolloff" },
+  { "v": "RED V-RAPTOR 8K",   "t_en": "High-resolution, precise — sharp, clean, digital",                    "t_de": "Hochauflösend, präzise — scharf, sauber, digital" },
+  { "v": "Sony Venice 2",     "t_en": "Dual ISO, cinematic — excellent skin tones, deep color gamut",        "t_de": "Dual ISO, filmisch — exzellente Hauttöne, tiefer Farbraum" },
+  { "v": "Blackmagic URSA",   "t_en": "RAW, cost-efficient — popular in indies",                              "t_de": "RAW, kostengünstig — beliebt in Indies" },
+  { "v": "Canon Cinema EOS",  "t_en": "Warm, versatile — Canon color science, skin-tone friendly",           "t_de": "Warm, vielseitig — Canon Color Science, hauttonfreundlich" },
+  { "v": "35mm Filmkamera",   "t_en": "Classic film look — grain, texture, organic light",                   "t_de": "Klassischer Film-Look — Korn, Textur, organisches Licht" },
+  { "v": "16mm Filmkamera",   "t_en": "Indie look — heavy grain, documentary, raw",                          "t_de": "Indie-Look — stark körnig, dokumentarisch, roh" },
+  { "v": "Super 8",           "t_en": "Lo-fi, nostalgic, retro — flickering warmth, soft edges",             "t_de": "Lo-Fi, nostalgisch, retro — flickernde Wärme, weiche Kanten" }
 ]
