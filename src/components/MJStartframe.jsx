@@ -21,9 +21,9 @@ const AR_OPTIONS = [
 ]
 
 const SUB_TABS = [
-  { id: 'fields',    labelKey: 'mj.sub_tab_fields' },
-  { id: 'templates', labelKey: 'mj.sub_tab_templates' },
-  { id: 'params',    labelKey: 'mj.sub_tab_params' },
+  { id: 'fields',    labelKey: 'mj.sub_tab_fields',    descKey: 'mj.sub_tab_fields_desc' },
+  { id: 'templates', labelKey: 'mj.sub_tab_templates', descKey: 'mj.sub_tab_templates_desc' },
+  { id: 'params',    labelKey: 'mj.sub_tab_params',    descKey: 'mj.sub_tab_params_desc' },
 ]
 
 function initState() {
@@ -191,6 +191,7 @@ export default function MJStartframe() {
               key={tab.id}
               className={[styles.subTabBtn, activeSubTab === tab.id && styles.active].filter(Boolean).join(' ')}
               onClick={() => setActiveSubTab(tab.id)}
+              title={t(tab.descKey)}
             >
               {t(tab.labelKey)}
               {tab.id === 'fields' && filledFieldCount > 0 && (
@@ -252,6 +253,7 @@ export default function MJStartframe() {
               <button
                 className={styles.collapsibleHeader}
                 onClick={() => setHooksOpen(p => !p)}
+                title={t('mj.hook_toggle_title')}
               >
                 <span className={styles.sectionTitle} style={{ marginBottom: 0 }}>
                   {t('mj.hook_label')}
@@ -379,6 +381,7 @@ export default function MJStartframe() {
               <button
                 className={[styles.chip, state.rawFlag && styles.active].filter(Boolean).join(' ')}
                 onClick={() => setState(p => ({ ...p, rawFlag: !p.rawFlag }))}
+                title={t('mj.raw_toggle_title')}
               >
                 --raw {state.rawFlag ? '✓' : '○'}
               </button>
@@ -395,7 +398,7 @@ export default function MJStartframe() {
           <button className={styles.ghostBtn} onClick={handleRandom} title="⌘⇧R">
             <DiceIcon /> {t('common.random')}
           </button>
-          <button className={styles.ghostBtn} onClick={handleReset}>
+          <button className={styles.ghostBtn} onClick={handleReset} title={t('mj.reset_title')}>
             <ResetIcon /> {t('common.reset')}
           </button>
         </div>
@@ -446,6 +449,7 @@ export default function MJStartframe() {
           className={styles.ghostBtn}
           style={{ width: '100%' }}
           onClick={handleSaveFav}
+          title={t('fav.save_title')}
         >
           <StarIcon filled={savedFav} />
           {' '}{savedFav ? t('fav.saved') : t('fav.save')}
@@ -455,6 +459,7 @@ export default function MJStartframe() {
         <button
           className={styles.antiPatternToggle}
           onClick={() => setShowForbidden(p => !p)}
+          title={t('mj.antipattern_title')}
         >
           {showForbidden ? '▴' : '▾'} {t('mj.antipattern_ref')}
         </button>

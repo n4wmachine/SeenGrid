@@ -276,6 +276,7 @@ export default function GridOperator() {
                       key={n}
                       className={[styles.dimBtn, rows === n && styles.active].filter(Boolean).join(' ')}
                       onClick={() => setRows(n)}
+                      title={t('grid.set_rows_title').replace('{n}', n)}
                     >{n}</button>
                   ))}
                 </div>
@@ -289,6 +290,7 @@ export default function GridOperator() {
                       key={n}
                       className={[styles.dimBtn, cols === n && styles.active].filter(Boolean).join(' ')}
                       onClick={() => setCols(n)}
+                      title={t('grid.set_cols_title').replace('{n}', n)}
                     >{n}</button>
                   ))}
                 </div>

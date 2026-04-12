@@ -315,6 +315,7 @@ export default function PromptBuilder() {
           style={{ width: '100%' }}
           disabled={!hasPrompt}
           onClick={handleSaveFav}
+          title={t('fav.save_title')}
         >
           <StarIcon filled={savedFav} />
           {' '}{savedFav ? t('fav.saved') : t('fav.save')}
@@ -336,6 +337,7 @@ export default function PromptBuilder() {
           <button
             className={styles.rulesToggle}
             onClick={() => setRulesOpen(p => !p)}
+            title={t('builder.rules_toggle_title')}
           >
             <span className={styles.rulesToggleIcon}>ℹ</span>
             <span className={styles.rulesToggleLabel}>{t('builder.rules_title')}</span>

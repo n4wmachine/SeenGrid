@@ -64,10 +64,14 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **2f — Tooltip-Review**
-Stufe 2e ist durch: `GridOperator.jsx`, `MJStartframe.jsx` und `PromptBuilder.jsx` greifen jetzt via `tData(obj, 'label' | 'desc' | 't' | 'placeholder' | 'reason')` auf lokalisierte Felder zu. `SUB_TABS` im MJ-Tab auf `labelKey`-Pattern umgestellt mit neuen i18n-Keys `mj.sub_tab_fields` / `mj.sub_tab_templates` / `mj.sub_tab_params`. `AR_OPTIONS` in MJStartframe hat jetzt `t_en`/`t_de`. `checkForForbidden` speichert jetzt die ganze `cat`-Referenz statt resolved-Text, damit warnings beim Sprachwechsel mitziehen.
+### Aktuelle Stufe: **2g — i18n.json DE-Block Completeness**
+Stufe 2f abgeschlossen: Fehlende `title=` Attribute auf den wichtigen interaktiven Elementen ergänzt, alle durch i18n lokalisiert. Konkret:
+- **MJStartframe:** SubTab-Buttons (neue Keys `mj.sub_tab_*_desc`), Hook-Collapsible-Toggle (`mj.hook_toggle_title`), `--raw` Toggle (`mj.raw_toggle_title`), Reset-Button (`mj.reset_title`), Save-Favorite (`fav.save_title`), Anti-Pattern-Toggle (`mj.antipattern_title`).
+- **GridOperator:** Row/Col-Dim-Buttons (parameterisierte Keys `grid.set_rows_title` / `grid.set_cols_title` mit `{n}` Placeholder).
+- **PromptBuilder:** Save-Favorite (`fav.save_title`), NanoBanana Rules-Toggle (`builder.rules_toggle_title`).
+- **PromptVault:** Category-Chips (`vault.category_title`), Load-more-Button, PromptCard-Copy-Button, FavoriteCard-Copy-Button. Hardcodete deutsche Strings `"− weniger"` / `"+ mehr"` in `FavoriteCard` durch `showMoreLabel`/`showLessLabel` Props ersetzt (nutzt existierende `vault.show_more` / `vault.show_less` Keys).
 
-Legacy-Felder (`label`/`desc`/`t`/`placeholder`/`reason`/`rules`) wurden aus allen 18 Preset-JSONs, `core-templates.json` und den 6 migrierten MJ-JSONs (`templates`, `filmstocks`, `modifiers`, `genres`, `emotional-hooks`, `forbidden`) entfernt. `random-scenes.json` bleibt unverändert (reine englische Prompt-Daten). Vite-Build ist grün (MJStartframe-Bundle von 71.75 kB auf 59.71 kB geschrumpft durch Legacy-Removal).
+Vite-Build grün. Stage 2e (Legacy-Felder-Entfernung) ebenfalls durch — siehe commit `1a0285d`.
 
 Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json`) haben noch nur Legacy `t` — die `tData`-Calls in PromptBuilder fallen via Fallback-Kette aber korrekt zurück, kein Regression. Diese Files kommen in Stufe **2h** dran.
 
@@ -87,7 +91,7 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - [x] 2c: `core-templates.json` auf gleiche Struktur
   - [x] 2d: MJ Data-Files — `templates.json` (label/desc + field.label/field.placeholder), `filmstocks.json`, `modifiers.json`, `genres.json`, `emotional-hooks.json` (alle `t_en`/`t_de`), `forbidden.json` (label/reason/rules), `random-scenes.json` (keine Lokalisierung nötig, reine englische Daten)
   - [x] 2e: Components anpassen — `obj.label` / `obj.desc` / `obj.t` → `tData(obj, 'label')` / `tData(obj, 'desc')` / `tData(obj, 't')`. Legacy-Felder aus den migrierten JSONs entfernt (Presets, core-templates, MJ-Files außer random-scenes).
-  - [ ] 2f: Tooltip-Review — alle `title=` Attribute prüfen, fehlende ergänzen
+  - [x] 2f: Tooltip-Review — fehlende `title=` Attribute auf SubTabs, Row/Col-Dim-Buttons, Toggles, Save-Fav, Load-more, Card-Copy ergänzt; hardcodete deutsche `weniger`/`mehr` in PromptVault.FavoriteCard durch i18n ersetzt
   - [ ] 2g: i18n.json prüfen ob DE-Block komplett ist, fehlende Keys ergänzen
   - [ ] 2h: PromptBuilder-Daten migrieren — `styles.json`, `cameras.json`, `lenses.json`, `focal.json`, `aperture.json`, `shotsize.json`, `cameraangle.json`, `lighting.json`, `colorgrade.json`, `effects.json`, `negative.json`, `aspectratio.json` auf `t_en`/`t_de`. Component nutzt schon `tData(item, 't')`, Fallback-Kette greift.
 - [ ] **Stufe 3** — GridOperator Komplett-Umbau:

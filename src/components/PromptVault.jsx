@@ -200,6 +200,7 @@ export default function PromptVault() {
             key={cat}
             className={`chip${category === cat ? ' active' : ''}`}
             onClick={() => setCategory(cat)}
+            title={t('vault.category_title')}
           >
             {cat === FAV_SENTINEL
               ? `\u2605 ${t('fav.tab')}${favorites.length > 0 ? ` (${favorites.length})` : ''}`
@@ -229,6 +230,8 @@ export default function PromptVault() {
                 copyLabel={t('vault.copy_btn')}
                 copiedLabel={t('vault.copied')}
                 removeLabel={t('fav.remove')}
+                showMoreLabel={t('vault.show_more')}
+                showLessLabel={t('vault.show_less')}
               />
             ))}
           </div>
@@ -292,7 +295,11 @@ export default function PromptVault() {
 
               {hasMore && (
                 <div style={{ textAlign: 'center', paddingTop: 'var(--sg-space-2xl)' }}>
-                  <button className="sg-btn-ghost" onClick={() => setPage(p => p + 1)}>
+                  <button
+                    className="sg-btn-ghost"
+                    onClick={() => setPage(p => p + 1)}
+                    title={t('vault.load_more')}
+                  >
                     {t('vault.load_more')} ({filtered.length - paginated.length} {t('vault.more_items')})
                   </button>
                 </div>
@@ -375,7 +382,7 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
         ))}
       </div>
 
-      <button className={styles.cardCopyBtn} onClick={onCopy}>
+      <button className={styles.cardCopyBtn} onClick={onCopy} title={copyLabel}>
         <CopyIcon />
         {copied ? copiedLabel : copyLabel}
       </button>
@@ -383,7 +390,7 @@ function PromptCard({ prompt, copied, expanded, starred, onCopy, onToggleExpand,
   )
 }
 
-function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, removeLabel }) {
+function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, removeLabel, showMoreLabel, showLessLabel }) {
   const [imgError, setImgError] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const hasImage = fav.imageUrls?.length > 0 && !imgError
@@ -437,12 +444,12 @@ function FavoriteCard({ fav, copied, onCopy, onRemove, copyLabel, copiedLabel, r
 
         {truncated && (
           <button className={styles.cardShowMore} onClick={() => setExpanded(p => !p)}>
-            {expanded ? '\u2212 weniger' : '+ mehr'}
+            {expanded ? showLessLabel : showMoreLabel}
           </button>
         )}
       </div>
 
-      <button className={styles.cardCopyBtn} onClick={onCopy}>
+      <button className={styles.cardCopyBtn} onClick={onCopy} title={copyLabel}>
         <CopyIcon />
         {copied ? copiedLabel : copyLabel}
       </button>
