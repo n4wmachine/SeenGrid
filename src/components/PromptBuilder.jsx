@@ -50,9 +50,11 @@ function initState() {
 export default function PromptBuilder() {
   const { t, tData } = useLang()
   const [state, setState] = useState(initState)
-  const [openSections, setOpenSections] = useState(
-    () => new Set(['style', 'shotsize', 'lighting'])
-  )
+  // Accordion: only one section open at a time. Opening a new one
+  // auto-closes the previous so the chip cluster never pushes everything
+  // out of the viewport. Multi-column / full visual rethink is deferred
+  // to the Visual Overhaul pass.
+  const [openSection, setOpenSection] = useState('style')
   const [copied, setCopied] = useState(false)
   const { addFavorite } = useFavorites()
   const [savedFav, setSavedFav] = useState(false)
@@ -83,11 +85,7 @@ export default function PromptBuilder() {
   }, [])
 
   const toggleSection = useCallback((id) => {
-    setOpenSections(prev => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
-    })
+    setOpenSection(prev => (prev === id ? null : id))
   }, [])
 
   function buildPrompt() {
@@ -326,7 +324,7 @@ export default function PromptBuilder() {
               key={sec.id}
               section={sec}
               state={state}
-              isOpen={openSections.has(sec.id)}
+              isOpen={openSection === sec.id}
               onToggle={() => toggleSection(sec.id)}
               onToggleChip={toggleChip}
               activeLabels={getActiveLabels(sec)}
