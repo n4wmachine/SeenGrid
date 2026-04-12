@@ -1,0 +1,41 @@
+{
+  "order": ["character", "world", "multishot", "detail", "technical"],
+  "categories": {
+    "character": {
+      "label_en": "Character",
+      "label_de": "Charakter",
+      "desc_en": "Identity-locked character grids — angle studies, expressions, outfits, turnarounds.",
+      "desc_de": "Charakter-Grids mit fixierter Identität — Winkelstudien, Ausdrücke, Outfits, Turnarounds."
+    },
+    "world": {
+      "label_en": "World",
+      "label_de": "Welt",
+      "desc_en": "Environment and location grids — zones, continuity, spatial reveals.",
+      "desc_de": "Umgebungs- und Location-Grids — Zonen, Kontinuität, räumliche Reveals."
+    },
+    "multishot": {
+      "label_en": "Multi-Shot",
+      "label_de": "Multi-Shot",
+      "desc_en": "Sequential narrative grids — film beats, keyframe pairs, progressions.",
+      "desc_de": "Sequenzielle Narrative-Grids — Film-Beats, Keyframe-Paare, Progressionen."
+    },
+    "detail": {
+      "label_en": "Detail",
+      "label_de": "Detail",
+      "desc_en": "Identity anchors and prop breakdowns — detail crops and knolling layouts.",
+      "desc_de": "Identity-Anker und Prop-Breakdowns — Detail-Crops und Knolling-Layouts."
+    },
+    "technical": {
+      "label_en": "Technical",
+      "label_de": "Technisch",
+      "desc_en": "Production-reference grids — lighting tests, blueprints, spatial diagrams.",
+      "desc_de": "Produktions-Referenz-Grids — Lichttests, Baupläne, Raumlayout-Diagramme."
+    },
+    "other": {
+      "label_en": "Other",
+      "label_de": "Andere",
+      "desc_en": "Presets without a category — fallback group.",
+      "desc_de": "Presets ohne Kategorie — Fallback-Gruppe."
+    }
+  }
+}
