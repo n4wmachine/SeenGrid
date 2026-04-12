@@ -64,12 +64,14 @@ export default function GridOperator() {
   const { t } = useLang()
 
   const LAYOUTS = [
-    { id: 'even',       label: 'Even',       desc: t('grid.layout_even_desc') },
-    { id: 'letterbox',  label: 'Letterbox',  desc: t('grid.layout_letterbox_desc') },
-    { id: 'seamless',   label: 'Seamless',   desc: t('grid.layout_seamless_desc') },
-    { id: 'framed',     label: 'Framed',     desc: t('grid.layout_framed_desc') },
-    { id: 'storyboard', label: 'Storyboard', desc: t('grid.layout_storyboard_desc') },
-    { id: 'polaroid',   label: 'Polaroid',   desc: t('grid.layout_polaroid_desc') },
+    // promptDesc = fest englisch, landet im generierten Prompt
+    // desc       = i18n via t(), nur für Tooltips im UI
+    { id: 'even',       label: 'Even',       promptDesc: 'uniform cells, equal gaps',                desc: t('grid.layout_even_desc') },
+    { id: 'letterbox',  label: 'Letterbox',  promptDesc: '16:9 widescreen cells',                    desc: t('grid.layout_letterbox_desc') },
+    { id: 'seamless',   label: 'Seamless',   promptDesc: 'zero gap between cells',                   desc: t('grid.layout_seamless_desc') },
+    { id: 'framed',     label: 'Framed',     promptDesc: 'black border frame around the grid',       desc: t('grid.layout_framed_desc') },
+    { id: 'storyboard', label: 'Storyboard', promptDesc: 'sketch/storyboard-style cells',            desc: t('grid.layout_storyboard_desc') },
+    { id: 'polaroid',   label: 'Polaroid',   promptDesc: 'polaroid-style cells with bottom margin',  desc: t('grid.layout_polaroid_desc') },
   ]
 
   const MODES = [
@@ -116,9 +118,12 @@ export default function GridOperator() {
     })
   }, [rows, cols, mode])
 
+  // WICHTIG: promptDesc (fest englisch) verwenden, NICHT desc (i18n).
+  // Diese Funktion liefert den Text der im generierten Prompt landet —
+  // der muss immer englisch bleiben, egal welche UI-Sprache aktiv ist.
   function getLayoutDesc(l) {
     const found = LAYOUTS.find(x => x.id === l)
-    return found ? `${found.label} — ${found.desc}` : l
+    return found ? `${found.label} — ${found.promptDesc}` : l
   }
 
   function buildOutput() {
