@@ -397,11 +397,16 @@ export default function GridOperator() {
               {/* Objective crop-size advisory — shows the exact pixel
                   dimensions of a single cropped panel at 2K and 4K total
                   grid resolution, plus a quality tag. Users decide for
-                  themselves whether the combo fits their use case. */}
+                  themselves whether the combo fits their use case.
+                  Tooltip documents the two assumptions the math makes:
+                  square canvas + floor rounding + shorter-edge tier. */}
               {(() => {
                 const advice = getDimAdvice(rows, cols)
                 return (
-                  <div className={[styles.dimAdvice, styles[`dimAdvice${advice.quality}`]].filter(Boolean).join(' ')}>
+                  <div
+                    className={[styles.dimAdvice, styles[`dimAdvice${advice.quality}`]].filter(Boolean).join(' ')}
+                    title={t('grid.advice_tooltip')}
+                  >
                     <div className={styles.dimAdviceHeader}>
                       <span className={styles.dimAdviceLabel}>{t('grid.advice_panel_crop_label')}</span>
                       <span className={styles.dimAdviceQualityTag}>
