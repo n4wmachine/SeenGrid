@@ -170,7 +170,7 @@ export default function MJStartframe() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  })
+  }, [output])
 
   const hasContent = !output.includes('[')
 

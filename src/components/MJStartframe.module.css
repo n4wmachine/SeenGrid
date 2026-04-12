@@ -29,52 +29,63 @@
 .builderColumn::-webkit-scrollbar-thumb { background: var(--sg-border-subtle); border-radius: 2px; }
 .builderColumn::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
-/* ---- SUB-TAB NAVIGATION ---- */
+/* ---- SUB-TAB NAVIGATION ----
+   NOTE: position:sticky inside .builderColumn (overflow:auto) caused a
+   chromium paint bug where the tabs rendered into the DOM but were never
+   painted until an unrelated re-layout fired. Keep this explicitly
+   non-sticky. */
 .subTabNav {
   display: flex;
+  gap: 2px;
   background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-border-subtle);
+  border: 1px solid var(--sg-border-default);
   border-radius: var(--sg-radius-lg);
-  overflow: hidden;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  padding: 4px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02) inset, 0 4px 12px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
 }
 
 .subTabBtn {
   flex: 1;
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-sm);
-  font-weight: 400;
-  color: var(--sg-text-tertiary);
+  font-size: var(--sg-text-md);
+  font-weight: 500;
+  color: var(--sg-text-secondary);
   background: transparent;
-  border: none;
-  padding: var(--sg-space-md) var(--sg-space-lg);
+  border: 1px solid transparent;
+  border-radius: var(--sg-radius-md);
+  padding: 10px var(--sg-space-lg);
   cursor: pointer;
-  transition: all var(--sg-transition);
+  transition: color var(--sg-transition), background var(--sg-transition), border-color var(--sg-transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sg-space-xs);
+  gap: var(--sg-space-sm);
   white-space: nowrap;
+  min-height: 40px;
 }
 .subTabBtn:hover {
-  color: var(--sg-text-secondary);
+  color: var(--sg-text-primary);
   background: var(--sg-bg-surface-1);
 }
 .subTabBtn.active {
   color: var(--sg-gold-text);
-  background: var(--sg-chip-bg-active);
-  font-weight: 500;
+  background: rgba(43, 181, 178, 0.14);
+  border-color: rgba(43, 181, 178, 0.45);
+  box-shadow: 0 0 0 1px rgba(43, 181, 178, 0.12), 0 0 12px rgba(43, 181, 178, 0.08);
 }
 
 .subTabBadge {
   font-family: var(--sg-font-mono);
   font-size: 10px;
+  font-weight: 600;
   color: var(--sg-gold);
-  background: rgba(43, 181, 178, 0.12);
+  background: rgba(43, 181, 178, 0.16);
+  border: 1px solid rgba(43, 181, 178, 0.25);
   border-radius: 3px;
-  padding: 0 4px;
+  padding: 1px 5px;
 }
 
 /* ---- 5-ELEMENT ARCHITEKTUR BOX (compact) ---- */
