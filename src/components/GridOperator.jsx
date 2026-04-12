@@ -78,6 +78,33 @@ function buildRoles(preset) {
   return Array.from({ length: total }, (_, i) => roles[i] || `Panel ${i + 1}`)
 }
 
+// Dim advisory: computes objective pixel sizes for a single cropped panel
+// at 2K and 4K total-grid resolution. Users see exactly how large their
+// single crops will end up — no subjective "good/ok/warn" interpretation,
+// just math. Cells are square because the grid is rendered inside a square
+// canvas; the longest axis determines cell edge length.
+//
+// Quality tag reads from the 2K cell size:
+//   ≥1024 → Hires  (full-detail final-shot material)
+//   512…1023 → Standard  (solid single-crop quality)
+//   256…511 → Low  (usable as reference, not as finals)
+//   <256 → Tiny  (concept board only)
+function getDimAdvice(rows, cols) {
+  const SIZE_2K = 2048
+  const SIZE_4K = 4096
+  const longest = Math.max(rows, cols)
+  const cell2K = Math.floor(SIZE_2K / longest)
+  const cell4K = Math.floor(SIZE_4K / longest)
+
+  let quality, icon
+  if (cell2K >= 1024)       { quality = 'Hires';    icon = '✓' }
+  else if (cell2K >= 512)   { quality = 'Standard'; icon = '✓' }
+  else if (cell2K >= 256)   { quality = 'Low';      icon = '→' }
+  else                      { quality = 'Tiny';     icon = '!' }
+
+  return { cell2K, cell4K, quality, icon }
+}
+
 export default function GridOperator() {
   const { t, tData } = useLang()
 
@@ -106,18 +133,13 @@ export default function GridOperator() {
   const [activeCategory, setActiveCategory] = useState(PRESET_GROUPS[0]?.key || 'character')
   const [outputExpanded, setOutputExpanded] = useState(false)
 
-  // Clamp dimension changes so we never end up with unbuildable combos like
-  // 8x3. Strips (1xN / Nx1) allow up to 8 on the free axis; grids cap at 4x4.
-  // Clicking rows=6 while at 3x3 forces cols to 1 — visible feedback, no
-  // hidden state. User can then scale cols back up (but rows clamps to ≤4).
-  function setRows(n) {
-    setRowsRaw(n)
-    if (n > 4) setColsRaw(1)
-  }
-  function setCols(n) {
-    setColsRaw(n)
-    if (n > 4) setRowsRaw(1)
-  }
+  // No dim clamp — all row×col combinations are freely selectable. The
+  // advisory below the dim controls tells the user whether the chosen
+  // combo is practical for single-cell detail crops or better suited as
+  // an overview concept board. Preserving the setRows/setCols wrappers
+  // keeps call sites uniform in case we add clamp-on-preset logic later.
+  const setRows = setRowsRaw
+  const setCols = setColsRaw
   const [layout, setLayout]           = useState('even')
   const [selectedPreset, setPreset]   = useState(ALL_PRESETS[0])
   const [panelRoles, setPanelRoles]   = useState(() => buildRoles(ALL_PRESETS[0]))
@@ -332,56 +354,68 @@ export default function GridOperator() {
               <span className={styles.gridSizeNote}>{t('grid.dim_locked')}</span>
             </div>
           ) : (
-            <div className={styles.dimControls}>
-              <div>
-                <div className={styles.dimLabel}>Rows</div>
-                <div className={styles.dimButtons}>
-                  {/* Always show 1-8. Clicking 5-8 triggers a clamp in
-                      setRows() that forces cols to 1 (strip layout). Discoverable
-                      by default — user sees all options without pre-clicking. */}
-                  {[1,2,3,4,5,6,7,8].map(n => (
-                    <button
-                      key={n}
-                      className={[
-                        styles.dimBtn,
-                        rows === n && styles.active,
-                        n > 4 && styles.dimBtnStrip,
-                      ].filter(Boolean).join(' ')}
-                      onClick={() => setRows(n)}
-                      title={n > 4
-                        ? `${t('grid.set_rows_title').replace('{n}', n)} — ${t('grid.strip_hint')}`
-                        : t('grid.set_rows_title').replace('{n}', n)}
-                    >{n}</button>
-                  ))}
+            <>
+              <div className={styles.dimControls}>
+                <div>
+                  <div className={styles.dimLabel}>Rows</div>
+                  <div className={styles.dimButtons}>
+                    {[1,2,3,4,5,6,7,8].map(n => (
+                      <button
+                        key={n}
+                        className={[styles.dimBtn, rows === n && styles.active].filter(Boolean).join(' ')}
+                        onClick={() => setRows(n)}
+                        title={t('grid.set_rows_title').replace('{n}', n)}
+                      >{n}</button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <span className={styles.dimX}>×</span>
-              <div>
-                <div className={styles.dimLabel}>Cols</div>
-                <div className={styles.dimButtons}>
-                  {[1,2,3,4,5,6,7,8].map(n => (
-                    <button
-                      key={n}
-                      className={[
-                        styles.dimBtn,
-                        cols === n && styles.active,
-                        n > 4 && styles.dimBtnStrip,
-                      ].filter(Boolean).join(' ')}
-                      onClick={() => setCols(n)}
-                      title={n > 4
-                        ? `${t('grid.set_cols_title').replace('{n}', n)} — ${t('grid.strip_hint')}`
-                        : t('grid.set_cols_title').replace('{n}', n)}
-                    >{n}</button>
-                  ))}
+                <span className={styles.dimX}>×</span>
+                <div>
+                  <div className={styles.dimLabel}>Cols</div>
+                  <div className={styles.dimButtons}>
+                    {[1,2,3,4,5,6,7,8].map(n => (
+                      <button
+                        key={n}
+                        className={[styles.dimBtn, cols === n && styles.active].filter(Boolean).join(' ')}
+                        onClick={() => setCols(n)}
+                        title={t('grid.set_cols_title').replace('{n}', n)}
+                      >{n}</button>
+                    ))}
+                  </div>
                 </div>
+                <span className={styles.dimTotal}>{totalPanels} {t('grid.panels')}</span>
               </div>
-              <span className={styles.dimTotal}>
-                {totalPanels} {t('grid.panels')}
-                {(rows > 4 || cols > 4) && (
-                  <span className={styles.stripBadge}>{t('grid.strip_mode')}</span>
-                )}
-              </span>
-            </div>
+
+              {/* Objective crop-size advisory — shows the exact pixel
+                  dimensions of a single cropped panel at 2K and 4K total
+                  grid resolution, plus a quality tag. Users decide for
+                  themselves whether the combo fits their use case. */}
+              {(() => {
+                const advice = getDimAdvice(rows, cols)
+                return (
+                  <div className={[styles.dimAdvice, styles[`dimAdvice${advice.quality}`]].filter(Boolean).join(' ')}>
+                    <div className={styles.dimAdviceHeader}>
+                      <span className={styles.dimAdviceLabel}>{t('grid.advice_panel_crop_label')}</span>
+                      <span className={styles.dimAdviceQualityTag}>
+                        <span className={styles.dimAdviceIcon} aria-hidden="true">{advice.icon}</span>
+                        {t(`grid.quality_${advice.quality.toLowerCase()}`)}
+                      </span>
+                    </div>
+                    <div className={styles.dimAdviceSizes}>
+                      <span className={styles.dimAdviceRes}>
+                        <span className={styles.dimAdviceResTag}>2K</span>
+                        <span className={styles.dimAdviceSize}>{advice.cell2K} × {advice.cell2K} px</span>
+                      </span>
+                      <span className={styles.dimAdviceDivider} aria-hidden="true">·</span>
+                      <span className={styles.dimAdviceRes}>
+                        <span className={styles.dimAdviceResTag}>4K</span>
+                        <span className={styles.dimAdviceSize}>{advice.cell4K} × {advice.cell4K} px</span>
+                      </span>
+                    </div>
+                  </div>
+                )
+              })()}
+            </>
           )}
         </div>
 

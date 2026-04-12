@@ -23,6 +23,7 @@
   max-height: calc(100vh - 96px);
   overflow-y: auto;
   padding-right: var(--sg-space-md);
+  padding-bottom: 22vh;
 }
 
 /* Scrollbar styling */
@@ -249,6 +250,7 @@
   gap: var(--sg-space-xl);
   max-height: calc(100vh - 96px);
   overflow-y: auto;
+  padding-bottom: 22vh;
 }
 
 /* Ghost Button (replaces global sg-btn-ghost) */

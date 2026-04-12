@@ -22,6 +22,10 @@
   max-height: calc(100vh - 96px);
   overflow-y: auto;
   padding-right: var(--sg-space-md);
+  /* Generous bottom padding so the last section never kisses the viewport
+     edge — gives breathing room at scroll-end. Without this, Panel Roles
+     bottom row gets visually chopped at the browser window bottom. */
+  padding-bottom: 22vh;
 }
 
 .controlsColumn::-webkit-scrollbar { width: 4px; }
@@ -422,15 +426,6 @@
   color: var(--sg-gold-text);
 }
 
-/* Strip-only buttons (5-8) — visually differentiated as "strip mode" so
-   the user understands that clicking them collapses the other axis to 1. */
-.dimBtn.dimBtnStrip {
-  border-style: dashed;
-}
-.dimBtn.dimBtnStrip.active {
-  border-style: solid;
-}
-
 .dimX {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xl);
@@ -441,23 +436,148 @@
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-xs);
   color: var(--sg-text-tertiary);
+}
+
+/* ---- DIM ADVISORY ----
+   Objective crop-size readout below the dim controls. Shows the exact
+   pixel size of a single cropped panel at 2K and 4K total-grid resolution,
+   plus a quality tag (Hires / Standard / Low / Tiny) derived from the 2K
+   cell size. Color-coded by quality tier. */
+.dimAdvice {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: var(--sg-space-md);
+  padding: 10px 12px;
+  border-radius: var(--sg-radius-sm);
+  border: 1px solid var(--sg-border-subtle);
+  background: var(--sg-bg-surface-0);
+  font-family: var(--sg-font-body);
+  font-size: var(--sg-text-xs);
+  line-height: 1.4;
+  transition: all var(--sg-transition);
+}
+
+.dimAdviceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dimAdviceLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sg-text-secondary);
+}
+
+.dimAdviceQualityTag {
   display: inline-flex;
   align-items: center;
-  gap: var(--sg-space-sm);
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sg-text-secondary);
+}
+
+.dimAdviceIcon {
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--sg-bg-surface-2);
+}
+
+.dimAdviceSizes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-.stripBadge {
-  font-family: var(--sg-font-body);
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
+.dimAdviceRes {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.dimAdviceResTag {
+  font-size: 9px;
+  font-weight: 700;
   letter-spacing: 0.06em;
-  color: var(--sg-gold-text);
-  background: rgba(43, 181, 178, 0.10);
-  border: 1px solid var(--sg-gold-dim);
+  padding: 2px 5px;
   border-radius: 3px;
-  padding: 1px 6px;
+  background: var(--sg-bg-surface-2);
+  color: var(--sg-text-secondary);
+  border: 1px solid var(--sg-border-subtle);
+}
+
+.dimAdviceSize {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sg-text-primary);
+}
+
+.dimAdviceDivider {
+  color: var(--sg-border-default);
+  font-size: 14px;
+}
+
+/* Hires — ≥1024px cell @ 2K, full-detail final-shot material */
+.dimAdviceHires {
+  border-color: rgba(43, 181, 178, 0.45);
+  background: rgba(43, 181, 178, 0.08);
+}
+.dimAdviceHires .dimAdviceIcon {
+  color: var(--sg-gold-text);
+  background: rgba(43, 181, 178, 0.22);
+}
+.dimAdviceHires .dimAdviceQualityTag {
+  color: var(--sg-gold-text);
+}
+
+/* Standard — 512…1023px cell @ 2K, solid single-crop quality */
+.dimAdviceStandard {
+  border-color: rgba(43, 181, 178, 0.30);
+  background: rgba(43, 181, 178, 0.04);
+}
+.dimAdviceStandard .dimAdviceIcon {
+  color: var(--sg-gold-text);
+  background: rgba(43, 181, 178, 0.16);
+}
+.dimAdviceStandard .dimAdviceQualityTag {
+  color: var(--sg-gold-text);
+}
+
+/* Low — 256…511px cell @ 2K, reference material only */
+.dimAdviceLow {
+  border-color: var(--sg-border-default);
+  background: var(--sg-bg-surface-1);
+}
+.dimAdviceLow .dimAdviceIcon {
+  color: var(--sg-text-secondary);
+  background: var(--sg-bg-surface-2);
+}
+
+/* Tiny — <256px cell @ 2K, concept board only */
+.dimAdviceTiny {
+  border-color: rgba(212, 149, 42, 0.40);
+  background: rgba(212, 149, 42, 0.06);
+}
+.dimAdviceTiny .dimAdviceIcon {
+  color: #e8bd6b;
+  background: rgba(212, 149, 42, 0.18);
+}
+.dimAdviceTiny .dimAdviceQualityTag {
+  color: #e8bd6b;
 }
 
 /* Reference images */
@@ -577,6 +697,9 @@
   max-height: calc(100vh - 96px);
   overflow-y: auto;
   padding-right: var(--sg-space-md);
+  /* Match controlsColumn bottom breathing so outputBox doesn't hit the
+     viewport edge when scrolled to end of the preview column. */
+  padding-bottom: 22vh;
 }
 
 .previewColumn::-webkit-scrollbar { width: 4px; }

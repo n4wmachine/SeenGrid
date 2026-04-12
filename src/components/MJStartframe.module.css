@@ -22,6 +22,9 @@
   max-height: calc(100vh - 96px);
   overflow-y: auto;
   padding-right: var(--sg-space-md);
+  /* Bottom breathing at scroll-end — prevents the last section from
+     clipping against the viewport bottom edge. */
+  padding-bottom: 22vh;
 }
 
 .builderColumn::-webkit-scrollbar { width: 4px; }
@@ -349,6 +352,7 @@
   gap: var(--sg-space-xl);
   max-height: calc(100vh - 96px);
   overflow-y: auto;
+  padding-bottom: 22vh;
 }
 
 .outputControls {
