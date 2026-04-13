@@ -1,7 +1,7 @@
 # Character Study — Pilot 1 Distillation
 
 > **Pilot:** 1 of 5 (Character Study)
-> **Status:** Phase 4 complete (distillation), sections 3/7/8 patched after Phase 5 review to resolve under-specifications surfaced by byte-exact re-read of section 9. Phases 5 (module formalization) + 6 (empirical validation) pending.
+> **Status:** Phase 4 complete (distillation). Sections 3/7/8/9 patched twice after Phase 5 review to resolve under-specifications surfaced by byte-exact re-read of section 9 (first patch: TASK/INPUT_DECL/MODE_SIGNAL/FORBIDDEN structures; second patch: user-input text slots, technical.angle framing_mode collapse, MOD-B conflict_tail_descriptor). Phase 5 (module formalization) + Phase 6 (empirical validation) pending.
 > **Session:** `claude/modular-grid-operator-98Bcq`
 > **Last updated:** 2026-04-13 (patch revision)
 > **Mandatory read first:** `MODULAR_GRID_ARCHITECTURE.md` (briefing) + `CLAUDE.md` (project bible)
@@ -88,6 +88,21 @@ Derived booleans:
 
 The `"of the same character"` tail is present only when `has_face_crop == true`, because the face crop is by definition another image of the same character. MOD-B-only flows drop the tail because the additional reference may describe an environment, an atmospheric scene, or any non-character reference (Ex E).
 
+**Reference listing — user-input text slots:**
+
+Each `Reference X = ...` line carries a **user-editable description**. The descriptions are NOT hardcoded templates — they vary across examples with identical module configs (compare Ex A vs Ex D, both `cinematic+angle+MOD-A`, both rendering different Reference A and Reference B strings). The skeleton provides sensible defaults per mode, but users can and do override them.
+
+| Slot | User-input source | Default (Cinematic mode) | Default (Technical mode) |
+|---|---|---|---|
+| Reference A (base image, always when `ref_count ≥ 2`) | always user-editable | `full-body cinematic character image` | `full-body view — body proportions, posture, clothing, silhouette` |
+| Reference B (when `MOD-A` active) | MOD-A `description` text field | `upscaled close crop of the character's face` | `close-up face view — facial identity, expression, fine details` |
+| Reference B (when `MOD-B` only) | MOD-B `purpose` text field | (no default — user must describe) | (no default — user must describe) |
+| Reference C (when `MOD-A + MOD-B`) | MOD-B `purpose` text field | (no default — user must describe) | (no default — user must describe) |
+
+**Base-image description is not a module.** The "Reference A" base image slot is always the first image the user drops into the canvas — it is not represented as a MOD-* file. Its description text is carried on the skeleton itself, not on a module. The renderer reads it from `userInputs.reference_a_description` (with the mode-coupled default applied when empty).
+
+The golden test files in `tests/golden/character-study/` feed the exact Ex A–E description strings as user-inputs to achieve byte-exact reproduction. See section 9 for the full user-input block per example.
+
 **TASK_TEMPLATE:**
 ```
 Create {N_word} {mode_noun} of the exact same character {variation_clause}, arranged in a {rows}×{cols} {layout_word}.
@@ -95,18 +110,19 @@ Create {N_word} {mode_noun} of the exact same character {variation_clause}, arra
 
 `N_word` = number-to-word ("four", "six", "nine"). `{mode_noun}` and `{variation_clause}` are selected from a **3D lookup** over `(mode, axis, framing_mode)`. `framing_mode` is a derived field from the active panel-content preset — see section 8.5.
 
-**TASK variant table** (6 cases):
+**TASK variant table** (5 cases):
 
-| Key (`mode.axis.framing_mode`) | `mode_noun` | `variation_clause` | Source |
+| Key | `mode_noun` | `variation_clause` | Source |
 |---|---|---|---|
 | `cinematic.angle.uniform_full_body` | `cinematic full-body shots` | `from {N_word} different camera angles` | Ex A (9.1), Ex E (9.5) |
 | `cinematic.angle.mixed` | `cinematic captures` | `from {N_word} different camera angles and shot types` | Ex D (9.4) |
 | `cinematic.expression` | `cinematic portraits` | `with controlled expression changes` | Ex B (9.2) |
-| `technical.angle.uniform_full_body` | `reference views` | `from {N_word} different camera angles` | UNTESTED — pending Phase 6 |
-| `technical.angle.mixed` | `reference views` | `from {N_word} different camera angles and shot types` | Ex C (9.3) |
+| `technical.angle` | `reference views` | `from {N_word} different camera angles` | Ex C (9.3) |
 | `technical.expression` | `expression studies` | `with controlled expression changes` | UNTESTED — pending Phase 6 |
 
-The `cinematic.expression` and `technical.expression` keys collapse `framing_mode` — MOD-F has its own head-and-shoulders framing rule and does not participate in the angle framing_mode split.
+**Collapse rules:**
+- `cinematic.expression` and `technical.expression` collapse `framing_mode` — MOD-F has its own head-and-shoulders framing rule and does not participate in the framing_mode split.
+- **`technical.angle` collapses `framing_mode` deliberately.** Technical Reference Sheets stay clinical regardless of panel-content framing — the `"and shot types"` suffix is cinematic-narrative language and is not inherited by Technical mode. Ex C (8view, 4 portraits + 4 full-body = mixed) renders `"from eight different camera angles"` without the suffix; this is the intended Technical tone. If a future empirical test shows Technical benefits from the suffix, the key can be re-split into `technical.angle.uniform_full_body` / `technical.angle.mixed`.
 
 **MODE_SIGNAL_VARIANT = B** (Inline Contrast Statement):
 When Mode = Cinematic, the following sentence is appended directly after TASK:
@@ -368,9 +384,9 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 
 | Module | Type | Default | Effects |
 |---|---|---|---|
-| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (via 3D lookup), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant. |
-| **MOD-A** | Image drop (Face Crop Reference) | off | Adds next sequential reference slot populated with face-crop authority language. Activates `REFERENCE PRIORITY` with face-priority template. Removes `", matching the reference image"` tail from `LOCKED`. |
-| **MOD-B** | Image drop + text (Additional Reference) | off | Adds next sequential reference slot populated with user-described purpose. Activates `REFERENCE PRIORITY` with generic template. **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
+| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (cinematic uses framing_mode split, technical collapses it), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant, **default text for `reference_a_description`** (cinematic: `"full-body cinematic character image"`, technical: `"full-body view — body proportions, posture, clothing, silhouette"`). |
+| **MOD-A** | Image drop + text field (Face Crop Reference) | off | Adds next sequential reference slot. User-editable `description` field (default per mode: `"upscaled close crop of the character's face"` for cinematic, `"close-up face view — facial identity, expression, fine details"` for technical). Activates `REFERENCE PRIORITY` with face-priority template. Removes `", matching the reference image"` tail from `LOCKED`. |
+| **MOD-B** | Image drop + two text fields (Additional Reference) | off | Adds next sequential reference slot. **Two user-input fields:** (1) `purpose` (required, describes what Reference B shows — no default, user must fill), (2) `conflict_tail_descriptor` (optional, single descriptive word/phrase injected into the REFERENCE PRIORITY conflict clause, e.g. `"atmospheric"` in Ex E). Activates `REFERENCE PRIORITY` with generic template (Case 3 or Case 4). **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
 | **MOD-C** | Auto-injection | auto when `ref_count ≥ 2` | Appends conflict clause to `REFERENCE PRIORITY`: `"If the references conflict, preserve ..."` |
 | **MOD-D** | Multi-select (Camera Angles) | on (primary axis) | Fills `PANEL_CONTENT`. Contributes `framing_mode` via active panel-content preset (see 8.5). Sets MOD-D variant for `LOCKED`, `POSE`. Sets `MOD-H` default pre-selection to Preserve. Adds MOD-D FORBIDDEN entries. XOR with MOD-F. |
 | **MOD-F** | Multi-select (Facial Expressions) | off (XOR with MOD-D) | Fills `PANEL_CONTENT`. Bypasses `framing_mode` (expression path collapses the framing_mode axis). Sets MOD-F variant for `LOCKED`, `POSE`. Activates `VARIABLE` block. Sets `MOD-H` default pre-selection to Neutral. Adds MOD-F FORBIDDEN entries. XOR with MOD-D. |
@@ -415,6 +431,10 @@ If the references conflict, preserve the face from Reference B first, then body 
 ```
 
 **Case 3 — MOD-B only (Additional Reference, no face crop):**
+
+Two template variants depending on whether `conflict_tail_descriptor` is set:
+
+*Without descriptor (default):*
 ```
 REFERENCE PRIORITY
 Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
@@ -422,7 +442,23 @@ Reference B provides {user_ref_b_purpose}.
 If the references conflict, preserve body and outfit from Reference A, then Reference B details.
 ```
 
+*With descriptor (e.g. Ex E: `conflict_tail_descriptor = "atmospheric"`):*
+```
+REFERENCE PRIORITY
+Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
+Reference B provides {user_ref_b_purpose}.
+If the references conflict, preserve body and outfit from Reference A, then Reference B {conflict_tail_descriptor} details.
+```
+
+Verified against Ex E (9.5): `user_ref_b_purpose = "the environment, backdrop, and atmospheric lighting"`, `conflict_tail_descriptor = "atmospheric"` → renders `"...Reference A, then Reference B atmospheric details."`.
+
+The descriptor is a **single word or short noun phrase** and is rendered with exactly one space on each side. Empty descriptor → first variant. Non-empty descriptor → second variant. The renderer must select the variant explicitly, not interpolate with an always-present slot — that avoids the double-space bug when descriptor is empty.
+
 **Case 4 — MOD-A + MOD-B (all three):**
+
+Same two-variant split for the Reference C conflict tail, using the same `conflict_tail_descriptor` field on MOD-B:
+
+*Without descriptor (default):*
 ```
 REFERENCE PRIORITY
 Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
@@ -431,9 +467,20 @@ Reference C provides {user_ref_c_purpose}.
 If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then Reference C details.
 ```
 
+*With descriptor:*
+```
+REFERENCE PRIORITY
+Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
+Reference B provides the highest-authority face: facial identity, facial structure, and fine facial details.
+Reference C provides {user_ref_c_purpose}.
+If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then Reference C {conflict_tail_descriptor} details.
+```
+
+Case 4 is UNTESTED — no example covers MOD-A + MOD-B simultaneously. Behavior is theoretical, pending Phase 6.
+
 ### 8.5 `framing_mode` — Derived Field
 
-`framing_mode` is a derived property of the active panel-content preset. It drives the `TASK` variant selection (section 3) and the `MODE_SIGNAL` `contrast_word` slot.
+`framing_mode` is a derived property of the active panel-content preset. It drives the `TASK` variant selection (section 3, **cinematic.angle only**) and the `MODE_SIGNAL` `contrast_word` slot (cinematic mode only, since Technical does not render MODE_SIGNAL). **Technical mode collapses `framing_mode` on the angle axis** — Technical Reference Sheets render `"from {N_word} different camera angles"` regardless of panel-content framing, and do not inherit the `"and shot types"` cinematic-narrative suffix.
 
 | Panel-content preset | `framing_mode` value |
 |---|---|
@@ -456,6 +503,10 @@ Five concrete renderings covering the main module combinations. All five are rep
 ### 9.1 Example A — 2×2 Cinematic Angle Study, MOD-A, Preserve
 
 **Config:** Mode=Cinematic, rows=2, cols=2, MOD-A=on, MOD-B=off, MOD-D=on (default N=4), MOD-H=Preserve, MOD-J=off, MOD-K=Even
+
+**User inputs (byte-exact for golden test):**
+- `reference_a_description = "full-body cinematic character image"`
+- `mod_a.description = "upscaled close crop of the character's face"`
 
 ```
 Cinematic character study — 2×2 grid
@@ -512,6 +563,9 @@ No replacement of the source environment with a neutral studio backdrop.
 
 **Config:** Mode=Cinematic, rows=1, cols=6, MOD-A=off, MOD-B=off, MOD-F=on (DS-17 defaults), MOD-H=Neutral (axis default), MOD-J=off, MOD-K=Even
 
+**User inputs (byte-exact for golden test):**
+- (none — single-ref path, no reference listing rendered)
+
 ```
 Cinematic character study — 1×6 horizontal strip
 
@@ -563,6 +617,13 @@ No simplification, no flat utilitarian rendering, no quality downgrade from the 
 ### 9.3 Example C — 2×4 Technical Reference Sheet, MOD-A, Custom, MOD-J
 
 **Config:** Mode=Technical, rows=2, cols=4, MOD-A=on, MOD-B=off, MOD-D=on (8view defaults), MOD-H=Custom (user override), MOD-J=on (Photoreal Studio Look), MOD-K=Even
+
+**User inputs (byte-exact for golden test):**
+- `reference_a_description = "full-body view — body proportions, posture, clothing, silhouette"`
+- `mod_a.description = "close-up face view — facial identity, expression, fine details"`
+- `mod_h.custom_text = "Soft studio backdrop with directional key light from camera-left"`
+- `mod_j.look_name = "Photoreal Studio Look"`
+- `mod_j.look_description = "Photoreal studio shoot, directional key light with soft fill, neutral color grade, sharp surface detail"`
 
 ```
 Character reference sheet — 2×4 grid
@@ -622,6 +683,10 @@ No simplification, no flat utilitarian rendering, no quality downgrade from the 
 ### 9.4 Example D — 3×3 Cinematic Storyboard, MOD-A, Preserve, MOD-G
 
 **Config:** Mode=Cinematic, rows=3, cols=3, MOD-A=on, MOD-B=off, MOD-D=on (DS-04 9-shot defaults), MOD-G=on (Strict View Rules), MOD-H=Preserve, MOD-J=off, MOD-K=Even
+
+**User inputs (byte-exact for golden test):**
+- `reference_a_description = "character preservation / integration image (full body)"`
+- `mod_a.description = "upscaled face crop (highest authority for face)"`
 
 ```
 Cinematic character study — 3×3 grid
@@ -684,7 +749,12 @@ No replacement of the source environment with a neutral studio backdrop.
 
 **Config:** Mode=Cinematic, rows=2, cols=2, MOD-A=off, MOD-B=on (Environment Reference), MOD-D=on (default N=4), MOD-H=Preserve, MOD-J=off, MOD-K=Even
 
-This example proves the **MOD-B independent flow** — using an additional reference for environment/atmosphere without requiring a face crop.
+**User inputs (byte-exact for golden test):**
+- `reference_a_description = "full-body cinematic character image"`
+- `mod_b.purpose = "the environment, backdrop, and atmospheric lighting"`
+- `mod_b.conflict_tail_descriptor = "atmospheric"`
+
+This example proves the **MOD-B independent flow** — using an additional reference for environment/atmosphere without requiring a face crop. It also proves the **optional `conflict_tail_descriptor`** field on MOD-B (see section 8.4 Case 3).
 
 ```
 Cinematic character study — 2×2 grid
@@ -821,6 +891,9 @@ No replacement of the source environment with a neutral studio backdrop.
 12. **Do not** place `MOD-I` in the renderer pipeline. It has no prompt effect. No JSON file, no `_order.json` entry. UI-only
 13. **Do not** treat `framing_mode` as a user-controllable module. It is derived from the active panel-content preset and cannot be overridden
 14. **Do not** merge all FORBIDDEN universals into a single group. The `universal_post` line ("No simplification…") always renders *after* axis-specific and toggle-specific entries
+15. **Do not** hardcode `Reference A` / `Reference B` description strings. They are user-editable text slots with per-mode defaults. Compare Ex A ("full-body cinematic character image") vs Ex D ("character preservation / integration image (full body)") — same module config, different strings
+16. **Do not** assume `technical.angle.mixed` exists as a distinct TASK variant. Technical mode collapses framing_mode on the angle axis — there is only `technical.angle`. Adding "and shot types" to Technical mode breaks Ex C
+17. **Do not** interpolate `{conflict_tail_descriptor}` as an always-present slot. Use two template variants (empty vs non-empty) and let the renderer branch. Interpolating an empty slot leaves a double-space artifact
 
 ---
 
