@@ -71,7 +71,28 @@
 
 ## 3. AKTIVE BAUSTELLE
 
-### Aktuelle Stufe: **Idea 1 (Header-Slogan) versucht, gescheitert, zurückgerollt — zurück auf "deferred to Visual Overhaul"**
+### Aktuelle Stufe: **Stufe 6 — Modulare Grid-Architektur (architektonischer Pivot, 2026-04-13)**
+
+⚠ **Pflichtlektüre für den nächsten Opus-Chat:** [`MODULAR_GRID_ARCHITECTURE.md`](./MODULAR_GRID_ARCHITECTURE.md). Enthält die vollständige Briefing-Dokumentation: Problem-Statement, Skeleton+Module Kernkonzept, Character-Study-Beispiel, die 5 Pilot-Presets (Character Study / Char+World Merge / Start/Endframe / World Zone Board / Multishot Sequence), die 6-Phasen-Destillations-Methodologie, 10 User-bestätigte Entscheidungen und 10 Anti-Patterns.
+
+**Kurzfassung des Pivots:** Die Session `claude/seengrid-visual-overhaul-kzfBe` wurde als Visual-Overhaul-Chat geöffnet (Idea 4 NB↔Grid-Bridge als erster Punkt). Im Dialog kam raus: das ganze Framing war falsch. Grid Operator ist nicht eine Template-Bibliothek mit Bridge-Optionen, sondern soll ein **modularer Prompt-Operator mit austauschbaren Skeletons + optionalen Modulen** sein. Die aktuellen 18 Presets sind statische Prompt-Text-Kopien aus DeepSeek1.txt — deshalb muss der User bei jedem Workflow manuell Prompts editieren (Reference B löschen, Look überschreiben etc.). Der tatsächliche USP von SeenGrid ist der modulare Grid-Builder. Alles andere (Visual Overhaul, Slogan, Typografie) kommt nach der Architektur.
+
+**User verbatim:** _"das hier ist der absolut wichtigste schritt in dem gfanzen seengrid prozess, wir haben gerade den wirklichen USP entdeckt"_
+
+**Visual Overhaul bleibt gestapelt** als Stufe 7. Erst Modular-Grid (Stufe 6) durchziehen, dann Visual-Overhaul auf der neuen Architektur.
+
+**Konkreter Start-Punkt im nächsten Chat:**
+1. `MODULAR_GRID_ARCHITECTURE.md` komplett lesen (kein Skimming)
+2. `DeepSeek1.txt` lesen, Items für Character Study extrahieren (Angle-Study, Expression-Board, Facial-Study, Head-Pose, Turnaround, etc.)
+3. Phase 1–3 der 6-Phasen-Destillation für **Character Study** durchführen (Bausteine → Klassifikation → User-Review vor Phase 4)
+4. Nach User-Approval: Phase 4–6 für Character Study, dann das Ganze für die 4 weiteren Pilot-Presets wiederholen
+5. Code-Implementierung ERST wenn alle 5 Skeleton+Module-Sheets vom User approved sind
+
+Der Visual-Overhaul-Ideen-Pool (Farbtemperatur, Display-Font, Slogan, Section-Icons, Card-Shadows) bleibt in `OPUS_CODE_HANDOFF.md` als Stage 7 dokumentiert und unverändert.
+
+---
+
+### Vorherige Stufe: **Idea 1 (Header-Slogan) versucht, gescheitert, zurückgerollt — zurück auf "deferred to Visual Overhaul"**
 
 Slogan **"Scene. Grid. Seen."** wurde in dieser Session zweimal gebaut, beide Versuche scheiterten am User-Review, beide wurden in derselben Session zurückgerollt. Der Header ist jetzt zurück auf dem Stand vor `8e2eebe`. Das ursprüngliche Opus-Gate ("nicht bauen bevor Display-Font entschieden ist") war korrekt — das Bypassen kostete zwei gescheiterte Iterationen.
 
@@ -207,7 +228,22 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - 2 Varianten bauen: (a) SVG mit currentColor + Glow (b) mix-blend-mode bei PNG
   - Größer machen, evtl. Wordmark daneben
   - Header-Tabs: Pills mit Hover-Glow, Icons vor Labels, aktiver Tab mit Teal-Background
-- [ ] **Stufe 6** — Section-Icons über alle Tabs (SVG, aus Lucide oder custom)
+- [ ] **Stufe 6** — Modulare Grid-Architektur (architektonischer Pivot, 2026-04-13) — siehe `MODULAR_GRID_ARCHITECTURE.md`
+  - [ ] Phase 1–3 Destillation **Character Study** (Bausteine sammeln → klassifizieren → User-Review)
+  - [ ] Phase 4–6 Character Study (NanoBanana-Optimierung → Module formalisieren → Validation)
+  - [ ] Character Study Skeleton+Module vom User approven lassen
+  - [ ] Wiederholung für **Char+World Merge** (Multi-Input-Topologie + Proportion-Control-Research)
+  - [ ] Wiederholung für **Start/Endframe Generator** (Temporal-Pair-Topologie, einzige legitime Ausnahme zur No-Camera-Movement-Regel)
+  - [ ] Wiederholung für **World Zone Board** (Cross-Check der existierenden User-Version)
+  - [ ] Wiederholung für **Multishot Sequence** (Cross-Check der existierenden User-Version)
+  - [ ] Look Register Datenstruktur definieren (NB Studio → Grid Operator Look-Modul-Slot)
+  - [ ] Code-Implementierung der Skeleton+Module-Engine (erst nach User-Approval aller 5 Pilot-Sheets)
+  - [ ] Migration der 18 Legacy-Presets: behalten mit "Legacy"-Badge, inkrementell ablösen
+- [ ] **Stufe 7** — Visual Overhaul (verschoben hinter Stufe 6)
+  - 6 Lever: Farbtemperatur-Vielfalt, Background-Texturen/Gradients, Display-Fonts, Section-Icons, Cards mit Shadows, Accent-Dividers
+  - Mockup-Plan zuerst, Code danach (im Visual-Overhaul-Chat)
+  - Detail-Kontext + offene Exploration-Items in `OPUS_CODE_HANDOFF.md` → "Pending: Visual Overhaul"
+- [ ] **Stufe 8** — Section-Icons über alle Tabs (SVG, aus Lucide oder custom) — ursprünglich Stufe 6, verschoben weil vom Visual Overhaul abhängig
   - Prompt Builder: Style, Camera, Lens, Lighting, etc. jeweils mit Icon
   - Grid, MJ, Vault: Section-Header mit Icons
 
@@ -251,16 +287,25 @@ _aktuell keine — alle 3 Rückfragen beantwortet: Beat ✓, SeenGrid Signature 
 - **`position: sticky` ohne `max-height` + `overflow-y: auto`** bricht Scroll wenn Content höher als Viewport. Siehe GridOperator Stufe 1.
 - **Keyboard-Shortcut `Ctrl+Shift+R`** kollidiert mit Browser Hard-Refresh. Nicht verwenden. Wir nutzen `Ctrl+Shift+G` für Random, `Ctrl+Shift+C` für Copy.
 - **Zwischen Random-Templates und Random-Pools nicht verwechseln.** `handleRandom` muss template-agnostisch sein: iteriert über die Felder des aktuell ausgewählten Templates und zieht pro Feld aus dem passenden Pool. Sonst bleiben Placeholders wie `[OBJECT]` stehen (der Bug den User gemeldet hat).
+- **Statische Presets = kein Operator, nur eine Textbibliothek.** Die 18 Presets der ersten Version waren reine DeepSeek1.txt-Kopien mit leeren Parameter-Slots. Das zwingt den User in jedem Workflow dazu, von Hand am Prompt zu editieren (Reference löschen, Look überschreiben, Mode-Wort austauschen). Ein echter Grid Operator ist **Skeleton + Module**: der Kern-Prompt ist fix und standalone-nutzbar, optionale Module lassen sich per Knopfdruck zuschalten und ändern den Skeleton minimal-invasiv. Siehe `MODULAR_GRID_ARCHITECTURE.md` für das komplette Konzept.
+- **Grid Operator ist zu 90% image2sheet, nicht text2sheet.** Der User hat in praktisch jedem täglichen Workflow ein Referenzbild und will einen Wrapper-Prompt drum rum — nicht eine reine Text-Eingabe. UI-Entscheidungen müssen diesen image-first Use-Case spiegeln, nicht einen casual text2grid-Modus den es praktisch nicht gibt.
+- **Look Transfer ist die echte Bridge zwischen NB Studio und Grid Operator, nicht Scene Transfer.** Der User experimentiert in NB Studio mit Looks (Chip-Stacks), dann will er den Look auf ein Sheet anwenden. Scene Transfer (generischer Szenentext → Sheet) ist ein Pseudo-Need. Die Bridge muss ein kleines "Save Look" in NB Studio sein + ein Look-Register das der Grid Operator in seinem Look-Modul-Slot liest.
+- **"Sheet" triggert bei NanoBanana bei Illustration/Anime den Kinder-Cartoon-Default — FAIL state.** Das Mode-Modul muss style-aware sein: bei Photorealistic beide Optionen (Sheet / Cinematic Study), bei Illustration nur Cinematic Study. Diese Kopplung ist Pflicht, keine Kür.
+- **Char+World Merge ist Multi-Input-Topologie (mehrere Inputs → 1 Output), alle anderen Topologien sind 1→N.** Kritisch: Downstream-Video-Modelle (Kling, Seedance) erben Proportionen aus dem Startframe — wenn die Figur im Merge falsche Proportionen zur Welt hat, sind alle nachfolgenden Clips kaputt. Das Proportion-Control-Modul ist NICHT optional bei Char+World Merge, sondern Pflicht.
+- **Start/Endframe Generator ist Temporal-Pair-Topologie (1 Input → 2 zeitlich verbundene Outputs)** und der einzige legitime Use-Case für Kamera-Bewegung-Bezug im ansonsten rein bild-fokussierten SeenGrid (die No-Camera-Movement-Regel gilt für NB-Bild-Output, aber Start/Endframe-Pairs definieren die gewünschte Bewegung implizit über den Delta zwischen beiden Frames).
+- **Einfache Sprache > Architekt-Jargon.** Der User ist kein Webdev und kein Designer. Wenn ein Opus in "Bridge 1+4 vs Bridge 2 mit Rückweg"-Fachsprache abrutscht, versteht der User nur Bahnhof und die Session verliert Tempo. Immer: simple deutsche Worte, konkrete Beispiele, Analogien aus Film/Küche/Werkzeug.
+- **Die "Ship it even though gated"-Versuchung ist real und immer falsch.** Idea 1 (Slogan) wurde zweimal gebaut bevor die Display-Font entschieden war, weil der User "sehen wollte wie es aussieht". Beide Versuche gescheitert, beide gerevertet. Das ursprüngliche Gate war korrekt. Gates existieren aus einem Grund; pushback statt bypass.
 
 ---
 
 ## 8. WORKFLOW-REGELN FÜR CLAUDE
 
 ### Beim Start eines neuen Chats
-1. Diese Datei (`ROADMAP.md`) zuerst lesen
-2. Dann `CLAUDE.md` (Projekt-Bibel)
-3. Dann `OPUS_CODE_HANDOFF.md` (aktueller Snapshot)
-4. Dann an der aktiven Stufe (Abschnitt 3) weiterarbeiten
+1. **Falls aktuelle Stufe = Stufe 6 (Modulare Grid-Architektur):** zuerst `MODULAR_GRID_ARCHITECTURE.md` komplett lesen (Pflichtlektüre). Das ist der 100%-Kontext-Dump für den Pivot.
+2. Diese Datei (`ROADMAP.md`) lesen
+3. Dann `CLAUDE.md` (Projekt-Bibel)
+4. Dann `OPUS_CODE_HANDOFF.md` (aktueller Snapshot)
+5. Dann an der aktiven Stufe (Abschnitt 3) weiterarbeiten
 
 ### Nach jeder abgeschlossenen Stufe
 1. Diese Datei updaten: Stufe in Abschnitt 4 abhaken, neue "Aktuelle Stufe" in Abschnitt 3 setzen
@@ -283,9 +328,10 @@ _aktuell keine — alle 3 Rückfragen beantwortet: Beat ✓, SeenGrid Signature 
 
 ## 9. VERKNÜPFUNG ZU ANDEREN DOKUMENTEN
 
+- **`MODULAR_GRID_ARCHITECTURE.md`** = **⚠ Pflichtlektüre für Stufe 6.** 100%-Briefing für den modularen Grid-Operator-Pivot (Skeleton+Module Konzept, 5 Pilot-Presets, 6-Phasen-Destillation, 10 User-Entscheidungen, 10 Anti-Patterns, konkrete Next Steps).
 - **`CLAUDE.md`** = Projekt-Bibel, Vision, Architektur-Prinzipien, Was ist SeenGrid
 - **`OPUS_CODE_HANDOFF.md`** = Momentaufnahme: was ist broken, was wurde zuletzt gemacht, Tech-Kontext
 - **`ROADMAP.md` (diese Datei)** = Richtung, Entscheidungen, Ideen-Pool, Stufen-Checkliste
-- **`DeepSeek1.txt`** = Quelle für SeenGrid Signature Presets (77 extrahierte Items)
+- **`DeepSeek1.txt`** = Quelle für SeenGrid Signature Presets (77 extrahierte Items) — wird in Stufe 6 Phase 1 als Baustein-Quelle für die Destillation genutzt
 - **`SEENGRID_STRATEGY_AND_FUTURE_VISION_BRIEFING.txt`** = Langfrist-Vision, strategischer Kontext
 - **`PHASE1_STATUS.md`** = Phase-1-Progress (falls vorhanden)
