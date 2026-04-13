@@ -231,14 +231,22 @@ function renderInputDecl(ctx) {
       : modADescDefault;
     lines.push(`Reference B = ${modADesc}.`);
   } else if (flags.has_extra_ref) {
+    // MOD-B two-slot semantic (distillation section 3):
+    //   - INPUT_DECL short-description comes from userInputs.mod_b_description
+    //     (physical object — what's on the image)
+    //   - REFERENCE PRIORITY purpose comes from userInputs.mod_b_purpose
+    //     (semantic role — what the image contributes)
+    //   - If mod_b_description is empty, fall back to mod_b_purpose so a
+    //     single-field flow still works.
     const purpose = userInputs.mod_b_purpose;
     if (!purpose) {
       throw new Error('renderInputDecl: mod_b.purpose is required when MOD-B is active');
     }
-    // MOD-B-only: the additional reference is rendered as "reference scene
-    // for ..." style — i.e. a short description of the extra-ref image.
-    // Section 9.5 shows the description is the same user-text as the purpose.
-    lines.push(`Reference B = ${purpose}.`);
+    const description =
+      (userInputs.mod_b_description && userInputs.mod_b_description.length > 0)
+        ? userInputs.mod_b_description
+        : purpose;
+    lines.push(`Reference B = ${description}.`);
   }
 
   // Slot 3 = MOD-B if both MOD-A and MOD-B are active.
@@ -247,7 +255,11 @@ function renderInputDecl(ctx) {
     if (!purpose) {
       throw new Error('renderInputDecl: mod_b.purpose is required when MOD-B is active');
     }
-    lines.push(`Reference C = ${purpose}.`);
+    const description =
+      (userInputs.mod_b_description && userInputs.mod_b_description.length > 0)
+        ? userInputs.mod_b_description
+        : purpose;
+    lines.push(`Reference C = ${description}.`);
   }
 
   return lines.join('\n');

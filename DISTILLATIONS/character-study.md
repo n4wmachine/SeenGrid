@@ -96,8 +96,10 @@ Each `Reference X = ...` line carries a **user-editable description**. The descr
 |---|---|---|---|
 | Reference A (base image, always when `ref_count ≥ 2`) | always user-editable | `full-body cinematic character image` | `full-body view — body proportions, posture, clothing, silhouette` |
 | Reference B (when `MOD-A` active) | MOD-A `description` text field | `upscaled close crop of the character's face` | `close-up face view — facial identity, expression, fine details` |
-| Reference B (when `MOD-B` only) | MOD-B `purpose` text field | (no default — user must describe) | (no default — user must describe) |
-| Reference C (when `MOD-A + MOD-B`) | MOD-B `purpose` text field | (no default — user must describe) | (no default — user must describe) |
+| Reference B (when `MOD-B` only) | MOD-B `description` text field, fallback to `purpose` if empty | (no default — user must describe) | (no default — user must describe) |
+| Reference C (when `MOD-A + MOD-B`) | MOD-B `description` text field, fallback to `purpose` if empty | (no default — user must describe) | (no default — user must describe) |
+
+**MOD-B two-slot semantic:** The INPUT_DECL `Reference B = ...` / `Reference C = ...` line describes *what is physically shown on the image* (short visual description), while the REFERENCE PRIORITY `Reference B provides ...` / `Reference C provides ...` line describes *what semantic role the image plays in generation* (purpose). These are intentionally separable — compare Ex E: `description = "reference scene for environment and atmospheric lighting"` (physical object) vs `purpose = "the environment, backdrop, and atmospheric lighting"` (semantic inventory). If the user leaves `description` empty, the renderer falls back to `purpose` so a single-field flow still works. This mirrors how MOD-A already splits `description` (INPUT_DECL short-desc) from the hardcoded REFERENCE PRIORITY face-authority template.
 
 **Base-image description is not a module.** The "Reference A" base image slot is always the first image the user drops into the canvas — it is not represented as a MOD-* file. Its description text is carried on the skeleton itself, not on a module. The renderer reads it from `userInputs.reference_a_description` (with the mode-coupled default applied when empty).
 
@@ -386,7 +388,7 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 |---|---|---|---|
 | **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (cinematic uses framing_mode split, technical collapses it), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant, **default text for `reference_a_description`** (cinematic: `"full-body cinematic character image"`, technical: `"full-body view — body proportions, posture, clothing, silhouette"`). |
 | **MOD-A** | Image drop + text field (Face Crop Reference) | off | Adds next sequential reference slot. User-editable `description` field (default per mode: `"upscaled close crop of the character's face"` for cinematic, `"close-up face view — facial identity, expression, fine details"` for technical). Activates `REFERENCE PRIORITY` with face-priority template. Removes `", matching the reference image"` tail from `LOCKED`. |
-| **MOD-B** | Image drop + two text fields (Additional Reference) | off | Adds next sequential reference slot. **Two user-input fields:** (1) `purpose` (required, describes what Reference B shows — no default, user must fill), (2) `conflict_tail_descriptor` (optional, single descriptive word/phrase injected into the REFERENCE PRIORITY conflict clause, e.g. `"atmospheric"` in Ex E). Activates `REFERENCE PRIORITY` with generic template (Case 3 or Case 4). **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
+| **MOD-B** | Image drop + three text fields (Additional Reference) | off | Adds next sequential reference slot. **Three user-input fields:** (1) `description` (optional, short visual description for the INPUT_DECL `Reference B = ...` / `Reference C = ...` line; falls back to `purpose` if empty), (2) `purpose` (required, semantic role for the REFERENCE PRIORITY `Reference B provides ...` / `Reference C provides ...` line — no default, user must fill), (3) `conflict_tail_descriptor` (optional, single descriptive word/phrase injected into the REFERENCE PRIORITY conflict clause, e.g. `"atmospheric"` in Ex E). Activates `REFERENCE PRIORITY` with generic template (Case 3 or Case 4). **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
 | **MOD-C** | Auto-injection | auto when `ref_count ≥ 2` | Appends conflict clause to `REFERENCE PRIORITY`: `"If the references conflict, preserve ..."` |
 | **MOD-D** | Multi-select (Camera Angles) | on (primary axis) | Fills `PANEL_CONTENT`. Contributes `framing_mode` via active panel-content preset (see 8.5). Sets MOD-D variant for `LOCKED`, `POSE`. Sets `MOD-H` default pre-selection to Preserve. Adds MOD-D FORBIDDEN entries. XOR with MOD-F. |
 | **MOD-F** | Multi-select (Facial Expressions) | off (XOR with MOD-D) | Fills `PANEL_CONTENT`. Bypasses `framing_mode` (expression path collapses the framing_mode axis). Sets MOD-F variant for `LOCKED`, `POSE`. Activates `VARIABLE` block. Sets `MOD-H` default pre-selection to Neutral. Adds MOD-F FORBIDDEN entries. XOR with MOD-D. |
@@ -751,10 +753,11 @@ No replacement of the source environment with a neutral studio backdrop.
 
 **User inputs (byte-exact for golden test):**
 - `reference_a_description = "full-body cinematic character image"`
+- `mod_b.description = "reference scene for environment and atmospheric lighting"`
 - `mod_b.purpose = "the environment, backdrop, and atmospheric lighting"`
 - `mod_b.conflict_tail_descriptor = "atmospheric"`
 
-This example proves the **MOD-B independent flow** — using an additional reference for environment/atmosphere without requiring a face crop. It also proves the **optional `conflict_tail_descriptor`** field on MOD-B (see section 8.4 Case 3).
+This example proves the **MOD-B independent flow** — using an additional reference for environment/atmosphere without requiring a face crop. It also proves the **optional `conflict_tail_descriptor`** field on MOD-B (see section 8.4 Case 3) and the **two-slot `description` / `purpose` split** on MOD-B (see section 3 "MOD-B two-slot semantic"). The INPUT_DECL short-description (`description`) is intentionally distinct from the REFERENCE PRIORITY semantic role (`purpose`).
 
 ```
 Cinematic character study — 2×2 grid
@@ -891,7 +894,7 @@ No replacement of the source environment with a neutral studio backdrop.
 12. **Do not** place `MOD-I` in the renderer pipeline. It has no prompt effect. No JSON file, no `_order.json` entry. UI-only
 13. **Do not** treat `framing_mode` as a user-controllable module. It is derived from the active panel-content preset and cannot be overridden
 14. **Do not** merge all FORBIDDEN universals into a single group. The `universal_post` line ("No simplification…") always renders *after* axis-specific and toggle-specific entries
-15. **Do not** hardcode `Reference A` / `Reference B` description strings. They are user-editable text slots with per-mode defaults. Compare Ex A ("full-body cinematic character image") vs Ex D ("character preservation / integration image (full body)") — same module config, different strings
+15. **Do not** hardcode `Reference A` / `Reference B` / `Reference C` description strings. They are user-editable text slots with per-mode defaults. Compare Ex A ("full-body cinematic character image") vs Ex D ("character preservation / integration image (full body)") — same module config, different strings. For MOD-B this means **two separate fields**: `description` feeds the INPUT_DECL short-description line, `purpose` feeds the REFERENCE PRIORITY semantic-role line. Compare Ex E: INPUT_DECL `Reference B = reference scene for environment and atmospheric lighting` vs REFERENCE PRIORITY `Reference B provides the environment, backdrop, and atmospheric lighting` — intentionally different strings
 16. **Do not** assume `technical.angle.mixed` exists as a distinct TASK variant. Technical mode collapses framing_mode on the angle axis — there is only `technical.angle`. Adding "and shot types" to Technical mode breaks Ex C
 17. **Do not** interpolate `{conflict_tail_descriptor}` as an always-present slot. Use two template variants (empty vs non-empty) and let the renderer branch. Interpolating an empty slot leaves a double-space artifact
 

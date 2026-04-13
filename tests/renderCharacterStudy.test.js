@@ -192,6 +192,7 @@ const CASES = [
     },
     userInputs: {
       reference_a_description: 'full-body cinematic character image',
+      mod_b_description: 'reference scene for environment and atmospheric lighting',
       mod_b_purpose: 'the environment, backdrop, and atmospheric lighting',
       mod_b_conflict_tail_descriptor: 'atmospheric'
     }

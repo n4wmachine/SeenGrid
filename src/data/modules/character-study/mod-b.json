@@ -7,10 +7,15 @@
   "axis": null,
   "exclusive_with": [],
   "user_inputs": {
+    "description": {
+      "required": false,
+      "default": "",
+      "description": "Short visual description for the INPUT_DECL 'Reference B = ...' / 'Reference C = ...' line — what is physically shown on the reference image. Falls back to `purpose` if empty."
+    },
     "purpose": {
       "required": true,
       "default": null,
-      "description": "What the additional reference shows (e.g. environment, atmospheric scene)"
+      "description": "Semantic role for the REFERENCE PRIORITY 'Reference B provides ...' / 'Reference C provides ...' line — what the reference contributes to generation (e.g. environment, atmospheric scene)"
     },
     "conflict_tail_descriptor": {
       "required": false,
