@@ -1,20 +1,23 @@
 # SEENGRID — Opus Code Handoff
 
-> **Last updated:** 2026-04-13, session `claude/seengrid-visual-overhaul-kzfBe` — **ARCHITECTURAL PIVOT: Modular Grid Operator discovered as the actual USP**. Visual Overhaul pushed behind modular architecture work.
-> **⚠ READ FIRST:** [`MODULAR_GRID_ARCHITECTURE.md`](./MODULAR_GRID_ARCHITECTURE.md) — the dedicated briefing for the next Opus. 100% mandatory before planning anything. Contains: full pivot context, 5 pilot presets, 6-phase destillation methodology, 10 user-approved decisions, 10 anti-patterns, concrete next steps.
-> **Read order for a new Opus:** 1) `MODULAR_GRID_ARCHITECTURE.md` (mandatory first read)  2) this doc  3) `ROADMAP.md`  4) `CLAUDE.md`
+> **Last updated:** 2026-04-13, session `claude/modular-grid-operator-98Bcq` — **STAGE 6 PILOT 1 PHASE 4 COMPLETE**. Character Study skeleton + modules distilled. Phase 5 (code formalization) + Phase 6 (empirical validation) pending. 4 pilots remaining.
+> **⚠ READ FIRST for a new Opus:** 1) [`DISTILLATIONS/character-study.md`](./DISTILLATIONS/character-study.md) — **the complete Pilot 1 spec** (C1-C6 locks, 14-block skeleton, 11 modules, 5 rendered examples, Phase 5/6 entry points). 2) [`MODULAR_GRID_ARCHITECTURE.md`](./MODULAR_GRID_ARCHITECTURE.md) — the architectural briefing for the pivot. 3) this doc. 4) `ROADMAP.md`. 5) `CLAUDE.md`.
 > **Rule:** update this doc after every fix. It is the snapshot-of-truth.
-> **Next chat:** **Modular Grid — Character Study Phase 1** (not Visual Overhaul anymore). See `MODULAR_GRID_ARCHITECTURE.md` for the full plan and the concrete Phase 1 starting point.
+> **Next chat options (pick one):**
+> - **Option A — Phase 5 for Pilot 1 (code formalization):** design JSON schema for `skeleton + modules`, convert Character Study distillation to JSON, write a renderer that reproduces all 5 examples from section 9 byte-exactly. No UI yet, pure data + render pipeline.
+> - **Option B — Phase 6 for Pilot 1 (empirical validation):** run the 5 rendered examples through NanoBanana with real reference images, document failure modes, iterate on block wording only where empirical evidence shows a specific failure.
+> - **Option C — Start Pilot 2 (Char + World Merge):** apply the same 6-phase methodology to the next preset. The proportion-control aspect is critical and needs separate source research (ROADMAP Stage 6 section).
+> User preference: typically Option A first (lock the architecture in code), then B, then start C once A+B are green.
 
 ---
 
 ## Quick Status
 
-- **Branch:** `claude/seengrid-visual-overhaul-kzfBe` (chat was opened as Visual Overhaul, pivoted mid-session)
-- **Latest commit:** see `git log --oneline -5`
-- **Build:** `npx vite build` green (no code changes this session, only docs + plan)
-- **Status:** **Massive architectural discovery this session. Idea 4 (NB ↔ Grid bridge) was supposed to be the first item. Over the course of the dialogue it became clear that the entire framing was wrong: Grid Operator is not a template library with optional bridges, it is supposed to be a modular prompt *operator* with swappable skeletons + optional modules. The current 18 presets are static prompt-text copies from DeepSeek1.txt, which is why every user workflow requires manual prompt editing (deleting Reference B, overriding look, etc.). The real USP of SeenGrid is the modular grid builder; everything else (Visual Overhaul, slogan, typography) comes after the architecture is right. See the new *Session 2026-04-13 — Architectural Pivot* section below for the complete record.**
-- **⚠ READ FIRST BEFORE PLANNING:** The new *Session 2026-04-13 — Architectural Pivot* section is the 100% mandatory first read. It supersedes all Idea 1/4 discussion in the older sections below and contains the full 5-pilot-preset plan, the 6-phase destillation methodology, all user-approved decisions, and the anti-patterns to avoid.
+- **Branch:** `claude/modular-grid-operator-98Bcq` (semantic name for the architectural pivot work — successor to `claude/seengrid-visual-overhaul-kzfBe`)
+- **Latest commit:** `702fc95 stage 6 pilot 1: character study phase 4 distillation complete` (see `git log --oneline -5`)
+- **Build:** no code changes in this session — docs-only work
+- **Status:** **Stage 6 Pilot 1 (Character Study) Phase 4 complete.** The Character Study skeleton has been fully distilled into `DISTILLATIONS/character-study.md` (745 lines). This is the first of 5 pilot presets and the anchor for Phase 5 (code formalization) + Phase 6 (empirical validation). All block templates are positive-only (except MODE_SIGNAL inline contrast), source-traceable to DS-04/DS-06/DS-17/8view/NEW-EXPR, and reproduce all 4 validated sources via 5 rendered examples. Module independence rules (MOD-B ⊥ MOD-A, MOD-H user override, TITLE not coupled to MOD-K) are documented and locked.
+- **⚠ READ FIRST BEFORE PLANNING:** `DISTILLATIONS/character-study.md` is now the primary spec document for anything Grid Operator related. It supersedes the scattered prompt-text approach of the 18 Legacy presets in `src/data/presets/`. The Legacy folder remains untouched but is now classified as snapshot-only — do not add new presets there.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
@@ -55,7 +58,9 @@ Dynamic fetch from `jau123/nanobanana-trending-prompts`. Not touched in this ses
 
 | Commit | Summary |
 |---|---|
-| _pending_ | **Idea 1 cleanup / revert** — both v1 and v2 reverted after user pointed out that ongoing iteration before the display-font decision is token-waste. Header back to pre-`8e2eebe` state. Idea 1 status restored to "deferred to Visual Overhaul" with full anti-pattern record + lessons learned for the next Opus. The two failed commits stay in git history as documented anti-patterns. |
+| `702fc95` | **Stage 6 Pilot 1 Phase 4 complete** — `DISTILLATIONS/character-study.md` (745 lines). 14-block skeleton + 11 modules distilled from 4 validated sources (DS-04, DS-06, DS-17, 8view) plus 3 user-supplied NEW-EXPR sources. 6 clusters locked iteratively (C1-C6). 5 rendered examples covering the main module combinations (A: 2×2 angles / B: 1×6 expressions / C: 2×4 technical + MOD-J / D: 3×3 storyboard + MOD-G / E: MOD-B only flow proof). Key architectural locks: skeleton-wide positive/negative split with single FORBIDDEN sink (exception: MODE_SIGNAL inline contrast), MOD-D XOR MOD-F axis rule, single-ref fallback with no REFERENCE PRIORITY block, QUALITY ANCHOR mode-coupled variants, MOD-H user override precedence, MOD-B independent of MOD-A, TITLE not coupled to MOD-K. Phase 5 (JSON schema + renderer) and Phase 6 (empirical NanoBanana validation) are the next Opus's entry points. |
+| `6ef8a0e` | **Branch pivot cherry-pick** — pivot commit from old `claude/seengrid-visual-overhaul-kzfBe` branch cherry-picked into new semantic branch `claude/modular-grid-operator-98Bcq`. No content changes, just clean branch handoff. |
+| _old_ | **Idea 1 cleanup / revert** — both v1 and v2 reverted after user pointed out that ongoing iteration before the display-font decision is token-waste. Header back to pre-`8e2eebe` state. Idea 1 status restored to "deferred to Visual Overhaul" with full anti-pattern record + lessons learned for the next Opus. The two failed commits stay in git history as documented anti-patterns. |
 | `869169f` | **Idea 1 v2 (REVERTED)** — Header slogan typography overcorrection: 17px / weight 500 / `--sg-text-primary`, "Grid." in `--sg-teal` matching wordmark accent. Resulted in two new failures: (1) double-brand-echo (white-teal-white pattern duplicated next to wordmark), (2) gaming-clan / esports vibe (colored accent on single word + three-beat staccato). |
 | `8e2eebe` | **Idea 1 v1 (REVERTED)** — Header slogan "Scene. Grid. Seen." 13px / 400 / dim, inline right of wordmark with thin vertical divider. Sat in the same visual category as the tab nav — user reported it "looked like another tool tab that can't be clicked". |
 | `4e32a5b` | docs: refine feature ideas after user clarifications |
