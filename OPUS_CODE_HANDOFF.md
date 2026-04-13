@@ -1,19 +1,20 @@
 # SEENGRID — Opus Code Handoff
 
-> **Last updated:** 2026-04-12, session `claude/review-docs-features-Sg7py` — Idea 1 (header slogan) shipped, body-font v1
-> **Read order for a new Opus:** 1) this doc  2) `ROADMAP.md`  3) `CLAUDE.md`
+> **Last updated:** 2026-04-13, session `claude/seengrid-visual-overhaul-kzfBe` — **ARCHITECTURAL PIVOT: Modular Grid Operator discovered as the actual USP**. Visual Overhaul pushed behind modular architecture work.
+> **⚠ READ FIRST:** [`MODULAR_GRID_ARCHITECTURE.md`](./MODULAR_GRID_ARCHITECTURE.md) — the dedicated briefing for the next Opus. 100% mandatory before planning anything. Contains: full pivot context, 5 pilot presets, 6-phase destillation methodology, 10 user-approved decisions, 10 anti-patterns, concrete next steps.
+> **Read order for a new Opus:** 1) `MODULAR_GRID_ARCHITECTURE.md` (mandatory first read)  2) this doc  3) `ROADMAP.md`  4) `CLAUDE.md`
 > **Rule:** update this doc after every fix. It is the snapshot-of-truth.
-> **Next chat:** Visual Overhaul (new dedicated chat). Base structure is solid. See *Pending: Visual Overhaul* below.
+> **Next chat:** **Modular Grid — Character Study Phase 1** (not Visual Overhaul anymore). See `MODULAR_GRID_ARCHITECTURE.md` for the full plan and the concrete Phase 1 starting point.
 
 ---
 
 ## Quick Status
 
-- **Branch:** `claude/review-docs-features-Sg7py`
+- **Branch:** `claude/seengrid-visual-overhaul-kzfBe` (chat was opened as Visual Overhaul, pivoted mid-session)
 - **Latest commit:** see `git log --oneline -5`
-- **Build:** `npx vite build` green
-- **Status:** **Idea 1 (header slogan) was attempted twice in this session, both attempts failed user review, both reverted in the same session. Header is back to its pre-`8e2eebe` state.** The original Opus's gate ("don't build before display-font is chosen") was correct — bypassing it cost two failed iterations. See *Pending: Feature Ideas → Idea 1* for the full anti-pattern record (commits `8e2eebe` v1 and `869169f` v2 are kept in history as documentation of what NOT to do). **Do not re-attempt the slogan until display-font decision is locked in the Visual Overhaul chat.**
-- **⚠ READ FIRST BEFORE PLANNING:** Section *Pending: Feature Ideas (accumulated, not yet built)* below — 4 user-collected ideas with triage + sequencing guidance. Idea 1 is back to "deferred to Visual Overhaul" status with full lessons-learned attached. Don't jump into Visual Overhaul without reading that section; Idea 4 (architectural product-framing) must be the first conversation item in the next chat.
+- **Build:** `npx vite build` green (no code changes this session, only docs + plan)
+- **Status:** **Massive architectural discovery this session. Idea 4 (NB ↔ Grid bridge) was supposed to be the first item. Over the course of the dialogue it became clear that the entire framing was wrong: Grid Operator is not a template library with optional bridges, it is supposed to be a modular prompt *operator* with swappable skeletons + optional modules. The current 18 presets are static prompt-text copies from DeepSeek1.txt, which is why every user workflow requires manual prompt editing (deleting Reference B, overriding look, etc.). The real USP of SeenGrid is the modular grid builder; everything else (Visual Overhaul, slogan, typography) comes after the architecture is right. See the new *Session 2026-04-13 — Architectural Pivot* section below for the complete record.**
+- **⚠ READ FIRST BEFORE PLANNING:** The new *Session 2026-04-13 — Architectural Pivot* section is the 100% mandatory first read. It supersedes all Idea 1/4 discussion in the older sections below and contains the full 5-pilot-preset plan, the 6-phase destillation methodology, all user-approved decisions, and the anti-patterns to avoid.
 - **Stack:** Vite + React + CSS Modules, no UI library
 - **i18n:** `LangContext` + `src/data/i18n.json`, EN primary, DE fallback.
   UI strings via `t('key')`, data labels via `tData(obj, 'field')`.
