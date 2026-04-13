@@ -1,0 +1,22 @@
+{
+  "id": "mod-j",
+  "name": "Look",
+  "type": "select",
+  "default": { "active": false },
+  "derived_flag": "mod_j_active",
+  "axis": null,
+  "exclusive_with": [],
+  "note": "Dropdown bound to the NanoBanana Studio Look Register. When active, renders the STYLE block. Look metadata is pulled from the register — the renderer only consumes look_name + look_description.",
+  "user_inputs": {
+    "look_name": {
+      "required": true,
+      "default": "",
+      "description": "Display name of the Look (from NB Studio Register)"
+    },
+    "look_description": {
+      "required": true,
+      "default": "",
+      "description": "Full descriptive clause for the Look (from NB Studio Register)"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "mod-d",
+  "name": "Camera Angles",
+  "type": "multi_select",
+  "default": { "active": true, "preset": "DS-06_N4" },
+  "derived_flag": "axis_angle",
+  "axis": "angle",
+  "exclusive_with": ["mod-f"],
+  "panel_presets": {
+    "DS-06_N4": {
+      "framing_mode": "uniform_full_body",
+      "panels": [
+        "Full-body front view",
+        "Full-body true right profile",
+        "Full-body true left profile",
+        "Full-body back view"
+      ]
+    },
+    "DS-04_N9": {
+      "framing_mode": "mixed",
+      "panels": [
+        "Extreme close-up — face",
+        "Close-up — shoulders",
+        "Medium shot — waist up",
+        "Full body — front",
+        "Low angle — heroic",
+        "High angle — top down",
+        "True side profile",
+        "Over-the-shoulder",
+        "Three-quarter rear / back view"
+      ]
+    },
+    "8view_N8": {
+      "framing_mode": "mixed",
+      "panels": [
+        "Close-up portrait facing forward",
+        "Portrait facing right",
+        "Portrait facing left",
+        "Portrait from the back",
+        "Full-body front view",
+        "Full-body right profile",
+        "Full-body left profile",
+        "Full-body back view"
+      ]
+    }
+  },
+  "visibility_clauses": {
+    "uniform_full_body": "Entire figure fully visible in all panels.",
+    "mixed": "Entire figure fully visible where full-body framing applies."
+  },
+  "pose": "Natural relaxed stance. Consistent posture across all panels where the body is visible.",
+  "locked": {
+    "dual_or_triple_ref": "Same facial identity, body proportions, hairstyle, outfit, colors, materials, and consistent lighting source and mood across all panels.",
+    "single_ref": "Same facial identity, body proportions, hairstyle, outfit, colors, materials, and consistent lighting source and mood across all panels, matching the reference image."
+  },
+  "forbidden_entries": [
+    "No cropped head, no cropped feet, no hidden footwear.",
+    "No rigid or aggressive posture."
+  ],
+  "mod_h_default": "Preserve"
+}

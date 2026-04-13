@@ -1,0 +1,41 @@
+{
+  "id": "mod-f",
+  "name": "Facial Expressions",
+  "type": "multi_select",
+  "default": { "active": false, "preset": "DS-17_N6" },
+  "derived_flag": "axis_expression",
+  "axis": "expression",
+  "exclusive_with": ["mod-d"],
+  "panel_presets": {
+    "DS-17_N6": {
+      "panels": [
+        "Neutral",
+        "Restrained subtle smile",
+        "Soft laughter",
+        "Confused / uncertain",
+        "Angry but controlled",
+        "Sad / exhausted"
+      ]
+    },
+    "NEW-EXPR-1x4_N4": {
+      "panels": [
+        "Neutral",
+        "Subtle smile",
+        "Soft laughter",
+        "Thoughtful"
+      ]
+    }
+  },
+  "visibility_clause": "Head-and-shoulders framing across all panels.",
+  "pose": "Identical body pose and framing across all panels, matching the reference.",
+  "variable_block": "Only the facial expression. Controlled, readable changes in expression from panel to panel.",
+  "locked": {
+    "single_ref": "Same face, facial proportions, hairstyle, skin tone, visible outfit, camera distance, camera height, framing, and lighting in all panels, matching the reference image.",
+    "dual_or_triple_ref": "Same face, facial proportions, hairstyle, skin tone, visible outfit, camera distance, camera height, framing, and lighting in all panels."
+  },
+  "forbidden_entries": [
+    "No age shift, no beautification drift.",
+    "No distortion, no exaggerated cartoon distortion."
+  ],
+  "mod_h_default": "Neutral"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "mod-b",
+  "name": "Additional Reference",
+  "type": "image_drop_with_description",
+  "default": { "active": false },
+  "derived_flag": "has_extra_ref",
+  "axis": null,
+  "exclusive_with": [],
+  "user_inputs": {
+    "purpose": {
+      "required": true,
+      "default": null,
+      "description": "What the additional reference shows (e.g. environment, atmospheric scene)"
+    },
+    "conflict_tail_descriptor": {
+      "required": false,
+      "default": "",
+      "description": "Optional single-word descriptor injected into the REFERENCE PRIORITY conflict clause (e.g. 'atmospheric')"
+    }
+  },
+  "effects": {
+    "reference_slot": true,
+    "reference_priority_variant": "generic",
+    "removes_locked_single_tail": true
+  }
+}

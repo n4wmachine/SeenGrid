@@ -1,0 +1,11 @@
+{
+  "id": "mod-k",
+  "name": "Layout Style",
+  "type": "select",
+  "options": ["Even", "Letterbox-framed", "Seamless (borderless)", "Framed with subtle separators", "Storyboard", "Polaroid-style"],
+  "default": { "active": true, "value": "Even" },
+  "derived_flag": "mod_k_active",
+  "axis": null,
+  "exclusive_with": [],
+  "note": "Fills the {layout_style} slot in the LAYOUT block. Does NOT affect TITLE (see Anti-Pattern 6). Mixed layouts unlock when empirically validated."
+}

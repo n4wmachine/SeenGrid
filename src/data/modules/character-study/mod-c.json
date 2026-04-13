@@ -1,0 +1,13 @@
+{
+  "id": "mod-c",
+  "name": "Reference Conflict Resolution",
+  "type": "auto",
+  "default": { "active": true },
+  "derived_flag": "has_multi_ref",
+  "axis": null,
+  "exclusive_with": [],
+  "note": "Auto-injected whenever ref_count >= 2. Appends the 'If the references conflict...' clause to REFERENCE PRIORITY. Has no user-facing toggle — it is always on when multi-ref is on.",
+  "effects": {
+    "reference_priority_conflict_clause": true
+  }
+}

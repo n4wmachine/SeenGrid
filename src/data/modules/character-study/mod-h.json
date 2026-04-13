@@ -1,0 +1,22 @@
+{
+  "id": "mod-h",
+  "name": "Environment",
+  "type": "select",
+  "options": ["Preserve", "Neutral", "Custom"],
+  "default": { "active": false, "value": null },
+  "derived_flag": "mod_h_user_explicit",
+  "axis": null,
+  "exclusive_with": [],
+  "note": "Three-state field: (a) active=false → axis default applies (Preserve for MOD-D, Neutral for MOD-F), (b) active=true, value='Preserve'|'Neutral'|'Custom' → user explicit choice wins over axis default. Only user_explicit overrides the axis default.",
+  "user_inputs": {
+    "custom_text": {
+      "required": false,
+      "default": "",
+      "description": "Free text describing the custom environment (only used when value='Custom')"
+    }
+  },
+  "axis_defaults": {
+    "angle": "Preserve",
+    "expression": "Neutral"
+  }
+}

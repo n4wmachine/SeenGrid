@@ -1,0 +1,16 @@
+{
+  "preset_id": "character-study",
+  "note": "Load / register order for modules. This is NOT render-assembly order — render order lives in the skeleton.blocks array. MOD-E and MOD-I are deliberately absent: MOD-E does not exist (see Anti-Pattern 11), MOD-I is UI-only and excluded from the renderer (see Anti-Pattern 12).",
+  "modules": [
+    "mode",
+    "mod-a",
+    "mod-b",
+    "mod-c",
+    "mod-d",
+    "mod-f",
+    "mod-g",
+    "mod-h",
+    "mod-j",
+    "mod-k"
+  ]
+}

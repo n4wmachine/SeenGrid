@@ -1,0 +1,52 @@
+Character reference sheet — 2×4 grid
+
+You are given two reference images of the same character.
+Reference A = full-body view — body proportions, posture, clothing, silhouette.
+Reference B = close-up face view — facial identity, expression, fine details.
+
+TASK
+Create eight reference views of the exact same character from eight different camera angles, arranged in a 2×4 grid.
+
+PANEL CONTENT
+Panel 1: Close-up portrait facing forward.
+Panel 2: Portrait facing right.
+Panel 3: Portrait facing left.
+Panel 4: Portrait from the back.
+Panel 5: Full-body front view.
+Panel 6: Full-body right profile.
+Panel 7: Full-body left profile.
+Panel 8: Full-body back view.
+
+REFERENCE PRIORITY
+Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
+Reference B provides the highest-authority face: facial identity, facial structure, and fine facial details.
+If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then materials.
+
+QUALITY ANCHOR
+Each panel is rendered with consistent photorealistic, DSLR-level fidelity.
+Preserve sharp surface detail, natural muted tones, and clean rendering across all panels.
+
+LAYOUT
+2×4 grid. Even spacing.
+Entire figure fully visible where full-body framing applies.
+
+POSE
+Natural relaxed stance. Consistent posture across all panels where the body is visible.
+
+ENVIRONMENT
+Soft studio backdrop with directional key light from camera-left.
+
+LOCKED
+Same facial identity, body proportions, hairstyle, outfit, colors, materials, and consistent lighting source and mood across all panels.
+
+STYLE
+Photoreal Studio Look. Photoreal studio shoot, directional key light with soft fill, neutral color grade, sharp surface detail.
+
+FORBIDDEN
+No text, no labels, no captions, no watermarks.
+No face drift, no identity drift between panels.
+No hairstyle drift, no outfit change between panels.
+No stylization drift between panels.
+No cropped head, no cropped feet, no hidden footwear.
+No rigid or aggressive posture.
+No simplification, no flat utilitarian rendering, no quality downgrade from the source image.
