@@ -1,10 +1,11 @@
 # Character Study — Pilot 1 Distillation
 
 > **Pilot:** 1 of 5 (Character Study)
-> **Status:** Phase 4 complete (distillation). Phases 5 (module formalization) + 6 (empirical validation) pending.
+> **Status:** Phase 4 complete (distillation), sections 3/7/8 patched after Phase 5 review to resolve under-specifications surfaced by byte-exact re-read of section 9. Phases 5 (module formalization) + 6 (empirical validation) pending.
 > **Session:** `claude/modular-grid-operator-98Bcq`
-> **Last updated:** 2026-04-13
+> **Last updated:** 2026-04-13 (patch revision)
 > **Mandatory read first:** `MODULAR_GRID_ARCHITECTURE.md` (briefing) + `CLAUDE.md` (project bible)
+> **Ground-truth precedence:** If sections 3–8 and section 9 disagree, **section 9 wins**. Section 9 Rendered Examples are the byte-exact contract. Phase 5 tests must reproduce them byte-exactly.
 
 ---
 
@@ -67,19 +68,68 @@ All templates in this distillation are traceable to the following sources. No co
   - `cols == 1` → `"vertical strip"`
   - otherwise → `"grid"`
 
-**INPUT_DECL_FORM:** Single-line default (`"You are given a character reference image."`) OR multi-line listed with `Reference A/B/C = [description].` when MOD-A or MOD-B are active.
+**INPUT_DECL_FORM:** First line is one of four intro variants selected via `(has_face_crop, has_extra_ref)`. When `ref_count ≥ 2`, the intro is followed by a reference listing (`Reference A = [description].` / `Reference B = [description].` / optionally `Reference C = [description].`) with one line per active reference slot.
+
+**INPUT_DECL intro variants:**
+
+| Condition | Intro line | Source |
+|---|---|---|
+| `is_single_ref` | `You are given a character reference image.` | Ex B (9.2) |
+| `has_face_crop && !has_extra_ref` | `You are given two reference images of the same character.` | Ex A (9.1), Ex C (9.3), Ex D (9.4) |
+| `!has_face_crop && has_extra_ref` | `You are given two reference images.` | Ex E (9.5) |
+| `has_face_crop && has_extra_ref` | `You are given three reference images of the same character.` | UNTESTED — pending Phase 6 |
+
+Derived booleans:
+- `has_face_crop = MOD-A active`
+- `has_extra_ref = MOD-B active`
+- `is_single_ref = !has_face_crop && !has_extra_ref`
+- `has_multi_ref = has_face_crop || has_extra_ref`
+- `ref_count = 1 + (has_face_crop ? 1 : 0) + (has_extra_ref ? 1 : 0)`
+
+The `"of the same character"` tail is present only when `has_face_crop == true`, because the face crop is by definition another image of the same character. MOD-B-only flows drop the tail because the additional reference may describe an environment, an atmospheric scene, or any non-character reference (Ex E).
 
 **TASK_TEMPLATE:**
 ```
 Create {N_word} {mode_noun} of the exact same character {variation_clause}, arranged in a {rows}×{cols} {layout_word}.
 ```
 
-`N_word` = number-to-word ("four", "six", "nine"), `mode_noun` = `"cinematic full-body shots"` | `"reference views"`, `variation_clause` axis-dependent.
+`N_word` = number-to-word ("four", "six", "nine"). `{mode_noun}` and `{variation_clause}` are selected from a **3D lookup** over `(mode, axis, framing_mode)`. `framing_mode` is a derived field from the active panel-content preset — see section 8.5.
+
+**TASK variant table** (6 cases):
+
+| Key (`mode.axis.framing_mode`) | `mode_noun` | `variation_clause` | Source |
+|---|---|---|---|
+| `cinematic.angle.uniform_full_body` | `cinematic full-body shots` | `from {N_word} different camera angles` | Ex A (9.1), Ex E (9.5) |
+| `cinematic.angle.mixed` | `cinematic captures` | `from {N_word} different camera angles and shot types` | Ex D (9.4) |
+| `cinematic.expression` | `cinematic portraits` | `with controlled expression changes` | Ex B (9.2) |
+| `technical.angle.uniform_full_body` | `reference views` | `from {N_word} different camera angles` | UNTESTED — pending Phase 6 |
+| `technical.angle.mixed` | `reference views` | `from {N_word} different camera angles and shot types` | Ex C (9.3) |
+| `technical.expression` | `expression studies` | `with controlled expression changes` | UNTESTED — pending Phase 6 |
+
+The `cinematic.expression` and `technical.expression` keys collapse `framing_mode` — MOD-F has its own head-and-shoulders framing rule and does not participate in the angle framing_mode split.
 
 **MODE_SIGNAL_VARIANT = B** (Inline Contrast Statement):
 When Mode = Cinematic, the following sentence is appended directly after TASK:
 
-> `This is not a technical reference layout — these are {N_word} cinematic film captures of the same person in a consistent environment.`
+```
+This is not a technical reference {contrast_word} — these are {N_word} cinematic film captures of the same person in a consistent {setting_word}.
+```
+
+Both slot values are derived from `(axis, framing_mode)`:
+
+| Slot | Condition | Value |
+|---|---|---|
+| `contrast_word` | `framing_mode == mixed` | `sheet` |
+| `contrast_word` | `framing_mode == uniform_full_body` | `layout` |
+| `contrast_word` | `axis == expression` | `layout` |
+| `setting_word` | `axis == angle` (MOD-D) | `environment` |
+| `setting_word` | `axis == expression` (MOD-F) | `setup` |
+
+Verification against examples:
+- Ex A (MOD-D, uniform_full_body) → `layout` + `environment` ✓
+- Ex B (MOD-F, expression) → `layout` + `setup` ✓
+- Ex D (MOD-D, mixed) → `sheet` + `environment` ✓
+- Ex E (MOD-D, uniform_full_body) → `layout` + `environment` ✓
 
 This is the **only** skeleton block permitted to carry an inline negative formulation. All other negatives are deferred to `FORBIDDEN`.
 
@@ -245,14 +295,27 @@ LAYOUT
 
 **FORBIDDEN_FORM:** Always present. Grouped by topic following DS-06/DS-17 pattern. Always the last block in the prompt.
 
-**Universal entries (always present):**
+**Universal entries — split into `pre` and `post` groups.** Discovered by byte-exact reading of the rendered examples: the "no simplification" line appears *after* the axis-specific and toggle-specific entries, not grouped with the other four universals.
+
+**`universal_pre` (4 lines, always, always first):**
 ```
 No text, no labels, no captions, no watermarks.
 No face drift, no identity drift between panels.
 No hairstyle drift, no outfit change between panels.
 No stylization drift between panels.
+```
+
+**`universal_post` (1 line, always, after axis/toggle blocks):**
+```
 No simplification, no flat utilitarian rendering, no quality downgrade from the source image.
 ```
+
+**FORBIDDEN render order (byte-exact, verified against Ex A/B/D):**
+1. `universal_pre` (4 lines)
+2. axis-specific block (MOD-D: 2 lines, or MOD-F: 2 lines)
+3. `mod_g_toggle` (1 line, only if MOD-G active)
+4. `universal_post` (1 line)
+5. `mod_h_preserve_conditional` (1 line, only if effective MOD-H == Preserve)
 
 **MOD-D specific additions (when Angles active):**
 ```
@@ -288,7 +351,7 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 |---|---|---|
 | `TITLE` | Always | Mode + rows/cols (derives `layout_word`) |
 | `INPUT_DECL` | Always | base + `MOD-A` + `MOD-B` |
-| `TASK` | Always | Mode + rows/cols + axis |
+| `TASK` | Always | Mode + rows/cols + axis + framing_mode |
 | `MODE_SIGNAL` | Mode == Cinematic | Mode |
 | `PANEL_CONTENT` | Always | `MOD-D` XOR `MOD-F` |
 | `REFERENCE PRIORITY` | `ref_count ≥ 2` | `MOD-A` + `MOD-B` + `MOD-C` |
@@ -299,21 +362,21 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 | `LOCKED` | Always (4 variants axis × ref_count) | Axis + ref_count |
 | `VARIABLE` | `MOD-F` active | `MOD-F` |
 | `STYLE` | `MOD-J` active | `MOD-J` |
-| `FORBIDDEN` | Always (composition varies) | Universal + axis + toggles |
+| `FORBIDDEN` | Always (composition varies) | universal_pre + axis + mod_g + universal_post + mod_h_conditional |
 
 ### 8.2 Module Specifications
 
 | Module | Type | Default | Effects |
 |---|---|---|---|
-| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant. |
+| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (via 3D lookup), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant. |
 | **MOD-A** | Image drop (Face Crop Reference) | off | Adds next sequential reference slot populated with face-crop authority language. Activates `REFERENCE PRIORITY` with face-priority template. Removes `", matching the reference image"` tail from `LOCKED`. |
 | **MOD-B** | Image drop + text (Additional Reference) | off | Adds next sequential reference slot populated with user-described purpose. Activates `REFERENCE PRIORITY` with generic template. **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
 | **MOD-C** | Auto-injection | auto when `ref_count ≥ 2` | Appends conflict clause to `REFERENCE PRIORITY`: `"If the references conflict, preserve ..."` |
-| **MOD-D** | Multi-select (Camera Angles) | on (primary axis) | Fills `PANEL_CONTENT`. Sets MOD-D variant for `LOCKED`, `POSE`. Sets `MOD-H` default pre-selection to Preserve. Adds MOD-D FORBIDDEN entries. XOR with MOD-F. |
-| **MOD-F** | Multi-select (Facial Expressions) | off (XOR with MOD-D) | Fills `PANEL_CONTENT`. Sets MOD-F variant for `LOCKED`, `POSE`. Activates `VARIABLE` block. Sets `MOD-H` default pre-selection to Neutral. Adds MOD-F FORBIDDEN entries. XOR with MOD-D. |
+| **MOD-D** | Multi-select (Camera Angles) | on (primary axis) | Fills `PANEL_CONTENT`. Contributes `framing_mode` via active panel-content preset (see 8.5). Sets MOD-D variant for `LOCKED`, `POSE`. Sets `MOD-H` default pre-selection to Preserve. Adds MOD-D FORBIDDEN entries. XOR with MOD-F. |
+| **MOD-F** | Multi-select (Facial Expressions) | off (XOR with MOD-D) | Fills `PANEL_CONTENT`. Bypasses `framing_mode` (expression path collapses the framing_mode axis). Sets MOD-F variant for `LOCKED`, `POSE`. Activates `VARIABLE` block. Sets `MOD-H` default pre-selection to Neutral. Adds MOD-F FORBIDDEN entries. XOR with MOD-D. |
 | **MOD-G** | Toggle (Strict View Rules) | off | Adds MOD-G FORBIDDEN entries (mirrored profiles, three-quarter substitutes). |
 | **MOD-H** | Select (Preserve / Neutral / Custom) | axis-based pre-selection, user-overridable | Renders `ENVIRONMENT` block per variant. User's explicit choice always wins over axis default. Conditional `FORBIDDEN` entry when effective value is Preserve. |
-| **MOD-I** | UI-warning | auto when Technical + illustrative look | **No prompt effect.** UI soft-warning only. |
+| **MOD-I** | UI-warning | auto when Technical + illustrative look | **No prompt effect. Excluded from renderer entirely.** No JSON module file, no `_order.json` entry. Surfaced only in the UI layer. |
 | **MOD-J** | Select (Look from NanoBanana Studio Register) | off | Activates `STYLE` block. Look metadata pulled from NB Studio Register. |
 | **MOD-K** | Select (Layout Style) | Even | Fills `{layout_style}` slot in `LAYOUT` block. **Does not affect `TITLE`.** Mixed layouts unlocked when empirically validated. |
 
@@ -324,9 +387,9 @@ Module identifiers `MOD-A`, `MOD-B`, `MOD-C` are internal. The reference slot na
 
 ```
 1.  Render TITLE              ← MODE + rows/cols (derives layout_word)
-2.  Render INPUT_DECL         ← ref_count + MOD-A + MOD-B
-3.  Render TASK               ← MODE + rows/cols + axis
-4.  Render MODE_SIGNAL        ← only if MODE = Cinematic
+2.  Render INPUT_DECL         ← intro variant from (has_face_crop, has_extra_ref) + sequential reference listing
+3.  Render TASK               ← MODE + axis + framing_mode (3D lookup) + rows/cols
+4.  Render MODE_SIGNAL        ← only if MODE = Cinematic; slot-fills (contrast_word, setting_word) from (axis, framing_mode)
 5.  Render PANEL_CONTENT      ← MOD-D XOR MOD-F fills
 6.  Render REFERENCE PRIORITY ← only if ref_count ≥ 2; variant by MOD-A/MOD-B combo
 7.  Render QUALITY ANCHOR     ← MODE-coupled variant
@@ -336,7 +399,7 @@ Module identifiers `MOD-A`, `MOD-B`, `MOD-C` are internal. The reference slot na
 11. Render LOCKED             ← axis + ref_count variant
 12. Render VARIABLE           ← only if MOD-F active
 13. Render STYLE              ← only if MOD-J active
-14. Render FORBIDDEN          ← Universal + axis + toggles + conditional MOD-H
+14. Render FORBIDDEN          ← universal_pre + axis + mod_g + universal_post + mod_h_preserve_conditional
 ```
 
 ### 8.4 REFERENCE PRIORITY Variants (All 4 Cases)
@@ -367,6 +430,22 @@ Reference B provides the highest-authority face: facial identity, facial structu
 Reference C provides {user_ref_c_purpose}.
 If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then Reference C details.
 ```
+
+### 8.5 `framing_mode` — Derived Field
+
+`framing_mode` is a derived property of the active panel-content preset. It drives the `TASK` variant selection (section 3) and the `MODE_SIGNAL` `contrast_word` slot.
+
+| Panel-content preset | `framing_mode` value |
+|---|---|
+| DS-06 default (N=4 front/right/left/back) | `uniform_full_body` |
+| DS-04 default (N=9 ECU/CU/MS/Full/Low/High/Profile/OTS/3-4-rear) | `mixed` |
+| 8view default (N=8 4 portraits + 4 full-body) | `mixed` |
+| User-custom panel content (free text) | `mixed` (safer fallback) |
+| MOD-F active (any expression preset) | `N/A` — expression path bypasses framing_mode |
+
+**Rationale:** DS-06 panels are all framed full-body and use uniform camera treatment, so the TASK phrasing reads `"full-body shots"`. DS-04 panels span ECU through full-body with mixed shot sizes, so the TASK phrasing reads `"captures"` and the variation clause adds `"and shot types"`. 8view is mixed for the same reason. The user-custom fallback defaults to `mixed` because `mixed` phrasing is permissive over any framing, whereas `uniform_full_body` phrasing becomes factually wrong the moment the user adds a non-full-body panel.
+
+`framing_mode` is a pure derivation — it has no UI control and cannot be overridden. It follows panel content.
 
 ---
 
@@ -738,6 +817,10 @@ No replacement of the source environment with a neutral studio backdrop.
 8. **Do not** override user's explicit `MOD-H` choice with an axis default. User wins
 9. **Do not** render a `VARIABLE` block for MOD-D. Variation is already explicit in `PANEL_CONTENT`
 10. **Do not** render a `REFERENCE PRIORITY` block at ref_count == 1. Continuity moves to `LOCKED`
+11. **Do not** introduce `MOD-E`. It does not exist. The module letters deliberately skip from D to F, and from H to J. The canonical list is `MOD-A`, `MOD-B`, `MOD-C`, `MOD-D`, `MOD-F`, `MOD-G`, `MOD-H`, `MOD-I`, `MOD-J`, `MOD-K`
+12. **Do not** place `MOD-I` in the renderer pipeline. It has no prompt effect. No JSON file, no `_order.json` entry. UI-only
+13. **Do not** treat `framing_mode` as a user-controllable module. It is derived from the active panel-content preset and cannot be overridden
+14. **Do not** merge all FORBIDDEN universals into a single group. The `universal_post` line ("No simplification…") always renders *after* axis-specific and toggle-specific entries
 
 ---
 
