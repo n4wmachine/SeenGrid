@@ -81,12 +81,18 @@
 
 **Visual Overhaul bleibt gestapelt** als Stufe 7. Erst Modular-Grid (Stufe 6) durchziehen, dann Visual-Overhaul auf der neuen Architektur.
 
-**Konkreter Start-Punkt im nächsten Chat:**
-1. `MODULAR_GRID_ARCHITECTURE.md` komplett lesen (kein Skimming)
-2. `DeepSeek1.txt` lesen, Items für Character Study extrahieren (Angle-Study, Expression-Board, Facial-Study, Head-Pose, Turnaround, etc.)
-3. Phase 1–3 der 6-Phasen-Destillation für **Character Study** durchführen (Bausteine → Klassifikation → User-Review vor Phase 4)
-4. Nach User-Approval: Phase 4–6 für Character Study, dann das Ganze für die 4 weiteren Pilot-Presets wiederholen
-5. Code-Implementierung ERST wenn alle 5 Skeleton+Module-Sheets vom User approved sind
+**Fortschritt Stand 2026-04-13 (Session `claude/modular-grid-operator-98Bcq`):**
+- Pilot 1 Character Study: Phase 1–5 komplett. Distillation + JSON-Schema + Modul-Files + `skeletonRenderer.js` + Golden-Files + Node-Test-Harness shipped. 5/5 Examples byte-exact grün. Siehe `DISTILLATIONS/character-study.md` + `OPUS_CODE_HANDOFF.md`.
+- Pilot 1 Phase 6 (empirische NanoBanana-Validierung) steht als nächstes an — primär User-Task (Golden-Files durchjagen, Failure-Modes dokumentieren).
+- Pilots 2–5 noch offen: Char+World Merge → Start/Endframe → World Zone Board → Multishot Sequence, in dieser Processing-Order (nicht UI-Order).
+
+**Konkreter Start-Punkt im nächsten Chat (nach Phase 6):**
+1. `OPUS_CODE_HANDOFF.md` lesen (aktuelle Snapshot-of-truth)
+2. `DISTILLATIONS/character-study.md` lesen (Schablone für die folgenden Pilots)
+3. `MODULAR_GRID_ARCHITECTURE.md` für Pilot-2-Briefing + Proportion-Control-Research-Notes
+4. Pilot 2 (Char+World Merge) Phase 1 starten: Source-Sammlung + extra Research-Pass für Proportion-Control-Sprache (DeepSeek1.txt + jau123-repo)
+5. Phasen 2–6 wie bei Pilot 1. Neue Distillation-Datei `DISTILLATIONS/char-world-merge.md`, neue JSON-Files unter `src/data/skeletons/` und `src/data/modules/char-world-merge/`, Renderer ggf. erweitern für multi-input Topologie
+6. UI-Arbeit bleibt gestapelt bis alle 5 Pilots grün sind. Keine UI-Zwischenschritte.
 
 Der Visual-Overhaul-Ideen-Pool (Farbtemperatur, Display-Font, Slogan, Section-Icons, Card-Shadows) bleibt in `OPUS_CODE_HANDOFF.md` als Stage 7 dokumentiert und unverändert.
 
@@ -229,9 +235,10 @@ Noch offen: PromptBuilder-Daten (`styles.json`, `cameras.json`, `lenses.json`, `
   - Größer machen, evtl. Wordmark daneben
   - Header-Tabs: Pills mit Hover-Glow, Icons vor Labels, aktiver Tab mit Teal-Background
 - [ ] **Stufe 6** — Modulare Grid-Architektur (architektonischer Pivot, 2026-04-13) — siehe `MODULAR_GRID_ARCHITECTURE.md`
-  - [ ] Phase 1–3 Destillation **Character Study** (Bausteine sammeln → klassifizieren → User-Review)
-  - [ ] Phase 4–6 Character Study (NanoBanana-Optimierung → Module formalisieren → Validation)
-  - [ ] Character Study Skeleton+Module vom User approven lassen
+  - [x] Phase 1–3 Destillation **Character Study** (Bausteine sammeln → klassifizieren → User-Review)
+  - [x] Phase 4 Character Study (NanoBanana-Optimierung) — siehe `DISTILLATIONS/character-study.md`
+  - [x] Phase 5 Character Study (Module formalisieren: JSON-Schema, Modul-Files, `skeletonRenderer.js`, Golden-Files, Node-Test-Harness, 5/5 byte-exact grün) — Commits `b24b438` + `68bc3b6` auf `claude/modular-grid-operator-98Bcq`
+  - [ ] Phase 6 Character Study (empirische NanoBanana-Validierung der 5 Rendered Examples gegen echte Referenzen)
   - [ ] Wiederholung für **Char+World Merge** (Multi-Input-Topologie + Proportion-Control-Research)
   - [ ] Wiederholung für **Start/Endframe Generator** (Temporal-Pair-Topologie, einzige legitime Ausnahme zur No-Camera-Movement-Regel)
   - [ ] Wiederholung für **World Zone Board** (Cross-Check der existierenden User-Version)

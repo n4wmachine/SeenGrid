@@ -1,7 +1,7 @@
 # Character Study — Pilot 1 Distillation
 
 > **Pilot:** 1 of 5 (Character Study)
-> **Status:** Phase 4 complete (distillation). Sections 3/7/8/9 patched twice after Phase 5 review to resolve under-specifications surfaced by byte-exact re-read of section 9 (first patch: TASK/INPUT_DECL/MODE_SIGNAL/FORBIDDEN structures; second patch: user-input text slots, technical.angle framing_mode collapse, MOD-B conflict_tail_descriptor). Phase 5 (module formalization) + Phase 6 (empirical validation) pending.
+> **Status:** Phase 4 (distillation) **and** Phase 5 (code formalization) complete. Sections 3/7/8/9/14 patched three times during Phase 5 to resolve under-specifications surfaced by byte-exact testing against section 9 (first patch: TASK/INPUT_DECL/MODE_SIGNAL/FORBIDDEN structures; second patch: user-input text slots, technical.angle framing_mode collapse, MOD-B conflict_tail_descriptor; third patch: MOD-B two-slot description/purpose split after Ex E byte-exact failure). Phase 5 code artifacts shipped — see `OPUS_CODE_HANDOFF.md` for the full list and the 5/5 byte-exact test result. Phase 6 (empirical NanoBanana validation) pending.
 > **Session:** `claude/modular-grid-operator-98Bcq`
 > **Last updated:** 2026-04-13 (patch revision)
 > **Mandatory read first:** `MODULAR_GRID_ARCHITECTURE.md` (briefing) + `CLAUDE.md` (project bible)
