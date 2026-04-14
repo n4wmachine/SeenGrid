@@ -58,5 +58,46 @@ extra characters, extra props, text, labels, watermarks, cropped feet, hidden sh
 Pfad: Haupt-Preset. Input = Full-body master reference (entweder Original wenn `clean_full_body`, oder Step-1-Output wenn `needs_normalization`) + Face reference. Default-Testfall: 4 vertikale Panels (front / right profile / left profile / back).
 
 ```
-Create one finished cinematic panel strip as four tall vertical panels arranged side by side in a single horizontal row.. Use the provided references as follows: - Full-body master reference = highest authority for body proportions, hairstyle, outfit, colors, materials, and footwear - Face reference = highest authority for facial identity and fine facial details Goal: Show the exact same character in four distinct full-body cinematic views. This is a polished cinematic panel strip, not a neutral studio turnaround sheet. Panel order from left to right: 1. Full-body front view 2. Full-body character's right side profile 3. Full-body character's left side profile 4. Full-body back view Critical orientation rule: - Panel 2 must show the character's right side to the camera - Panel 3 must show the character's left side to the camera - Panel 2 and Panel 3 must be true opposite side views, not duplicated and not mirrored versions of the same side Critical full-body rule: Every panel must show the complete figure from head to both feet. Both shoes must be fully visible in every panel. No cropped legs, no cropped feet, no hidden footwear. Consistency: Keep identical facial identity, hairstyle, body proportions, outfit, colors, materials, and footwear across all four panels. Keep the same environment, same lighting direction, same mood, and same rendering quality across all panels. Pose: Natural relaxed standing pose. Calm balanced posture. Only the viewing angle changes from panel to panel. Layout: Four tall vertical panels in one horizontal row. Even spacing between panels. Each figure fully contained inside its own panel with a small margin around the silhouette. Do not add: text, labels, captions, watermarks, extra characters, extra props, studio background, identity drift, outfit drift, hairstyle drift, material drift, cropped body parts, hidden shoes, or mirrored reuse of the same side profile.
+Create one finished cinematic panel strip as four tall vertical panels arranged side by side in a single horizontal row.
+
+Use the provided references as follows:
+- Full-body master reference = highest authority for body proportions, hairstyle, outfit, colors, materials, and footwear
+- Face reference = highest authority for facial identity and fine facial details
+
+Goal:
+Show the exact same character in four distinct full-body cinematic views.
+This is a polished cinematic panel strip, not a neutral studio turnaround sheet.
+
+Panel order from left to right:
+1. Full-body front view
+2. Full-body character's right side profile
+3. Full-body character's left side profile
+4. Full-body back view
+
+Critical orientation rule:
+- Panel 2 must show the character's right side to the camera
+- Panel 3 must show the character's left side to the camera
+- Panel 2 and Panel 3 must be true opposite side views, not duplicated and not mirrored versions of the same side
+
+Critical full-body rule:
+Every panel must show the complete figure from head to both feet.
+Both shoes must be fully visible in every panel.
+No cropped legs, no cropped feet, no hidden footwear.
+
+Consistency:
+Keep identical facial identity, hairstyle, body proportions, outfit, colors, materials, and footwear across all four panels.
+Keep the same environment, same lighting direction, same mood, and same rendering quality across all panels.
+
+Pose:
+Natural relaxed standing pose.
+Calm balanced posture.
+Only the viewing angle changes from panel to panel.
+
+Layout:
+Four tall vertical panels in one horizontal row.
+Even spacing between panels.
+Each figure fully contained inside its own panel with a small margin around the silhouette.
+
+Do not add:
+text, labels, captions, watermarks, extra characters, extra props, studio background, identity drift, outfit drift, hairstyle drift, material drift, cropped body parts, hidden shoes, or mirrored reuse of the same side profile.
 ```
