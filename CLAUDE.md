@@ -1,5 +1,35 @@
 # CLAUDE.md — SeenGrid
 
+---
+
+## CURRENT STATUS — ZUERST LESEN
+
+**Stand:** 2026-04-14
+**Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
+**Phase:** 6 (empirische NanoBanana-Validierung) — im RETTUNGSMODUS nach semantischem Drift
+**Working Branch:** `claude/reconstruct-seengrid-history-EqIn8`
+**Archiv-Branch (nicht anfassen):** `claude/modular-grid-operator-98Bcq` — enthält Phase 1–6 Modular-Code inklusive bekanntem semantischem Drift. Nicht löschen, nicht rebasen, nicht force-pushen. Historisches Beweismaterial.
+
+**Was ist der Zustand:**
+- Phase 5 war der letzte saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
+- Phase 6 hat semantischen Drift eingeführt: ein vorheriger Opus-Chat ohne Projektkontext hat ChatGPT-optimierte Prompts verwässert beim modularen Einbau und Teile hart-codiert die modular bleiben sollten.
+- Die neue Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
+- Nächster Schritt: Strict Diff zwischen Ground Truth und den 11 Golden Files des Modular-Branch → Patch- oder Rebuild-Entscheidung → Pilot 1 Phase 6 zuklappen → erst dann Pilot 2 starten.
+
+**NICHT anfassen ohne explizite Freigabe von Jonas:**
+- Die 18 Legacy-Presets in `src/data/presets/` (Phase-1-Snapshot, unabhängig von modularer Arbeit)
+- `OPUS_CODE_HANDOFF.md` und `ROADMAP.md` Sync — bleiben bewusst auf "Phase 6 in Arbeit" stehen bis Phase 6 wirklich grün gegen Ground Truth ist
+- Merge auf `main` — erst nach Phase 6 Abschluss für Pilot 1
+- Löschung alter Branches — erst nach Abschluss der Rettung
+
+**Offene Scope-Entscheidungen (NICHT heimlich lösen, zuerst Jonas fragen):**
+- Modulare Panel-Anzahl UI (1x2 / 1x3 / 1x5 / 1x6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase, explizit NICHT Teil von Phase 6. Die Engine bleibt parameterisiert, nur die UI-Buttons kommen später.
+- Technical Sheet Mode Status — Klärung pending
+
+Dieser Block ist die Wahrheit über den Projektzustand. Jeder Chat liest ihn als ERSTE Handlung und aktualisiert ihn als LETZTE Handlung vor dem finalen Commit.
+
+---
+
 ## Was ist SeenGrid?
 SeenGrid ist ein modulares Operator-Tool für AI-Film-/Bild-Workflows. Es soll als eigenständige Web-App (Vite + React) gebaut werden, deploybar auf Vercel/Netlify.
 
@@ -44,6 +74,37 @@ Der Grid Operator hat KEINE festen "2x2" oder "3x3" Buttons. Stattdessen: frei w
 
 ### 4. Prompt-Output = Paste-Ready
 Jeder Output muss DIREKT in NanoBanana/MJ/Kling kopierbar sein. Kein generisches Listing, sondern vollständige Prompts im richtigen Format.
+
+---
+
+## ARBEITSREGELN GEGEN DRIFT
+
+Diese sechs Regeln sind entstanden aus dem Phase-6-Rettungsfall vom 2026-04-14. Sie sind nicht optional. Jeder Chat der SeenGrid anfasst hält sich daran ohne Ausnahme. Der gesamte Sinn dieser Regeln ist: kein Chat kann mehr heimlich driften, und kein Chat startet mehr aus einem leeren Kontext.
+
+### Regel 1: STATUS-Block zuerst lesen, zuletzt aktualisieren
+Der "CURRENT STATUS" Block oben in dieser Datei ist die Wahrheit über den aktuellen Projekt-Zustand. Jeder neue Chat liest ihn als erste Handlung und weiß damit sofort wo er steht. Jeder Chat aktualisiert ihn als letzte Handlung vor dem finalen Commit mit dem neuen Stand. Keine Session endet mit veraltetem Status-Block.
+
+### Regel 2: Working Branch Pin
+Der "Working Branch" aus dem STATUS-Block ist der einzige Branch auf dem Arbeit geschieht. Keine neuen Branches ohne explizite Freigabe von Jonas im Chat. Wenn die Claude-Code-Harness automatisch einen neuen Branch anlegt, wechselt der Chat als erste Handlung zurück auf den Working Branch. Branch-Chaos entsteht sonst durch Default-Verhalten, nicht durch Absicht.
+
+### Regel 3: Ground-Truth-Datei pro Preset
+Jedes Preset (Character Study, Char+World Merge, Start/Endframe, World Zone Board, Multishot Sequence) bekommt EINE wortwörtliche Wahrheitsquelle unter `DISTILLATIONS/<pilot>-chatgpt-groundtruth.md`. Diese Datei enthält die mit ChatGPT erarbeiteten und empirisch bei NanoBanana validierten Prompts, unverändert, in Code-Blöcken. Kein Code-Change an einem Preset ohne dass diese Datei existiert und der Chat sie vollständig gelesen hat. Jeder gerenderte Prompt-Output wird byte-exact gegen diese Datei gedifft. Abweichung = Bug in der Repo, niemals in der Ground Truth.
+
+### Regel 4: Rendered-Output-Review vor Commit
+Bevor irgendein Commit Prompt-Inhalt verändert (Skeletons, Module, Goldens, Renderer-Logik), postet der Chat den vollständig gerenderten Prompt im Chat zur Freigabe. Jonas sagt "ja" oder "nein". Erst bei "ja" wird committet. Das ist der Echtzeit-Drift-Catcher — keine Abkürzung, auch nicht bei vermeintlich "kleinen" Änderungen. Jonas ist kein Coder, aber er erkennt sofort ob ein Prompt-Text stimmt oder nicht.
+
+### Regel 5: Slice-Disziplin
+Ein Chat = ein Slice. Ein Slice ist: ein einzelner Block in einem Skeleton, ein einzelnes Modul, eine einzelne Golden-Datei, eine einzelne Patch-Zeile. "Phase 6 implementieren", "Pilot 2 bauen", "Modularen Panel-Count einbauen" sind KEINE Slices — das sind Projekte. Wenn ein Chat beim Lesen seines Auftrags merkt dass der Scope zu groß ist, stoppt er und fragt Jonas ob er splitten soll. Lieber zehn kleine Chats die je eine Sache richtig erledigen als ein großer Chat der vier Sachen halb macht. Genau daran ist der 2-step Opus am 2026-04-14 verstorben.
+
+### Regel 6: Session-Übergabe-Protokoll
+Jede Session schließt sich selbst sauber ab. Der nächste Chat startet NIEMALS aus einem leeren Kontext. Reihenfolge am Ende jeder Session, zwingend:
+
+1. STATUS-Block oben in CLAUDE.md aktualisieren: neuer Stand, was wurde in dieser Session erledigt, was ist der nächste konkrete Schritt, was sind neue offene Punkte, welche Scope-Entscheidungen sind jetzt pending
+2. Falls `OPUS_CODE_HANDOFF.md` im Repo existiert und mit der aktuellen Phase synchron sein soll: auch dort die Session-Zusammenfassung nachziehen
+3. Letzter Commit der Session enthält diese Status-Updates und trägt die Session-ID im Commit-Body
+4. Im Chat eine kurze schriftliche Übergabe posten: "Nächster Chat liest CLAUDE.md Status-Block, dann `DISTILLATIONS/<pilot>-chatgpt-groundtruth.md`, dann letzter Commit auf Working Branch, dann startet mit Schritt X."
+
+Diese drei Quellen zusammen — STATUS-Block, Ground-Truth-Datei für den aktiven Piloten, letzter Commit — müssen ausreichen damit ein neuer Chat ohne manuelles Briefing von Jonas weiterarbeiten kann. Wenn eine Session endet ohne dass diese drei Quellen synchron sind, ist die Session nicht korrekt abgeschlossen.
 
 ---
 
