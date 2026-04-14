@@ -6,7 +6,7 @@
 
 **Stand:** 2026-04-14
 **Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
-**Phase:** 6 (empirische NanoBanana-Validierung) — Rebuild-Slice fertig, NanoBanana-Gegentest steht aus
+**Phase:** 6 (empirische NanoBanana-Validierung) — Rebuild-Slice fertig + byte-exact verifiziert, NanoBanana-Bildtest steht bei Jonas aus
 **Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild ist hier passiert, ab jetzt der einzige aktive Branch
 **Rescue-Planungs-Archiv (nicht anfassen):** `claude/reconstruct-seengrid-history-EqIn8` — auf diesem Branch fand am 2026-04-14 die Diagnose und der Strict Diff statt. Enthält die frühen Versionen der Ground-Truth-Datei und der CLAUDE.md-Rescue-Additionen (wurden per Cherry-Pick hierher gebracht). Nicht löschen bis Rettung abgeschlossen, nicht weiterentwickeln.
 
@@ -14,8 +14,9 @@
 - Phase 5 war der letzte vorherige saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
 - Phase 6 hatte semantischen Drift: ein vorheriger Opus-Chat ohne Projektkontext hatte ChatGPT-optimierte Prompts verwässert.
 - Die Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
-- **Rebuild-Slice abgeschlossen am 2026-04-14:** der 4-Winkel Cinematic Angle Study Fall ist neu gebaut über zwei neue Skeleton-Dateien plus Routing in `renderCharacterStudy`. Die alten Skeletons sind unverändert geblieben (uncertified Modi laufen byte-stable weiter).
-- **Nächster Schritt:** Jonas testet die 3 neuen Goldens empirisch in NanoBanana gegen die GT. Wenn der Bildtest bestanden ist, ist Phase 6 zu für den 4-Winkel Fall. Erst danach: nächster Slice (entweder eigene GT für einen der uncertified Modi, oder neuer Pilot).
+- **Neuer Workflow ab 2026-04-14:** GT-First Modell — siehe Abschnitt **PILOT-WORKFLOW (GT-FIRST)** weiter unten. Pilot 1 hat es im Phase-6-Rebuild rückwirkend übernommen, Pilots 2-5 laufen direkt nach diesem Modell.
+- **Rebuild-Slice abgeschlossen am 2026-04-14:** der 4-Winkel Cinematic Angle Study Fall ist neu gebaut über zwei neue Skeleton-Dateien plus Routing in `renderCharacterStudy`. Die alten Skeletons sind unverändert geblieben (uncertified Modi laufen byte-stable weiter). Die 3 neuen Goldens sind byte-exact gegen die GT-Code-Blocks verifiziert.
+- **Nächster Schritt:** Jonas testet die 3 neuen Goldens empirisch in NanoBanana gegen die GT. Wenn der Bildtest bestanden ist: (a) Pilot 1 4-Winkel-Fall ist fertig, (b) Merge auf `main` als erster Per-Pilot-Merge im neuen GT-First Workflow, (c) parallel beginnt Jonas die GT-Erstellung für Pilots 2-5 in eigenen ChatGPT-Sessions außerhalb der Repo. Die fertigen GTs landen dann jeweils als eigener Slice im modularen System.
 
 **Was Phase-6-Rebuild konkret gemacht hat:**
 - NEU: `src/data/skeletons/character-study-cinematic-strip.json` (10 Blöcke, Title-Case-Header mit Doppelpunkt, semantische Reference-Labels)
@@ -48,10 +49,10 @@ Alles andere fällt durch zum alten (uncertified) Pfad.
 - Die "uncertified" Modi (Expression Board, 3×3, Env-Ref, Technical Sheet) — nicht verschlimmbessern, nicht löschen, erst eigener Slice mit eigener GT
 
 **Offene Scope-Entscheidungen (NICHT heimlich lösen, zuerst Jonas fragen):**
-- Modulare Panel-Anzahl UI (1×2 / 1×3 / 1×5 / 1×6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase, explizit NICHT Teil von Phase 6. Die Engine ist parameterisiert über `{n_word}`, nur die UI-Buttons kommen später
-- Technical Sheet Mode Status — Klärung pending, aktuell läuft auf altem Pfad und ist uncertified
-- Eigene Ground-Truth-Dateien für die uncertified Modi (Expression, 3×3, Env-Ref, Technical) — Entscheidung später welche davon überhaupt im Produkt bleiben
-- Soll der neue Skeleton-Pfad MOD-J / MOD-G / MOD-H Custom unterstützen? Aktuell silent ignoriert. Wenn ja: braucht eigene GT-Validierung pro Variante
+- Modulare Panel-Anzahl UI (1×2 / 1×3 / 1×5 / 1×6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase. Die Engine ist parameterisiert über `{n_word}`, nur die UI-Buttons kommen später
+- Technical Sheet Mode — bleibt auf altem Pfad als orphan/uncertified. Wird ein eigener GT-First-Slice falls Jonas ihn behalten will, sonst wird er gestrichen
+- Uncertified Modi (Expression Board, 3×3 Storyboard, Env-Ref, Technical Sheet) — pro Modus entscheidet Jonas später: entweder eigener GT-First-Slice (mit ChatGPT-Optimierung + NanoBanana-Validierung + Skeleton) oder Streichung. Kein Modus wird "gefixt" oder "verbessert" ohne eigene GT
+- MOD-J / MOD-G / MOD-H Custom auf cinematic-strip Pfad — **gelöst durch GT-First**: jede solche Variante braucht eine eigene GT-Validierung, deshalb werden sie auf dem GT-Pfad weiterhin silent ignoriert, bis ein eigener Slice mit eigener GT existiert
 
 Dieser Block ist die Wahrheit über den Projektzustand. Jeder Chat liest ihn als ERSTE Handlung und aktualisiert ihn als LETZTE Handlung vor dem finalen Commit.
 
@@ -132,6 +133,70 @@ Jede Session schließt sich selbst sauber ab. Der nächste Chat startet NIEMALS 
 4. Im Chat eine kurze schriftliche Übergabe posten: "Nächster Chat liest CLAUDE.md Status-Block, dann `DISTILLATIONS/<pilot>-chatgpt-groundtruth.md`, dann letzter Commit auf Working Branch, dann startet mit Schritt X."
 
 Diese drei Quellen zusammen — STATUS-Block, Ground-Truth-Datei für den aktiven Piloten, letzter Commit — müssen ausreichen damit ein neuer Chat ohne manuelles Briefing von Jonas weiterarbeiten kann. Wenn eine Session endet ohne dass diese drei Quellen synchron sind, ist die Session nicht korrekt abgeschlossen.
+
+---
+
+## PILOT-WORKFLOW (GT-FIRST) — entstanden 2026-04-14
+
+Ab Pilot 2 läuft jeder Pilot nach diesem Modell. Pilot 1 (Character Study) hat es im Phase-6-Rebuild rückwirkend übernommen. Der Sinn: Chats können Prompt-Inhalt strukturell nicht mehr verändern — sie integrieren nur. Drift-Risiko fällt damit auf null, weil die einzige kreative Arbeit (Prompt-Engineering) **außerhalb der Repo** bei Jonas mit ChatGPT passiert und das Ergebnis als locked Code-Block ins Repo eingekippt wird.
+
+### Schritt 1 — Jonas erarbeitet den Prompt (außerhalb der Repo)
+Eine ChatGPT-Session pro Pilot. Jonas arbeitet mit ChatGPT zusammen am Prompt, in seinem Element (filmische Intuition + Prompt-Engineering). Output: ein optimierter Prompt für **einen** Basis-Fall, nicht für alle Varianten. Beispiel Pilot 1: 4-Winkel Cinematic Angle Study mit Face-Crop, env Preserve, 1×4 vertical strip. Andere Varianten (1×3, 1×5, MOD-J, env Custom) werden später als eigene Slices mit eigenen GTs erarbeitet.
+
+### Schritt 2 — Jonas validiert empirisch in NanoBanana
+Jonas füttert den Prompt in NanoBanana, erzeugt mehrere Bilder, vergleicht mit seinem mentalen Maßstab. Wenn die Bilder filmisch stimmen → Schritt 3. Wenn nicht → zurück zu Schritt 1, ChatGPT iterieren bis es passt. Diese Schleife passiert vollständig außerhalb der Repo, ohne Code-Chat-Beteiligung.
+
+### Schritt 3 — Jonas legt die GT-Datei an
+Pfad: `DISTILLATIONS/<pilot>-chatgpt-groundtruth.md`. Inhalt: Datum, Status, Quelle, Zweck, Regel, dann den Prompt **wortwörtlich in einem Markdown-Code-Block**. Wenn der Pilot zweistufig ist (Normalizer + Hauptprompt, wie Character Study), zwei Code-Blocks unter "Step 1" und "Step 2" mit kurzer Pfad-Beschreibung pro Block.
+
+Diese Datei ist ab dann **locked**: kein Chat editiert sie, keine Variante wird ergänzt ohne neuen NanoBanana-Test, keine Formatierungs-"Verbesserungen". Wenn ein Chat sie versehentlich kaputt macht, rollt die nächste Session zurück.
+
+### Schritt 4 — Chat baut die Integration
+Input für den Chat: nur die GT-Datei und der STATUS-Block in CLAUDE.md. Keine Briefings, keine Kontext-Spuren aus Jonas' ChatGPT-Sessions, keine Diskussion über Prompt-Inhalt.
+
+Aufgabe des Chats:
+- Skeleton-JSON-Datei(en) für den neuen Pilot in `src/data/skeletons/`
+- Module-JSON-Daten in `src/data/modules/<pilot>/` (sofern neu)
+- Block-Renderer und Routing-Erweiterung in `src/lib/skeletonRenderer.js`
+- 1 byte-exact Golden-Datei in `tests/golden/<pilot>/`
+- Test-Case in `tests/<pilot>.test.js`
+- `npm test` (oder das pilot-spezifische Test-Script) muss grün sein
+
+**Vertrag:** Wenn das Golden nicht byte-exact mit der GT-Code-Block matcht, ist die Repo falsch — niemals die GT.
+
+**Wenn die Engine etwas architektonisch nicht abbilden kann:** der Chat **stoppt**, meldet zurück an Jonas mit konkreter Beschreibung welcher Block welche Constraint verletzt, und macht **keine** "kreative Lösung". Jonas entscheidet dann ob die Engine erweitert wird oder ob die GT-Variante geändert wird (was zurück zu Schritt 1 + 2 führt, also neue ChatGPT-Optimierung + neuer NanoBanana-Test).
+
+### Schritt 5 — Jonas verifiziert visuell (Regel 4)
+Bevor der Chat committet, postet er den vollständig gerenderten Output im Chat. Jonas vergleicht visuell mit der GT, sagt ja oder nein. Bei "ja": Chat committet + pusht. Bei "nein": Chat fragt nach was Jonas anders will, verändert Skeleton/Renderer entsprechend, postet erneut. Niemals committen ohne Jonas' explizites OK.
+
+### Schritt 6 — Per-Pilot-Merge auf main
+Sobald ein Pilot Basis-Fall validiert ist (NanoBanana + byte-exact Golden) und der Code im Working Branch grün läuft: **Merge auf main** als eigener kleiner Merge.
+
+Ablauf:
+1. Chat öffnet einen Pull Request über die GitHub MCP-Tools mit Titel `Pilot N — <name> base case`
+2. Jonas öffnet die PR-URL im Browser, scrollt durch die Files-Changed Liste, klickt "Merge pull request" auf der GitHub-Webseite
+3. Chat verifiziert dass main jetzt den merged code enthält und schließt den Slice ab
+
+Pro Pilot ein Merge — kein Sammel-Merge nach allen 5 Pilots. Gründe: kleine Merges sind sicherer, jeder validierte Pilot liegt sofort stabil auf main, Fehler in Pilot 4 betreffen nicht Pilot 1+2+3.
+
+Uncertified Modi (Modi ohne eigene GT) bleiben byte-stable in der Repo. Sie werden nicht entfernt, weil sie funktionieren, nur eben nicht GT-validiert. Sie werden später eigene Slices oder eben gestrichen.
+
+### Was kommt nach den 5 Pilot-Merges
+Die Pilots sind nur **ein Teil von Phase 1** (siehe Abschnitt "WAS GEBAUT WERDEN MUSS" weiter unten). Nach allen 5 Pilots:
+- Phase 1 hat noch: Prompt Builder (Chip-basiert), MJ Startframe Modul, Prompt Vault (1500+ Community-Prompts mit Galerie)
+- Phase 2: Kling/Seedance Formate, Workflow Layer Grundstruktur, Character Operator mit Multi-Varianten
+- Phase 3: vollständige App, Workflow Guide, Deployment auf Vercel/Netlify
+
+Erst nach Phase 3 ist SeenGrid produktreif. Die Pilots sind Schritt 1 von ungefähr 10. Sie sind aber der wichtigste Schritt, weil sie das Herz des Tools sind — ohne validierte Pilots ist alles andere Drumherum.
+
+### Liste der 5 Pilots
+1. **Character Study** (Two-Step Flow) — Pilot 1, in Arbeit, 4-Winkel-Fall validiert ⏳ NanoBanana-Test
+2. **Char + World Merge** — Pilot 2, GT pending bei Jonas
+3. **Start/End Frame** — Pilot 3, GT pending bei Jonas
+4. **World Zone Board** — Pilot 4, GT pending bei Jonas
+5. **Multishot Sequence** — Pilot 5, GT pending bei Jonas
+
+Die genauen Pilot-Namen können sich bei der Ausarbeitung schärfen — Jonas legt fest welche 5 Pilots genau das modulare System tragen.
 
 ---
 
