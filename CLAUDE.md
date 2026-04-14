@@ -174,10 +174,24 @@ Bevor der Chat committet, postet er den vollständig gerenderten Output im Chat.
 ### Schritt 6 — Per-Pilot-Merge auf main
 Sobald ein Pilot Basis-Fall validiert ist (NanoBanana + byte-exact Golden) und der Code im Working Branch grün läuft: **Merge auf main** als eigener kleiner Merge.
 
-Ablauf:
-1. Chat öffnet einen Pull Request über die GitHub MCP-Tools mit Titel `Pilot N — <name> base case`
-2. Jonas öffnet die PR-URL im Browser, scrollt durch die Files-Changed Liste, klickt "Merge pull request" auf der GitHub-Webseite
-3. Chat verifiziert dass main jetzt den merged code enthält und schließt den Slice ab
+**Ablauf (kein PR, kein MCP, kein Web UI):**
+1. Jonas sagt im Chat explizit "merge Pilot N" — ohne dieses explizite OK passiert nichts auf main, niemals
+2. Chat führt lokal aus:
+   ```
+   git checkout main
+   git pull origin main
+   git merge --ff-only claude/<working-branch>
+   git push origin main
+   ```
+3. Chat verifiziert mit `git log main -1` dass der Merge-Commit drauf ist und meldet zurück
+4. Chat checkt anschließend wieder zurück auf den Working Branch
+
+Begründung kein PR: Jonas reviewt Code nicht via GitHub. Sein Review-Mechanismus ist Regel 4 (gerendeter Output im Chat) + NanoBanana-Bildtest. Beide passieren BEVOR Schritt 6. Der PR wäre nur Zeremonie und würde unnötig MCP-Abhängigkeit einführen.
+
+**Hartes Anti-Loop-Gesetz für MCP / GitHub-Tools:**
+Falls in einem zukünftigen Slice irgendein MCP-Tool oder externes GitHub-Tool aufgerufen wird und beim ersten Versuch fehlschlägt: Chat **stoppt sofort**, kein Retry, kein Loop, meldet den Fehler, und Jonas entscheidet manuell wie weiter. Niemals eine Fehlerschleife mit MCP-Tools — vergangene Sessions haben gezeigt dass solche Loops 10+ Stunden fressen können ohne Resultat.
+
+**Fast-Forward-Voraussetzung:** Der Working Branch muss ein sauberer Fast-Forward von main sein (keine konkurrierenden Commits auf main seit dem Branch-Off). Wenn `--ff-only` fehlschlägt: Chat stoppt, meldet zurück, Jonas entscheidet — kein automatisches `git merge` ohne ff, niemals ein force-push auf main.
 
 Pro Pilot ein Merge — kein Sammel-Merge nach allen 5 Pilots. Gründe: kleine Merges sind sicherer, jeder validierte Pilot liegt sofort stabil auf main, Fehler in Pilot 4 betreffen nicht Pilot 1+2+3.
 
@@ -186,7 +200,7 @@ Uncertified Modi (Modi ohne eigene GT) bleiben byte-stable in der Repo. Sie werd
 ### Was kommt nach den 5 Pilot-Merges
 Die Pilots sind nur **ein Teil von Phase 1** (siehe Abschnitt "WAS GEBAUT WERDEN MUSS" weiter unten). Nach allen 5 Pilots:
 - Phase 1 hat noch: Prompt Builder (Chip-basiert), MJ Startframe Modul, Prompt Vault (1500+ Community-Prompts mit Galerie)
-- Phase 2: Kling/Seedance Formate, Workflow Layer Grundstruktur, Character Operator mit Multi-Varianten
+- Phase 2: Workflow Layer Grundstruktur, Character Operator mit Multi-Varianten (Kling/Seedance + Video-Prompts gestrichen 2026-04-14)
 - Phase 3: vollständige App, Workflow Guide, Deployment auf Vercel/Netlify
 
 Erst nach Phase 3 ist SeenGrid produktreif. Die Pilots sind Schritt 1 von ungefähr 10. Sie sind aber der wichtigste Schritt, weil sie das Herz des Tools sind — ohne validierte Pilots ist alles andere Drumherum.
