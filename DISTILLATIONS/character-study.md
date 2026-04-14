@@ -1,9 +1,9 @@
 # Character Study — Pilot 1 Distillation
 
 > **Pilot:** 1 of 5 (Character Study)
-> **Status:** Phase 4 (distillation) **and** Phase 5 (code formalization) complete. Sections 3/7/8/9/14 patched three times during Phase 5 to resolve under-specifications surfaced by byte-exact testing against section 9 (first patch: TASK/INPUT_DECL/MODE_SIGNAL/FORBIDDEN structures; second patch: user-input text slots, technical.angle framing_mode collapse, MOD-B conflict_tail_descriptor; third patch: MOD-B two-slot description/purpose split after Ex E byte-exact failure). Phase 5 code artifacts shipped — see `OPUS_CODE_HANDOFF.md` for the full list and the 5/5 byte-exact test result. Phase 6 (empirical NanoBanana validation) pending.
+> **Status:** Phase 4 (distillation) **and** Phase 5 (code formalization) complete. Phase 6 (empirical NanoBanana validation) **in progress** — Ex A tested 2026-04-14, ~50% pass rate on 1-step flow uncovered a structural limitation (reconstruction + view-variation coupling). Distillation extended with Section 15 "Two-Step Flow for `needs_normalization`" and supporting patches (Section 3 spatial orientation vocab, new `CRITICAL REQUIREMENTS` block, Section 8.2 `ref_completeness` config, Section 14 Anti-Patterns 18–19). Sections 3/7/8/9/14 were already patched three times during Phase 5 to resolve under-specifications surfaced by byte-exact testing against section 9 (first patch: TASK/INPUT_DECL/MODE_SIGNAL/FORBIDDEN structures; second patch: user-input text slots, technical.angle framing_mode collapse, MOD-B conflict_tail_descriptor; third patch: MOD-B two-slot description/purpose split after Ex E byte-exact failure).
 > **Session:** `claude/modular-grid-operator-98Bcq`
-> **Last updated:** 2026-04-13 (patch revision)
+> **Last updated:** 2026-04-14 (Phase 6 Section 15 patch)
 > **Mandatory read first:** `MODULAR_GRID_ARCHITECTURE.md` (briefing) + `CLAUDE.md` (project bible)
 > **Ground-truth precedence:** If sections 3–8 and section 9 disagree, **section 9 wins**. Section 9 Rendered Examples are the byte-exact contract. Phase 5 tests must reproduce them byte-exactly.
 
@@ -19,6 +19,8 @@ The Character Study Pilot distills the Skeleton + Modules architecture from 4 va
 - **Single-Ref fallback:** no `REFERENCE PRIORITY` block when only one reference is present; continuity is enforced by the `LOCKED` block instead (DS-17 compliant).
 - **Mode coupling on QA:** Cinematic Study and Technical Sheet carry distinct `QUALITY ANCHOR` wordings, because they serve different rendering targets (storytelling vs. reference documentation).
 - **User choice wins on `MOD-H`:** axis-based environment defaults (`MOD-D` → Preserve, `MOD-F` → Neutral) are pre-selections only. Explicit `MOD-H` picks always override them.
+- **Two-Step Flow for incomplete refs (Section 15):** when the user's base reference is not a clean canonical full-body (cropped legs, partial framing, hidden feet, etc.), the renderer emits a two-prompt bundle. Step 1 is a single-image "Canonical Full-Body Normalizer" that produces a clean master; Step 2 feeds that master into the standard angle-study skeleton. Activated by `ref_completeness = needs_normalization` config, default is `clean_full_body`. Grounded in 2-step empirical finding (19/20 success rate vs ~50% on 1-step with incomplete refs, session 2026-04-14). Applies to all MOD-D (angle-axis) flows; MOD-F (expression-axis, head-and-shoulders) does not need normalization.
+- **Spatial orientation vocabulary (Section 3, Anti-Pattern 18):** side-profile panels are phrased in terms of which body side faces the camera ("character's right side profile"), not as abstract orientation labels ("true right profile"). Enforced by a new `CRITICAL REQUIREMENTS` block (section 8.1) that carries template-specific orientation and visibility rules positively formulated — including the generalized "critical visibility positive" rule (of which "both shoes fully visible" is the full-body-template special case).
 
 ---
 
@@ -35,8 +37,9 @@ All templates in this distillation are traceable to the following sources. No co
 | NEW-EXPR-1x6 | User-supplied (session 2026-04-13) | 1×6 | VALIDATED | Expression strip pattern, head-and-shoulders framing |
 | NEW-EXPR-2x2 | User-supplied (session 2026-04-13) | 2×2 | VALIDATED | Expression grid variant |
 | NEW-EXPR-1x4 | User-supplied (session 2026-04-13) | 1×4 | VALIDATED | Expression strip 4-step pattern |
+| TWO-STEP-P6A | User-supplied empirical finding (Phase 6 session 2026-04-14) | 2-prompt bundle | VALIDATED 19/20 on project refs | Primary source for Section 15 Two-Step Flow, spatial orientation vocabulary, and `CRITICAL REQUIREMENTS` block. Result: 19/20 success on incomplete-ref inputs where 1-step achieved ~50%. **Project finding, not a general model guarantee.** |
 
-**User confirmation on sources:** All 3 NEW-EXPR sources were empirically tested by the user before being added to the corpus.
+**User confirmation on sources:** All 3 NEW-EXPR sources were empirically tested by the user before being added to the corpus. TWO-STEP-P6A was surfaced by user + ChatGPT iteration during Phase 6 on Example A and then generalized with the user's explicit scope (see Section 15).
 
 ---
 
@@ -169,11 +172,14 @@ NanoBanana responds better to positive instructions inside topical blocks. All n
 - **MOD-D XOR MOD-F:** these axes are mutually exclusive within Stage 6. They require different `LOCKED`/`VARIABLE` configurations, so combining them is out of scope.
 
 **Default slot fills:**
-- MOD-D + N=4 → DS-06 (`Full-body front` · `true right profile` · `true left profile` · `back view`)
+- MOD-D + N=4 → DS-06 (`Full-body front` · `character's right side profile` · `character's left side profile` · `back view`)
 - MOD-D + N=9 → DS-04 (`ECU face` · `CU shoulders` · `MS waist-up` · `Full body front` · `Low angle heroic` · `High angle top-down` · `True side profile` · `OTS` · `3/4 rear`)
+- MOD-D + N=8 → 8view (`Close-up portrait facing forward` · `Portrait facing right` · `Portrait facing left` · `Portrait from the back` · `Full-body front view` · `Full-body character's right side profile` · `Full-body character's left side profile` · `Full-body back view`)
 - MOD-F + N=6 → DS-17 (`Neutral` · `Restrained subtle smile` · `Soft laughter` · `Confused` · `Angry controlled` · `Sad/exhausted`)
 - MOD-F + N=4 → NEW-EXPR-1x4 pattern (`Neutral` · `Subtle smile` · `Soft laughter` · `Thoughtful`)
 - Other sizes → user picks from axis pool
+
+**Spatial orientation vocabulary rule (TWO-STEP-P6A, Anti-Pattern 18):** Side-profile panels at any framing use the phrase "character's right/left side profile" (or "character's right/left side to the camera"), not the earlier Phase 5 vocabulary "true right/left profile". The earlier wording was semantically ambiguous and produced ~50% mirrored-duplicate failures on Ex A. The spatial framing anchors the rule to body-side-relative-to-camera, which is unambiguous. The anti-duplication rule (Panel X and Panel Y must be true opposite side views, not mirrored) is carried positively by the new `CRITICAL REQUIREMENTS` block (section 8.1) when the active panel preset includes opposite-side profile panels.
 
 **REFERENCE_PRIORITY_FORM:** Block is rendered **only when `ref_count ≥ 2`**. At `ref_count == 1`, the block is omitted entirely and continuity is enforced by `LOCKED` (DS-17 compliant).
 
@@ -372,6 +378,7 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 | `TASK` | Always | Mode + rows/cols + axis + framing_mode |
 | `MODE_SIGNAL` | Mode == Cinematic | Mode |
 | `PANEL_CONTENT` | Always | `MOD-D` XOR `MOD-F` |
+| `CRITICAL REQUIREMENTS` | Active panel preset exposes a non-empty `critical_rules` array | Panel preset |
 | `REFERENCE PRIORITY` | `ref_count ≥ 2` | `MOD-A` + `MOD-B` + `MOD-C` |
 | `QUALITY ANCHOR` | Always (2 mode-coupled variants) | Mode |
 | `LAYOUT` | Always | rows/cols + `MOD-K` + axis visibility_clause |
@@ -382,11 +389,38 @@ The conditional fires on the **rendered** `MOD-H` value, not on user intent vs. 
 | `STYLE` | `MOD-J` active | `MOD-J` |
 | `FORBIDDEN` | Always (composition varies) | universal_pre + axis + mod_g + universal_post + mod_h_conditional |
 
+**`CRITICAL REQUIREMENTS` block specification (added 2026-04-14, TWO-STEP-P6A):**
+
+This block carries template-specific positive requirements that the model must satisfy. It renders between `PANEL_CONTENT` and `REFERENCE PRIORITY`. Content is driven by the active panel preset's `critical_rules` array (one rule per line). The block is omitted entirely when the active preset defines no rules or defines an empty array.
+
+**Rationale for existence as a block (not extension of LAYOUT/PANEL_CONTENT):** The rules are cross-cutting — they touch orientation, visibility, framing integrity — and do not belong to any single existing block. They also require *positive* formulation that would pollute LAYOUT's spacing/figure-presence tone. Keeping them in their own labeled block keeps each block's topical concern clean (Positive/Negative Split rule, extended).
+
+**Two category principles carried by this block:**
+
+1. **Orientation integrity (L2 of TWO-STEP-P6A):** When panels specify opposite-side views, state explicitly which body side faces the camera and that the two panels must be true opposites, not duplicates or mirrored reuse. Replaces ambiguous semantic labels like "true left profile".
+2. **Critical visibility, positively formulated (L4 of TWO-STEP-P6A):** When a template requires specific body parts to be visible in all panels, state that requirement positively (e.g. "Both shoes fully visible in every panel") instead of relying only on the FORBIDDEN-block negations (e.g. "No hidden footwear"). The positive formulation has empirically produced better compliance. "Both shoes visible" is the full-body special case; other templates may require different visibility guarantees (full face, full torso, etc.). Keep the rule template-specific — do not hardcode shoes into the block renderer.
+
+The existing FORBIDDEN-block negation (`No cropped feet, no hidden footwear`) is *retained* alongside the positive formulation — the two reinforce each other. The positive rule primes the generation goal; the negative rule gates failure modes. Do not replace one with the other.
+
+**Example `critical_rules` per preset (see `src/data/modules/character-study/mod-d.json` for the authoritative list):**
+
+- `DS-06_N4`:
+  - `Panel 2 shows the character's right side to the camera. Panel 3 shows the character's left side to the camera. Panels 2 and 3 must be true opposite side views, not duplicated and not mirrored versions of the same side.`
+  - `Both shoes fully visible in every panel.`
+- `DS-04_N9`:
+  - `Panel 7 shows a true side profile of the character — one specific body side facing the camera, not a three-quarter substitute.`
+  - `Both shoes fully visible in every panel where full-body framing applies.`
+- `8view_N8`:
+  - `Panel 6 shows the character's right side to the camera. Panel 7 shows the character's left side to the camera. Panels 6 and 7 must be true opposite side views, not duplicated and not mirrored versions of the same side.`
+  - `Both shoes fully visible in every panel where full-body framing applies.`
+- MOD-F expression presets: empty (no critical_rules) — head-and-shoulders framing does not need body-visibility rules, and the expression axis does not carry orientation panels.
+
 ### 8.2 Module Specifications
 
 | Module | Type | Default | Effects |
 |---|---|---|---|
-| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (cinematic uses framing_mode split, technical collapses it), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant, **default text for `reference_a_description`** (cinematic: `"full-body cinematic character image"`, technical: `"full-body view — body proportions, posture, clothing, silhouette"`). |
+| **MODE** | Select (`Cinematic Study` / `Technical Sheet`) | Cinematic | Controls `TITLE` mode_title_word, `TASK` variant selection (cinematic uses framing_mode split, technical collapses it), `MODE_SIGNAL` existence, `QUALITY ANCHOR` variant, **default text for `reference_a_description`** (cinematic: `"full-body cinematic character image"`, technical: `"full-body view — body proportions, posture, clothing, silhouette"`). Also controls Section 15 Step 1 (normalizer) environment behavior: Cinematic-mode Step 1 preserves the source environment; Technical-mode Step 1 does **not** preserve environment (studio backdrop is re-generated in Step 2 anyway). |
+| **`ref_completeness`** (top-level config, not a module) | Select (`clean_full_body` / `needs_normalization`) | `clean_full_body` | **Added 2026-04-14 (Section 15).** Top-level flow switch, lives on `moduleConfig.ref_completeness`, not nested under any module. `clean_full_body` (default) → standard 1-prompt render pipeline. `needs_normalization` → two-prompt bundle: Step 1 renders via `character-study-normalizer.json` skeleton (Canonical Full-Body Normalizer), Step 2 renders the standard character-study skeleton with `reference_a_description` replaced by the Step 1 output semantic label. See Section 15 for the full contract. Only meaningful on MOD-D (angle-axis) flows — setting `needs_normalization` on a MOD-F flow is an error. |
 | **MOD-A** | Image drop + text field (Face Crop Reference) | off | Adds next sequential reference slot. User-editable `description` field (default per mode: `"upscaled close crop of the character's face"` for cinematic, `"close-up face view — facial identity, expression, fine details"` for technical). Activates `REFERENCE PRIORITY` with face-priority template. Removes `", matching the reference image"` tail from `LOCKED`. |
 | **MOD-B** | Image drop + three text fields (Additional Reference) | off | Adds next sequential reference slot. **Three user-input fields:** (1) `description` (optional, short visual description for the INPUT_DECL `Reference B = ...` / `Reference C = ...` line; falls back to `purpose` if empty), (2) `purpose` (required, semantic role for the REFERENCE PRIORITY `Reference B provides ...` / `Reference C provides ...` line — no default, user must fill), (3) `conflict_tail_descriptor` (optional, single descriptive word/phrase injected into the REFERENCE PRIORITY conflict clause, e.g. `"atmospheric"` in Ex E). Activates `REFERENCE PRIORITY` with generic template (Case 3 or Case 4). **Independent of MOD-A** — valid in A-only, B-only, and A+B flows. |
 | **MOD-C** | Auto-injection | auto when `ref_count ≥ 2` | Appends conflict clause to `REFERENCE PRIORITY`: `"If the references conflict, preserve ..."` |
@@ -404,21 +438,24 @@ Module identifiers `MOD-A`, `MOD-B`, `MOD-C` are internal. The reference slot na
 ### 8.3 Rendering Assembly Order
 
 ```
-1.  Render TITLE              ← MODE + rows/cols (derives layout_word)
-2.  Render INPUT_DECL         ← intro variant from (has_face_crop, has_extra_ref) + sequential reference listing
-3.  Render TASK               ← MODE + axis + framing_mode (3D lookup) + rows/cols
-4.  Render MODE_SIGNAL        ← only if MODE = Cinematic; slot-fills (contrast_word, setting_word) from (axis, framing_mode)
-5.  Render PANEL_CONTENT      ← MOD-D XOR MOD-F fills
-6.  Render REFERENCE PRIORITY ← only if ref_count ≥ 2; variant by MOD-A/MOD-B combo
-7.  Render QUALITY ANCHOR     ← MODE-coupled variant
-8.  Render LAYOUT             ← rows/cols + MOD-K + axis visibility_clause
-9.  Render POSE               ← axis-coupled variant
-10. Render ENVIRONMENT        ← MOD-H (user choice > axis default)
-11. Render LOCKED             ← axis + ref_count variant
-12. Render VARIABLE           ← only if MOD-F active
-13. Render STYLE              ← only if MOD-J active
-14. Render FORBIDDEN          ← universal_pre + axis + mod_g + universal_post + mod_h_preserve_conditional
+1.  Render TITLE                ← MODE + rows/cols (derives layout_word)
+2.  Render INPUT_DECL           ← intro variant from (has_face_crop, has_extra_ref) + sequential reference listing
+3.  Render TASK                 ← MODE + axis + framing_mode (3D lookup) + rows/cols
+4.  Render MODE_SIGNAL          ← only if MODE = Cinematic; slot-fills (contrast_word, setting_word) from (axis, framing_mode)
+5.  Render PANEL_CONTENT        ← MOD-D XOR MOD-F fills
+6.  Render CRITICAL REQUIREMENTS← only if active panel preset has non-empty critical_rules array
+7.  Render REFERENCE PRIORITY   ← only if ref_count ≥ 2; variant by MOD-A/MOD-B combo
+8.  Render QUALITY ANCHOR       ← MODE-coupled variant
+9.  Render LAYOUT               ← rows/cols + MOD-K + axis visibility_clause
+10. Render POSE                 ← axis-coupled variant
+11. Render ENVIRONMENT          ← MOD-H (user choice > axis default)
+12. Render LOCKED               ← axis + ref_count variant
+13. Render VARIABLE             ← only if MOD-F active
+14. Render STYLE                ← only if MOD-J active
+15. Render FORBIDDEN            ← universal_pre + axis + mod_g + universal_post + mod_h_preserve_conditional
 ```
+
+**Two-step flow assembly (`ref_completeness == needs_normalization`, see Section 15):** The renderer does **not** run the single-prompt pipeline above. Instead it calls the normalizer skeleton for Step 1 and the standard skeleton for Step 2, then returns a `{ prompts: [step1, step2] }` bundle. Step 2 uses the same 15-step assembly order as above, with `reference_a_description` replaced by a Step 1 semantic label (e.g. `"canonical full-body master of the character"`).
 
 ### 8.4 REFERENCE PRIORITY Variants (All 4 Cases)
 
@@ -501,6 +538,8 @@ Case 4 is UNTESTED — no example covers MOD-A + MOD-B simultaneously. Behavior 
 ## 9. Rendered Examples
 
 Five concrete renderings covering the main module combinations. All five are reproducible from the skeleton + module configuration listed above each example.
+
+> ⚠ **STALE NOTICE (2026-04-14):** After the Section 15 patch, Examples A/C/D/E below no longer reflect the renderer's output. They are the pre-patch Phase 5 snapshots. The new output differs in three places: (1) DS-06/8view panel strings use `"character's right side profile"` vocab (Section 3, Anti-Pattern 18), (2) a new `CRITICAL REQUIREMENTS` block renders between `PANEL CONTENT` and `REFERENCE PRIORITY` (section 8.1), (3) in `needs_normalization` flow, two prompts are emitted (see Section 15 for Step 1 forms). The examples below are the authoritative `clean_full_body` 1-step forms **before vocabulary + block updates** — they will be regenerated in Phase D once the renderer and golden files are updated. Example B is not affected by any of these changes and remains current.
 
 ### 9.1 Example A — 2×2 Cinematic Angle Study, MOD-A, Preserve
 
@@ -849,6 +888,8 @@ No replacement of the source environment with a neutral studio backdrop.
 
 **Validation criterion:** All 5 rendered examples (9.1 through 9.5) must be byte-exactly reproducible from the JSON + renderer pipeline.
 
+**Phase 5 status (2026-04-13):** ✅ Complete. 5/5 byte-exact passes on the original single-prompt pipeline. After Section 15 was added, Phase 5 test harness was extended to cover the 2-prompt bundle form as well — see `tests/renderCharacterStudy.test.js` for the current CASES array.
+
 ---
 
 ## 12. Phase 6 Entry Point — Empirical Validation
@@ -861,11 +902,18 @@ No replacement of the source environment with a neutral studio backdrop.
 3. Document failure modes per example
 4. Iterate on block wording only where empirical evidence shows a specific failure
 
+**Phase 6 status (2026-04-14):** 🟡 In progress.
+
+- **Example A (2×2 Cinematic Angle Study, MOD-A):** Tested on project refs. Result: ~50% failure rate on left/right side-profile separation (mirrored duplicates) and ~50% failure rate on full-body completeness (cropped legs or feet) when the input body ref was not already a clean canonical full-body. Diagnosis: NanoBanana cannot simultaneously hold identity, reconstruct missing body parts, distinguish opposite side profiles, and produce multiple views in a single generation pass — too much coupled uncertainty. A 2-step pipeline (Canonical Normalizer → Angle Study) reached 19/20 success on the same refs. Adopted as **Section 15 Two-Step Flow**. Project finding from session 2026-04-14, not a general model guarantee.
+- **Examples B, C, D, E:** Pending empirical test with the updated Section 15 / Section 3 vocabulary. Ex B is expected to stay 1-step (head-and-shoulders, no body reconstruction needed); C, D, E will be tested in 2-step form.
+
 **Known untested edges:**
 - Mixed-panel-size layouts (rows × cols non-uniform) — deferred until empirical test
 - Triple-ref flow (MOD-A + MOD-B simultaneously) — no source has 3 references; behavior theoretical
 - Technical Sheet + illustrative Look combination — MOD-I soft-warning assumes this is unreliable at anime/illustration; Pixar/3D-rig untested
 - Grid sizes ≥6 panels beyond 3×3 — crop advisory triggers but downstream behavior untested
+- Two-step flow on expression axis (`MOD-F` + `needs_normalization`) — explicitly rejected; expression panels are head-and-shoulders and do not benefit from body normalization
+- Whether the "decouple reconstruction from variation" principle (Section 15, L1 of TWO-STEP-P6A) generalizes to other pilots (World Study, Multi-Shot Scene, Start-End Pair) — to be assessed at Pilot 2+
 
 ---
 
@@ -897,6 +945,210 @@ No replacement of the source environment with a neutral studio backdrop.
 15. **Do not** hardcode `Reference A` / `Reference B` / `Reference C` description strings. They are user-editable text slots with per-mode defaults. Compare Ex A ("full-body cinematic character image") vs Ex D ("character preservation / integration image (full body)") — same module config, different strings. For MOD-B this means **two separate fields**: `description` feeds the INPUT_DECL short-description line, `purpose` feeds the REFERENCE PRIORITY semantic-role line. Compare Ex E: INPUT_DECL `Reference B = reference scene for environment and atmospheric lighting` vs REFERENCE PRIORITY `Reference B provides the environment, backdrop, and atmospheric lighting` — intentionally different strings
 16. **Do not** assume `technical.angle.mixed` exists as a distinct TASK variant. Technical mode collapses framing_mode on the angle axis — there is only `technical.angle`. Adding "and shot types" to Technical mode breaks Ex C
 17. **Do not** interpolate `{conflict_tail_descriptor}` as an always-present slot. Use two template variants (empty vs non-empty) and let the renderer branch. Interpolating an empty slot leaves a double-space artifact
+18. **Do not** use semantic left/right profile labels (`true right profile`, `true left profile`) without explicit spatial anchoring. Always phrase side profiles in terms of which body side faces the camera (`character's right side profile`, `character's left side to the camera`) and pair the rule with an explicit anti-duplication clause in the `CRITICAL REQUIREMENTS` block. The earlier semantic wording produced ~50% mirrored-duplicate failures on Ex A empirically (session 2026-04-14)
+19. **Do not** ask NanoBanana to simultaneously reconstruct missing body parts AND generate multiple views from an incomplete reference in a single prompt. Use the Section 15 Two-Step Flow: Step 1 produces a canonical full-body master, Step 2 generates views from the master. The single-step path is reserved for `ref_completeness == clean_full_body`. Ignoring this on incomplete refs produced ~50% failure rate on Ex A before Section 15 was added
+20. **Do not** hardcode "Both shoes fully visible" (or any specific body part) as a universal rule in the renderer. It is the full-body-template special case of the generalized "positively formulate critical visibility" principle (section 8.1, L4 of TWO-STEP-P6A). Which body part is critical depends on the template — keep it per-preset in `critical_rules`, not in the skeleton code. Conversely, do not *remove* the "Both shoes visible" line from full-body presets just because the FORBIDDEN block already contains "No hidden footwear" — positive and negative reinforce each other, and the empirical finding uses both together
+21. **Do not** preserve the source environment in Section 15 Step 1 when the Step 2 target is a neutral or studio backdrop (Technical mode, or Cinematic mode with `MOD-H=Neutral`/`Custom`). Preserving an environment that Step 2 will discard is wasted budget for the normalizer and may drag unwanted background features into the canonical master. The Step 1 environment clause is coupled to the effective Step 2 environment choice, not to source mode alone
+22. **Do not** route MOD-B environment/scene references through Step 1 of the Two-Step Flow. Only the base reference (Ref A) and, if present, the MOD-A face crop are used as inputs to Step 1. MOD-B environment refs bypass Step 1 and rejoin the pipeline in Step 2. Passing an environment ref to Step 1 would contaminate the canonical character master
+
+---
+
+## 15. Two-Step Flow for `needs_normalization`
+
+**Source:** TWO-STEP-P6A (user empirical finding, Phase 6 session 2026-04-14, 19/20 success on project refs vs ~50% on 1-step).
+
+**Scope:** Cinematic Angle Study and Technical Reference Sheet (all MOD-D / angle-axis flows). Explicitly **not** applied to MOD-F (expression axis) — head-and-shoulders framing does not require body reconstruction.
+
+### 15.1 Activation
+
+A top-level `moduleConfig.ref_completeness` field selects the flow:
+
+| Value | Flow |
+|---|---|
+| `clean_full_body` (default) | Standard 1-prompt pipeline (sections 3–14). Unchanged. |
+| `needs_normalization` | Two-prompt bundle. Step 1 = Canonical Full-Body Normalizer (new skeleton `character-study-normalizer.json`). Step 2 = standard character-study skeleton, with `reference_a_description` replaced by a Step 1 semantic label. |
+
+**Hard constraint:** `ref_completeness == needs_normalization` is only valid when the active axis is `MOD-D`. Combining it with `MOD-F` is an error (the renderer throws).
+
+**Determining activation in practice:** The user (or UI) decides `needs_normalization` when the base reference is cropped, partial, missing feet, missing lower body, or otherwise not a clean canonical full-body. This is currently a manual choice; automatic detection is out of scope for Stage 6.
+
+### 15.2 Five learnings from TWO-STEP-P6A
+
+These are the transferable core principles. They are **global** (likely reusable across other pilots); the specific rules derived from them (shoe visibility, left/right anchoring) are **template-specific**.
+
+1. **L1 — Decouple reconstruction from variation.** When a single generation pass must hold identity AND complete missing body parts AND produce multiple views AND preserve outfit/environment, the coupled uncertainty overwhelms the model. Separate reconstruction (Step 1, one image) from variation (Step 2, N panels).
+2. **L2 — Spatial orientation vocabulary.** Semantic labels like "true right profile" are ambiguous. Anchor orientation to which body side faces the camera. Pair with an explicit anti-duplication clause for opposite-side panel pairs.
+3. **L3 — Conservative completion of missing parts.** Missing or occluded regions are completed in the same design language as the source reference — no new clothing items, no new accessories, no relocation. Applies to Step 1 only.
+4. **L4 — Positively formulate critical visibility.** Requirements for body parts that must be visible in every panel (shoes, full face, etc.) get a positive line in `CRITICAL REQUIREMENTS`, reinforced by the matching negative in `FORBIDDEN`. Positive formulation is per-template; the skeleton does not hardcode specific body parts.
+5. **L5 — Respect stable model layout preferences.** If the model reliably produces 1×4 tall panels for a 4-view study and fights 2×2, use 1×4. Out of scope for the distillation (layout is modular via `MOD-K`), but recorded here so future layout work does not re-fight a preference the model has already settled.
+
+### 15.3 Step 1 — Canonical Full-Body Normalizer
+
+**Skeleton:** `src/data/skeletons/character-study-normalizer.json` (new). Single-image output, not a grid.
+
+**Block order (Step 1 skeleton):**
+
+```
+1.  TITLE                       "Canonical full-body character normalization"
+2.  INPUT_DECL                  (single-ref or dual-ref based on MOD-A presence)
+3.  TASK                        "Create one single full-body cinematic character image of the exact same person."
+4.  REFERENCE PRIORITY          (only if MOD-A is active — face-priority hierarchy)
+5.  CRITICAL REQUIREMENTS       positive full-body completeness + shoe visibility
+6.  OUTFIT PRESERVATION         conservative completion rule (L3)
+7.  ENVIRONMENT PRESERVATION    conditional on effective Step 2 environment being Preserve
+8.  POSE                        "Natural relaxed standing pose. Neutral balanced stance."
+9.  FRAMING                     "Full-body shot with comfortable margin around the figure. No body part touches the frame edge."
+10. LOCKED                      "Same identity, same hairstyle, same outfit, same colors, same materials, same footwear" (+ environment clause if preserved)
+11. FORBIDDEN                   normalizer-specific FORBIDDEN list
+```
+
+**Step 1 references used:**
+- Always: Ref A (base character image, possibly incomplete).
+- If MOD-A active: Ref B (face crop).
+- If MOD-B active: **ignored** (Anti-Pattern 22). MOD-B environment/scene refs rejoin the pipeline in Step 2.
+
+**Step 1 INPUT_DECL variants:**
+
+| Input combination | Step 1 INPUT_DECL |
+|---|---|
+| Base only, no MOD-A, MOD-B inactive or env-ref only | `You are given a character reference image.` |
+| Base + MOD-A face crop | `You are given two reference images of the same character.` + `Reference A = {body description}.` + `Reference B = {face description}.` |
+
+**Step 1 TASK (always identical):**
+
+```
+Create one single full-body cinematic character image of the exact same person.
+```
+
+**Step 1 CRITICAL REQUIREMENTS (always):**
+
+```
+Show the complete character from the top of the head to the bottom of both feet.
+Both shoes must be fully visible.
+If the references are cropped or incomplete, reconstruct the missing lower body faithfully so the result becomes one complete canonical full-body version of the same character.
+```
+
+**Step 1 OUTFIT PRESERVATION (always, L3):**
+
+```
+Preserve the exact outfit from Reference A.
+Do not redesign, restyle, replace, simplify, or invent new clothing items.
+Keep the same garment structure, layers, silhouette, colors, materials, patterns, accessories, and footwear from Reference A.
+If any part of the outfit is partially obscured in the reference, complete it conservatively in the same design language without adding new fashion elements.
+```
+
+**Step 1 ENVIRONMENT PRESERVATION — mode-coupled conditional (Anti-Pattern 21):**
+
+The Step 1 environment clause is coupled to the **effective Step 2 environment** (after MOD-H evaluation), not to source mode alone.
+
+| Step 2 effective environment | Step 1 environment clause |
+|---|---|
+| `Preserve` | Render the Step 1 environment-preservation block (identical to Ex-A-style wording below) |
+| `Neutral` / `Custom` (Cinematic MOD-H override) | **Omit** the Step 1 environment-preservation block. The normalizer focuses only on character/outfit/completeness. |
+| Technical mode (any) | **Omit.** Technical mode always produces studio or custom backdrop in Step 2 — preserving source env in Step 1 is wasted budget and contaminates the canonical master. |
+
+**Step 1 environment-preservation block (when included):**
+
+```
+Preserve the exact environment and visual world from Reference A.
+Do not replace the background, do not move the character into a new location, and do not introduce a studio backdrop or neutral setting.
+Keep the same atmosphere, spatial context, lighting mood, and environmental materials from Reference A.
+```
+
+**Step 1 POSE (always):**
+
+```
+Natural relaxed standing pose.
+Neutral balanced stance.
+No dramatic action.
+```
+
+**Step 1 FRAMING (always):**
+
+```
+Full-body shot with comfortable margin around the figure.
+No body part touches the frame edge.
+```
+
+**Step 1 LOCKED — environment-conditional:**
+
+- Env preserved:
+  ```
+  Same identity, same hairstyle, same outfit, same colors, same materials, same footwear, same environment.
+  ```
+- Env not preserved:
+  ```
+  Same identity, same hairstyle, same outfit, same colors, same materials, same footwear.
+  ```
+
+**Step 1 FORBIDDEN (always):**
+
+```
+No text, no labels, no captions, no watermarks.
+No extra characters, no extra props.
+No cropped feet, no hidden footwear, no cropped body parts.
+No outfit changes, no new clothing items, no new accessories, no hairstyle changes.
+No studio background replacement, no simplified rendering.
+```
+
+When env is preserved, additionally:
+```
+No new background, no relocation of the character.
+```
+
+### 15.4 Step 2 — Standard Skeleton with Master Reference
+
+**Skeleton:** `src/data/skeletons/character-study.json` (existing, unchanged structure).
+
+**Difference from the 1-step flow:** Only the `reference_a_description` default changes. Instead of `"full-body cinematic character image"` (Cinematic) or `"full-body view — body proportions, posture, clothing, silhouette"` (Technical), Step 2 uses a Step-1-aware default:
+
+| Mode | Step 2 `reference_a_description` default |
+|---|---|
+| Cinematic | `canonical full-body master of the character` |
+| Technical | `canonical full-body master of the character` |
+
+Users can still override. The description is mode-agnostic because the Step 1 output is the same artifact in both modes — only the Step 2 downstream differs.
+
+**Step 2 reference count behavior:**
+- MOD-A face crop is re-used in Step 2 as a separate reference (Step 1 output is the body reference; the face crop remains the highest-authority identity source). This matches the 1-step flow's REFERENCE PRIORITY Case 2 or Case 4, just with Reference A re-labeled.
+- MOD-B env/scene ref re-joins the pipeline in Step 2. REFERENCE PRIORITY Case 3 or Case 4 applies.
+- The `ref_count` in Step 2 is computed the same way as in the 1-step flow: `1 + (MOD-A active ? 1 : 0) + (MOD-B active ? 1 : 0)`.
+
+All other Step 2 blocks (TASK, MODE_SIGNAL, PANEL_CONTENT, CRITICAL REQUIREMENTS, REFERENCE PRIORITY, QUALITY ANCHOR, LAYOUT, POSE, ENVIRONMENT, LOCKED, VARIABLE, STYLE, FORBIDDEN) render exactly as section 8.3. No special-casing.
+
+### 15.5 Renderer Contract
+
+The renderer entry point for Character Study is a bundle function:
+
+```js
+// src/lib/skeletonRenderer.js
+export function renderCharacterStudy(bundle, moduleConfig, userInputs) -> { prompts: string[] }
+```
+
+- `bundle` carries both skeletons (`character-study.json` + `character-study-normalizer.json`) plus the shared module set.
+- Returns `{ prompts: [string] }` (length 1) when `ref_completeness == clean_full_body`.
+- Returns `{ prompts: [step1String, step2String] }` (length 2) when `ref_completeness == needs_normalization`.
+- Internally delegates to the pure `renderSkeleton(skeleton, moduleConfig, userInputs) -> string` function for each skeleton — `renderSkeleton` stays pure and single-string. No plumbing changes to existing callers.
+
+**Derived inputs for Step 2:** The renderer computes a derived `userInputs` object for the Step 2 call that overrides `reference_a_description` with the mode-coupled master label (section 15.4) unless the user already set a non-empty custom value. Everything else is passed through unchanged.
+
+### 15.6 Golden Tests
+
+The Phase 5 golden test harness is extended to handle 2-prompt bundles:
+
+- Single-prompt cases (Ex B): one golden file, runner compares `prompts[0]` to the golden.
+- Two-prompt cases (Ex A, C, D, E): two golden files per case — `example-X-step1.txt` and `example-X-step2.txt`. Runner compares `prompts[0]` to step1 and `prompts[1]` to step2.
+- The runner's diff reporter prints a labeled line showing which step failed.
+
+Ex A/C/D/E are regenerated with the new vocabulary (spatial orientation, `CRITICAL REQUIREMENTS` block, updated default reference_a_description for Step 2). Ex B is unchanged.
+
+### 15.7 Scope Disclaimers
+
+- **19/20 is a project finding, not a general model guarantee.** It was observed on the user's reference set during session 2026-04-14. Different characters, different NanoBanana versions, and different refs may produce different numbers.
+- **Detection of `needs_normalization` is manual.** There is no automatic classifier. The user flips the switch when they know their ref is incomplete.
+- **Not applied to expression axis.** MOD-F flows never use Two-Step. The head-and-shoulders framing of expression studies does not suffer from the reconstruction+variation coupling that angle studies exhibit.
+- **Layout preference learning (L5) is out of scope for the distillation.** Recorded for the future UI layer; do not hardcode "1×4 is better than 2×2" anywhere in skeletons or modules. Layout stays modular.
+- **Generalization to other pilots is a Pilot 2+ question.** World Study, Multi-Shot Scene, Start-End Pair may or may not benefit from a similar pre-normalizer. Do not preemptively refactor until empirical evidence appears.
 
 ---
 
