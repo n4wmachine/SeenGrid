@@ -53,6 +53,8 @@ Alles andere fällt durch zum alten (uncertified) Pfad.
 - Technical Sheet Mode — bleibt auf altem Pfad als orphan/uncertified. Wird ein eigener GT-First-Slice falls Jonas ihn behalten will, sonst wird er gestrichen
 - Uncertified Modi (Expression Board, 3×3 Storyboard, Env-Ref, Technical Sheet) — pro Modus entscheidet Jonas später: entweder eigener GT-First-Slice (mit ChatGPT-Optimierung + NanoBanana-Validierung + Skeleton) oder Streichung. Kein Modus wird "gefixt" oder "verbessert" ohne eigene GT
 - MOD-J / MOD-G / MOD-H Custom auf cinematic-strip Pfad — **gelöst durch GT-First**: jede solche Variante braucht eine eigene GT-Validierung, deshalb werden sie auf dem GT-Pfad weiterhin silent ignoriert, bis ein eigener Slice mit eigener GT existiert
+- **Visual Overhaul vs Deployment Reihenfolge in Phase 3** — pending: kommt das große Visual Overhaul (cinematic dark theme, distinctive Schrift, breites Layout, Logo-Slot) VOR dem ersten Vercel/Netlify-Deployment, oder erst deployen und dann nachpolieren? Beide Reihenfolgen haben Vor- und Nachteile. Wird im Architektur-Deep-Dive-Chat entschieden
+- **Erweiterte Feature-Ideen für die Webseite** (Trendy-Presets-Spalte etc., weitere Ideen von Jonas) — pending: eigener Architektur-Deep-Dive-Chat nachdem der Grid Operator funktional steht. Ziel: alle Ideen logisch durchsprechen ohne dass die Engine-Architektur sie blockiert. Grundsatz bleibt: das Grid-Operator-Skelett ist nach Bau stabil, alles Inhaltliche (Signature Presets, Trendy Presets, weitere Spalten/Tabs) muss austauschbar sein. Nichts hardcoden was später noch wachsen soll
 
 Dieser Block ist die Wahrheit über den Projektzustand. Jeder Chat liest ihn als ERSTE Handlung und aktualisiert ihn als LETZTE Handlung vor dem finalen Commit.
 
@@ -245,15 +247,17 @@ Die genauen Pilot-Namen können sich bei der Ausarbeitung schärfen — Jonas le
 - Eigene Kategorie/Tab in der App ("Vault" oder "Community")
 
 ### Phase 2: Erweiterung (SPÄTER)
-- Kling/Seedance Formatvorlagen mit T1-T9 Regeln
-- Kamera-Bewegungen und Module C Techniken (NUR für Video/Kling/Seedance, NICHT für Bildgenerierung)
 - Workflow Layer Grundstruktur (geführte Schrittketten)
 - Character Operator mit Multi-Varianten
+
+**Was Phase 2 ausdrücklich NICHT mehr enthält** (gestrichen 2026-04-14): Kling/Seedance-Formate, T1-T9 Video-Regeln, Kamera-Bewegungen, Module-C-Techniken. SeenGrid macht ausschließlich Bildgenerierung. Video-Prompts gehören nicht ins Tool — falls jemals nötig, eigenes Schwester-Tool, nicht hier.
 
 ### Phase 3: Vollständige App
 - Alles zusammen deploybar
 - Workflow Guide (manuell geführte Pipeline)
 - Später: Automation Layer Andockpunkte (NICHT jetzt bauen)
+
+**Pending in Phase 3** (siehe Offene Scope-Entscheidungen): Reihenfolge von Visual Overhaul (cinematic dark theme, distinctive Schrift, breites Layout) vs Deployment ist noch nicht entschieden. Wird im Architektur-Deep-Dive-Chat geklärt nachdem der Grid Operator funktional steht.
 
 ---
 
@@ -261,7 +265,7 @@ Die genauen Pilot-Namen können sich bei der Ausarbeitung schärfen — Jonas le
 
 1. **SeenGrid_grundgeruest_fuer_claude.md** — Konzeptionelles Grundgerüst, Architektur, Prinzipien
 2. **SEENGRID_STRATEGY_AND_FUTURE_VISION_BRIEFING.txt** — Strategischer Kontext, Langfrist-Vision (NICHT jetzt alles bauen, nur Architektur nicht verbauen)
-3. **DeepSeek1.txt** — 77 extrahierte Items: MJ-Templates, Kling-Regeln, Seedance-Regeln, Grid-Presets, Kamera-Techniken. Die SeenGrid Optimized Presets kommen hieraus.
+3. **DeepSeek1.txt** — 77 extrahierte Items. Für SeenGrid relevant: MJ-Templates und Grid-Presets (daraus kommen die SeenGrid Optimized Presets). NICHT relevant für SeenGrid: die Kling-/Seedance-/Kamera-Bewegungs-Items — SeenGrid macht ausschließlich Bildgenerierung, keine Video-Prompts. Diese Items im File ignorieren.
 4. **popup.js / popup.html / popup.css** — Bestehender CinePrompt Prompt-Builder (Browser Extension). Datenstruktur und Chip-Kategorien als Referenz für den Library Layer. ACHTUNG: Enthält "Kamera Bewegung" als Kategorie — das ist FALSCH für Bildgenerierung und soll NICHT übernommen werden. Nur die bildrelevanten Kategorien verwenden (Style, Camera, Lens, Focal, Aperture, Lighting, Color Grade, Shot Size, Camera Angle, Aspect Ratio, Effects, Negative).
 5. **NanoBanana System Prompt** — https://github.com/jau123/nanobanana-trending-prompts/blob/main/prompts/system-prompt-en.md — Die 6 Core-Regeln für NanoBanana-Prompt-Optimierung
 6. **Trending Prompts Repo** — https://github.com/jau123/nanobanana-trending-prompts — 1500+ Community-Prompts als JSON
