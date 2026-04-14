@@ -6,33 +6,52 @@
 
 **Stand:** 2026-04-14
 **Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
-**Phase:** 6 (empirische NanoBanana-Validierung) — im RETTUNGSMODUS nach semantischem Drift, Rebuild-Slice steht als nächstes an
-**Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild passiert hier, ab jetzt der einzige aktive Branch
+**Phase:** 6 (empirische NanoBanana-Validierung) — Rebuild-Slice fertig, NanoBanana-Gegentest steht aus
+**Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild ist hier passiert, ab jetzt der einzige aktive Branch
 **Rescue-Planungs-Archiv (nicht anfassen):** `claude/reconstruct-seengrid-history-EqIn8` — auf diesem Branch fand am 2026-04-14 die Diagnose und der Strict Diff statt. Enthält die frühen Versionen der Ground-Truth-Datei und der CLAUDE.md-Rescue-Additionen (wurden per Cherry-Pick hierher gebracht). Nicht löschen bis Rettung abgeschlossen, nicht weiterentwickeln.
 
 **Was ist der Zustand:**
-- Phase 5 war der letzte saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
-- Phase 6 hat semantischen Drift eingeführt: ein vorheriger Opus-Chat ohne Projektkontext hat ChatGPT-optimierte Prompts verwässert beim modularen Einbau und Teile hart-codiert die modular bleiben sollten.
+- Phase 5 war der letzte vorherige saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
+- Phase 6 hatte semantischen Drift: ein vorheriger Opus-Chat ohne Projektkontext hatte ChatGPT-optimierte Prompts verwässert.
 - Die Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
-- Der Strict Diff ist gelaufen: die Drift ist strukturell (Template-Form statt Natürliche-Sprache-Form), das Layout des Angle Study ist auf 2×2 statt 1×4, die Reference-Priority-Reihenfolge ist vertauscht, die FORBIDDEN-Liste ist inhaltlich verschoben. Urteil: Rebuild, nicht Patch.
-- Nächster Schritt: Rebuild des Angle-Study-Skeletons + betroffener Module (MOD-K Layout, Reference-Priority, FORBIDDEN) + Regeneration der 8 betroffenen Goldens byte-exact gegen Ground Truth. Nach dem Rebuild: Rendered-Output-Review von Jonas → Commit → NanoBanana-Gegentest → erst dann Phase 6 zu.
+- **Rebuild-Slice abgeschlossen am 2026-04-14:** der 4-Winkel Cinematic Angle Study Fall ist neu gebaut über zwei neue Skeleton-Dateien plus Routing in `renderCharacterStudy`. Die alten Skeletons sind unverändert geblieben (uncertified Modi laufen byte-stable weiter).
+- **Nächster Schritt:** Jonas testet die 3 neuen Goldens empirisch in NanoBanana gegen die GT. Wenn der Bildtest bestanden ist, ist Phase 6 zu für den 4-Winkel Fall. Erst danach: nächster Slice (entweder eigene GT für einen der uncertified Modi, oder neuer Pilot).
 
-**Scope des Rebuilds (strikt begrenzt):**
-- NUR der 4-Winkel Cinematic Angle Study Fall (Front, Right Profile, Left Profile, Back, 1×4 vertical strip).
-- Betrifft: `src/data/skeletons/character-study.json`, `src/data/skeletons/character-study-normalizer.json`, MOD-K, MOD-G, Reference-Module, FORBIDDEN-Module, 8 Goldens (example-a, example-c, example-a2-step1/step2, example-c2-step1/step2, example-d2-step1/step2).
-- Nicht betroffen / bleibt unverändert: Expression Board (example-b, MOD-F), 3×3 Grid (example-d), Environment-Ref (example-e). Diese Modi werden als "uncertified" markiert — sie brauchen eigene ChatGPT-Ground-Truth und NanoBanana-Validierung als eigenen Slice später.
+**Was Phase-6-Rebuild konkret gemacht hat:**
+- NEU: `src/data/skeletons/character-study-cinematic-strip.json` (10 Blöcke, Title-Case-Header mit Doppelpunkt, semantische Reference-Labels)
+- NEU: `src/data/skeletons/character-study-cinematic-normalizer.json` (9 Blöcke, GT Step-1-Form)
+- NEU: in `src/lib/skeletonRenderer.js` 19 neue Block-Renderer (`cstrip_*`, `cnorm_*`) plus `shouldUseCinematicStrip()` Routing-Predicate in `renderCharacterStudy`
+- Test-Cases `example-a` und `example-a2` umgestellt von `rows: 2, cols: 2` auf `rows: 1, cols: 4` (entspricht GT "four tall vertical panels arranged side by side in a single horizontal row")
+- 3 Goldens neu geschrieben: `example-a.txt`, `example-a2-step1.txt`, `example-a2-step2.txt` — alle drei byte-exact mit der GT verifiziert (Script-gestützter Vergleich gegen die zwei Code-Blocks im GT-Markdown)
+- 8 Legacy-Goldens (`example-b/c/d/e/c2/d2-*`) byte-stable unverändert — sie laufen über den alten Pfad weil das Routing-Predicate sie ausschließt
+- Test-Status: **8 / 8 grün** (`node tests/renderCharacterStudy.test.js`)
+- Wichtige Konsequenz der semantischen Labels: Step 2 clean (`example-a.txt`) ist byte-identisch zu Step 2 nach Normalizer (`example-a2-step2.txt`). Der `STEP2_MASTER_LABEL`-Override ist auf dem neuen Pfad obsolet (existiert nur noch als Fallback im alten Pfad).
+
+**Routing-Bedingung für den neuen Pfad** (`shouldUseCinematicStrip`):
+- `mode === 'cinematic'`
+- `mod_d.active === true`
+- `preset.framing_mode === 'uniform_full_body'`
+- `mod_a.active === true` (face crop vorhanden)
+
+Alles andere fällt durch zum alten (uncertified) Pfad.
+
+**Bekannte Limitierungen des neuen Pfads** (für Phase 6 OK, später erweitern):
+- MOD-J (Style Overlay), MOD-G (Strict View Rules), und MOD-H Custom/Neutral werden auf dem neuen Pfad **silent ignoriert**, weil sie nicht in der GT validiert sind. Wenn der User sie aktiviert, kommt trotzdem der reine GT-Output.
+- Andere Panel-Counts (1×3, 1×5, 1×6) sind im neuen Skeleton parameterisiert (`{n_word}`, `{n_word_capitalized}`), aber bisher nur 1×4 byte-exact validiert.
 
 **NICHT anfassen ohne explizite Freigabe von Jonas:**
 - Die 18 Legacy-Presets in `src/data/presets/` (Phase-1-Snapshot, unabhängig von modularer Arbeit)
-- `OPUS_CODE_HANDOFF.md` und `ROADMAP.md` Sync — bleiben bewusst auf "Phase 6 in Arbeit" stehen bis Phase 6 wirklich grün gegen Ground Truth ist
-- Merge auf `main` — erst nach Phase 6 Abschluss für Pilot 1
+- `OPUS_CODE_HANDOFF.md` und `ROADMAP.md` Sync — bleiben bewusst auf "Phase 6 in Arbeit" stehen bis Phase 6 vollständig nach NanoBanana-Test grün ist
+- Merge auf `main` — erst nach Phase 6 Abschluss für Pilot 1 (nach NanoBanana-Test)
 - Löschung alter Branches — erst nach Abschluss der Rettung
-- Die "uncertified" Modi (Expression Board, 3×3, Env-Ref) — nicht verschlimmbessern, nicht löschen, erst eigener Slice
+- Die alten Skeletons `character-study.json` und `character-study-normalizer.json` — bewusst unverändert gelassen, sie tragen die uncertified Modi
+- Die "uncertified" Modi (Expression Board, 3×3, Env-Ref, Technical Sheet) — nicht verschlimmbessern, nicht löschen, erst eigener Slice mit eigener GT
 
 **Offene Scope-Entscheidungen (NICHT heimlich lösen, zuerst Jonas fragen):**
-- Modulare Panel-Anzahl UI (1x2 / 1x3 / 1x5 / 1x6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase, explizit NICHT Teil von Phase 6. Die Engine bleibt parameterisiert, nur die UI-Buttons kommen später.
-- Technical Sheet Mode Status — Klärung pending
-- Eigene Ground-Truth-Dateien für die 3 uncertified Modi — Entscheidung später welche davon überhaupt im Produkt bleiben
+- Modulare Panel-Anzahl UI (1×2 / 1×3 / 1×5 / 1×6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase, explizit NICHT Teil von Phase 6. Die Engine ist parameterisiert über `{n_word}`, nur die UI-Buttons kommen später
+- Technical Sheet Mode Status — Klärung pending, aktuell läuft auf altem Pfad und ist uncertified
+- Eigene Ground-Truth-Dateien für die uncertified Modi (Expression, 3×3, Env-Ref, Technical) — Entscheidung später welche davon überhaupt im Produkt bleiben
+- Soll der neue Skeleton-Pfad MOD-J / MOD-G / MOD-H Custom unterstützen? Aktuell silent ignoriert. Wenn ja: braucht eigene GT-Validierung pro Variante
 
 Dieser Block ist die Wahrheit über den Projektzustand. Jeder Chat liest ihn als ERSTE Handlung und aktualisiert ihn als LETZTE Handlung vor dem finalen Commit.
 

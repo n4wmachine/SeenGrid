@@ -587,6 +587,113 @@ function renderNormalizerForbidden(ctx) {
   return lines.join('\n');
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+// Cinematic Strip block renderers — see DISTILLATIONS/character-study-chatgpt-groundtruth.md
+// ────────────────────────────────────────────────────────────────────────────
+//
+// The cinematic-strip skeleton is the GT-validated path for the
+// 4-panel uniform_full_body Cinematic Angle Study (front / right profile /
+// left profile / back). It uses semantic reference labels
+// ("Full-body master reference" / "Face reference") instead of positional
+// Reference A/B, so Step 2 is identical for clean_full_body and
+// needs_normalization flows. Routing happens in renderCharacterStudy.
+
+function renderCstripIntro(ctx) {
+  const { skeleton, derived } = ctx;
+  return skeleton.lookups.intro.replace('{n_word}', derived.n_word);
+}
+
+function renderCstripReferences(ctx) {
+  return ctx.skeleton.lookups.references_lines.join('\n');
+}
+
+function renderCstripGoal(ctx) {
+  const { skeleton, derived } = ctx;
+  return skeleton.lookups.goal_lines
+    .map((l) => l.replace('{n_word}', derived.n_word))
+    .join('\n');
+}
+
+function renderCstripPanelOrder(ctx) {
+  const { skeleton, moduleConfig } = ctx;
+  const modDData = skeleton.modules['mod-d'];
+  const presetId = moduleConfig.mod_d.preset || 'DS-06_N4';
+  const preset = modDData.panel_presets[presetId];
+  if (!preset) throw new Error(`renderCstripPanelOrder: unknown MOD-D preset "${presetId}"`);
+  return preset.panels.map((p, i) => `${i + 1}. ${p}`).join('\n');
+}
+
+function renderCstripOrientationRule(ctx) {
+  return ctx.skeleton.lookups.orientation_rule_lines.join('\n');
+}
+
+function renderCstripFullBodyRule(ctx) {
+  return ctx.skeleton.lookups.full_body_rule_lines.join('\n');
+}
+
+function renderCstripConsistency(ctx) {
+  const { skeleton, derived } = ctx;
+  return skeleton.lookups.consistency_lines
+    .map((l) => l.replace('{n_word}', derived.n_word))
+    .join('\n');
+}
+
+function renderCstripPose(ctx) {
+  return ctx.skeleton.lookups.pose_lines.join('\n');
+}
+
+function renderCstripLayout(ctx) {
+  const { skeleton, derived } = ctx;
+  const nWordCap = derived.n_word.charAt(0).toUpperCase() + derived.n_word.slice(1);
+  return skeleton.lookups.layout_lines
+    .map((l) => l.replace('{n_word_capitalized}', nWordCap))
+    .join('\n');
+}
+
+function renderCstripDoNotAdd(ctx) {
+  return ctx.skeleton.lookups.do_not_add;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Cinematic Normalizer (Step 1) block renderers — GT Step 1
+// ────────────────────────────────────────────────────────────────────────────
+
+function renderCnormTask(ctx) {
+  return ctx.skeleton.lookups.task;
+}
+
+function renderCnormPriority(ctx) {
+  return ctx.skeleton.lookups.priority_lines.join('\n');
+}
+
+function renderCnormCriticalRequirement(ctx) {
+  return ctx.skeleton.lookups.critical_requirement_lines.join('\n');
+}
+
+function renderCnormOutfitPreservation(ctx) {
+  return ctx.skeleton.lookups.outfit_preservation_lines.join('\n');
+}
+
+function renderCnormEnvironmentPreservation(ctx) {
+  return ctx.skeleton.lookups.environment_preservation_lines.join('\n');
+}
+
+function renderCnormPose(ctx) {
+  return ctx.skeleton.lookups.pose_lines.join('\n');
+}
+
+function renderCnormFraming(ctx) {
+  return ctx.skeleton.lookups.framing_lines.join('\n');
+}
+
+function renderCnormLock(ctx) {
+  return ctx.skeleton.lookups.lock;
+}
+
+function renderCnormDoNotAdd(ctx) {
+  return ctx.skeleton.lookups.do_not_add;
+}
+
 const RENDERERS = {
   title: renderTitle,
   input_decl: renderInputDecl,
@@ -614,7 +721,28 @@ const RENDERERS = {
   normalizer_pose: renderNormalizerPose,
   normalizer_framing: renderNormalizerFraming,
   normalizer_locked: renderNormalizerLocked,
-  normalizer_forbidden: renderNormalizerForbidden
+  normalizer_forbidden: renderNormalizerForbidden,
+  // Cinematic Strip (GT Step 2) block renderers — see Ground Truth file.
+  cstrip_intro: renderCstripIntro,
+  cstrip_references: renderCstripReferences,
+  cstrip_goal: renderCstripGoal,
+  cstrip_panel_order: renderCstripPanelOrder,
+  cstrip_orientation_rule: renderCstripOrientationRule,
+  cstrip_full_body_rule: renderCstripFullBodyRule,
+  cstrip_consistency: renderCstripConsistency,
+  cstrip_pose: renderCstripPose,
+  cstrip_layout: renderCstripLayout,
+  cstrip_do_not_add: renderCstripDoNotAdd,
+  // Cinematic Normalizer (GT Step 1) block renderers — see Ground Truth file.
+  cnorm_task: renderCnormTask,
+  cnorm_priority: renderCnormPriority,
+  cnorm_critical_requirement: renderCnormCriticalRequirement,
+  cnorm_outfit_preservation: renderCnormOutfitPreservation,
+  cnorm_environment_preservation: renderCnormEnvironmentPreservation,
+  cnorm_pose: renderCnormPose,
+  cnorm_framing: renderCnormFraming,
+  cnorm_lock: renderCnormLock,
+  cnorm_do_not_add: renderCnormDoNotAdd
 };
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -658,6 +786,24 @@ export function renderSkeleton(skeleton, moduleConfig, userInputs) {
 
 const STEP2_MASTER_LABEL = 'canonical full-body master of the character';
 
+// Routing predicate — Phase 6 rebuild. Returns true when the request matches
+// the GT-validated 4-panel uniform_full_body Cinematic Angle Study case
+// (NanoBanana-validated, see DISTILLATIONS/character-study-chatgpt-groundtruth.md).
+// Anything that returns false falls through to the legacy (uncertified)
+// skeletons — technical mode, expression axis, mixed-framing presets,
+// MOD-A-less configurations, env=Custom, etc.
+function shouldUseCinematicStrip(bundle, moduleConfig) {
+  if (moduleConfig.mode !== 'cinematic') return false;
+  const modA = moduleConfig.mod_a || { active: false };
+  const modD = moduleConfig.mod_d || { active: false };
+  if (!modA.active || !modD.active) return false;
+  const modDData = bundle.modules['mod-d'];
+  const presetId = modD.preset || 'DS-06_N4';
+  const preset = modDData.panel_presets[presetId];
+  if (!preset) return false;
+  return preset.framing_mode === 'uniform_full_body';
+}
+
 export function renderCharacterStudy(bundle, moduleConfig, userInputs) {
   if (!bundle || !bundle.mainSkeleton || !bundle.normalizerSkeleton || !bundle.modules) {
     throw new Error('renderCharacterStudy: bundle must include { mainSkeleton, normalizerSkeleton, modules }');
@@ -669,8 +815,33 @@ export function renderCharacterStudy(bundle, moduleConfig, userInputs) {
     throw new Error(`renderCharacterStudy: invalid ref_completeness "${refCompleteness}"`);
   }
 
-  const mainBundle = { ...bundle.mainSkeleton, modules: bundle.modules };
   const inputs = userInputs || {};
+
+  // Phase 6 rebuild: GT-validated path for the 4-panel Cinematic Angle Study.
+  // The new skeletons use semantic labels (Full-body master / Face), so Step 2
+  // is identical for clean_full_body and needs_normalization flows — no
+  // STEP2_MASTER_LABEL override required on this path.
+  if (shouldUseCinematicStrip(bundle, moduleConfig)) {
+    if (!bundle.cinematicStripSkeleton || !bundle.cinematicNormalizerSkeleton) {
+      throw new Error('renderCharacterStudy: bundle must include { cinematicStripSkeleton, cinematicNormalizerSkeleton } when routing to the cinematic strip path');
+    }
+    const stripBundle = { ...bundle.cinematicStripSkeleton, modules: bundle.modules };
+
+    if (refCompleteness === 'clean_full_body') {
+      const prompt = renderSkeleton(stripBundle, moduleConfig, inputs);
+      return { prompts: [prompt] };
+    }
+
+    const cnormBundle = { ...bundle.cinematicNormalizerSkeleton, modules: bundle.modules };
+    const step1 = renderSkeleton(cnormBundle, moduleConfig, inputs);
+    const step2 = renderSkeleton(stripBundle, moduleConfig, inputs);
+    return { prompts: [step1, step2] };
+  }
+
+  // Legacy path — uncertified modes (technical, expression, mixed framing,
+  // env-ref without face crop, etc.). Kept byte-stable until each gets its
+  // own ChatGPT ground truth + NanoBanana validation slice.
+  const mainBundle = { ...bundle.mainSkeleton, modules: bundle.modules };
 
   if (refCompleteness === 'clean_full_body') {
     const prompt = renderSkeleton(mainBundle, moduleConfig, inputs);

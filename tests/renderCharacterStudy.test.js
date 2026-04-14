@@ -25,6 +25,8 @@ function readJson(relPath) {
 function loadCharacterStudyBundle() {
   const mainSkeleton = readJson('src/data/skeletons/character-study.json');
   const normalizerSkeleton = readJson('src/data/skeletons/character-study-normalizer.json');
+  const cinematicStripSkeleton = readJson('src/data/skeletons/character-study-cinematic-strip.json');
+  const cinematicNormalizerSkeleton = readJson('src/data/skeletons/character-study-cinematic-normalizer.json');
   const moduleDir = 'src/data/modules/character-study';
   const order = readJson(`${moduleDir}/_order.json`);
 
@@ -56,7 +58,7 @@ function loadCharacterStudyBundle() {
     }
   }
 
-  return { mainSkeleton, normalizerSkeleton, modules };
+  return { mainSkeleton, normalizerSkeleton, cinematicStripSkeleton, cinematicNormalizerSkeleton, modules };
 }
 
 function readGolden(name) {
@@ -96,13 +98,13 @@ function diffReport(actual, expected) {
 
 const CASES = [
   {
-    name: 'Example A — 2×2 Cinematic Angle Study, MOD-A, Preserve (clean)',
+    name: 'Example A — 1×4 Cinematic Angle Study Strip, MOD-A, Preserve (clean) — GT-validated',
     goldens: ['example-a.txt'],
     moduleConfig: {
       mode: 'cinematic',
       ref_completeness: 'clean_full_body',
-      rows: 2,
-      cols: 2,
+      rows: 1,
+      cols: 4,
       mod_a: { active: true },
       mod_b: { active: false },
       mod_d: { active: true, preset: 'DS-06_N4' },
@@ -207,13 +209,13 @@ const CASES = [
     }
   },
   {
-    name: 'Example A2 — 2×2 Cinematic Angle Study, MOD-A, Preserve (needs_normalization)',
+    name: 'Example A2 — 1×4 Cinematic Angle Study Strip, MOD-A, Preserve (needs_normalization) — GT-validated',
     goldens: ['example-a2-step1.txt', 'example-a2-step2.txt'],
     moduleConfig: {
       mode: 'cinematic',
       ref_completeness: 'needs_normalization',
-      rows: 2,
-      cols: 2,
+      rows: 1,
+      cols: 4,
       mod_a: { active: true },
       mod_b: { active: false },
       mod_d: { active: true, preset: 'DS-06_N4' },

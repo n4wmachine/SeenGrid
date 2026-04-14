@@ -1,52 +1,42 @@
-Cinematic character study — 2×2 grid
+Create one finished cinematic panel strip as four tall vertical panels arranged side by side in a single horizontal row.
 
-You are given two reference images of the same character.
-Reference A = full-body cinematic character image.
-Reference B = upscaled close crop of the character's face.
+Use the provided references as follows:
+- Full-body master reference = highest authority for body proportions, hairstyle, outfit, colors, materials, and footwear
+- Face reference = highest authority for facial identity and fine facial details
 
-TASK
-Create four cinematic full-body shots of the exact same character from four different camera angles, arranged in a 2×2 grid.
+Goal:
+Show the exact same character in four distinct full-body cinematic views.
+This is a polished cinematic panel strip, not a neutral studio turnaround sheet.
 
-This is not a technical reference layout — these are four cinematic film captures of the same person in a consistent environment.
+Panel order from left to right:
+1. Full-body front view
+2. Full-body character's right side profile
+3. Full-body character's left side profile
+4. Full-body back view
 
-PANEL CONTENT
-Panel 1: Full-body front view.
-Panel 2: Full-body character's right side profile.
-Panel 3: Full-body character's left side profile.
-Panel 4: Full-body back view.
+Critical orientation rule:
+- Panel 2 must show the character's right side to the camera
+- Panel 3 must show the character's left side to the camera
+- Panel 2 and Panel 3 must be true opposite side views, not duplicated and not mirrored versions of the same side
 
-CRITICAL REQUIREMENTS
-Panel 2 shows the character's right side to the camera. Panel 3 shows the character's left side to the camera. Panels 2 and 3 must be true opposite side views, not duplicated and not mirrored versions of the same side.
-Both shoes fully visible in every panel.
+Critical full-body rule:
+Every panel must show the complete figure from head to both feet.
+Both shoes must be fully visible in every panel.
+No cropped legs, no cropped feet, no hidden footwear.
 
-REFERENCE PRIORITY
-Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
-Reference B provides the highest-authority face: facial identity, facial structure, and fine facial details.
-If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then materials.
+Consistency:
+Keep identical facial identity, hairstyle, body proportions, outfit, colors, materials, and footwear across all four panels.
+Keep the same environment, same lighting direction, same mood, and same rendering quality across all panels.
 
-QUALITY ANCHOR
-Each panel matches the rendering quality of the source image.
-Preserve material richness, lighting nuance, atmospheric depth, and surface detail across all panels.
+Pose:
+Natural relaxed standing pose.
+Calm balanced posture.
+Only the viewing angle changes from panel to panel.
 
-LAYOUT
-2×2 grid. Even spacing.
-Entire figure fully visible in all panels.
+Layout:
+Four tall vertical panels in one horizontal row.
+Even spacing between panels.
+Each figure fully contained inside its own panel with a small margin around the silhouette.
 
-POSE
-Natural relaxed stance. Consistent posture across all panels where the body is visible.
-
-ENVIRONMENT
-Keep the same atmospheric environment from the source image across all panels.
-
-LOCKED
-Same facial identity, body proportions, hairstyle, outfit, colors, materials, and consistent lighting source and mood across all panels.
-
-FORBIDDEN
-No text, no labels, no captions, no watermarks.
-No face drift, no identity drift between panels.
-No hairstyle drift, no outfit change between panels.
-No stylization drift between panels.
-No cropped head, no cropped feet, no hidden footwear.
-No rigid or aggressive posture.
-No simplification, no flat utilitarian rendering, no quality downgrade from the source image.
-No replacement of the source environment with a neutral studio backdrop.
+Do not add:
+text, labels, captions, watermarks, extra characters, extra props, studio background, identity drift, outfit drift, hairstyle drift, material drift, cropped body parts, hidden shoes, or mirrored reuse of the same side profile.

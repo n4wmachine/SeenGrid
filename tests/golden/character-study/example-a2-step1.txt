@@ -1,49 +1,36 @@
-Canonical full-body character normalization
-
-You are given two reference images of the same character.
-Reference A = full-body cinematic character image.
-Reference B = upscaled close crop of the character's face.
-
-TASK
 Create one single full-body cinematic character image of the exact same person.
 
-REFERENCE PRIORITY
-Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
-Reference B provides the highest-authority face: facial identity, facial structure, and fine facial details.
-If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then materials.
+Priority:
+- Reference B is the highest-authority source for facial identity and fine facial details.
+- Reference A is the strict authority for hairstyle, body proportions, the exact outfit design, garment layering, colors, materials, accessories, footwear, and the original environment.
 
-CRITICAL REQUIREMENTS
+Critical requirement:
 Show the complete character from the top of the head to the bottom of both feet.
 Both shoes must be fully visible.
 If the references are cropped or incomplete, reconstruct the missing lower body faithfully so the result becomes one complete canonical full-body version of the same character.
 
-OUTFIT PRESERVATION
+Outfit preservation:
 Preserve the exact outfit from Reference A.
 Do not redesign, restyle, replace, simplify, or invent new clothing items.
 Keep the same garment structure, layers, silhouette, colors, materials, patterns, accessories, and footwear from Reference A.
 If any part of the outfit is partially obscured in the reference, complete it conservatively in the same design language without adding new fashion elements.
 
-ENVIRONMENT PRESERVATION
+Environment preservation:
 Preserve the exact environment and visual world from Reference A.
 Do not replace the background, do not move the character into a new location, and do not introduce a studio backdrop or neutral setting.
 Keep the same atmosphere, spatial context, lighting mood, and environmental materials from Reference A.
 
-POSE
+Pose:
 Natural relaxed standing pose.
 Neutral balanced stance.
 No dramatic action.
 
-FRAMING
+Framing:
 Full-body shot with comfortable margin around the figure.
 No body part touches the frame edge.
 
-LOCKED
+Lock:
 Same identity, same hairstyle, same outfit, same colors, same materials, same footwear, same environment.
 
-FORBIDDEN
-No text, no labels, no captions, no watermarks.
-No extra characters, no extra props.
-No cropped feet, no hidden footwear, no cropped body parts.
-No outfit changes, no new clothing items, no new accessories, no hairstyle changes.
-No studio background replacement, no simplified rendering.
-No new background, no relocation of the character.
+Do not add:
+extra characters, extra props, text, labels, watermarks, cropped feet, hidden shoes, outfit changes, new clothing items, new accessories, hairstyle changes, new background, studio background, or simplified rendering.
