@@ -9,10 +9,10 @@
 // under each example in the distillation are mirrored exactly in the
 // CASES array below.
 
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { renderSkeleton } from '../src/lib/skeletonRenderer.js';
+import { renderCharacterStudy } from '../src/lib/skeletonRenderer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +23,8 @@ function readJson(relPath) {
 }
 
 function loadCharacterStudyBundle() {
-  const skeleton = readJson('src/data/skeletons/character-study.json');
+  const mainSkeleton = readJson('src/data/skeletons/character-study.json');
+  const normalizerSkeleton = readJson('src/data/skeletons/character-study-normalizer.json');
   const moduleDir = 'src/data/modules/character-study';
   const order = readJson(`${moduleDir}/_order.json`);
 
@@ -55,7 +56,7 @@ function loadCharacterStudyBundle() {
     }
   }
 
-  return { ...skeleton, modules };
+  return { mainSkeleton, normalizerSkeleton, modules };
 }
 
 function readGolden(name) {
@@ -89,12 +90,17 @@ function diffReport(actual, expected) {
 // Cases — mirror Section 9 User Inputs blocks byte-exact
 // ────────────────────────────────────────────────────────────────────────────
 
+// Each case has `goldens: string[]` — one golden file per emitted prompt.
+//   - clean_full_body cases → length 1
+//   - needs_normalization cases → length 2 (step1 + step2)
+
 const CASES = [
   {
-    name: 'Example A — 2×2 Cinematic Angle Study, MOD-A, Preserve',
-    golden: 'example-a.txt',
+    name: 'Example A — 2×2 Cinematic Angle Study, MOD-A, Preserve (clean)',
+    goldens: ['example-a.txt'],
     moduleConfig: {
       mode: 'cinematic',
+      ref_completeness: 'clean_full_body',
       rows: 2,
       cols: 2,
       mod_a: { active: true },
@@ -113,7 +119,7 @@ const CASES = [
   },
   {
     name: 'Example B — 1×6 Cinematic Expression Strip, Single-Ref, MOD-F',
-    golden: 'example-b.txt',
+    goldens: ['example-b.txt'],
     moduleConfig: {
       mode: 'cinematic',
       rows: 1,
@@ -130,10 +136,11 @@ const CASES = [
     userInputs: {}
   },
   {
-    name: 'Example C — 2×4 Technical Reference Sheet, MOD-A, Custom, MOD-J',
-    golden: 'example-c.txt',
+    name: 'Example C — 2×4 Technical Reference Sheet, MOD-A, Custom, MOD-J (clean)',
+    goldens: ['example-c.txt'],
     moduleConfig: {
       mode: 'technical',
+      ref_completeness: 'clean_full_body',
       rows: 2,
       cols: 4,
       mod_a: { active: true },
@@ -154,10 +161,11 @@ const CASES = [
     }
   },
   {
-    name: 'Example D — 3×3 Cinematic Storyboard, MOD-A, Preserve, MOD-G',
-    golden: 'example-d.txt',
+    name: 'Example D — 3×3 Cinematic Storyboard, MOD-A, Preserve, MOD-G (clean)',
+    goldens: ['example-d.txt'],
     moduleConfig: {
       mode: 'cinematic',
+      ref_completeness: 'clean_full_body',
       rows: 3,
       cols: 3,
       mod_a: { active: true },
@@ -175,10 +183,11 @@ const CASES = [
     }
   },
   {
-    name: 'Example E — 2×2 Cinematic Angle, MOD-B only (Additional Ref without Face Crop)',
-    golden: 'example-e.txt',
+    name: 'Example E — 2×2 Cinematic Angle, MOD-B only (Additional Ref without Face Crop) (clean)',
+    goldens: ['example-e.txt'],
     moduleConfig: {
       mode: 'cinematic',
+      ref_completeness: 'clean_full_body',
       rows: 2,
       cols: 2,
       mod_a: { active: false },
@@ -196,6 +205,75 @@ const CASES = [
       mod_b_purpose: 'the environment, backdrop, and atmospheric lighting',
       mod_b_conflict_tail_descriptor: 'atmospheric'
     }
+  },
+  {
+    name: 'Example A2 — 2×2 Cinematic Angle Study, MOD-A, Preserve (needs_normalization)',
+    goldens: ['example-a2-step1.txt', 'example-a2-step2.txt'],
+    moduleConfig: {
+      mode: 'cinematic',
+      ref_completeness: 'needs_normalization',
+      rows: 2,
+      cols: 2,
+      mod_a: { active: true },
+      mod_b: { active: false },
+      mod_d: { active: true, preset: 'DS-06_N4' },
+      mod_f: { active: false },
+      mod_g: { active: false },
+      mod_h: { active: true, value: 'Preserve' },
+      mod_j: { active: false },
+      mod_k: { active: true, value: 'Even' }
+    },
+    userInputs: {
+      reference_a_description: 'full-body cinematic character image',
+      mod_a_description: "upscaled close crop of the character's face"
+    }
+  },
+  {
+    name: 'Example C2 — 2×4 Technical Reference Sheet, MOD-A, Custom, MOD-J (needs_normalization)',
+    goldens: ['example-c2-step1.txt', 'example-c2-step2.txt'],
+    moduleConfig: {
+      mode: 'technical',
+      ref_completeness: 'needs_normalization',
+      rows: 2,
+      cols: 4,
+      mod_a: { active: true },
+      mod_b: { active: false },
+      mod_d: { active: true, preset: '8view_N8' },
+      mod_f: { active: false },
+      mod_g: { active: false },
+      mod_h: { active: true, value: 'Custom' },
+      mod_j: { active: true },
+      mod_k: { active: true, value: 'Even' }
+    },
+    userInputs: {
+      reference_a_description: 'full-body view — body proportions, posture, clothing, silhouette',
+      mod_a_description: 'close-up face view — facial identity, expression, fine details',
+      mod_h_custom_text: 'Soft studio backdrop with directional key light from camera-left',
+      mod_j_look_name: 'Photoreal Studio Look',
+      mod_j_look_description: 'Photoreal studio shoot, directional key light with soft fill, neutral color grade, sharp surface detail'
+    }
+  },
+  {
+    name: 'Example D2 — 3×3 Cinematic Storyboard, MOD-A, Preserve, MOD-G (needs_normalization)',
+    goldens: ['example-d2-step1.txt', 'example-d2-step2.txt'],
+    moduleConfig: {
+      mode: 'cinematic',
+      ref_completeness: 'needs_normalization',
+      rows: 3,
+      cols: 3,
+      mod_a: { active: true },
+      mod_b: { active: false },
+      mod_d: { active: true, preset: 'DS-04_N9' },
+      mod_f: { active: false },
+      mod_g: { active: true },
+      mod_h: { active: true, value: 'Preserve' },
+      mod_j: { active: false },
+      mod_k: { active: true, value: 'Even' }
+    },
+    userInputs: {
+      reference_a_description: 'character preservation / integration image (full body)',
+      mod_a_description: 'upscaled face crop (highest authority for face)'
+    }
   }
 ];
 
@@ -203,31 +281,74 @@ const CASES = [
 // Runner
 // ────────────────────────────────────────────────────────────────────────────
 
+function writeGolden(name, content) {
+  const path = join(REPO_ROOT, 'tests/golden/character-study', name);
+  // Golden files are stored with a trailing POSIX newline; readGolden strips
+  // exactly one. Preserve the invariant here so repeated writes are stable.
+  writeFileSync(path, content.endsWith('\n') ? content : content + '\n', 'utf8');
+}
+
 function run() {
+  const updateMode = process.argv.includes('--update');
   const bundle = loadCharacterStudyBundle();
   let passed = 0;
   let failed = 0;
+  let updated = 0;
 
   for (const c of CASES) {
-    let actual;
+    let result;
     try {
-      actual = renderSkeleton(bundle, c.moduleConfig, c.userInputs);
+      result = renderCharacterStudy(bundle, c.moduleConfig, c.userInputs);
     } catch (err) {
       console.error(`✗ ${c.name}\n  RENDER ERROR: ${err.message}`);
       failed++;
       continue;
     }
-    const expected = readGolden(c.golden);
-    if (actual === expected) {
+
+    const prompts = result.prompts;
+    const goldens = c.goldens;
+    if (prompts.length !== goldens.length) {
+      console.error(`✗ ${c.name}\n  PROMPT COUNT MISMATCH: got ${prompts.length}, expected ${goldens.length}`);
+      failed++;
+      continue;
+    }
+
+    if (updateMode) {
+      for (let i = 0; i < prompts.length; i++) {
+        writeGolden(goldens[i], prompts[i]);
+        updated++;
+      }
+      console.log(`↻ ${c.name} (${goldens.join(', ')})`);
+      continue;
+    }
+
+    let caseFailed = false;
+    for (let i = 0; i < prompts.length; i++) {
+      const goldenPath = join(REPO_ROOT, 'tests/golden/character-study', goldens[i]);
+      if (!existsSync(goldenPath)) {
+        console.error(`✗ ${c.name}\n  MISSING GOLDEN: ${goldens[i]}`);
+        caseFailed = true;
+        continue;
+      }
+      const expected = readGolden(goldens[i]);
+      if (prompts[i] === expected) continue;
+      const label = prompts.length === 1 ? '' : ` [prompt ${i + 1}/${prompts.length} — ${goldens[i]}]`;
+      console.error(`✗ ${c.name}${label}\n${diffReport(prompts[i], expected)}`);
+      caseFailed = true;
+    }
+    if (caseFailed) {
+      failed++;
+    } else {
       console.log(`✓ ${c.name}`);
       passed++;
-    } else {
-      console.error(`✗ ${c.name}\n${diffReport(actual, expected)}`);
-      failed++;
     }
   }
 
   console.log('');
+  if (updateMode) {
+    console.log(`Updated ${updated} golden file(s) across ${CASES.length} case(s).`);
+    return;
+  }
   console.log(`Result: ${passed} passed, ${failed} failed, ${CASES.length} total.`);
   if (failed > 0) process.exit(1);
 }

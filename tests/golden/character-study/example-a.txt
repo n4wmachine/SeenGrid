@@ -11,9 +11,13 @@ This is not a technical reference layout — these are four cinematic film captu
 
 PANEL CONTENT
 Panel 1: Full-body front view.
-Panel 2: Full-body true right profile.
-Panel 3: Full-body true left profile.
+Panel 2: Full-body character's right side profile.
+Panel 3: Full-body character's left side profile.
 Panel 4: Full-body back view.
+
+CRITICAL REQUIREMENTS
+Panel 2 shows the character's right side to the camera. Panel 3 shows the character's left side to the camera. Panels 2 and 3 must be true opposite side views, not duplicated and not mirrored versions of the same side.
+Both shoes fully visible in every panel.
 
 REFERENCE PRIORITY
 Reference A provides body proportions, hairstyle, outfit, materials, and footwear.

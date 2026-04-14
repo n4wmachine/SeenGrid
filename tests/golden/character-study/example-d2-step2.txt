@@ -1,7 +1,7 @@
 Cinematic character study — 3×3 grid
 
 You are given two reference images of the same character.
-Reference A = character preservation / integration image (full body).
+Reference A = canonical full-body master of the character.
 Reference B = upscaled face crop (highest authority for face).
 
 TASK

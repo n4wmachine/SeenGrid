@@ -123,13 +123,17 @@ function deriveContext(skeleton, moduleConfig, userInputs) {
   }
 
   // Resolve framing_mode from active panel-content preset (angle axis only).
+  // Also detect whether the preset ships template-specific critical_rules
+  // (positive visibility / anti-duplication guarantees — Phase 6, L4).
   let framingMode = null;
+  let hasCriticalRules = false;
   if (axisAngle) {
     const modDData = skeleton.modules['mod-d'];
     const presetId = modD.preset || 'DS-06_N4';
     const preset = modDData.panel_presets[presetId];
     if (!preset) throw new Error(`deriveContext: unknown MOD-D preset "${presetId}"`);
     framingMode = preset.framing_mode;
+    hasCriticalRules = Array.isArray(preset.critical_rules) && preset.critical_rules.length > 0;
   }
 
   // MOD-H effective value: explicit user choice wins, else axis default.
@@ -148,6 +152,12 @@ function deriveContext(skeleton, moduleConfig, userInputs) {
       : '';
   const modBHasConflictDescriptor = hasExtraRef && modBDescriptor.length > 0;
 
+  // Step 1 (normalizer) environment-preservation is coupled to the effective
+  // Step 2 environment, not to the mode alone. Technical mode always
+  // neutralizes in Step 2 (studio/custom), so Step 1 env-preservation is
+  // suppressed there. See Anti-Pattern 21 and Section 15.3.
+  const step1EnvPreserve = isCinematic && effectiveEnvironmentPreserve;
+
   const flags = {
     is_cinematic: isCinematic,
     is_technical: isTechnical,
@@ -164,7 +174,9 @@ function deriveContext(skeleton, moduleConfig, userInputs) {
     mod_h_user_explicit: modHExplicit,
     mod_j_active: modJ.active === true,
     mod_k_active: modK.active !== false,
-    effective_environment_preserve: effectiveEnvironmentPreserve
+    effective_environment_preserve: effectiveEnvironmentPreserve,
+    has_critical_rules: hasCriticalRules,
+    step1_env_preserve: step1EnvPreserve
   };
 
   return {
@@ -347,6 +359,22 @@ function renderPanelContent(ctx) {
   return panels.map((p, i) => `Panel ${i + 1}: ${p}.`).join('\n');
 }
 
+function renderCriticalRequirements(ctx) {
+  const { skeleton, moduleConfig, flags } = ctx;
+  if (!flags.axis_angle) {
+    throw new Error('renderCriticalRequirements: only angle-axis presets ship critical_rules');
+  }
+  const modDData = skeleton.modules['mod-d'];
+  const presetId = moduleConfig.mod_d.preset || 'DS-06_N4';
+  const preset = modDData.panel_presets[presetId];
+  if (!preset) throw new Error(`renderCriticalRequirements: unknown MOD-D preset "${presetId}"`);
+  const rules = preset.critical_rules;
+  if (!Array.isArray(rules) || rules.length === 0) {
+    throw new Error(`renderCriticalRequirements: preset "${presetId}" has no critical_rules (block should be gated on has_critical_rules)`);
+  }
+  return rules.join('\n');
+}
+
 function renderReferencePriority(ctx) {
   const { skeleton, userInputs, flags } = ctx;
   const variants = skeleton.lookups.reference_priority_variants;
@@ -477,12 +505,95 @@ function renderForbidden(ctx) {
   return lines.join('\n');
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+// Normalizer (Step 1) block renderers — see Distillation Section 15.3
+// ────────────────────────────────────────────────────────────────────────────
+//
+// The normalizer reuses the shared deriveContext (so `has_face_crop`,
+// `step1_env_preserve`, `is_cinematic` etc. are already populated) and the
+// shared module bundle (`mode`, `mod-a`). MOD-B is deliberately ignored in
+// Step 1 — Anti-Pattern 22.
+
+function renderNormalizerTitle(ctx) {
+  return ctx.skeleton.lookups.title;
+}
+
+function renderNormalizerInputDecl(ctx) {
+  const { skeleton, userInputs, derived, flags } = ctx;
+  const variants = skeleton.lookups.input_decl_intro_variants;
+
+  if (!flags.has_face_crop) {
+    return variants.single_ref;
+  }
+
+  const mainModules = skeleton.modules;
+  const refADescDefault = mainModules.mode.reference_a_description_default[derived.mode];
+  const refADesc = (userInputs.reference_a_description && userInputs.reference_a_description.length > 0)
+    ? userInputs.reference_a_description
+    : refADescDefault;
+
+  const modADescDefault = mainModules['mod-a'].description_default[derived.mode];
+  const modADesc = (userInputs.mod_a_description && userInputs.mod_a_description.length > 0)
+    ? userInputs.mod_a_description
+    : modADescDefault;
+
+  return [
+    variants.dual_ref,
+    `Reference A = ${refADesc}.`,
+    `Reference B = ${modADesc}.`
+  ].join('\n');
+}
+
+function renderNormalizerTask(ctx) {
+  return ctx.skeleton.lookups.task;
+}
+
+function renderNormalizerReferencePriority(ctx) {
+  return ctx.skeleton.lookups.reference_priority_lines.join('\n');
+}
+
+function renderNormalizerCriticalRequirements(ctx) {
+  return ctx.skeleton.lookups.critical_requirements_lines.join('\n');
+}
+
+function renderNormalizerOutfitPreservation(ctx) {
+  return ctx.skeleton.lookups.outfit_preservation_lines.join('\n');
+}
+
+function renderNormalizerEnvironmentPreservation(ctx) {
+  return ctx.skeleton.lookups.environment_preservation_lines.join('\n');
+}
+
+function renderNormalizerPose(ctx) {
+  return ctx.skeleton.lookups.pose_lines.join('\n');
+}
+
+function renderNormalizerFraming(ctx) {
+  return ctx.skeleton.lookups.framing_lines.join('\n');
+}
+
+function renderNormalizerLocked(ctx) {
+  const { skeleton, flags } = ctx;
+  const key = flags.step1_env_preserve ? 'env_preserved' : 'env_not_preserved';
+  return skeleton.lookups.locked_variants[key];
+}
+
+function renderNormalizerForbidden(ctx) {
+  const { skeleton, flags } = ctx;
+  const lines = [...skeleton.lookups.forbidden_base];
+  if (flags.step1_env_preserve) {
+    for (const l of skeleton.lookups.forbidden_env_preserved_extras) lines.push(l);
+  }
+  return lines.join('\n');
+}
+
 const RENDERERS = {
   title: renderTitle,
   input_decl: renderInputDecl,
   task: renderTask,
   mode_signal: renderModeSignal,
   panel_content: renderPanelContent,
+  critical_requirements: renderCriticalRequirements,
   reference_priority: renderReferencePriority,
   quality_anchor: renderQualityAnchor,
   layout: renderLayout,
@@ -491,7 +602,19 @@ const RENDERERS = {
   locked: renderLocked,
   variable: renderVariable,
   style: renderStyle,
-  forbidden: renderForbidden
+  forbidden: renderForbidden,
+  // Normalizer (Step 1) block renderers — see Section 15.3.
+  normalizer_title: renderNormalizerTitle,
+  normalizer_input_decl: renderNormalizerInputDecl,
+  normalizer_task: renderNormalizerTask,
+  normalizer_reference_priority: renderNormalizerReferencePriority,
+  normalizer_critical_requirements: renderNormalizerCriticalRequirements,
+  normalizer_outfit_preservation: renderNormalizerOutfitPreservation,
+  normalizer_environment_preservation: renderNormalizerEnvironmentPreservation,
+  normalizer_pose: renderNormalizerPose,
+  normalizer_framing: renderNormalizerFraming,
+  normalizer_locked: renderNormalizerLocked,
+  normalizer_forbidden: renderNormalizerForbidden
 };
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -513,6 +636,72 @@ export function renderSkeleton(skeleton, moduleConfig, userInputs) {
     parts.push(block.header ? `${block.header}\n${body}` : body);
   }
   return parts.join(skeleton.join || '\n\n');
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Character Study orchestrator (Two-Step Flow — Distillation Section 15)
+// ────────────────────────────────────────────────────────────────────────────
+//
+// Entry point that decides between the 1-prompt clean-full-body flow and the
+// 2-prompt needs-normalization flow, based on moduleConfig.ref_completeness.
+//
+// Bundle shape:
+//   {
+//     mainSkeleton:       loaded character-study.json,
+//     normalizerSkeleton: loaded character-study-normalizer.json,
+//     modules:            shared module map (mode, mod-a, mod-b, ..., mod-k)
+//   }
+//
+// Output: { prompts: string[] }
+//   - length 1 for ref_completeness === 'clean_full_body' (default)
+//   - length 2 for ref_completeness === 'needs_normalization' (Step 1 + Step 2)
+
+const STEP2_MASTER_LABEL = 'canonical full-body master of the character';
+
+export function renderCharacterStudy(bundle, moduleConfig, userInputs) {
+  if (!bundle || !bundle.mainSkeleton || !bundle.normalizerSkeleton || !bundle.modules) {
+    throw new Error('renderCharacterStudy: bundle must include { mainSkeleton, normalizerSkeleton, modules }');
+  }
+
+  const refCompleteness = moduleConfig.ref_completeness || 'clean_full_body';
+
+  if (refCompleteness !== 'clean_full_body' && refCompleteness !== 'needs_normalization') {
+    throw new Error(`renderCharacterStudy: invalid ref_completeness "${refCompleteness}"`);
+  }
+
+  const mainBundle = { ...bundle.mainSkeleton, modules: bundle.modules };
+  const inputs = userInputs || {};
+
+  if (refCompleteness === 'clean_full_body') {
+    const prompt = renderSkeleton(mainBundle, moduleConfig, inputs);
+    return { prompts: [prompt] };
+  }
+
+  // needs_normalization: hard constraint — only valid on angle axis (MOD-D).
+  // See Section 15.1. MOD-F (expression) is out of scope.
+  const modF = moduleConfig.mod_f || { active: false };
+  if (modF.active === true) {
+    throw new Error('renderCharacterStudy: ref_completeness="needs_normalization" is only valid with MOD-D (angle axis) — MOD-F is out of scope');
+  }
+
+  const normalizerBundle = { ...bundle.normalizerSkeleton, modules: bundle.modules };
+
+  // Step 1 uses the raw userInputs — reference_a_description describes the
+  // ORIGINAL (possibly incomplete) base image.
+  const step1 = renderSkeleton(normalizerBundle, moduleConfig, inputs);
+
+  // Step 2 always overrides reference_a_description with the master label:
+  // in 2-step mode, Reference A for Step 2 is the Step 1 output, not the
+  // user's base image. See Section 15.4. If the user wants a custom Step 2
+  // label, they provide step2_reference_a_description.
+  const step2OverrideLabel =
+    (typeof inputs.step2_reference_a_description === 'string' && inputs.step2_reference_a_description.length > 0)
+      ? inputs.step2_reference_a_description
+      : STEP2_MASTER_LABEL;
+  const step2Inputs = { ...inputs, reference_a_description: step2OverrideLabel };
+  const step2 = renderSkeleton(mainBundle, moduleConfig, step2Inputs);
+
+  return { prompts: [step1, step2] };
 }
 
 export default renderSkeleton;

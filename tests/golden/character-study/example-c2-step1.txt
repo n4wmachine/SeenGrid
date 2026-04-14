@@ -1,0 +1,43 @@
+Canonical full-body character normalization
+
+You are given two reference images of the same character.
+Reference A = full-body view — body proportions, posture, clothing, silhouette.
+Reference B = close-up face view — facial identity, expression, fine details.
+
+TASK
+Create one single full-body cinematic character image of the exact same person.
+
+REFERENCE PRIORITY
+Reference A provides body proportions, hairstyle, outfit, materials, and footwear.
+Reference B provides the highest-authority face: facial identity, facial structure, and fine facial details.
+If the references conflict, preserve the face from Reference B first, then body and outfit from Reference A, then materials.
+
+CRITICAL REQUIREMENTS
+Show the complete character from the top of the head to the bottom of both feet.
+Both shoes must be fully visible.
+If the references are cropped or incomplete, reconstruct the missing lower body faithfully so the result becomes one complete canonical full-body version of the same character.
+
+OUTFIT PRESERVATION
+Preserve the exact outfit from Reference A.
+Do not redesign, restyle, replace, simplify, or invent new clothing items.
+Keep the same garment structure, layers, silhouette, colors, materials, patterns, accessories, and footwear from Reference A.
+If any part of the outfit is partially obscured in the reference, complete it conservatively in the same design language without adding new fashion elements.
+
+POSE
+Natural relaxed standing pose.
+Neutral balanced stance.
+No dramatic action.
+
+FRAMING
+Full-body shot with comfortable margin around the figure.
+No body part touches the frame edge.
+
+LOCKED
+Same identity, same hairstyle, same outfit, same colors, same materials, same footwear.
+
+FORBIDDEN
+No text, no labels, no captions, no watermarks.
+No extra characters, no extra props.
+No cropped feet, no hidden footwear, no cropped body parts.
+No outfit changes, no new clothing items, no new accessories, no hairstyle changes.
+No studio background replacement, no simplified rendering.

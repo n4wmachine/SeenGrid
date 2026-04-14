@@ -1,7 +1,7 @@
 Character reference sheet — 2×4 grid
 
 You are given two reference images of the same character.
-Reference A = full-body view — body proportions, posture, clothing, silhouette.
+Reference A = canonical full-body master of the character.
 Reference B = close-up face view — facial identity, expression, fine details.
 
 TASK
