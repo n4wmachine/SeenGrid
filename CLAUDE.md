@@ -6,25 +6,33 @@
 
 **Stand:** 2026-04-14
 **Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
-**Phase:** 6 (empirische NanoBanana-Validierung) — im RETTUNGSMODUS nach semantischem Drift
-**Working Branch:** `claude/reconstruct-seengrid-history-EqIn8`
-**Archiv-Branch (nicht anfassen):** `claude/modular-grid-operator-98Bcq` — enthält Phase 1–6 Modular-Code inklusive bekanntem semantischem Drift. Nicht löschen, nicht rebasen, nicht force-pushen. Historisches Beweismaterial.
+**Phase:** 6 (empirische NanoBanana-Validierung) — im RETTUNGSMODUS nach semantischem Drift, Rebuild-Slice steht als nächstes an
+**Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild passiert hier, ab jetzt der einzige aktive Branch
+**Rescue-Planungs-Archiv (nicht anfassen):** `claude/reconstruct-seengrid-history-EqIn8` — auf diesem Branch fand am 2026-04-14 die Diagnose und der Strict Diff statt. Enthält die frühen Versionen der Ground-Truth-Datei und der CLAUDE.md-Rescue-Additionen (wurden per Cherry-Pick hierher gebracht). Nicht löschen bis Rettung abgeschlossen, nicht weiterentwickeln.
 
 **Was ist der Zustand:**
 - Phase 5 war der letzte saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
 - Phase 6 hat semantischen Drift eingeführt: ein vorheriger Opus-Chat ohne Projektkontext hat ChatGPT-optimierte Prompts verwässert beim modularen Einbau und Teile hart-codiert die modular bleiben sollten.
-- Die neue Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
-- Nächster Schritt: Strict Diff zwischen Ground Truth und den 11 Golden Files des Modular-Branch → Patch- oder Rebuild-Entscheidung → Pilot 1 Phase 6 zuklappen → erst dann Pilot 2 starten.
+- Die Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
+- Der Strict Diff ist gelaufen: die Drift ist strukturell (Template-Form statt Natürliche-Sprache-Form), das Layout des Angle Study ist auf 2×2 statt 1×4, die Reference-Priority-Reihenfolge ist vertauscht, die FORBIDDEN-Liste ist inhaltlich verschoben. Urteil: Rebuild, nicht Patch.
+- Nächster Schritt: Rebuild des Angle-Study-Skeletons + betroffener Module (MOD-K Layout, Reference-Priority, FORBIDDEN) + Regeneration der 8 betroffenen Goldens byte-exact gegen Ground Truth. Nach dem Rebuild: Rendered-Output-Review von Jonas → Commit → NanoBanana-Gegentest → erst dann Phase 6 zu.
+
+**Scope des Rebuilds (strikt begrenzt):**
+- NUR der 4-Winkel Cinematic Angle Study Fall (Front, Right Profile, Left Profile, Back, 1×4 vertical strip).
+- Betrifft: `src/data/skeletons/character-study.json`, `src/data/skeletons/character-study-normalizer.json`, MOD-K, MOD-G, Reference-Module, FORBIDDEN-Module, 8 Goldens (example-a, example-c, example-a2-step1/step2, example-c2-step1/step2, example-d2-step1/step2).
+- Nicht betroffen / bleibt unverändert: Expression Board (example-b, MOD-F), 3×3 Grid (example-d), Environment-Ref (example-e). Diese Modi werden als "uncertified" markiert — sie brauchen eigene ChatGPT-Ground-Truth und NanoBanana-Validierung als eigenen Slice später.
 
 **NICHT anfassen ohne explizite Freigabe von Jonas:**
 - Die 18 Legacy-Presets in `src/data/presets/` (Phase-1-Snapshot, unabhängig von modularer Arbeit)
 - `OPUS_CODE_HANDOFF.md` und `ROADMAP.md` Sync — bleiben bewusst auf "Phase 6 in Arbeit" stehen bis Phase 6 wirklich grün gegen Ground Truth ist
 - Merge auf `main` — erst nach Phase 6 Abschluss für Pilot 1
 - Löschung alter Branches — erst nach Abschluss der Rettung
+- Die "uncertified" Modi (Expression Board, 3×3, Env-Ref) — nicht verschlimmbessern, nicht löschen, erst eigener Slice
 
 **Offene Scope-Entscheidungen (NICHT heimlich lösen, zuerst Jonas fragen):**
 - Modulare Panel-Anzahl UI (1x2 / 1x3 / 1x5 / 1x6 Buttons für Character Study) — verschoben auf Post-Pilot-Phase, explizit NICHT Teil von Phase 6. Die Engine bleibt parameterisiert, nur die UI-Buttons kommen später.
 - Technical Sheet Mode Status — Klärung pending
+- Eigene Ground-Truth-Dateien für die 3 uncertified Modi — Entscheidung später welche davon überhaupt im Produkt bleiben
 
 Dieser Block ist die Wahrheit über den Projektzustand. Jeder Chat liest ihn als ERSTE Handlung und aktualisiert ihn als LETZTE Handlung vor dem finalen Commit.
 
