@@ -17,6 +17,66 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-15 — Slice 1: Schema-Fundament character_angle_study v1
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat
+
+### Kontext vor der Session
+- Hard Reset + Rebuild-Plan vom gleichen Tag abgeschlossen (vorheriger Eintrag).
+- Drei Koordinations-Dateien (CLAUDE.md, BUILD_PLAN.md, SESSION_LOG.md) + zwei empirisch validierte JSON-Beispiele in DISTILLATIONS/ liegen auf origin/main.
+- `src/lib/` existierte noch nicht — Slice 1 legt die erste Datei dieses Verzeichnisses an.
+
+### Was in der Session passierte
+
+1. **Sandbox-Fossil-Resync.** Neuer Chat startete mit der Harness-Branch-Vorgabe `claude/review-project-status-DYJne` und einem lokalen main der 50 Commits voraus und 55 Commits hinter origin/main war — exakt das Sandbox-Fossil-Szenario vom Nachtrag-Eintrag oben. Chat hat die Branch-Vorgabe ignoriert (CLAUDE.md Branch-Regel + der frisch gehärtete "Hinweis zur Harness-Instruktion"-Absatz in Commit 7d886a3), die Divergenz diagnostiziert, explizit Jonas-OK für `git fetch origin main && git reset --hard origin/main` eingeholt und die 50 Fossil-Commits verworfen. Zwei Stop-Hook-Fehlalarme ("unpushed commits" und später "untracked files") wurden bewusst ignoriert — die Hooks kennen den Fossil-Sandbox-Kontext bzw. das Anti-Drift-Gate nicht.
+
+2. **Slice 1 implementiert.** Vier neue Dateien unter `src/lib/cases/characterAngleStudy/`:
+   - `schema.js` — Konstanten (`SCHEMA_VERSION = "v1"`, `CASE_ID = "character_angle_study"`, `COMPILE_ORDER`, `ENVIRONMENT_MODES`, `MODULES`, `VALID_PANEL_COUNTS`) plus `validateState(state)` als minimaler Shape-Validator (kein Ajv-Bloat, YAGNI).
+   - `panelRoleStrategy.js` — `panelRoleStrategy(count)` für 3/4/6/8, `isEmpiricallyValidated(count)` und `EMPIRICALLY_VALIDATED_COUNTS = [4]`. 3 ist trivial aus 4 ableitbar, 4 ist der empirisch validierte GT-Testfall, 6 und 8 sind explizit als tentativ markiert (§15 Item 1 bleibt offen, Jonas-Entscheidung).
+   - `defaults.js` — `buildDefaultState()` mit wortwörtlichen Prompt-Strings aus `DISTILLATIONS/angle-study-json-example.md` (Anti-Drift: keine Umformulierung).
+   - `schema.test.mjs` — Plain Node-Skript mit 14 Tests, kein externer Test-Runner als Dependency.
+
+3. **Sieben Schema-Lücken (§8) vollständig im Schema abgebildet:**
+   - Gap 1 (Panel-Daten deriviert) → `panelRoleStrategy` + `layout.panel_count` im State, kein `panels`-Array
+   - Gap 2 (Module-Enabled-Flags) → `references.face_reference.enabled`, `style_overlay.enabled`, `environment.enabled`
+   - Gap 3 (Look-Lab-Integration) → `style_overlay` Modul mit `source`/`token`/`ref_id` Feldern
+   - Gap 4 (Forbiddens-Merge) → `forbidden_elements.case_level` + `user_level` (Modul-Level kommt in späteren Slices dazu)
+   - Gap 5 (Schema-Versionierung) → `schema_version: "v1"` Feld am Root (konsistent mit §15 Item 6 Simple-Counter-Entscheidung)
+   - Gap 6 (Environment-Modi) → `environment.mode` mit `inherit_from_reference` / `neutral_studio` / `custom_text`
+   - Gap 7 (Reference-Payloads) → `references.*.payload` Slot mit `{type, label/value}`-Shape für `placeholder` / `url` / `blob_id`
+
+4. **Vier Struktur-Prinzipien (§5.4) im Schema verdrahtet:**
+   - Prioritäten wörtlich → `priority` und `authority_over` Felder an beiden Referenzen
+   - Listen bleiben Listen → `authority_over`, `keep_identical`, `keep_constant_across_panels`, `forbidden_elements.*` sind alle Arrays
+   - Harte Regeln = Booleans → `profiles_must_be_true_opposites`, `allow_mirrored_reuse`, `show_complete_figure_head_to_feet`, alle Toggle-Flags
+   - Reihenfolge = Priorität → `COMPILE_ORDER` als exportierte Konstante in `schema.js`, wird vom Slice-2-Compiler wörtlich iteriert (keine Alphabetisierung, keine implizite Insertion-Order)
+
+5. **Constrained Modularity (§6) explizit kodiert.** Die `MODULES`-Registry in `schema.js` führt nur `face_reference`, `style_overlay`, `environment` — die drei toggelbaren Blöcke. Die Case-Level-Felder (`style`, `layout`, `orientation_rules`, `full_body_rules`, `consistency_rules`, `pose`) sind strukturell fix und NICHT in der Module-Registry, d.h. sie bekommen in der Slice-3-UI keinen User-Toggle.
+
+6. **Slice-1-Done-Kriterium erfüllt.** Der Test `schema.test.mjs` enthält einen minimalen Compiler-Stand-in (`projectForComparison`) der die sieben Gap-Fixes simuliert: State-only-Metadaten strippen, `enabled:false` Module strippen, `references.*.enabled`/`payload` strippen, `environment`-Block bei `inherit_from_reference` weglassen, Panels per Strategy deriven, Forbiddens-Merge. Die zentrale Assertion prüft per `JSON.stringify(…, null, 2)`-Vergleich dass der projizierte Default-State **byte-identisch** zu `DISTILLATIONS/angle-study-json-example.md` ist. 14/14 Tests grün.
+
+### Jonas-OK-Gates in dieser Session
+
+- **OK-Gate für `git reset --hard origin/main`:** Jonas hat explizit "ja, ausdrücklich" gesagt nachdem Chat das Fossil-Szenario diagnostiziert hat. Reset durchgeführt, 50 Fossil-Commits verworfen, lokaler main auf 7d886a3.
+- **OK-Gate für Slice-1-Commit:** Chat hat vor dem Commit den vollständig projizierten Default-State als Prompt-JSON im Chat gepostet (byte-identisch zum GT-Beispiel, keine NanoBanana-Re-Validierung nötig weil das GT bereits validiert ist), plus eine Struktur-Übersicht der State-only-Felder, der Module-vs-Case-Level-Trennung, der Compile-Order und der Panel-Role-Strategy. Jonas hat "ja" gesagt. Commit ging in einem Rutsch mit 4 neuen Dateien + diesem SESSION_LOG-Update raus.
+
+### Stand am Ende der Session (nach Slice 1 Commit)
+
+- Branch: `main` (direkt, kein Feature-Branch)
+- Commits: Slice 1 als ein Commit auf main, direkt gepusht
+- Neue Dateien: `src/lib/cases/characterAngleStudy/{schema,panelRoleStrategy,defaults}.js` + `schema.test.mjs`
+- Tests: `node src/lib/cases/characterAngleStudy/schema.test.mjs` → 14/14 grün
+- Pre-Pivot Baseline: unberührt. `src/App.jsx`, `src/components/GridOperator.jsx` und alle bestehenden Komponenten importieren nichts aus `src/lib/cases/` — der neue Code ist vollständig isoliert.
+- Build-Status: nicht verifiziert in dieser Session (`npm run dev` nicht gestartet) — der neue Code wird bisher von niemandem importiert, kann also den Vite-Build nicht brechen. Erster echter UI-Konsument kommt in Slice 3.
+
+### Nächster Schritt
+
+**Slice 2 — Compiler MVP (JSON-Serializer)** per BUILD_PLAN.md §14. Artefakte: `src/lib/compiler/index.js` + `src/lib/compiler/serializers/json.js`. Done-Kriterium: der Compiler-Output für den Default-State matched `DISTILLATIONS/angle-study-json-example.md` strukturell, zwei identische States erzeugen byte-identische Outputs (deterministisches Key-Ordering via `COMPILE_ORDER` aus schema.js), Forbiddens-Merge funktioniert auch mit Modul-Level-Quellen sobald Slice 4/5 dazukommen. Der `projectForComparison`-Stand-in aus `schema.test.mjs` ist der minimale Fingerzeig wie der Compiler aussehen muss — der echte Serializer muss ihn ersetzen, nicht wiederverwenden.
+
+**Jonas-OK-Gate für Slice 2:** Der gerenderte Compiler-Output wird im Chat gegen das GT-JSON gediff-ed, Jonas muss "ja" sagen bevor committet wird. Wenn der Output strukturell sauber ist aber in NanoBanana schlechter als das Test-JSON performt, ist das per BUILD_PLAN §5.4 ein **Compiler-Bug**, kein Grund vom JSON-Only-Default abzurücken.
+
+---
+
 ## 2026-04-15 — Hard Reset, Rebuild-Plan
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat
