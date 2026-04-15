@@ -4,9 +4,9 @@
 
 ## CURRENT STATUS — ZUERST LESEN
 
-**Stand:** 2026-04-14
+**Stand:** 2026-04-15
 **Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
-**Phase:** 6 (empirische NanoBanana-Validierung) — Rebuild-Slice fertig + byte-exact verifiziert, NanoBanana-Bildtest steht bei Jonas aus
+**Phase:** 6 (empirische NanoBanana-Validierung) — A-D NanoBanana-validiert, Example E als Scope-Cleanup raus (Char+Scene-Merge → gehört zu Pilot 2), bereit für Merge auf `main`
 **Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild ist hier passiert, ab jetzt der einzige aktive Branch
 **Rescue-Planungs-Archiv (nicht anfassen):** `claude/reconstruct-seengrid-history-EqIn8` — auf diesem Branch fand am 2026-04-14 die Diagnose und der Strict Diff statt. Enthält die frühen Versionen der Ground-Truth-Datei und der CLAUDE.md-Rescue-Additionen (wurden per Cherry-Pick hierher gebracht). Nicht löschen bis Rettung abgeschlossen, nicht weiterentwickeln.
 
@@ -16,7 +16,7 @@
 - Die Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
 - **Neuer Workflow ab 2026-04-14:** GT-First Modell — siehe Abschnitt **PILOT-WORKFLOW (GT-FIRST)** weiter unten. Pilot 1 hat es im Phase-6-Rebuild rückwirkend übernommen, Pilots 2-5 laufen direkt nach diesem Modell.
 - **Rebuild-Slice abgeschlossen am 2026-04-14:** der 4-Winkel Cinematic Angle Study Fall ist neu gebaut über zwei neue Skeleton-Dateien plus Routing in `renderCharacterStudy`. Die alten Skeletons sind unverändert geblieben (uncertified Modi laufen byte-stable weiter). Die 3 neuen Goldens sind byte-exact gegen die GT-Code-Blocks verifiziert.
-- **Nächster Schritt:** Jonas testet die 3 neuen Goldens empirisch in NanoBanana gegen die GT. Wenn der Bildtest bestanden ist: (a) Pilot 1 4-Winkel-Fall ist fertig, (b) Merge auf `main` als erster Per-Pilot-Merge im neuen GT-First Workflow, (c) parallel beginnt Jonas die GT-Erstellung für Pilots 2-5 in eigenen ChatGPT-Sessions außerhalb der Repo. Die fertigen GTs landen dann jeweils als eigener Slice im modularen System.
+- **Nächster Schritt:** Pilot 1 bereit für Merge auf `main` (A-D bereits NanoBanana-validiert, E war der einzige schlechte Fall und ist jetzt raus). Parallel beginnt Jonas die GT-Erstellung für Pilots 2-5 in eigenen ChatGPT-Sessions außerhalb der Repo. Die fertigen GTs landen dann jeweils als eigener Slice im modularen System. MOD-B wird in Pilot 2 (Char + World Merge) mit eigener GT neu aufgesetzt.
 
 **Was Phase-6-Rebuild konkret gemacht hat:**
 - NEU: `src/data/skeletons/character-study-cinematic-strip.json` (10 Blöcke, Title-Case-Header mit Doppelpunkt, semantische Reference-Labels)
@@ -24,8 +24,9 @@
 - NEU: in `src/lib/skeletonRenderer.js` 19 neue Block-Renderer (`cstrip_*`, `cnorm_*`) plus `shouldUseCinematicStrip()` Routing-Predicate in `renderCharacterStudy`
 - Test-Cases `example-a` und `example-a2` umgestellt von `rows: 2, cols: 2` auf `rows: 1, cols: 4` (entspricht GT "four tall vertical panels arranged side by side in a single horizontal row")
 - 3 Goldens neu geschrieben: `example-a.txt`, `example-a2-step1.txt`, `example-a2-step2.txt` — alle drei byte-exact mit der GT verifiziert (Script-gestützter Vergleich gegen die zwei Code-Blocks im GT-Markdown)
-- 8 Legacy-Goldens (`example-b/c/d/e/c2/d2-*`) byte-stable unverändert — sie laufen über den alten Pfad weil das Routing-Predicate sie ausschließt
-- Test-Status: **8 / 8 grün** (`node tests/renderCharacterStudy.test.js`)
+- 7 Legacy-Goldens (`example-b/c/d/c2/d2-*`) byte-stable unverändert — sie laufen über den alten Pfad weil das Routing-Predicate sie ausschließt
+- **2026-04-15 Scope-Cleanup:** Example E entfernt (Golden gelöscht, Test-Case raus). Begründung: NanoBanana-Test hat gezeigt dass Example E ein Char+Scene-Merge via MOD-B ist — semantisch Pilot-2-Territorium (Char + World Merge), nicht Pilot 1 (reines Character Study). `src/data/modules/character-study/mod-b.json` bleibt als dead code bis Pilot 2 es mit eigener GT neu aufsetzt.
+- Test-Status: **7 / 7 grün** (`node tests/renderCharacterStudy.test.js`)
 - Wichtige Konsequenz der semantischen Labels: Step 2 clean (`example-a.txt`) ist byte-identisch zu Step 2 nach Normalizer (`example-a2-step2.txt`). Der `STEP2_MASTER_LABEL`-Override ist auf dem neuen Pfad obsolet (existiert nur noch als Fallback im alten Pfad).
 
 **Routing-Bedingung für den neuen Pfad** (`shouldUseCinematicStrip`):

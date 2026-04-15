@@ -185,30 +185,6 @@ const CASES = [
     }
   },
   {
-    name: 'Example E — 2×2 Cinematic Angle, MOD-B only (Additional Ref without Face Crop) (clean)',
-    goldens: ['example-e.txt'],
-    moduleConfig: {
-      mode: 'cinematic',
-      ref_completeness: 'clean_full_body',
-      rows: 2,
-      cols: 2,
-      mod_a: { active: false },
-      mod_b: { active: true },
-      mod_d: { active: true, preset: 'DS-06_N4' },
-      mod_f: { active: false },
-      mod_g: { active: false },
-      mod_h: { active: true, value: 'Preserve' },
-      mod_j: { active: false },
-      mod_k: { active: true, value: 'Even' }
-    },
-    userInputs: {
-      reference_a_description: 'full-body cinematic character image',
-      mod_b_description: 'reference scene for environment and atmospheric lighting',
-      mod_b_purpose: 'the environment, backdrop, and atmospheric lighting',
-      mod_b_conflict_tail_descriptor: 'atmospheric'
-    }
-  },
-  {
     name: 'Example A2 — 1×4 Cinematic Angle Study Strip, MOD-A, Preserve (needs_normalization) — GT-validated',
     goldens: ['example-a2-step1.txt', 'example-a2-step2.txt'],
     moduleConfig: {
