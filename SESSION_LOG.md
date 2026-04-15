@@ -17,6 +17,79 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-15 — Slice 3: Custom Builder POC (throwaway UI)
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Fortsetzung derselben Session wie Slice 1/2)
+
+### Kontext vor der Session
+- Slice 2 direkt davor committet als `ff8f300` auf main.
+- Compiler (`src/lib/compiler/{index.js,serializers/json.js}`) läuft stabil, 33/33 Tests grün.
+- Noch kein UI-Konsument — der Compiler lebt bisher nur in Node-Tests.
+- Pre-Pivot-Baseline (`PromptBuilder`, `GridOperator`, `MJStartframe`, `PromptVault`) unverändert auf main, nutzt das bestehende Tab-State-Pattern in `App.jsx` ohne React Router.
+
+### Jonas-Vorgabe zu Beginn von Slice 3
+
+> "Slice 3 wird als standalone Komponente gebaut, nicht in die alte GridOperator.jsx reingemerged. Bewusst minimal und throwaway-UI. Die Zieladresse `src/components/GridOperator/CustomBuilder.jsx` aus §14 bleibt das spätere Ziel — aber erst nach dem Visual Overhaul, den Jonas als eigenen Track treibt. Slice 3 = nackter Funktionsbeweis, nichts polish. Leg an mit temporärer Route in App.jsx."
+
+Explizit ausgeschlossen also: Merge in `GridOperator.jsx`, Visual Polish, SVG-Preview, LookLab-Token-Picker, i18n für die POC-Strings. Einziger Zweck: beweisen dass der Slice-2-Compiler von einem echten React-State-Holder im Browser angetrieben werden kann.
+
+### Was in der Session passierte
+
+1. **Architektur-Scoping.** App.jsx nutzt einen einfachen `useState('builder')` + Header-Tabs Pattern, kein React Router. Header akzeptiert beliebige `tabs`-Arrays per Prop. Minimal-invasiver Weg: fünften Tab `poc` anhängen, lazy-geladene POC-Komponente rendern wenn `activeTab === 'poc'`. Keine Routing-Dependency einbauen, kein Pre-Pivot-Code anfassen.
+
+2. **`src/components/CustomBuilderPoc.jsx` geschrieben** (standalone, inline styles gegen die globalen CSS-Vars, keine separate `.module.css` damit beim Wegwerfen wirklich alles weg ist):
+   - Hält `buildDefaultState()` in React-State, `structuredClone`-basierter Immutable-Update-Helper.
+   - `useMemo` rund um `compileToString(state)` mit try/catch — wenn der State kurzzeitig invalid ist (z.B. während einer Modul-Toggle-Transition), zeigt die Preview den Error-String statt die React-Tree zu crashen.
+   - Zweispaltiges Layout: Controls links (320px), Preview rechts (1fr). Preview ist scrollable `<pre>` mit Copy-Button (`navigator.clipboard.writeText`), Char-Counter im Header.
+   - **Controls (gesamter POC-Scope):** `layout.panel_count` Select (mit "not empirically validated" Warning für 3/6/8), `references.face_reference.enabled` Checkbox, `style_overlay.enabled` Checkbox + `source`/`token` Text-Inputs (conditional), `environment.enabled` + `environment.mode` Select + `custom_text` Textarea (conditional), `forbidden_elements.user_level` Textarea (eins pro Zeile, auto-trim), Reset-Button.
+   - Warnbanner im Controls-Bereich: "Provisorischer fünfter Tab. Finale Zieladresse: src/components/GridOperator/CustomBuilder.jsx nach Visual Overhaul."
+
+3. **`src/App.jsx` um temp-Tab erweitert:**
+   - Lazy-Import `CustomBuilderPoc` mit Kommentar der auf diesen SESSION_LOG-Eintrag verweist und den Exit-Pfad (nach Visual Overhaul) dokumentiert.
+   - Neue TAB_DOTS-Farbe `poc: '#d46bbf'` (Magenta, optisch klar abgesetzt von den vier Bestands-Tabs).
+   - Neues Tab-Objekt mit `label: 'POC (S3)'` hardcoded — bewusst **nicht** durch `t()` gezogen, damit das Temp-Label visuell sofort als "gehört nicht hier hin" lesbar ist.
+   - Render-Zeile `{activeTab === 'poc' && <CustomBuilderPoc />}` unter den vier Bestands-Tabs.
+
+4. **Smoke-Tests gelaufen:**
+   - `npm install` — 64 Packages, kein Lockfile-Konflikt.
+   - `npm run build` — clean. Vite splittet `CustomBuilderPoc` in einen eigenen Lazy-Chunk `CustomBuilderPoc-C_D5UuUy.js` (13.45 kB roh, 4.33 kB gzip). Keine anderen Bestandsbundles verändert.
+   - `npm run dev` — Vite-Dev-Server startet auf `http://localhost:5173/SeenGrid/`, HMR-Transform von `CustomBuilderPoc.jsx` liefert 608 Zeilen JS ohne Fehler.
+   - `node src/lib/cases/characterAngleStudy/schema.test.mjs` — 14/14 grün (Slice 1 unberührt).
+   - `node src/lib/compiler/compiler.test.mjs` — 19/19 grün (Slice 2 unberührt).
+   - Gesamt: 33/33.
+
+5. **Fünf UI-Szenarien replay-getestet** via direktem Node-Stub der React-State-Mutationen durch den echten Compiler schickt (Screenshot-Ersatz, da keine Browser-Capture verfügbar):
+   - **Scenario A** (default / kein Click): Output byte-identisch zu `angle-study-json-example.md`.
+   - **Scenario B** (`face_reference.enabled = false`): `references.face_reference` Block fehlt, `full_body_master` bleibt.
+   - **Scenario C** (`panel_count = 3`): `layout.panel_count: 3`, `panels` hat 3 Items (front/right_profile/left_profile, kein `back`), Indices 1–3.
+   - **Scenario D** (`environment.mode = "neutral_studio"`): Neuer `{"environment": {"mode": "neutral_studio"}}` Block zwischen `pose` und `forbidden_elements` — Position folgt COMPILE_ORDER.
+   - **Scenario E** (`style_overlay` enabled + `look_lab`/`warm_neon_diner_glow` + user-level forbiddens `rain`, `neon_signs`): `style_overlay: {source, token}` Block zwischen `style` und `layout`, `forbidden_elements`-Array um `rain` und `neon_signs` am Ende erweitert.
+
+### Jonas-OK-Gates in dieser Session
+
+- **Stop-Hook zweimal ignoriert:** Einmal für "untracked files" vor dem Jonas-OK-Gate, ein zweites Mal für "uncommitted changes" während auf Jonas' Antwort gewartet wurde. In beiden Fällen wäre der Hook-Vorschlag (jetzt committen und pushen) durch das Anti-Drift-Gate gebrochen. Chat hat beide Fehlalarme explizit im Reply zu Jonas erwähnt und die Begründung genannt.
+- **OK-Gate für Slice-3-Commit:** Chat hat den fünf-Szenarien-Walkthrough im Chat gepostet (Text-Equivalent zum Screenshot, da kein Browser-Capture in der Sandbox verfügbar), plus den Build-Status, plus die 33/33-Tests-Zusammenfassung, plus eine explizite Liste was die POC NICHT macht. Jonas hat "ja" gesagt. Commit ging in einem Rutsch raus: zwei neue/modifizierte Source-Files + dieser SESSION_LOG-Eintrag + npm-installierte `node_modules` bleiben unversioniert (stehen bereits in `.gitignore`).
+
+### Stand am Ende der Session (nach Slice 3 Commit)
+
+- Branch: `main` (direkt)
+- Commits: Slice 3 als ein Commit auf main, direkt gepusht
+- Neue / modifizierte Dateien: `src/components/CustomBuilderPoc.jsx` (neu), `src/App.jsx` (5. Tab angehängt)
+- Tests: 33/33 grün (Slice 1: 14, Slice 2: 19). Slice 3 bringt **keine neuen Unit-Tests** — die POC ist UI, und die Compiler-Pfade die sie anfährt sind bereits 100% in `compiler.test.mjs` abgedeckt.
+- Build-Status: `npm run build` durchgelaufen, `CustomBuilderPoc` als eigener Lazy-Chunk im `dist/assets/`. Kein Bestands-Chunk verändert.
+- Pre-Pivot Baseline: `PromptBuilder`, `GridOperator`, `MJStartframe`, `PromptVault` sind **nicht angefasst worden**. `App.jsx` ist die einzige Bestands-Datei die Slice 3 modifiziert, und auch nur um einen additiven Tab-Eintrag.
+- UI-Zugang: `npm run dev` → fünfter Tab rechts "POC (S3)" (Magenta-Dot).
+
+### Nächster Schritt
+
+**Slice 4 — SVG Dummy-Preview** per BUILD_PLAN.md §14. Ziel: parallel zur JSON-Preview eine stilisierte Skizze der Panel-Rollen anzeigen (Front, Right Profile, Left Profile, Back für 4-Panel; angepasst je nach `panel_count`), damit der User beim Live-Editing sofort filmisch sieht was NanoBanana bekommen wird. Die SVG-Komponente lebt vorerst ebenfalls im POC-Tab (nicht im echten Grid Creator), bis Jonas' Visual Overhaul abgeschlossen ist und der Move nach `src/components/GridOperator/CustomBuilder.jsx` passiert.
+
+Offene Entscheidung für Slice 4: Sollen die Dummy-Figuren wörtlich aus den `view`-Strings gemappt werden (`front` → Dummy-Figur frontal, `right_profile` → Dummy seitlich rechts, usw.), oder ist eine minimalere Strich-Abstraktion (nur Pose-Silhouette + Blickrichtungs-Pfeil) ausreichend für den ersten Wurf? Wird beim Start von Slice 4 mit Jonas geklärt bevor gecodet wird.
+
+**Jonas-OK-Gate für Slice 4:** Wieder UI-only, kein Prompt-Inhalt. Aber: der SVG-Dummy hat visuelle Semantik (zeigt dem User was der Prompt bedeutet), also zählt er de-facto als neue Nutzer-sichtbare Quelle der Wahrheit — der Style/die Pose-Suggestion der Dummies darf nicht still driften. Chat postet vor dem Commit eine Beschreibung jedes Dummy-View + Screenshot-Ersatz der laufenden Preview, Jonas schaut drüber.
+
+---
+
 ## 2026-04-15 — Slice 2: Compiler MVP (JSON-Serializer)
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Fortsetzung derselben Session wie Slice 1, nach Context-Compaction)
