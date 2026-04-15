@@ -5,8 +5,8 @@
 ## CURRENT STATUS — ZUERST LESEN
 
 **Stand:** 2026-04-15
-**Aktueller Pilot:** Pilot 1 — Character Study (Two-Step Flow)
-**Phase:** 6 (empirische NanoBanana-Validierung) — A-D NanoBanana-validiert, Example E als Scope-Cleanup raus (Char+Scene-Merge → gehört zu Pilot 2), bereit für Merge auf `main`
+**Aktueller Pilot:** Pilot 2 — Char + World Merge (GT-Erarbeitung extern im Gang)
+**Phase:** 6 abgeschlossen für Pilot 1 — A-D NanoBanana-validiert, Pilot 1 auf `main` gemerged (Commit `31c08c5`), Example-E-Scope-Cleanup durch (MOD-B / Char+Scene-Merge gehört architektonisch zu Pilot 2, nicht Pilot 1). Parallel: Pilot 2 GT-Erarbeitung extern bei Jonas + ChatGPT + NanoBanana im Gang, Integrations-Slice folgt sobald die GT-Datei befüllt ist
 **Working Branch:** `claude/modular-grid-operator-98Bcq` — der Modular-Code lebt hier, der Rebuild ist hier passiert, ab jetzt der einzige aktive Branch
 **Rescue-Planungs-Archiv (nicht anfassen):** `claude/reconstruct-seengrid-history-EqIn8` — auf diesem Branch fand am 2026-04-14 die Diagnose und der Strict Diff statt. Enthält die frühen Versionen der Ground-Truth-Datei und der CLAUDE.md-Rescue-Additionen (wurden per Cherry-Pick hierher gebracht). Nicht löschen bis Rettung abgeschlossen, nicht weiterentwickeln.
 
@@ -14,9 +14,10 @@
 - Phase 5 war der letzte vorherige saubere Stand (5/5 Beispiele byte-exact grün bei NanoBanana validiert).
 - Phase 6 hatte semantischen Drift: ein vorheriger Opus-Chat ohne Projektkontext hatte ChatGPT-optimierte Prompts verwässert.
 - Die Wahrheitsquelle für Pilot 1 ist `DISTILLATIONS/character-study-chatgpt-groundtruth.md` (NanoBanana-validiert, wortwörtlich von Jonas mit ChatGPT erarbeitet, nicht editieren ohne Re-Test).
-- **Neuer Workflow ab 2026-04-14:** GT-First Modell — siehe Abschnitt **PILOT-WORKFLOW (GT-FIRST)** weiter unten. Pilot 1 hat es im Phase-6-Rebuild rückwirkend übernommen, Pilots 2-5 laufen direkt nach diesem Modell.
+- **Neuer Workflow ab 2026-04-14:** GT-First Modell — siehe Abschnitt **PILOT-WORKFLOW (GT-FIRST)** weiter unten. Pilot 1 hat es im Phase-6-Rebuild rückwirkend übernommen, Pilots 2-6 laufen direkt nach diesem Modell.
 - **Rebuild-Slice abgeschlossen am 2026-04-14:** der 4-Winkel Cinematic Angle Study Fall ist neu gebaut über zwei neue Skeleton-Dateien plus Routing in `renderCharacterStudy`. Die alten Skeletons sind unverändert geblieben (uncertified Modi laufen byte-stable weiter). Die 3 neuen Goldens sind byte-exact gegen die GT-Code-Blocks verifiziert.
-- **Nächster Schritt:** Pilot 1 bereit für Merge auf `main` (A-D bereits NanoBanana-validiert, E war der einzige schlechte Fall und ist jetzt raus). Parallel beginnt Jonas die GT-Erstellung für Pilots 2-5 in eigenen ChatGPT-Sessions außerhalb der Repo. Die fertigen GTs landen dann jeweils als eigener Slice im modularen System. MOD-B wird in Pilot 2 (Char + World Merge) mit eigener GT neu aufgesetzt.
+- **Pilot 1 Status:** ✅ fertig und auf main. NanoBanana-Test bestanden, Per-Pilot-Merge auf `main` durchgeführt (Commit `31c08c5`), Example-E Legacy-Modus als Scope-Cleanup entfernt (`7 / 7` Tests grün). Grund für die Streichung von Example E: der Fall war ein Char+Scene-Merge und gehört architektonisch zu Pilot 2, nicht zu Pilot 1. MOD-B wird dort mit eigener GT neu aufgesetzt. Liegt stabil als erster validierter GT-First-Pilot auf main.
+- **Nächster Schritt:** Jonas erarbeitet extern in ChatGPT + NanoBanana die GT für **Pilot 2 — Char + World Merge**. Ziel-Datei: `DISTILLATIONS/char-world-merge-chatgpt-groundtruth.md` (Template liegt vorbereitet auf Jonas' Desktop). Sobald die GT befüllt und validiert ist, kommt der Integrations-Slice im Chat: Skeleton-JSON + Block-Renderer + Golden + Test. Parallel legt Jonas Placeholder-GT-Dateien für Pilots 3-6 an, die er nach und nach befüllt. Pilot-Liste nach Split: Pilot 3 Start/End Frame, Pilot 4 World Zone Board, Pilot 5 Shot Coverage, Pilot 6 Story Sequence (Multishot Sequence wurde in diese beiden gesplittet, weil es architektonisch zwei verschiedene Use Cases sind).
 
 **Was Phase-6-Rebuild konkret gemacht hat:**
 - NEU: `src/data/skeletons/character-study-cinematic-strip.json` (10 Blöcke, Title-Case-Header mit Doppelpunkt, semantische Reference-Labels)
@@ -41,10 +42,22 @@ Alles andere fällt durch zum alten (uncertified) Pfad.
 - MOD-J (Style Overlay), MOD-G (Strict View Rules), und MOD-H Custom/Neutral werden auf dem neuen Pfad **silent ignoriert**, weil sie nicht in der GT validiert sind. Wenn der User sie aktiviert, kommt trotzdem der reine GT-Output.
 - Andere Panel-Counts (1×3, 1×5, 1×6) sind im neuen Skeleton parameterisiert (`{n_word}`, `{n_word_capitalized}`), aber bisher nur 1×4 byte-exact validiert.
 
+**Pre-Pivot Baseline — bereits gebaut, NICHT nochmal bauen:**
+Bevor die modulare Engine-Architektur beschlossen wurde, war SeenGrid schon eine funktionierende Web-App auf main. Dieser Stand ist die Grundlage auf der die modulare Engine aufsetzt — er wird nicht neu gebaut, nur durch den Grid Operator ergänzt und später mit ihm verheiratet:
+- **Phase 1 A — Prompt Builder (Chip-basiert, NanoBanana-optimiert)** — fertig, live auf main. Chip-Auswahl für Style / Camera / Lens / Focal / Aperture / Aspect / Shot / Angle / Lighting / Color Grade / Effects / Negative, Tooltips, Copy-to-Clipboard, Random-Generator, Quality-Suffix-Toggle.
+- **Phase 1 C — MJ Startframe Modul** — fertig, live auf main. 5-Element-Architektur, 6 Templates, Anti-Pattern-Warnung, Filmstock-Auswahl, Random-Generator, paste-ready MJ-Output.
+- **Phase 1 D — Prompt Vault / Community Prompts** — fertig, live auf main. Galerie-Ansicht der 1500+ NanoBanana-Trending-Prompts mit Vorschaubildern, Kategorisierung, Favoriten-System.
+- **Design System + GitHub-Pages-Deployment** — fertig, live auf main. CSS, Header, Layout-Grundgerüst, Deployment-Config stehen.
+- **UX-Polish-Phase** (letzter Stand direkt vor dem Architektur-Pivot) — fertig, live auf main. Inhalt: Grid Advisory, Random Buttons, Signature Tabs, MJ-Fixes, NanoBanana-Accordion, sinnvolle Design-/UI-Anpassungen ("Universum B"). Das war das letzte Slice-Paket bevor die Entscheidung fiel, das Kernfeature von einer Sheet-Bibliothek zur modularen Grid-Engine umzubauen.
+- **Slogan "Scene. Grid. Seen."** — Experiment war in der UX-Polish-Phase in Arbeit, **bewusst verschoben auf die Visual-Overhaul-Phase** (siehe Phase 3 in "WAS GEBAUT WERDEN MUSS" und Offene Scope-Entscheidungen). Der Architektur-Pivot zur modularen Engine hat das Experiment unterbrochen, kommt zurück wenn das Visual Overhaul dran ist.
+- **Visual-Overhaul-Explorationsmaterial** (cinematic dark theme, distinctive Schrift, breites Layout, Logo-Slot, erweiterte Feature-Ideen wie Trendy-Presets-Spalte) — in früheren Handoff-Docs gesammelt, wartet auf den eigenen Architektur-Deep-Dive-Chat nachdem der Grid Operator funktional steht.
+
+**Wichtig für jeden neuen Chat:** Wenn du den Abschnitt "WAS GEBAUT WERDEN MUSS" weiter unten liest, sind Phase 1 **A / C / D** bereits erledigt und stehen auf main. Der aktuelle Neubau ist **Phase 1 B — Grid Operator mit modularer Engine (Pilots 1-6)**, der auf dem Pre-Pivot-Stand aufsetzt und ihn NICHT ersetzt. Später in Phase 3 wird das Visual Overhaul gemacht und die Engine mit der bestehenden UI verheiratet. Kein Chat fängt nochmal bei null an mit Prompt Builder, MJ Modul oder Vault — die laufen schon.
+
 **NICHT anfassen ohne explizite Freigabe von Jonas:**
 - Die 18 Legacy-Presets in `src/data/presets/` (Phase-1-Snapshot, unabhängig von modularer Arbeit)
 - `OPUS_CODE_HANDOFF.md` und `ROADMAP.md` Sync — bleiben bewusst auf "Phase 6 in Arbeit" stehen bis Phase 6 vollständig nach NanoBanana-Test grün ist
-- Merge auf `main` — erst nach Phase 6 Abschluss für Pilot 1 (nach NanoBanana-Test)
+- Merge auf `main` — **nur pro Pilot und nur mit explizitem OK** von Jonas im Chat ("merge Pilot N"). Ablauf ist in Schritt 6 des PILOT-WORKFLOW (GT-FIRST) definiert: lokaler Fast-Forward-Merge, kein PR, kein MCP, Anti-Loop-Gesetz. Pilot 1 ist bereits durch (Commit `31c08c5`), Pilot 2 folgt nach GT-Validierung
 - Löschung alter Branches — erst nach Abschluss der Rettung
 - Die alten Skeletons `character-study.json` und `character-study-normalizer.json` — bewusst unverändert gelassen, sie tragen die uncertified Modi
 - Die "uncertified" Modi (Expression Board, 3×3, Env-Ref, Technical Sheet) — nicht verschlimmbessern, nicht löschen, erst eigener Slice mit eigener GT
