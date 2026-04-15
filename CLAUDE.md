@@ -83,6 +83,8 @@ Diese Ausnahme von der destructive-ops-Regel ist **nicht pre-authorized** — di
 
 **Anti-Drift-Mechanismus:** Vor jedem Commit der Prompt-Inhalt verändert (Skeletons, Compiler-Logik, Goldens) postet der Chat den vollständig gerenderten Prompt im Chat zur Freigabe. Jonas sagt "ja" oder "nein". Erst bei "ja" wird committet. Kein Chat committet Prompt-Inhalt ohne explizites Jonas-OK. Das ist der einzige Drift-Schutz den wir jetzt noch haben — und der wirklich funktioniert.
 
+**Spec-Compliance (Präzisierung zum Anti-Drift, ergänzt 2026-04-15):** Drei Punkte damit ein Chat nicht aus falscher Vorlage baut — keine neuen Regeln, nur wie die bestehenden konkret greifen. (1) **Slice-Start:** Der Chat zitiert den vollständigen Slice-Text aus BUILD_PLAN.md §14 **wortwörtlich** bevor er baut, nicht paraphrasiert. (2) **Slice-Review:** Wer einen fremden Slice-Report prüft, vergleicht **zuerst** gegen die Spec ("welche Elemente sollen laut §14 existieren, welche nicht?"), dann erst gegen den Code. Code-Korrektheit allein beweist nicht Spec-Konformität. (3) **UI-Slices brauchen Screenshot.** Ein textuelles Ersatz-Narrativ reicht nicht — UI-Spec-Drift wird nur auf dem echten Screenshot sichtbar.
+
 **Destruktive Operationen** (force push, reset --hard, History-Rewriting) passieren niemals ohne explizites Jonas-OK.
 
 ---

@@ -17,9 +17,58 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-15 — Spec-Drift in Slice 3 POC entdeckt + CLAUDE.md Spec-Compliance-Präzisierung
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Review-Rolle, Fortsetzung derselben Session)
+
+### Was passiert ist
+
+Direkt nach dem Slice-3-POC-Commit (`d66a828`, siehe Eintrag direkt darunter) hat Jonas die laufende UI im Browser getestet und per Screenshot sofort Spec-Drift gegen §14 Slice 3 entdeckt: der POC hat Face-Reference-Toggle, Style-Overlay, Environment-Block und User-Forbiddens-Textarea (alle Slice-4/5/7-Module), aber **kein** Case-Dropdown, **kein** Rows × Cols Picker, **kein** Orientation-Picker — das genaue Gegenteil von was §14 Slice 3 wörtlich spezifiziert ("Case-Dropdown, Rows/Cols/Orientation-Picker, Live-JSON-Prompt-Output, Copy-JSON-Button. Kein Module-Panel, kein Visual Preview").
+
+**Timeline-Klarstellung:** Der Commit `d66a828` ist **nicht** eine Anti-Drift-Gate-Verletzung. Der Bau-Chat hat einen technisch plausiblen Fünf-Szenarien-Walkthrough geschickt. Review-Chat (ich) hat die Szenarien gegen den Compiler-Code gegengecheckt und code-seitig bestätigt — korrekte Compile-Order-Positionen, korrekter Forbiddens-Merge — und daraufhin "ja"-Empfehlung an Jonas abgegeben. Jonas hat dieses "ja" vom Review-Chat an den Bau-Chat relayed, und der Commit ging raus. **Der Review war falsch:** ich hatte nur Code-gegen-Compiler verifiziert, nicht Spec-gegen-§14. Drei der fünf Szenarien haben Module-Panel-Interaktionen getestet — das hätte ein Alarm sein müssen, war aber keiner. Der Drift wurde erst nach dem Commit beim Browser-Test durch Jonas entdeckt.
+
+**Konkret falsch in der POC (aus Spec-Sicht):**
+- **Fehlt:** Case-Dropdown, Rows × Cols Picker, Panel-Orientation Picker (alle drei explizit in §14 Slice 3 gefordert)
+- **Zu viel:** Face-Reference-Toggle, Style-Overlay, Environment-Block, User-Forbiddens-Textarea — alle explizit ausgeschlossen durch §14 "Kein Module-Panel, kein Visual Preview". Diese Module sind Sache von Slices 4/5/7.
+
+Der Bau-Chat hat nach Jonas-Rückfrage zugegeben dass er §14 nicht wörtlich gelesen sondern aus BUILD_PLAN-Kontext geraten hat. Beide Chats haben den gleichen Fehler in zwei verschiedenen Modi gemacht: Bau-Chat im Implement-Modus, Review-Chat im Validate-Modus, beide ohne §14-Spec-Text direkt auf dem Tisch.
+
+### Zweitrangige Klärung: Module-Menge-Erwartung
+
+Jonas hat beim Screenshot zusätzlich gefragt warum nur 3-4 Module (Face / Style / Environment) sichtbar sind — er erwartet 5-10. Klärung: §14 Slices 1-8 spezifiziert `character_angle_study` + drei Module (face_reference, environment, style_overlay) + normalizer als MVP-Scope. Die anderen vier Cases aus §7 (`start_end_frame`, `world_zone_board`, `shot_coverage`, `story_sequence`) sind im Plan, aber explizit als "Was nach Slice 8 kommt". Ob der MVP-Scope erweitert wird (mehr Module pro Case oder mehrere Cases im MVP) ist eine **offene Produkt-Entscheidung** bei Jonas, vertagt bis nach Slice 3 sauber fertig ist.
+
+### Fix: CLAUDE.md Präzisierung
+
+CLAUDE.md Branch-Regel-Abschnitt wurde um einen einzelnen Absatz "Spec-Compliance (Präzisierung zum Anti-Drift)" erweitert, direkt unter dem bestehenden Anti-Drift-Mechanismus. **Keine neue Regel-Kategorie** — explizit als Verfeinerung der existierenden Anti-Drift-Strategie geframed, damit die 3-Punkte-Struktur aus "Kontakt zu den Regeln" nicht auf 4 Punkte wächst (Anti-Regel-Inflation, nachdem Jonas beim Hard Reset klar gemacht hat dass Regel-Meere Drift verursachen, nicht verhindern). Drei Präzisierungen in einem Absatz:
+
+1. **Slice-Start:** Chat zitiert den vollständigen §14-Slice-Text wortwörtlich bevor er baut
+2. **Slice-Review:** Reviewer prüft zuerst gegen Spec ("welche Elemente sollen laut §14 existieren, welche nicht?"), dann gegen Code
+3. **UI-Slices:** Screenshot der laufenden UI ist Pflicht, kein Text-Ersatz
+
+### Jonas-OK-Gates in dieser Session
+
+- **OK-Gate für CLAUDE.md-Ergänzung:** Jonas hat "gut" gesagt nach Vorschlag, explizit mit der Sorge "ich hoffe dass es nicht wieder so endet [wie das letzte Regel-Meer]". Deshalb Ergänzung bewusst als einzelner Absatz, nicht als neue Sektion.
+
+### Stand am Ende der Session
+
+- Branch: `main` (direkt)
+- Slice 1 + 2 + Slice-3-POC (`d66a828`) unangetastet auf main
+- CLAUDE.md: ein neuer Absatz "Spec-Compliance" unter Anti-Drift-Mechanismus, sonst unverändert
+- Module-Menge-Frage: offen, vertagt bis nach Slice 3
+- Parallel läuft im Bau-Chat die Slice-3-Neuauflage streng nach §14
+
+### Nächster Schritt
+
+1. **Bau-Chat:** Slice 3 POC neu aufsetzen streng nach §14: Case-Dropdown (Slot mit nur `character_angle_study`), Rows × Cols + Orientation-Picker, Live-JSON-Output, Copy-Button. **Keine** Module-Controls. Vor Commit: Screenshot + Jonas-OK.
+2. **Offene Produkt-Frage:** MVP-Scope-Erweiterung (mehr Module, evtl. zweiter Case im MVP). Entscheidung nach Slice 3 fertig, nicht jetzt.
+
+---
+
 ## 2026-04-15 — Slice 3: Custom Builder POC (throwaway UI)
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Fortsetzung derselben Session wie Slice 1/2)
+
+**Nachtrag 2026-04-15 spät:** Dieser POC-Commit wurde nach dem Commit beim Browser-Test durch Jonas als Spec-Drift gegen §14 Slice 3 identifiziert (siehe Eintrag direkt darüber). Der Commit bleibt als historischer Record auf main stehen; die korrigierte Slice-3-Fassung entsteht parallel im Bau-Chat.
 
 ### Kontext vor der Session
 - Slice 2 direkt davor committet als `ff8f300` auf main.
