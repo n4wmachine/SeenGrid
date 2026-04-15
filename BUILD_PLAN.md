@@ -68,11 +68,11 @@ Der Custom Builder ist **kein** "wähle ein Template aus einer Liste und zeig de
 
 4. **User fügt Module per Klick hinzu.** Face Reference an/aus, Environment Preserve an/aus, Style Overlay (Text-Token aus Look Lab), Custom Forbiddens. Jedes Modul ist ein Toggle oder ein kleines Formular (z.B. Env Preserve hat die Modi "inherit_from_reference | neutral_studio | custom_text").
 
-5. **Der Prompt passt sich in Echtzeit an.** Jeder Klick löst einen Recompile aus. Der Output (Paragraph-Prompt **oder** JSON-Prompt, per Toggle wählbar) wird live neben dem Builder angezeigt. Kein "Generate"-Button, kein Loading-State — pure Reaktivität.
+5. **Der Prompt passt sich in Echtzeit an.** Jeder Klick löst einen Recompile aus. Der Output (strukturiertes JSON-Prompt-Format) wird live neben dem Builder angezeigt. Kein "Generate"-Button, kein Loading-State — pure Reaktivität.
 
 6. **Live Visual Preview.** Parallel zum Prompt-Output zeigt eine SVG-basierte Vorschau **stilisierte Dummy-Figuren in den Panel-Rollen**. Für Angle Study: 4 Dummies in Front/R/L/Back-Orientierung. Für Shot Coverage: 1 Dummy in 4 Kameradistanzen. So sieht der User **sofort** was der Prompt produzieren wird, nicht nur leere Boxen mit Text drin.
 
-7. **Copy-Output.** Paste-ready Paragraph oder JSON, ein Klick zum Kopieren. Kein Auto-Submit an NanoBanana, kein API-Layer. Der User kopiert manuell in sein Tool.
+7. **Copy-Output.** Paste-ready JSON, ein Klick zum Kopieren. Kein Auto-Submit an NanoBanana, kein API-Layer. Der User kopiert manuell in sein Tool. Das JSON-Format ist als transportables Prompt-Format bewusst gewählt — es funktioniert nicht nur in NanoBanana, sondern auch in Grok Imagine und voraussichtlich in anderen strukturschwachen Prompt-Interfaces, ohne dass der User umformatieren muss.
 
 **Was der Custom Builder nicht ist:**
 - Kein Template-Selector mit Preview
@@ -88,7 +88,7 @@ Der Custom Builder ist **kein** "wähle ein Template aus einer Liste und zeig de
 Dies ist der **zentrale architektonische Durchbruch** der Rebuild-Diskussion am 2026-04-15. Früher war der Plan: "Funktion pro Case die einen String zurückgibt". Der neue Plan ist:
 
 ```
-UI State  →  Case-Schema-Validator  →  Serializer(s)  →  Output(s)
+UI State  →  Case-Schema-Validator  →  JSON-Serializer  →  JSON-Prompt-Output
 ```
 
 ### 5.1 Warum JSON statt String-Templates
@@ -99,11 +99,9 @@ Am 2026-04-15 hat Jonas den wortwörtlich validierten Paragraph-Prompt aus `DIST
 
 **Das bedeutet:** NanoBanana akzeptiert strukturiertes JSON direkt als Input und reagiert darauf 1:1 wie auf natürliche Sprache — und bei Constraint-schweren Cases (viele Locks, viele Forbiddens, explizite Prioritäten) **präziser** weil die strukturellen Beziehungen weniger interpretationsoffen sind.
 
-**Konsequenz für die Architektur:** Der Custom Builder hält seinen Zustand **nicht als String-Template-Fragmente**, sondern als **strukturiertes JSON-Objekt**. Aus diesem Objekt erzeugt ein Compiler zwei (später evtl. mehr) Output-Formen:
-- **Paragraph-Prompt** (für User die lieber natürliche Sprache kopieren)
-- **JSON-Prompt** (für Constraint-schwere Cases wo JSON empirisch präziser ist)
+**Konsequenz für die Architektur:** Der Custom Builder hält seinen Zustand **nicht als String-Template-Fragmente**, sondern als **strukturiertes JSON-Objekt**. Aus diesem Objekt erzeugt ein Compiler einen **JSON-Prompt-Output** — das ist im MVP das einzige unterstützte Output-Format (Entscheidung vom 2026-04-15 abends, siehe §15 Item 2). Ein Paragraph-Serializer ist explizit **nicht** Teil des MVP und wird erst nachgezogen wenn ein realer Use Case auftaucht.
 
-Die beiden Formate sind **gleichwertig** im Sinne von NanoBanana, aber **nicht identisch** im Sinne des Compilers — die gleiche JSON-State erzeugt in beiden Formaten leicht unterschiedliche Wortfolgen je nach Serializer.
+**Wichtig:** Der interne State (`State-JSON`) und der Output (`Prompt-JSON`) sind **nicht dieselbe Struktur**, auch wenn beide JSON sind. Der State enthält Felder die im Output nichts verloren haben — z.B. `enabled: false`-Flags, `schema_version`, Forbiddens-Quellen-Metadaten. Der Compiler übersetzt vom State-JSON in ein Prompt-JSON das NanoBanana (und Grok Imagine und ähnliche Backends) wortwörtlich als Input akzeptiert. Die Test-JSONs in `DISTILLATIONS/` sind **validierte Prompt-JSON-Zielzustände**, nicht State-Schemas — das State-Schema baut die sieben Lücken aus §8 drumherum auf.
 
 ### 5.2 Die beiden empirisch validierten JSON-Beispiele
 
@@ -123,30 +121,36 @@ Der Compiler nimmt einen JSON-State + den Case-Identifier und produziert Output.
 2. **Modul-Toggles werden respektiert.** Wenn ein Modul `enabled: false` hat, werden seine Felder übersprungen und seine Forbiddens nicht in den Merge aufgenommen.
 3. **Forbiddens werden gemerged.** Case-Level-Forbiddens + aktive Modul-Level-Forbiddens + User-Custom-Forbiddens → dedupliziert → in eine finale Liste.
 4. **Panel-Rollen werden deriviert, nicht gelesen.** Die `panels`-Liste im JSON ist **nicht hardcoded**, sondern kommt aus `layout.panel_count` + einer case-spezifischen Panel-Role-Strategy (siehe Abschnitt 8.1).
-5. **Zwei Output-Modi.** Der gleiche Compiler produziert entweder einen Paragraph-Prompt (durch Paragraph-Serializer) oder einen JSON-Prompt (durch JSON-Serializer mit stabiler Key-Order).
+5. **Ein Output-Modus: JSON.** Der Compiler produziert einen JSON-Prompt mit stabiler Key-Order. Paragraph-Output ist explizit **nicht** Teil des MVP (siehe §15 Item 2). Die stabile Key-Order ist wichtig damit zwei identische States byte-identische Outputs erzeugen und der User keine kosmetischen Diff-Overheads beim Copy-Paste erlebt.
 
 ### 5.4 Wichtige Nuance: Nicht das JSON ist der Hebel — die Struktur ist es
 
-**Aufgeklärt am 2026-04-15 abends nach weiteren NanoBanana-Tests:** Jonas hat nach dem initialen Angle-Study- und Normalizer-Test noch weitere Prompts im gleichen strukturierten Format probiert — und sie funktionieren **noch besser** als die unstrukturierten Paragraph-Varianten. ChatGPT hat dazu einen wichtigen Hinweis gegeben den wir hier festhalten:
+**Aufgeklärt am 2026-04-15 abends nach weiteren NanoBanana-Tests:** Jonas hat nach dem initialen Angle-Study- und Normalizer-Test noch weitere Prompts im gleichen strukturierten Format probiert und berichtet: sie funktionieren **noch besser** als die unstrukturierten Paragraph-Varianten, und zwar konstanter und sauberer. ChatGPT hat dazu einen wichtigen Hinweis gegeben den wir hier festhalten:
 
 > **Der Qualitätsgewinn kommt nicht vom JSON-Format an sich, sondern von der Strukturierung und den klaren Prioritäten die das JSON-Format erzwingt.**
 
 Das ist ein bedeutender Unterschied in der Interpretation:
 
-- **Falsche Lesart:** "JSON ist das magische Format, alle Prompts sollten JSON sein."
-- **Richtige Lesart:** "Saubere Hierarchien, explizite Prioritäten (`priority`, `authority_over`), harte Trennung zwischen Constraints und Präferenzen, und atomare Listen statt Fließtext sind die Qualitäten die NanoBanana besser versteht. JSON erzwingt diese Qualitäten einfach am effizientesten. Der **gleiche** Paragraph-Prompt mit der **gleichen** strukturellen Klarheit würde auch besser performen als ein unstrukturierter."
+- **Falsche Lesart:** "JSON ist das magische Format, alle Prompts sollten JSON sein weil Format X."
+- **Richtige Lesart:** "Saubere Hierarchien, explizite Prioritäten (`priority`, `authority_over`), harte Trennung zwischen Constraints und Präferenzen, und atomare Listen statt Fließtext sind die Qualitäten die NanoBanana besser versteht. JSON erzwingt diese Qualitäten einfach am effizientesten — und ist deshalb das gewählte Output-Format, nicht weil JSON-als-Symbol magisch ist."
 
-**Warum das wichtig ist für den Compiler:**
+**Warum das wichtig ist für das Schema-Design (Slice 1) und den Compiler (Slice 2):**
 
-1. **Paragraph-Serializer darf nicht verwässern.** Wenn der JSON-State klare Prioritäten hat (z.B. "Full-body master reference ist die höchste Autorität für X, Y, Z"), muss der Paragraph-Serializer diese Prioritäten **wörtlich übertragen**, nicht zu einer schmierigen Fließtext-Version zusammenziehen wo "höchste Autorität" zu "bitte beachte" wird.
+Wir liefern zwar nur JSON als Output aus — aber die obige Einsicht bestimmt **wie das Schema gestaltet wird und wie der Compiler den State in JSON übersetzt**. Ein strukturschwaches Schema würde ein strukturschwaches JSON produzieren, und der Vorteil wäre dahin. Die vier konkreten Prinzipien:
 
-2. **Listen bleiben Listen.** Wenn Forbiddens im JSON eine Liste sind (`["studio_background", "new_location", ...]`), serialisiert der Paragraph-Serializer sie als saubere aufgezählte Struktur ("Do not add: studio background, new location, ..."), nicht als Fließtext-Paragraph ("Bitte keine Studio-Backgrounds verwenden und auch nicht die Location wechseln und ...").
+1. **Prioritäten werden wörtlich kodiert.** Wenn im State "Full-body master reference ist die höchste Autorität für X, Y, Z" gilt, kodiert das Schema dies als explizites `priority`-Feld und `authority_over: [...]` — nicht als vage Reihenfolge oder implizite Annahme. Der Compiler serialisiert diese Felder wortwörtlich in den Output, nicht umformuliert.
 
-3. **Harte vs. weiche Regeln sind explizit.** Ein `"allow_redesign": false` im JSON darf im Paragraph nicht zu "preferably avoid" werden — es muss zu "Do not redesign" werden. Der Serializer respektiert den Boolean-Charakter.
+2. **Listen bleiben Listen.** Forbiddens sind im State ein Array (`["studio_background", "new_location", ...]`) und werden im Output-JSON auch als Array serialisiert — nie zu einem Fließtext-String zusammengezogen, nie in natürliche Sprache eingebettet.
 
-4. **Reihenfolge ist Priorität.** Die Compile-Order (in welcher Reihenfolge Felder im Output erscheinen) spiegelt die Gewichtung. Wichtigste Constraints oben, weiche Präferenzen unten. Der Paragraph-Serializer bricht diese Order nicht auf zugunsten "schönerer Sprache".
+3. **Harte vs. weiche Regeln sind explizit.** Ein `"allow_redesign": false` bleibt im Output-JSON exakt so — kein "preferably avoid", kein "try not to". Booleans bleiben Booleans, harte Constraints bleiben Negativ-Aussagen. Der Compiler hat eine Regel: boolsche Flags werden nicht paraphrasiert.
 
-**Konsequenz für die Slices 2+:** Der Paragraph-Serializer wird gegen den JSON-Serializer **empirisch gebencht** werden — wenn der Paragraph-Output schlechter in NanoBanana performt als der JSON-Output für den gleichen State, ist der Paragraph-Serializer kaputt und muss strukturtreuer gemacht werden. Nicht umgekehrt. Der JSON-Output ist der Referenz-Benchmark weil er strukturell "am reinsten" ist.
+4. **Reihenfolge ist Priorität.** Die Compile-Order (in welcher Reihenfolge Felder im Output erscheinen) spiegelt die Gewichtung. Wichtigste Constraints oben, weiche Präferenzen unten. JSON-Objekte haben eigentlich keine garantierte Key-Order, aber NanoBanana (und auch Grok Imagine) interpretiert die Reihenfolge in der Praxis als Priorität. Deshalb garantiert der JSON-Serializer **stable key ordering** — das ist eine harte Anforderung an die Serializer-Implementation in Slice 2.
+
+**Konsequenz für Slice 1:** Beim Schema-Design für `character_angle_study` werden diese vier Prinzipien direkt im Schema abgebildet. Jedes Feld das eine Priorität hat, bekommt ein `priority`- oder `authority_over`-Feld. Constraints sind Booleans oder typisierte Enums, nicht Freitext. Forbiddens sind Arrays. Die Compile-Order ist Teil des Schemas, nicht erst des Serializers.
+
+**Konsequenz für Slice 2:** Der JSON-Serializer ist keine einfache `JSON.stringify()`-Wrapper-Funktion — er iteriert über die Compile-Order, entfernt interne State-Felder die nicht in den Output gehören (`enabled: false` Blöcke, `schema_version`, Quellen-Metadaten), mergt Forbiddens aus mehreren Quellen, und produziert deterministisches JSON. Zwei identische States erzeugen byte-identische Outputs.
+
+**Konsequenz für die empirische Validierung:** Der Output des Slice-2-Compilers für den Default-4-Panel-State wird wortwörtlich gegen `DISTILLATIONS/angle-study-json-example.md` gediff-ed (modulo erlaubte Unterschiede durch die sieben Schema-Lücken-Erweiterungen). Wenn der Compiler-Output strukturell sauber ist aber in NanoBanana schlechter performt als das Test-JSON direkt, ist das ein **Compiler-Bug**, kein Grund vom JSON-Only-Default abzurücken.
 
 ---
 
@@ -232,7 +236,7 @@ Der Merge dedupliziert und erzeugt die finale Liste. Wenn ein Modul deaktiviert 
 ### 8.5 Keine Schema-Versionierung
 Das Beispiel-JSON hat kein `schema_version`-Feld. Das heißt: wenn wir das Schema später ändern, können wir gespeicherte User-Zustände nicht mehr lesen ohne kaputtzugehen.
 
-**Fix:** Top-Level-Feld `schema_version: "1.0.0"` im State. Der Validator akzeptiert nur bekannte Versionen. Bei Versions-Upgrades läuft eine Migration-Funktion.
+**Fix:** Top-Level-Feld `schema_version: "v1"` im State (simpler Counter, siehe Entscheidung §15 Item 6). Der Validator akzeptiert nur bekannte Versionen. Bei Versions-Upgrades läuft eine Migration-Funktion, deren Signatur beim ersten tatsächlichen Bump festgelegt wird.
 
 ### 8.6 Environment unterspezifiziert
 Das Beispiel-JSON hat `environment_preservation` als Binary (preserve ja/nein). Real brauchen wir mehrere Modi:
@@ -246,7 +250,7 @@ Das Beispiel-JSON hat `environment_preservation` als Binary (preserve ja/nein). 
 ### 8.7 Reference-Image-Payloads fehlen
 Das Beispiel-JSON hat `references.full_body_master` + `references.face_reference` mit `priority` und `authority_over`, aber **keinen Slot für das tatsächliche Bild**. Im echten Builder muss der User ein Referenzbild hochladen oder aus einer Sammlung wählen können.
 
-**Fix:** Referenzen kriegen einen `payload`-Slot: entweder `{ type: "url", value: "..." }` oder `{ type: "blob_id", value: "..." }` oder `{ type: "placeholder", label: "Reference A" }` (für den Prompt-Output wenn der User das Bild erst später pastet). Der Paragraph-Serializer interpretiert `placeholder` als "Reference A" in Fließtext.
+**Fix:** Referenzen kriegen einen `payload`-Slot: entweder `{ type: "url", value: "..." }` oder `{ type: "blob_id", value: "..." }` oder `{ type: "placeholder", label: "Reference A" }` (für den Prompt-Output wenn der User das Bild erst später pastet). Der JSON-Serializer übernimmt den `payload`-Slot wortwörtlich in den Output, so dass NanoBanana den Platzhalter beim Pasten durch das dann mitgeschickte Bild ersetzen kann.
 
 ### 8.8 Zusammenfassung
 Diese sieben Lücken **definieren die Schema-Arbeit in Slice 1**. Ohne sie ist das Schema nicht erweiterbar genug um den Custom Builder zu tragen. Sie sind nicht optional.
@@ -268,7 +272,7 @@ Der Custom Builder ist **eine einzige reaktive Seite**, kein Wizard, keine Steps
 │  [✓] Env Preserve    │  │F │ │R │ │L │ │B │                 │
 │      Mode: inherit   │  └──┘ └──┘ └──┘ └──┘                 │
 │  [ ] Style Overlay   │                                      │
-│  [ ] Custom Forbids  │  Output Mode: [Paragraph] [JSON]     │
+│  [ ] Custom Forbids  │  Output Format: JSON                 │
 ├──────────────────────┴──────────────────────────────────────┤
 │  Live Prompt Output                                         │
 │  ┌────────────────────────────────────────────────────────┐ │
@@ -289,7 +293,7 @@ Der UI-State entspricht **genau** dem JSON-Schema-State. Das heißt: es gibt kei
 Wenn der User aus Tier 1/2/3 einen Signature/Core/Trendy-Eintrag lädt, wird dessen JSON-State direkt in den Custom Builder geladen. Der User kann dann **editieren** — es gibt keinen Unterschied zwischen "geladenes Preset" und "custom gebaut", außer dass Signature-Einträge einen dezenten Hinweis anzeigen "originaler Jonas-Prompt, Änderungen auf eigene Faust".
 
 ### 9.4 Copy-Output
-Zwei Buttons: "Copy Paragraph" und "Copy JSON". Beide produzieren paste-ready Text den der User direkt in NanoBanana oder in ChatGPT oder in sein NanoBanana-System-Prompt-Setup pasten kann. Kein Auto-Submit.
+Ein Button: "Copy JSON". Produziert paste-ready JSON-Text den der User direkt in NanoBanana, Grok Imagine, ChatGPT oder sein NanoBanana-System-Prompt-Setup pasten kann. Kein Auto-Submit. Ein zusätzlicher Paragraph-Copy-Button ist **nicht** im MVP (siehe §15 Item 2); wenn später ein Use Case auftaucht, wird er als sekundärer Button nachgezogen ohne den Default zu verändern.
 
 ---
 
@@ -337,7 +341,7 @@ Wenn der User Panel-Rollen freitextlich überschreibt (z.B. "Panel 2 soll ein Lo
 - Der Custom Builder lädt diese Liste (read-only aus dem Look-Lab-State oder aus einer gemeinsamen Datenquelle).
 - Im Custom Builder erscheint ein "Style Overlay"-Modul. Beim Aktivieren kann der User aus der Look-Lab-Liste wählen.
 - Das gewählte `text_token` wird in den Compile-Flow eingefügt als zusätzliches Feld im `style_overlay`-Block.
-- Der Paragraph-Serializer fügt es als zusätzlichen Satz in den Prompt ein. Der JSON-Serializer fügt es als `style_overlay.text_token` Feld hinzu.
+- Der JSON-Serializer fügt es als `style_overlay.text_token` Feld in den Output ein, in der durch die Compile-Order definierten Position (typischerweise nach `style`, vor `pose`).
 
 ### 11.2 Phase 2 — Image Reference
 - Look Lab speichert zusätzlich Style-Referenzbilder.
@@ -386,20 +390,20 @@ Kurz-Diagnose damit nachfolgende Chats nicht die gleichen Fehler wiederholen:
 Der Rebuild wird in acht kleinen Slices gebaut, jeder mit klarem Done-Kriterium. Kein Slice wird begonnen bevor der vorherige in der UI funktioniert. **UI-First-Regel:** jeder Slice muss einen sichtbaren UI-Effekt haben oder er zählt nicht.
 
 ### Slice 1 — Schema-Fundament (Character Angle Study)
-- **Ziel:** JSON-Schema-Definition für `character_angle_study` v1.0.0, inklusive Modul-Toggle-Flags, Panel-Role-Strategy für 3/4/6/8 Panels, Forbiddens-Merge-Logik, Schema-Version-Feld.
+- **Ziel:** JSON-Schema-Definition für `character_angle_study` `v1`, inklusive Modul-Enabled-Flags, Panel-Role-Strategy für 3/4/6/8 Panels, Forbiddens-Merge-Logik, Schema-Version-Feld. Das Schema muss die vier Struktur-Prinzipien aus §5.4 abbilden: explizite `priority`/`authority_over`-Felder, Booleans für harte Regeln, Arrays für Listen, deklarierte Compile-Order.
 - **Artefakte:** `src/lib/cases/characterAngleStudy/schema.js`, `src/lib/cases/characterAngleStudy/panelRoleStrategy.js`, `src/lib/cases/characterAngleStudy/defaults.js`.
 - **Done:** Unit-Test der aus einem minimalen State einen gültigen, schema-validen JSON-State produziert und gegen den empirisch validierten JSON aus `DISTILLATIONS/angle-study-json-example.md` diff-bar ist (modulo `enabled`-Flags und Panel-Role-Ableitung).
 
-### Slice 2 — Compiler MVP (Paragraph + JSON)
-- **Ziel:** Compiler der einen `character_angle_study` State in zwei Outputs umwandelt — Paragraph-Prompt und JSON-Prompt — mit stabiler Compile-Order und Forbiddens-Merge.
-- **Artefakte:** `src/lib/compiler/index.js`, `src/lib/compiler/serializers/paragraph.js`, `src/lib/compiler/serializers/json.js`.
-- **Done:** Der Paragraph-Output für den Default-4-Panel-State matched den empirisch validierten GT-Prompt in `DISTILLATIONS/character-study-chatgpt-groundtruth.md` Step 2 **bis auf Whitespace und Wort-Reihenfolge identisch** (nicht byte-exact, aber semantisch identisch). Der JSON-Output matched `DISTILLATIONS/angle-study-json-example.md` strukturell.
-- **Jonas-OK-Gate:** Der gerenderte Paragraph-Output wird im Chat gepostet und muss explizit von Jonas abgenickt werden bevor irgendetwas committet wird.
+### Slice 2 — Compiler MVP (JSON-Serializer)
+- **Ziel:** Compiler der einen `character_angle_study` State in einen JSON-Prompt-Output umwandelt — mit stabiler Compile-Order, Forbiddens-Merge, Entfernung interner State-Felder (`enabled: false`-Blöcke, `schema_version`, Quellen-Metadaten) und deterministischem Key-Ordering.
+- **Artefakte:** `src/lib/compiler/index.js`, `src/lib/compiler/serializers/json.js`.
+- **Done:** Der JSON-Output für den Default-4-Panel-State matched `DISTILLATIONS/angle-study-json-example.md` strukturell (modulo die sieben Schema-Lücken-Erweiterungen aus §8 — z.B. neue Panel-Role-Strategy-Ableitung, `enabled`-Flags-Bereinigung). Zwei identische States erzeugen byte-identische Outputs.
+- **Jonas-OK-Gate:** Der gerenderte JSON-Output wird im Chat gepostet und muss explizit von Jonas in NanoBanana getestet und abgenickt werden bevor irgendetwas committet wird. Das ist der erste echte Live-Bench des Compilers gegen das bereits validierte Test-JSON.
 
 ### Slice 3 — Live Reactive UI Shell
-- **Ziel:** Der Custom-Builder-Tab im Grid Creator zeigt: Case-Dropdown (nur `character_angle_study` bisher), Rows/Cols/Orientation-Picker, Live-Prompt-Output (beide Serializer per Toggle), Copy-Button. Kein Module-Panel, kein Visual Preview.
+- **Ziel:** Der Custom-Builder-Tab im Grid Creator zeigt: Case-Dropdown (nur `character_angle_study` bisher), Rows/Cols/Orientation-Picker, Live-JSON-Prompt-Output, Copy-JSON-Button. Kein Module-Panel, kein Visual Preview.
 - **Artefakte:** `src/components/GridOperator/CustomBuilder.jsx` (neu), State-Hook, Copy-Button.
-- **Done:** User kann im Browser den Custom-Builder-Tab öffnen, Panel-Count ändern (3/4/6/8), zwischen Paragraph und JSON toggeln, den Output per Klick kopieren. Output stimmt mit Slice 2 überein.
+- **Done:** User kann im Browser den Custom-Builder-Tab öffnen, Panel-Count ändern (3/4/6/8), den live aktualisierten JSON-Output sehen und per Klick kopieren. Output stimmt mit Slice 2 überein.
 
 ### Slice 4 — Erstes Modul: Face Reference
 - **Ziel:** Face-Reference-Modul mit `enabled`-Flag. Aktivieren fügt `references.face_reference` in den State ein, Deaktivieren entfernt es.
@@ -408,7 +412,7 @@ Der Rebuild wird in acht kleinen Slices gebaut, jeder mit klarem Done-Kriterium.
 
 ### Slice 5 — Zweites Modul: Environment mit Modi
 - **Ziel:** Environment-Modul mit `mode`-Feld (`inherit_from_reference | neutral_studio | custom_text`). UI-Select, State-Integration, Compiler-Unterstützung für alle drei Modi.
-- **Artefakte:** `src/lib/cases/characterAngleStudy/modules/environment.js`, UI-Select, drei Compile-Pfade im Paragraph-Serializer.
+- **Artefakte:** `src/lib/cases/characterAngleStudy/modules/environment.js`, UI-Select, drei Compile-Pfade im JSON-Serializer (einer pro Modus — `inherit` entfernt den `environment`-Block komplett, `neutral_studio` setzt einen expliziten Studio-Backdrop-Block, `custom_text` emittiert den User-Text in einem dafür vorgesehenen Feld).
 - **Done:** Alle drei Modi produzieren sinnvolle Prompt-Varianten. Jonas testet alle drei in NanoBanana und gibt OK.
 
 ### Slice 6 — Live Visual Preview (SVG-Dummies)
@@ -439,7 +443,7 @@ Der Rebuild wird in acht kleinen Slices gebaut, jeder mit klarem Done-Kriterium.
 Punkte die im Chat aufgekommen sind und **noch nicht entschieden** sind. Jeder neue Chat muss diese lesen und **nicht selbst entscheiden** — Jonas entscheidet.
 
 1. **Panel-Order-Konvention bei 6/8 Panels.** Für 4 ist es klar (Front/R/L/Back). Für 6 und 8 ist die optimale Reihenfolge empirisch zu testen. Erste Idee: 6 = Front/FR/R/Back/L/FL, 8 = volle 45°-Rotation. Muss Jonas in NanoBanana testen.
-2. **Default Serializer.** ✅ ENTSCHIEDEN (2026-04-15 abends): **Paragraph** als Default-Output-Mode im Custom Builder. JSON-Modus bleibt als Toggle einen Klick weit weg für Power-User-Szenarien und empirische Benches. Begründung: Paragraph ist das Format das Jonas seit Monaten gewohnt ist und das in den meisten Community-Prompts erwartet wird — aber siehe §5.4: der Paragraph-Serializer muss strukturtreu genug sein um nicht gegen den JSON-Serializer empirisch zu verlieren.
+2. **Default Serializer.** ✅ ENTSCHIEDEN (2026-04-15 spätabends, korrigiert auf Basis zusätzlicher Jonas-Tests): **JSON-only im MVP.** Kein Paragraph-Serializer im ersten Release. Begründung: Jonas hat nach dem ersten Test weitere Prompts im strukturierten JSON-Format getestet und berichtet empirisch dass JSON "deutlich sauberer und konstanter" in NanoBanana performt als die Paragraph-Varianten. Plus transportable Vorteile — das gleiche JSON ist auch für Grok Imagine und vermutlich weitere strukturschwache Prompt-Interfaces direkt verwendbar, ohne Umformatierung. Ein Paragraph-Serializer ist YAGNI solange kein realer Use Case dafür auftaucht; wenn er irgendwann gebaut wird, kommt er als **sekundärer** Toggle-Button neben dem Default JSON, nicht als gleichberechtigter Zweitweg. Die Struktur-Einsicht aus §5.4 bleibt trotzdem relevant — sie prägt jetzt das Schema-Design in Slice 1 und das Serializer-Verhalten in Slice 2, nicht mehr einen Paragraph-vs-JSON-Bench.
 3. **Signature-Content.** Welche konkreten Sheets werden Tier 1 im MVP? Jonas hat einen Pool — die Auswahl kommt separat.
 4. **Tier 3 Scope im MVP.** Wird Tier 3 überhaupt im ersten Release gebaut oder später nachgezogen? Mein Vorschlag: später. Entscheidung offen.
 5. **Look Lab State-Format.** Wie genau sieht der Read-Adapter zu Look Lab aus — direkter State-Import oder gemeinsame Datenquelle? Abhängig vom aktuellen Look-Lab-Code, muss bei Slice 7 geklärt werden.
@@ -454,7 +458,7 @@ Punkte die im Chat aufgekommen sind und **noch nicht entschieden** sind. Jeder n
 Der MVP ist fertig wenn **alle** folgenden Punkte erfüllt sind:
 
 1. Custom Builder Tab funktioniert für `character_angle_study` mit 3/4/6/8 Panels.
-2. Beide Serializer (Paragraph + JSON) produzieren paste-ready Output.
+2. Der JSON-Serializer produziert paste-ready, deterministisches, strukturell sauberes JSON-Output.
 3. Mindestens 3 Module sind integriert: Face Reference, Environment (3 Modi), Style Overlay (Text-Token).
 4. Live Visual Preview zeigt SVG-Dummies für alle Angle-Study-Rollen.
 5. Normalizer-Two-Step-Flow ist integriert und getestet.

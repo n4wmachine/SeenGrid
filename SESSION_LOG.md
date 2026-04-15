@@ -110,4 +110,38 @@ Nach dem Purge-Commit und dem Merge auf main kamen im gleichen Chat noch drei Di
 
 ### Zusätzliche Notiz für den nächsten Chat (Slice 1 + Struktur-Hinweis)
 
-Beim Implementieren von Slice 1 (Schema-Fundament `character_angle_study`) und insbesondere Slice 2 (Compiler) ist §5.4 aus BUILD_PLAN.md Pflichtlektüre. Die Schema-Felder sollen so gestaltet sein dass sie **explizit Prioritäten und Constraints-vs-Präferenzen kodieren** — nicht einfach flache Key-Value-Pairs. Der Paragraph-Serializer muss so gebaut sein dass diese Hierarchien beim Rendern erhalten bleiben (kein "preferably", kein "try to", kein Weichspüler). Wenn in der Praxis beim ersten Bench gegen den JSON-Serializer rauskommt dass der Paragraph-Output schlechter ist, ist das ein **Serializer-Bug**, kein Grund den Paragraph-Default zu kippen.
+Beim Implementieren von Slice 1 (Schema-Fundament `character_angle_study`) und insbesondere Slice 2 (Compiler) ist §5.4 aus BUILD_PLAN.md Pflichtlektüre. Die Schema-Felder sollen so gestaltet sein dass sie **explizit Prioritäten und Constraints-vs-Präferenzen kodieren** — nicht einfach flache Key-Value-Pairs. Der JSON-Serializer muss diese Struktur deterministisch und mit stabiler Key-Order in den Output bringen (Booleans bleiben Booleans, Arrays bleiben Arrays, Prioritäten bleiben wörtlich erhalten).
+
+### Zweiter Nachtrag (2026-04-15 tief nachts) — Kurskorrektur auf JSON-only
+
+Jonas hat eine wichtige empirische Korrektur an der Serializer-Default-Entscheidung gemacht. Der Stand nach dem ersten Nachtrag war: Paragraph als Default, JSON als Toggle, Bench-Pflicht Paragraph-vs-JSON. Dieser Stand war aus einem "sensible default"-Gedanken des Chats heraus entschieden worden, nicht aus empirischer Messung.
+
+Jonas hat während des Purge-Commits parallel weitere Prompt-Tests in NanoBanana im strukturierten JSON-Format gemacht und berichtet wörtlich: "ich bin mir zu 100% sicher dass der json output als prompt deutlich sauberer und konstanter funktioniert. ich will den eigentlich als output, nicht wieder diesen standard prompt text." Plus ein wichtiger Zusatz: das gleiche JSON-Format funktioniert auch in Grok Imagine direkt ohne Umformatierung — das macht JSON zum transportablen Prompt-Format über mehrere Backends hinweg, nicht nur NanoBanana-spezifisch.
+
+**Entscheidung:** JSON-only im MVP. Kein Paragraph-Serializer im ersten Release. Option A aus dem Chat-Choice ("minimal, jede ungeschriebene Zeile kann nicht driften") wurde gewählt. Paragraph-Serializer ist explizit YAGNI bis ein realer Use Case auftaucht; wenn er kommt, wird er als sekundärer Toggle-Button nachgezogen ohne den Default zu verändern.
+
+**Edits in BUILD_PLAN.md in diesem Nachtrag:**
+
+1. **§4 (Custom Builder Beschreibung):** Copy-Output auf "Paste-ready JSON" umgestellt mit explizitem Grok-Imagine-Transport-Hinweis. Live-Prompt-Reaktivität auf "strukturiertes JSON-Prompt-Format" präzisiert.
+2. **§5 Architektur-Skizze:** `Serializer(s) → Output(s)` auf `JSON-Serializer → JSON-Prompt-Output` verkürzt.
+3. **§5.1 Konsequenz-Absatz:** Zwei-Output-Formen-Erklärung ersetzt durch JSON-only-Aussage + explizite State-JSON-vs-Prompt-JSON-Unterscheidung (dieser zweite Teil war bisher nirgends klar dokumentiert — er beantwortet die Frage die Jonas im Chat gestellt hat: "was muss noch angepasst werden für die module engine").
+4. **§5.3 Compiler-Regel 5:** "Zwei Output-Modi" → "Ein Output-Modus: JSON" mit stabilem Key-Ordering als harte Anforderung.
+5. **§5.4 Struktur-Einsicht:** Behalten, aber **umgewidmet**. Bisher: "Paragraph-Serializer darf nicht verwässern" + "Paragraph wird gegen JSON empirisch gebencht". Jetzt: Die vier Struktur-Prinzipien (Prioritäten wörtlich, Listen bleiben Listen, harte vs. weiche Regeln explizit, Reihenfolge ist Priorität) prägen das **Schema-Design in Slice 1** und das **Serializer-Verhalten in Slice 2** — nicht mehr einen Paragraph-Bench. Die Bench-Regel ist umformuliert zu "wenn der Compiler-Output strukturell sauber ist aber in NanoBanana schlechter als das Test-JSON performt, ist das ein Compiler-Bug".
+6. **§8.5 Schema-Versionierung:** `"1.0.0"` → `"v1"` (konsistent mit §15 Item 6 Simple-Counter-Entscheidung).
+7. **§8.7 Reference-Payloads:** Paragraph-Serializer-Referenz entfernt, durch JSON-Serializer-Placeholder-Handling ersetzt.
+8. **§9 ASCII-UI-Skizze:** "Output Mode: [Paragraph] [JSON]" → "Output Format: JSON".
+9. **§9.4 Copy-Output:** "Zwei Buttons: Copy Paragraph und Copy JSON" → "Ein Button: Copy JSON" mit explizitem Hinweis dass Paragraph-Button nicht im MVP ist.
+10. **§11.1 Look Lab Integration:** Paragraph-Serializer-Style-Overlay-Erklärung entfernt, durch JSON-Serializer-Beschreibung ersetzt.
+11. **§14 Slice 1:** Schema-Version `v1.0.0` → `v1`, zusätzliche Anforderung dass die vier Struktur-Prinzipien aus §5.4 direkt im Schema abgebildet werden.
+12. **§14 Slice 2:** "Compiler MVP (Paragraph + JSON)" → "Compiler MVP (JSON-Serializer)". Artefakte ohne `paragraph.js`. Done-Kriterium auf JSON-only umgestellt. Jonas-OK-Gate ist jetzt ein Live-Bench des Compiler-Outputs gegen das validierte Test-JSON.
+13. **§14 Slice 3:** "beide Serializer per Toggle" → "Live-JSON-Prompt-Output, Copy-JSON-Button". Done-Kriterium entsprechend.
+14. **§14 Slice 5:** "drei Compile-Pfade im Paragraph-Serializer" → "drei Compile-Pfade im JSON-Serializer" mit ausformulierter Modus-Beschreibung.
+15. **§15 Item 2 (Default Serializer):** Entscheidung **umgekehrt** von "Paragraph als Default" zu "JSON-only im MVP". Begründung: Jonas-empirische Tests + Grok-Imagine-Transport-Vorteil. Alter Stand war ein nicht-empirischer "sensible default", neuer Stand ist empirisch belegt.
+16. **§16 Done-Definition Punkt 2:** "Beide Serializer (Paragraph + JSON)" → "Der JSON-Serializer produziert paste-ready, deterministisches, strukturell sauberes JSON-Output".
+
+**Verifikation:** Nach den Edits wurde BUILD_PLAN.md zweimal geggrep't — einmal nach `[Pp]aragraph|[Ss]erializer`, einmal nach `[Tt]oggle|zwei.{0,10}[Oo]utput|Copy.{0,5}Paragraph`. Alle verbleibenden Treffer sind entweder (a) korrekt umgeschrieben auf JSON-Serializer, (b) explizit als "nicht im MVP" markiert, (c) historische Validierungs-Referenzen in §5.1/§12/§17 die wortwörtlich bleiben müssen weil sie beschreiben was Jonas in welcher Reihenfolge getestet hat, oder (d) Modul-Toggles (Face Reference an/aus, Environment-Modi) die mit Output-Toggles nichts zu tun haben. Keine halbgaren Paragraph-Reste im Plan.
+
+**Wichtig für den nächsten Chat:**
+- Der Custom Builder baut **ausschließlich JSON-Output** im MVP. Kein Format-Toggle, kein zweiter Serializer.
+- §5.4 bleibt **essenzielle Lektüre** — nicht weil wir einen Bench haben, sondern weil das Schema-Design in Slice 1 direkt davon abhängt. Schlechtes Schema → schlechtes Output-JSON → Vorteil dahin.
+- Die Unterscheidung **State-JSON vs. Prompt-JSON** (neu in §5.1 dokumentiert) ist die Antwort auf "was muss noch angepasst werden für die Module-Engine". Die Test-JSONs in DISTILLATIONS sind **Prompt-JSON-Zielzustände**, nicht State-Schemas. Der Compiler muss den State-JSON in ein Prompt-JSON übersetzen das (modulo sieben Schema-Lücken-Erweiterungen) dem Test-JSON strukturell entspricht.
