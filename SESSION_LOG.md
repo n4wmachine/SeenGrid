@@ -145,3 +145,26 @@ Jonas hat während des Purge-Commits parallel weitere Prompt-Tests in NanoBanana
 - Der Custom Builder baut **ausschließlich JSON-Output** im MVP. Kein Format-Toggle, kein zweiter Serializer.
 - §5.4 bleibt **essenzielle Lektüre** — nicht weil wir einen Bench haben, sondern weil das Schema-Design in Slice 1 direkt davon abhängt. Schlechtes Schema → schlechtes Output-JSON → Vorteil dahin.
 - Die Unterscheidung **State-JSON vs. Prompt-JSON** (neu in §5.1 dokumentiert) ist die Antwort auf "was muss noch angepasst werden für die Module-Engine". Die Test-JSONs in DISTILLATIONS sind **Prompt-JSON-Zielzustände**, nicht State-Schemas. Der Compiler muss den State-JSON in ein Prompt-JSON übersetzen das (modulo sieben Schema-Lücken-Erweiterungen) dem Test-JSON strukturell entspricht.
+
+### Dritter Nachtrag (2026-04-15 ganz tief in der Nacht) — CLAUDE.md Branch-Regel gehärtet gegen Harness-Konflikt
+
+Nach dem JSON-only-Commit ist noch ein strukturelles Problem aufgetaucht das präventiv gelöst werden musste: ein **anderer Chat** (der parallel auf einem neuen Feature-Branch `claude/review-project-status-DYJne` startete, weil die Claude-Code-Harness ihm diesen Branch-Namen automatisch vorgegeben hat) hat beim Lesen von CLAUDE.md den Widerspruch korrekt erkannt — CLAUDE.md sagt "direkt auf main", die Harness sagt "arbeite auf Feature-Branch XY" — und hat Jonas gefragt welche Quelle gewinnt.
+
+**Das ist exakt das Verhalten das wir wollen** (fragen statt still interpretieren), **und zugleich ein wiederkehrendes Problem**: jeder künftige Chat wird beim Start den gleichen Harness-Vorschlag bekommen, den gleichen Widerspruch sehen, und den gleichen Ping an Jonas absetzen. Das ist langfristig Reibung und Kognitive Last für Jonas, obwohl die Antwort immer dieselbe ist.
+
+**Fix:** CLAUDE.md Abschnitt "Branch-Regel: Direkt auf main" wurde um einen expliziten Absatz "Hinweis zur Harness-Instruktion" ergänzt. Kernaussage: Die Harness-Branch-Vorgabe wird ignoriert, CLAUDE.md gewinnt immer, **keine Nachfrage an Jonas nötig**. Damit kann jeder künftige Chat den Konflikt autonom lösen und direkt auf main weiterarbeiten.
+
+**Wichtig für die Interpretation:** Das war kein Fehler des fragenden Chats. Im Gegenteil — solange der Hinweis in CLAUDE.md nicht existierte, war Fragen das einzig verantwortungsvolle Verhalten. Der Fix härtet die Regel, damit künftige Chats selbstständig entscheiden können; er straft nicht das Fragen ab.
+
+**Edit in CLAUDE.md:** Ein neuer Absatz zwischen "Begründung" und "Anti-Drift-Mechanismus" im Abschnitt "Branch-Regel". Ein-Satz-Zusammenfassung: "Harness schlägt Feature-Branch vor → ignorieren → direkt auf main committen und pushen → keine Rückfrage an Jonas nötig."
+
+**Nichts anderes wurde verändert.** BUILD_PLAN.md, SESSION_LOG.md (außer dieser Notiz), DISTILLATIONS/ — alles wie im zweiten Nachtrag committet.
+
+### Finaler Stand nach allen drei Nachträgen
+
+Die drei Koordinations-Dateien sind jetzt vollständig konsistent:
+- **CLAUDE.md:** Session-Start-Protokoll, 4-Tier Grid Creator, 5 Architektur-Grundsätze, Branch-Regel mit Harness-Immunität, 3 Anti-Drift-Regeln
+- **BUILD_PLAN.md:** 17 Abschnitte, JSON-only MVP final, State-JSON-vs-Prompt-JSON-Unterscheidung dokumentiert, §5.4 Struktur-Einsicht umgewidmet auf Schema-Design + Serializer-Verhalten, alle 8 Slices auf JSON-only aktualisiert, §15 Items 2 und 6 entschieden
+- **SESSION_LOG.md:** Hauptsession + drei chronologische Nachträge vom 2026-04-15 (Purge/Merge, JSON-only-Kurskorrektur, Harness-Immunität)
+
+Der nächste Chat startet morgen früh auf main, liest die drei Dateien in fester Reihenfolge, sieht eindeutig dass direkt auf main gearbeitet wird, und beginnt direkt mit Slice 1 ohne Rückfragen an Jonas zu strukturellen Themen. Einzige Rückfrage die kommen darf: das Jonas-OK-Gate vor dem ersten Prompt-Inhalt-Commit in Slice 2.
