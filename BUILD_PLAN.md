@@ -125,6 +125,29 @@ Der Compiler nimmt einen JSON-State + den Case-Identifier und produziert Output.
 4. **Panel-Rollen werden deriviert, nicht gelesen.** Die `panels`-Liste im JSON ist **nicht hardcoded**, sondern kommt aus `layout.panel_count` + einer case-spezifischen Panel-Role-Strategy (siehe Abschnitt 8.1).
 5. **Zwei Output-Modi.** Der gleiche Compiler produziert entweder einen Paragraph-Prompt (durch Paragraph-Serializer) oder einen JSON-Prompt (durch JSON-Serializer mit stabiler Key-Order).
 
+### 5.4 Wichtige Nuance: Nicht das JSON ist der Hebel — die Struktur ist es
+
+**Aufgeklärt am 2026-04-15 abends nach weiteren NanoBanana-Tests:** Jonas hat nach dem initialen Angle-Study- und Normalizer-Test noch weitere Prompts im gleichen strukturierten Format probiert — und sie funktionieren **noch besser** als die unstrukturierten Paragraph-Varianten. ChatGPT hat dazu einen wichtigen Hinweis gegeben den wir hier festhalten:
+
+> **Der Qualitätsgewinn kommt nicht vom JSON-Format an sich, sondern von der Strukturierung und den klaren Prioritäten die das JSON-Format erzwingt.**
+
+Das ist ein bedeutender Unterschied in der Interpretation:
+
+- **Falsche Lesart:** "JSON ist das magische Format, alle Prompts sollten JSON sein."
+- **Richtige Lesart:** "Saubere Hierarchien, explizite Prioritäten (`priority`, `authority_over`), harte Trennung zwischen Constraints und Präferenzen, und atomare Listen statt Fließtext sind die Qualitäten die NanoBanana besser versteht. JSON erzwingt diese Qualitäten einfach am effizientesten. Der **gleiche** Paragraph-Prompt mit der **gleichen** strukturellen Klarheit würde auch besser performen als ein unstrukturierter."
+
+**Warum das wichtig ist für den Compiler:**
+
+1. **Paragraph-Serializer darf nicht verwässern.** Wenn der JSON-State klare Prioritäten hat (z.B. "Full-body master reference ist die höchste Autorität für X, Y, Z"), muss der Paragraph-Serializer diese Prioritäten **wörtlich übertragen**, nicht zu einer schmierigen Fließtext-Version zusammenziehen wo "höchste Autorität" zu "bitte beachte" wird.
+
+2. **Listen bleiben Listen.** Wenn Forbiddens im JSON eine Liste sind (`["studio_background", "new_location", ...]`), serialisiert der Paragraph-Serializer sie als saubere aufgezählte Struktur ("Do not add: studio background, new location, ..."), nicht als Fließtext-Paragraph ("Bitte keine Studio-Backgrounds verwenden und auch nicht die Location wechseln und ...").
+
+3. **Harte vs. weiche Regeln sind explizit.** Ein `"allow_redesign": false` im JSON darf im Paragraph nicht zu "preferably avoid" werden — es muss zu "Do not redesign" werden. Der Serializer respektiert den Boolean-Charakter.
+
+4. **Reihenfolge ist Priorität.** Die Compile-Order (in welcher Reihenfolge Felder im Output erscheinen) spiegelt die Gewichtung. Wichtigste Constraints oben, weiche Präferenzen unten. Der Paragraph-Serializer bricht diese Order nicht auf zugunsten "schönerer Sprache".
+
+**Konsequenz für die Slices 2+:** Der Paragraph-Serializer wird gegen den JSON-Serializer **empirisch gebencht** werden — wenn der Paragraph-Output schlechter in NanoBanana performt als der JSON-Output für den gleichen State, ist der Paragraph-Serializer kaputt und muss strukturtreuer gemacht werden. Nicht umgekehrt. Der JSON-Output ist der Referenz-Benchmark weil er strukturell "am reinsten" ist.
+
 ---
 
 ## 6. Constrained Modularity — Was das heißt und was nicht
@@ -416,11 +439,11 @@ Der Rebuild wird in acht kleinen Slices gebaut, jeder mit klarem Done-Kriterium.
 Punkte die im Chat aufgekommen sind und **noch nicht entschieden** sind. Jeder neue Chat muss diese lesen und **nicht selbst entscheiden** — Jonas entscheidet.
 
 1. **Panel-Order-Konvention bei 6/8 Panels.** Für 4 ist es klar (Front/R/L/Back). Für 6 und 8 ist die optimale Reihenfolge empirisch zu testen. Erste Idee: 6 = Front/FR/R/Back/L/FL, 8 = volle 45°-Rotation. Muss Jonas in NanoBanana testen.
-2. **Default Serializer.** Paragraph oder JSON als Default-Output-Mode im Custom Builder? Aktuell empfehle ich Paragraph als Default (weil nativer wirkt), JSON als Power-User-Toggle. Entscheidung offen.
+2. **Default Serializer.** ✅ ENTSCHIEDEN (2026-04-15 abends): **Paragraph** als Default-Output-Mode im Custom Builder. JSON-Modus bleibt als Toggle einen Klick weit weg für Power-User-Szenarien und empirische Benches. Begründung: Paragraph ist das Format das Jonas seit Monaten gewohnt ist und das in den meisten Community-Prompts erwartet wird — aber siehe §5.4: der Paragraph-Serializer muss strukturtreu genug sein um nicht gegen den JSON-Serializer empirisch zu verlieren.
 3. **Signature-Content.** Welche konkreten Sheets werden Tier 1 im MVP? Jonas hat einen Pool — die Auswahl kommt separat.
 4. **Tier 3 Scope im MVP.** Wird Tier 3 überhaupt im ersten Release gebaut oder später nachgezogen? Mein Vorschlag: später. Entscheidung offen.
 5. **Look Lab State-Format.** Wie genau sieht der Read-Adapter zu Look Lab aus — direkter State-Import oder gemeinsame Datenquelle? Abhängig vom aktuellen Look-Lab-Code, muss bei Slice 7 geklärt werden.
-6. **Schema-Versionierungs-Strategie.** Semver (1.0.0) oder simpler Counter (v1)? Migration-Funktion-Signatur? Details offen.
+6. **Schema-Versionierungs-Strategie.** ✅ ENTSCHIEDEN (2026-04-15 abends): **Simpler Counter** (`v1`, `v2`, `v3`…) als `schema_version`-Feld am Root jedes Case-Schemas. Begründung: Solo-Tool ohne öffentliche API, keine Überkomplikation durch Semver nötig. Breaking Change = Bump um 1. Migration-Funktion-Signatur (`migrate(oldState, fromVersion, toVersion)`) wird beim ersten tatsächlichen Versions-Bump festgelegt, nicht prospektiv.
 7. **`GridOperator.jsx` Umbau-Zeitpunkt.** Wird der alte Preset-Loader beibehalten bis Core-Tab komplett ist, oder parallel ersetzt? Vorschlag: parallel halten, wenn Custom Builder stabil ist, Core-Tab umstellen, dann Preset-Loader entfernen. Entscheidung offen.
 8. **Jonas-OK-Gate Mechanik.** Der Chat postet den gerenderten Prompt, Jonas antwortet "ja"/"nein". Was passiert bei "nein"? Rollback auf vorherigen bekannten guten State? Fix-Iteration ohne Commit? → Praxis zeigen.
 
