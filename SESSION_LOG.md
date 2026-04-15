@@ -168,3 +168,23 @@ Die drei Koordinations-Dateien sind jetzt vollständig konsistent:
 - **SESSION_LOG.md:** Hauptsession + drei chronologische Nachträge vom 2026-04-15 (Purge/Merge, JSON-only-Kurskorrektur, Harness-Immunität)
 
 Der nächste Chat startet morgen früh auf main, liest die drei Dateien in fester Reihenfolge, sieht eindeutig dass direkt auf main gearbeitet wird, und beginnt direkt mit Slice 1 ohne Rückfragen an Jonas zu strukturellen Themen. Einzige Rückfrage die kommen darf: das Jonas-OK-Gate vor dem ersten Prompt-Inhalt-Commit in Slice 2.
+
+### Vierter Nachtrag (2026-04-15 ganz spät) — Sandbox-Fossil-Protokoll in CLAUDE.md kodifiziert
+
+Unmittelbar nach dem dritten Nachtrag ist ein zweites Harness-Symptom aufgetreten: ein neuer Chat hat in seiner frischen Sandbox den gleichen 50-ahead/55-behind-Fossil-Zustand vorgefunden den wir heute mittag beim Merge-Drama schon hatten. Der Chat hat das Problem **vorbildlich diagnostiziert**: er hat den Stop-Hook ignoriert (der "bitte pushen" forderte), den Refuse-to-push-Reflex gezeigt (ein Force-Push hätte den echten origin/main inklusive allen heutigen Commits zerstört), die Diagnose in drei Sätzen an Jonas geliefert und auf explizites OK für `git fetch origin main && git reset --hard origin/main` gewartet.
+
+Das ist exakt das Verhalten das CLAUDE.md verlangt. Gleichzeitig wird es **jedem künftigen Chat in einer frischen Sandbox passieren**, weil die Claude-Code-Harness jede neue Sandbox aus einem eingefrorenen Pre-Reset-Snapshot bootstrappt. Der Roundtrip Chat → Jonas → "ja" → Chat kostet jedes Mal Sekunden, und Jonas antwortet jedes Mal gleich — aber die destructive-ops-Regel verbietet Pre-Authorization.
+
+**Fix:** CLAUDE.md Abschnitt "Branch-Regel" wurde um einen neuen Absatz "Hinweis zum Sandbox-Fossil-Zustand" + das dazugehörige 5-Schritt-Protokoll erweitert (zwischen dem Harness-Hinweis und dem Anti-Drift-Mechanismus). Die Kern-Entscheidung: das Protokoll **formalisiert** den Diagnose- und Ping-Ablauf, aber die Ausnahme von der destructive-ops-Regel ist **nicht pre-authorized**. Jonas-OK bleibt verpflichtend. Begründung: die Diagnose könnte falsch sein (z.B. ein Chat hat tatsächlich Arbeit in der Sandbox die nirgendwo sonst existiert), und der Mensch-im-Loop-Schutz ist wichtiger als die Sekunden die der Ping kostet. Das Protokoll kürzt nur die **Diagnose-Arbeit** ab, nicht die Authorization.
+
+**Was damit abgedeckt ist:** Jeder künftige Chat der beim Start den Fossil-Zustand sieht hat jetzt ein klares, geschriebenes 5-Schritt-Protokoll das er befolgen kann (nicht pushen → Stop-Hook ignorieren → Diagnose-Ping → warten → bei ja ausführen). Der Ping an Jonas bleibt, aber er ist dokumentiert als Standard-Protokoll, nicht als Unsicherheits-Rückfrage.
+
+### Endgültiger Stand nach vier Nachträgen (2026-04-15 Abend bis tiefe Nacht)
+
+Vier Commits auf main nach dem Purge:
+1. **`1d279e9`** — §5.4 Struktur-Einsicht + §15 Mikro-Entscheidungen (erster Nachtrag)
+2. **`801cfb1`** — JSON-only Kurskorrektur (zweiter Nachtrag)
+3. **`7d886a3`** — Harness-Branch-Immunität in CLAUDE.md (dritter Nachtrag)
+4. **Dieser Commit** — Sandbox-Fossil-Protokoll in CLAUDE.md (vierter Nachtrag)
+
+Die drei Koordinations-Dateien sind jetzt **vollständig konsistent und hart gegen beide bekannten Harness-Symptome** (automatischer Feature-Branch-Vorschlag + Sandbox-Fossil-Bootstrap). Der nächste Chat startet morgen früh auf main, liest die drei Dateien, löst den Fossil-Zustand per Protokoll (falls vorhanden), und legt mit Slice 1 los.
