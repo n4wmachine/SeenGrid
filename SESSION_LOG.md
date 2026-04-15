@@ -17,6 +17,75 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-15 — Slice 2: Compiler MVP (JSON-Serializer)
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Fortsetzung derselben Session wie Slice 1, nach Context-Compaction)
+
+### Kontext vor der Session
+- Slice 1 direkt davor fertig committet als `38eed9d` auf main (rebased über den parallelen Protokoll-Commit `2ea4f85`).
+- Vier Case-Dateien und 14 grüne Tests liegen unter `src/lib/cases/characterAngleStudy/`.
+- `src/lib/compiler/` existierte noch nicht — Slice 2 legt das Verzeichnis an.
+
+### Was in der Session passierte
+
+1. **Architektur-Entscheidung: Case-aware Dispatcher + dünner Kern-Serializer.** Der Compiler ist NICHT modul-agnostisch. `compile(state)` routet per `state.case` auf einen case-spezifischen Serializer, Unknown-Cases werfen laut. Das ist die direkte Code-Umsetzung von Constrained Modularity (§6) — es gibt bewusst keinen generischen "iteriere über alle Module" Pfad.
+
+2. **Drei neue Dateien für den Compiler:**
+   - `src/lib/compiler/index.js` — Dispatcher mit `compile(state)` (Objekt-Output für Tests/Preview) und `compileToString(state)` (deterministischer 2-Space-JSON-String für Paste). Zwei Entry-Points explizit, damit niemand in Tests mit unterschiedlichen Indents `JSON.stringify` aufruft.
+   - `src/lib/compiler/serializers/json.js` — Kern-Serializer für `character_angle_study`. Iteriert `COMPILE_ORDER` wörtlich, `emitField`-Switch pro Top-Level-Key, `SKIP`-Symbol für ausgelassene Felder. Separate Emit-Handler für `references`, `style_overlay`, `panels`, `environment`, `forbidden_elements`. `collectModuleForbiddens(state)` existiert als Hook für spätere Slices, gibt in Slice 2 ein leeres Array zurück (der 13-Item GT ist voll case_level).
+   - `src/lib/cases/characterAngleStudy/testHelpers.mjs` — `loadAngleStudyGt()` liest den GT-JSON-Block **zur Laufzeit** aus `DISTILLATIONS/angle-study-json-example.md` via Regex-Extraktion. Ersetzt den Slice-1-Ansatz (inline-GT-Konstante in `schema.test.mjs`). Damit gibt es exakt eine Wahrhetsquelle für die GT — die .md-Datei — und Tests pullen sie direkt.
+
+3. **Sieben Gap-Fixes im Serializer verdrahtet:**
+   - Gap 1 (Panels deriviert) → `emitPanels` ruft `panelRoleStrategy(state.layout.panel_count)` auf und fügt 1-basierten Index hinzu
+   - Gap 2 (Module-Toggles) → `emitReferences` skipt `face_reference` wenn `enabled:false`, `emitStyleOverlay` und `emitEnvironment` skippen ganze Blöcke wenn disabled
+   - Gap 3 (Look-Lab) → `emitStyleOverlay` emittiert `source`/`token`/`ref_id` wenn enabled, stript das `enabled`-Flag aus dem Output
+   - Gap 4 (Forbiddens-Merge) → `emitForbiddenElements` merget `case_level` + `collectModuleForbiddens()` + `user_level` in dieser Reihenfolge, dedupliziert first-seen
+   - Gap 5 (Schema-Versionierung) → `schema_version` und `case` sind state-only, werden im Top-Level-Loop nie besucht (sind nicht in `COMPILE_ORDER`)
+   - Gap 6 (Environment-Modi) → `emitEnvironment` kollabiert `inherit_from_reference` komplett weg (kein Block), emittiert `neutral_studio` als `{mode}`, `custom_text` als `{mode, custom_text}`
+   - Gap 7 (Reference-Payloads) → `stripRefState` behält `payload` nur wenn `type !== "placeholder"`; Placeholder-Payloads sind UI-Labels und landen nicht im NanoBanana-Output
+
+4. **Vier Struktur-Prinzipien (§5.4) zur Laufzeit enforced:**
+   - Key-Order → Top-Level-Loop iteriert `COMPILE_ORDER` wörtlich, Output-Keys werden in exakt der Reihenfolge inserted
+   - Listen bleiben Listen → kein `.join(", ")`, alle Arrays gehen 1:1 raus
+   - Booleans bleiben Booleans → keine String-Konversion von `orientation_rules.*`, `full_body_rules.*` etc.
+   - Reihenfolge = Priorität → durch Key-Order implizit garantiert
+
+5. **19 Acceptance-Tests geschrieben** in `src/lib/compiler/compiler.test.mjs` (plain Node, kein Vitest, konsistent mit Slice 1):
+   - Byte-Identität: `compile(defaultState)` deep-equal zur via `loadAngleStudyGt()` gelesenen GT, zusätzlich String-Vergleich via `compileToString`
+   - Determinismus: zwei `compile`-Aufrufe produzieren identische Outputs
+   - Error-Cases: invalid `schema_version`, unknown `case`, non-object state werfen
+   - Panel-Ableitung: `panel_count` 3/6/8 produzieren korrekte Array-Längen und 1-basierte Indices
+   - Module-Toggles: `face_reference` disabled → Block fehlt; `style_overlay` enabled → Block mit `source`/`token` erscheint, `enabled`-Flag ist gestrippt
+   - Environment-Modi: `inherit_from_reference` → kein Block; `neutral_studio` → `{mode}`; `custom_text` → `{mode, custom_text}`
+   - Forbiddens-Merge: case + user dedupliziert, case-Reihenfolge bleibt stabil am Anfang, user-only items werden first-seen angehängt
+   - Key-Order: Output-`Object.keys()` matched `COMPILE_ORDER` gefiltert auf präsente Keys
+   - State-only Stripping: `schema_version`, `case`, alle `references.*.enabled`, Placeholder-`payload`s sind NICHT im Output
+   - Real Payload Kept: `{type: "url", url: "..."}` Payloads landen im Output (damit Phase 2 Bild-Refs funktionieren)
+
+6. **Tests grün:** `node src/lib/compiler/compiler.test.mjs` → 19/19 passed.
+
+### Jonas-OK-Gates in dieser Session
+
+- **OK-Gate für Slice-2-Commit:** Chat hat den vollständig gerenderten `compileToString(buildDefaultState())`-Output im Chat gepostet (wörtlich byte-identisch zum GT-JSON aus `angle-study-json-example.md`), plus eine Kurz-Erklärung wie die sieben Gap-Fixes im Code wired sind und welche 19 Tests grün sind. Jonas hat "ja" gesagt mit expliziter Erwähnung dass er als Nicht-Coder auf den Augen-Diff und den passing Test-Output vertraut. Commit ging in einem Rutsch raus: 4 neue Dateien (`index.js`, `serializers/json.js`, `testHelpers.mjs`, `compiler.test.mjs`) + dieses SESSION_LOG-Update.
+- **Stop-Hook ignoriert:** Zwischen Test-Pass und Jonas-OK hat der Stop-Hook "untracked files"-Warnung gefeuert. Bewusst ignoriert (CLAUDE.md Anti-Drift-Gate gewinnt immer gegen generische Hook-Empfehlungen), Jonas explizit über den Grund informiert bevor committet wurde.
+
+### Stand am Ende der Session (nach Slice 2 Commit)
+
+- Branch: `main` (direkt)
+- Commits: Slice 2 als ein Commit auf main, direkt gepusht
+- Neue Dateien: `src/lib/compiler/index.js`, `src/lib/compiler/serializers/json.js`, `src/lib/cases/characterAngleStudy/testHelpers.mjs`, `src/lib/compiler/compiler.test.mjs`
+- Tests: `node src/lib/cases/characterAngleStudy/schema.test.mjs` → 14/14 grün (Slice 1), `node src/lib/compiler/compiler.test.mjs` → 19/19 grün (Slice 2). Gesamt 33/33.
+- Slice-1-Test hängt weiter an seinem eigenen Inline-GT-Duplikat; er wurde in Slice 2 bewusst NICHT auf `loadAngleStudyGt()` migriert, damit Slice 1 ein in sich geschlossener Commit-Block bleibt und der Slice-2-Commit nur Compiler-Code anfasst. Falls das Inline-Duplikat stört, ist das ein sauberer Einzel-Commit-Cleanup für einen späteren Slice.
+- Pre-Pivot Baseline: weiterhin unberührt. Kein UI-Code importiert den neuen Compiler.
+
+### Nächster Schritt
+
+**Slice 3 — Custom-Builder-UI-Shell** per BUILD_PLAN.md §14. Erster echter UI-Konsument des Compilers: eine neue Tab-Ansicht im Grid Creator (oder ein dediziertes Custom-Builder-Panel) die `buildDefaultState()` hält, per Controls modifiziert (panel_count Slider, face_reference Toggle, environment Mode-Dropdown, etc.) und `compileToString(state)` live anzeigt mit Copy-Button für den Paste in NanoBanana. Die SVG-Dummy-Preview aus CLAUDE.md "Live Visual Preview" ist Teil von Slice 3 oder wird in einen eigenen Slice 4 gesplittet — Entscheidung beim Start von Slice 3.
+
+**Jonas-OK-Gate für Slice 3:** Kein Prompt-Inhalt ändert sich in Slice 3 (nur UI und State-Manipulation über bestehendem Compiler), daher ist der Anti-Drift-Gate formal NICHT ausgelöst. Aber: vor dem Commit wird trotzdem ein Screenshot der laufenden UI im Chat gepostet und Jonas schaut einmal drüber.
+
+---
+
 ## 2026-04-15 — Slice 1: Schema-Fundament character_angle_study v1
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat
