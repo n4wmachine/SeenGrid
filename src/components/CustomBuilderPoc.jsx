@@ -211,6 +211,7 @@ export default function CustomBuilderPoc() {
   const [cols, setCols] = useState(4)
   const [rows, setRows] = useState(1)
   const [panelOrientation, setPanelOrientation] = useState('vertical')
+  const [faceReference, setFaceReference] = useState(true)
   const [copied, setCopied] = useState(false)
 
   const panelCount = cols * rows
@@ -225,6 +226,7 @@ export default function CustomBuilderPoc() {
     s.layout.panel_count = panelCount
     s.layout.panel_orientation = panelOrientation
     applyPanelArrangement(s.layout, cols, rows)
+    s.references.face_reference.enabled = faceReference
 
     if (!panelCountValid) {
       return {
@@ -243,7 +245,7 @@ export default function CustomBuilderPoc() {
     } catch (err) {
       return { ok: false, output: err?.message ?? String(err) }
     }
-  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid])
+  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid, faceReference])
 
   const onCopy = async () => {
     if (!compiled.ok) return
@@ -276,8 +278,8 @@ export default function CustomBuilderPoc() {
         <div style={styles.warning}>
           Provisorischer fünfter Tab. Finale Zieladresse:
           src/components/GridOperator/CustomBuilder.jsx nach Visual Overhaul.
-          Module-Toggles (face_reference, environment, style_overlay) kommen
-          erst in Slices 4/5/7.
+          Module-Toggles: face_reference (Slice 4) live. environment,
+          style_overlay kommen in Slices 5/7.
         </div>
 
         {/* (a) Case */}
@@ -361,6 +363,23 @@ export default function CustomBuilderPoc() {
           </select>
           <span style={styles.subheader}>
             individual panel shape, separate dimension from grid (§4 pt 1)
+          </span>
+        </div>
+
+        {/* (d) Face Reference — Slice 4 */}
+        <div style={styles.section}>
+          <span style={styles.sectionTitle}>modules</span>
+          <label style={{ ...styles.label, flexDirection: 'row', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={faceReference}
+              onChange={(e) => setFaceReference(e.target.checked)}
+              style={{ accentColor: 'var(--sg-accent, #7c6aef)' }}
+            />
+            face_reference
+          </label>
+          <span style={styles.subheader}>
+            adds a second reference image slot for facial identity
           </span>
         </div>
       </div>
