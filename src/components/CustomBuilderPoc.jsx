@@ -284,6 +284,8 @@ export default function CustomBuilderPoc() {
   const [faceReference, setFaceReference] = useState(true)
   const [envMode, setEnvMode] = useState('inherit_from_reference')
   const [envCustomText, setEnvCustomText] = useState('')
+  const [styleOverlay, setStyleOverlay] = useState(false)
+  const [styleToken, setStyleToken] = useState('')
   const [copied, setCopied] = useState(false)
 
   const panelCount = cols * rows
@@ -301,6 +303,9 @@ export default function CustomBuilderPoc() {
     s.references.face_reference.enabled = faceReference
     s.environment.mode = envMode
     s.environment.custom_text = envMode === 'custom_text' ? envCustomText : null
+    s.style_overlay.enabled = styleOverlay
+    s.style_overlay.source = styleOverlay ? 'look_lab' : null
+    s.style_overlay.token = styleOverlay && styleToken.trim() ? styleToken.trim() : null
 
     if (!panelCountValid) {
       return {
@@ -319,7 +324,7 @@ export default function CustomBuilderPoc() {
     } catch (err) {
       return { ok: false, output: err?.message ?? String(err) }
     }
-  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid, faceReference, envMode, envCustomText])
+  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid, faceReference, envMode, envCustomText, styleOverlay, styleToken])
 
   const onCopy = async () => {
     if (!compiled.ok) return
@@ -352,8 +357,8 @@ export default function CustomBuilderPoc() {
         <div style={styles.warning}>
           Provisorischer fünfter Tab. Finale Zieladresse:
           src/components/GridOperator/CustomBuilder.jsx nach Visual Overhaul.
-          Module-Toggles: face_reference (Slice 4), environment (Slice 5)
-          live. style_overlay kommt in Slice 7.
+          Module-Toggles: face_reference (4), environment (5),
+          style_overlay (7), visual preview (6) — alle live.
         </div>
 
         {/* (a) Case */}
@@ -484,6 +489,34 @@ export default function CustomBuilderPoc() {
             )}
             <span style={styles.subheader}>
               inherit = from reference · neutral_studio = plain backdrop · custom = your text
+            </span>
+          </div>
+
+          {/* (g) Style Overlay — Slice 7 */}
+          <div style={{ borderTop: '1px solid var(--sg-border, #2a2a2a)', paddingTop: '10px', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <label style={{ ...styles.label, flexDirection: 'row', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={styleOverlay}
+                onChange={(e) => setStyleOverlay(e.target.checked)}
+                style={{ accentColor: 'var(--sg-accent, #7c6aef)' }}
+              />
+              style_overlay
+            </label>
+            {styleOverlay && (
+              <label style={styles.label}>
+                style token
+                <input
+                  style={styles.control}
+                  type="text"
+                  placeholder="e.g. warm_neon_diner_glow"
+                  value={styleToken}
+                  onChange={(e) => setStyleToken(e.target.value)}
+                />
+              </label>
+            )}
+            <span style={styles.subheader}>
+              look lab style token · later: dropdown from saved styles
             </span>
           </div>
         </div>
