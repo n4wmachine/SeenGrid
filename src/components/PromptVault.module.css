@@ -2,7 +2,7 @@
   max-width: 1480px;
   margin: 0 auto;
   padding: 24px 32px;
-  height: calc(100vh - var(--sg-header-height, 96px));
+  height: calc(100vh - var(--sg-header-height, 56px));
   overflow-y: auto;
   display: flex;
   flex-direction: column;
