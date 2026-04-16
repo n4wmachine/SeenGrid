@@ -10,7 +10,7 @@
   padding: var(--sg-space-3xl);
   max-width: 1440px;
   margin: 0 auto;
-  min-height: calc(100vh - 96px);
+  min-height: calc(100vh - var(--sg-header-height));
   align-items: start;
 }
 
@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--sg-space-2xl);
-  max-height: calc(100vh - 96px);
+  max-height: calc(100vh - var(--sg-header-height));
   overflow-y: auto;
   padding-right: var(--sg-space-md);
   /* Generous bottom padding so the last section never kisses the viewport
@@ -34,9 +34,8 @@
 .controlsColumn::-webkit-scrollbar-thumb:hover { background: var(--sg-border-default); }
 
 /* ---- Operator Mode Toggle — Pills-style ----
-   Stage 3: Pills mit Hover-Glow, Signature-Pill trägt Gold-Akzent (echtes
-   Gold, nicht Teal). Core + Custom bleiben Teal. Signature ist immer
-   durch den Gold-Stern + Gold-Border hervorgehoben, egal ob aktiv. */
+   Pills mit Hover-Glow. Signature-Pill trägt eigenen Gold-Akzent,
+   Core + Custom nutzen den primären Gold-Akzent. */
 .modeToggle {
   display: flex;
   gap: var(--sg-space-sm);
@@ -72,7 +71,7 @@
 }
 .modeToggleBtn.active {
   color: var(--sg-text-primary);
-  background: rgba(43, 181, 178, 0.14);
+  background: rgba(212, 149, 42, 0.14);
   border-color: var(--sg-gold);
   font-weight: 600;
   box-shadow: 0 0 0 1px var(--sg-gold-glow), 0 0 16px var(--sg-gold-glow);
@@ -103,9 +102,7 @@
   line-height: 1;
 }
 
-/* Signature section: teal border + subtle teal glow so the panel is
-   clearly delineated, but no gold wash across the whole frame. Gold
-   stays as a spotlight on labels/items inside. */
+/* Signature section: gold border + subtle gold glow. */
 .section.signatureSection {
   border-color: var(--sg-gold-dim);
   box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle), 0 0 20px var(--sg-gold-glow-subtle);
@@ -137,7 +134,7 @@
 }
 .quickNavPill:hover {
   color: var(--sg-text-primary);
-  border-color: var(--sg-teal);
+  border-color: var(--sg-gold);
   background: var(--sg-bg-surface-2);
   transform: translateY(-1px);
 }
@@ -148,9 +145,9 @@
 /* Brief highlight flash on the target section after a quick-nav jump.
    Runs once (no infinite), then state clears and the class is removed. */
 @keyframes sgSectionFlash {
-  0%   { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
-  15%  { box-shadow: 0 0 0 2px rgba(43, 181, 178, 0.55), 0 0 22px rgba(43, 181, 178, 0.38); border-color: var(--sg-teal); }
-  100% { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
+  0%   { box-shadow: 0 0 0 0 rgba(212, 149, 42, 0.0), 0 0 0 0 rgba(212, 149, 42, 0.0); border-color: var(--sg-border-subtle); }
+  15%  { box-shadow: 0 0 0 2px rgba(212, 149, 42, 0.55), 0 0 22px rgba(212, 149, 42, 0.38); border-color: var(--sg-gold); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 149, 42, 0.0), 0 0 0 0 rgba(212, 149, 42, 0.0); border-color: var(--sg-border-subtle); }
 }
 .section.sectionFlash {
   animation: sgSectionFlash 1400ms ease-out;
@@ -336,8 +333,8 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--sg-gold);
-  background: rgba(43, 181, 178, 0.10);
-  border: 1px solid rgba(43, 181, 178, 0.20);
+  background: rgba(212, 149, 42, 0.10);
+  border: 1px solid rgba(212, 149, 42, 0.20);
   border-radius: var(--sg-radius-sm);
   padding: 2px 6px;
   flex-shrink: 0;
@@ -386,7 +383,7 @@
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px rgba(43, 181, 178, 0.10);
+  box-shadow: 0 0 8px rgba(212, 149, 42, 0.10);
   font-weight: 500;
   animation: chipPulse 200ms ease-out;
 }
@@ -585,12 +582,12 @@
 
 /* Hires — ≥1024px cell @ 2K, full-detail final-shot material */
 .dimAdviceHires {
-  border-color: rgba(43, 181, 178, 0.45);
-  background: rgba(43, 181, 178, 0.08);
+  border-color: rgba(212, 149, 42, 0.45);
+  background: rgba(212, 149, 42, 0.08);
 }
 .dimAdviceHires .dimAdviceIcon {
   color: var(--sg-gold-text);
-  background: rgba(43, 181, 178, 0.22);
+  background: rgba(212, 149, 42, 0.22);
 }
 .dimAdviceHires .dimAdviceQualityTag {
   color: var(--sg-gold-text);
@@ -598,12 +595,12 @@
 
 /* Standard — 512…1023px cell @ 2K, solid single-crop quality */
 .dimAdviceStandard {
-  border-color: rgba(43, 181, 178, 0.30);
-  background: rgba(43, 181, 178, 0.04);
+  border-color: rgba(212, 149, 42, 0.30);
+  background: rgba(212, 149, 42, 0.04);
 }
 .dimAdviceStandard .dimAdviceIcon {
   color: var(--sg-gold-text);
-  background: rgba(43, 181, 178, 0.16);
+  background: rgba(212, 149, 42, 0.16);
 }
 .dimAdviceStandard .dimAdviceQualityTag {
   color: var(--sg-gold-text);
@@ -745,8 +742,8 @@
    Analog zu MJStartframe .outputColumn. */
 .previewColumn {
   position: sticky;
-  top: 96px;
-  max-height: calc(100vh - 96px);
+  top: var(--sg-header-height);
+  max-height: calc(100vh - var(--sg-header-height));
   overflow-y: auto;
   padding-right: var(--sg-space-md);
   /* Match controlsColumn bottom breathing so outputBox doesn't hit the
@@ -878,7 +875,7 @@
   font-size: var(--sg-text-sm);
   line-height: 1.7;
   color: var(--sg-text-primary);
-  box-shadow: 0 0 16px rgba(43, 181, 178, 0.08);
+  box-shadow: 0 0 16px rgba(212, 149, 42, 0.08);
   white-space: pre-wrap;
   cursor: text;
   transition: max-height var(--sg-transition);

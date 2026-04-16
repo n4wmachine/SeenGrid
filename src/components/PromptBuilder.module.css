@@ -11,7 +11,7 @@
   padding: var(--sg-space-3xl);
   max-width: 1440px;
   margin: 0 auto;
-  min-height: calc(100vh - 96px);
+  min-height: calc(100vh - var(--sg-header-height));
   align-items: start;
 }
 
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--sg-space-2xl);
-  max-height: calc(100vh - 96px);
+  max-height: calc(100vh - var(--sg-header-height));
   overflow-y: auto;
   padding-right: var(--sg-space-md);
   padding-bottom: 22vh;
@@ -96,7 +96,7 @@
 }
 
 .section.hasActive {
-  border-color: rgba(43, 181, 178, 0.15);
+  border-color: rgba(212, 149, 42, 0.15);
 }
 
 /* Section Header */
@@ -157,8 +157,8 @@
   text-transform: none;
   letter-spacing: 0;
   color: var(--sg-gold-text);
-  background: rgba(43, 181, 178, 0.10);
-  border: 1px solid rgba(43, 181, 178, 0.20);
+  background: rgba(212, 149, 42, 0.10);
+  border: 1px solid rgba(212, 149, 42, 0.20);
   border-radius: 3px;
   padding: 1px 6px;
   white-space: nowrap;
@@ -172,7 +172,7 @@
   font-size: var(--sg-text-xs);
   font-family: var(--sg-font-mono);
   color: var(--sg-gold);
-  background: rgba(43, 181, 178, 0.12);
+  background: rgba(212, 149, 42, 0.12);
   border-radius: 3px;
   padding: 1px 5px;
   letter-spacing: 0;
@@ -230,7 +230,7 @@
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px rgba(43, 181, 178, 0.10);
+  box-shadow: 0 0 8px rgba(212, 149, 42, 0.10);
   font-weight: 500;
   animation: chipPulse 200ms ease-out;
 }
@@ -244,11 +244,11 @@
 /* ---- RECHTE SPALTE: Output Panel (STICKY) ---- */
 .rightColumn {
   position: sticky;
-  top: 96px;
+  top: var(--sg-header-height);
   display: flex;
   flex-direction: column;
   gap: var(--sg-space-xl);
-  max-height: calc(100vh - 96px);
+  max-height: calc(100vh - var(--sg-header-height));
   overflow-y: auto;
   padding-bottom: 22vh;
 }
@@ -440,7 +440,7 @@
 
 .outputBox.filled {
   border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 16px rgba(43, 181, 178, 0.08), 0 0 4px rgba(43, 181, 178, 0.06);
+  box-shadow: 0 0 16px rgba(212, 149, 42, 0.08), 0 0 4px rgba(212, 149, 42, 0.06);
 }
 
 /* Copy Button */
