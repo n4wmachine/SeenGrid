@@ -30,10 +30,12 @@ Konkret: Ein neuer Case = neue Config-Dateien unter `src/lib/cases/`, kein neuer
 
 Der Grid Creator hat vier Tiers:
 
-1. **Signature** — Jonas' handoptimierte, NanoBanana-validierte Sheets. Ein Klick, fertiger Prompt, direkt kopierbar. **Läuft nicht über die Engine** — das sind fertige, getestete Prompts die so bleiben wie sie sind. Aktuell Platzhalter, echte Sheets kommen rein sobald die Engine steht.
-2. **Core** — Basis-Starter-Templates die als **vorgefüllte Zustände in den Custom Builder laden** (nicht ein eigener Tab — der User kann sie danach frei editieren). **Läuft über die Engine.**
-3. **Trendy** — Kuratierte Community-Grids aus dem Prompt Vault / Trending-Prompts-Repo. **Eigenständige Preset-Sammlung mit Copy-Paste-Output** — werden NICHT in den Custom Builder geladen, weil Community-Prompts nicht zwingend in das Case/Modul-Schema passen. **Läuft nicht über die Engine.**
-4. **Custom Builder** — Die echte modulare Live-Engine. User wählt Case, Grid-Dimensionen, Panel-Orientierung, toggled Module, bearbeitet Panel-Rollen — Prompt passt sich in Echtzeit an. Live Visual Preview mit SVG-Dummies zeigt was jedes Panel darstellt. **Das Herzstück.**
+Jeder Tier spricht eine andere Zielgruppe / einen anderen Use Case an:
+
+1. **Custom Builder** — Für Leute die genau wissen was sie wollen und volle Kontrolle brauchen. Die echte modulare Live-Engine: Case wählen, Grid-Dimensionen, Panel-Orientierung, Module togglen, Panel-Rollen bearbeiten — Prompt passt sich in Echtzeit an. Live Visual Preview mit SVG-Dummies. **Das Herzstück.**
+2. **Core** — Für schnelle Drafts oder eilige Leute. Vorgefertigte Starter-Templates für Standard-Cases (z.B. Standard Character Sheet). **Direkt im Custom Builder auswählbar** als Toggle `[ ] Custom [ ] Core` — der User entscheidet ob er bei Null anfängt oder mit einem vorgefüllten Template das er danach frei anpassen kann. **Läuft über die Engine.**
+3. **Signature** — Für Leute die erprobte Klassiker übernehmen wollen wenn er auf ihren Use Case passt. Jonas' handoptimierte, NanoBanana-validierte Sheets. Ein Klick, fertiger Prompt, direkt kopierbar. **Läuft nicht über die Engine** — fertige, getestete Prompts die so bleiben wie sie sind.
+4. **Trendy** — Casual / Social Media Zielgruppe. Kuratierte Community-Grids aus dem Prompt Vault / Trending-Prompts-Repo. Eigenständige Preset-Sammlung mit Copy-Paste-Output. **Läuft nicht über die Engine** — Community-Prompts passen nicht zwingend in das Case/Modul-Schema.
 
 ---
 
