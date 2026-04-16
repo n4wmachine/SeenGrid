@@ -1,19 +1,20 @@
 # CLAUDE.md — SeenGrid
 
-**Datum der letzten Aktualisierung:** 2026-04-15
+**Datum der letzten Aktualisierung:** 2026-04-16
 **Aktiver Branch:** `main` (direkt, keine Feature-Branches — siehe Branch-Regel unten)
 
 ---
 
 ## Session-Start-Protokoll (für jeden neuen Chat)
 
-Jeder neue Chat liest diese drei Dateien in dieser Reihenfolge, bevor er irgendwas tut:
+Jeder neue Chat liest diese vier Dateien in dieser Reihenfolge, bevor er irgendwas tut:
 
 1. **CLAUDE.md** (diese Datei) — Was SeenGrid ist, wie der Nutzer arbeitet, Architektur-Grundsätze, Regeln
 2. **BUILD_PLAN.md** — Der vollständige Rebuild-Plan mit allen Details, Schema-Gaps, Slices, offenen Entscheidungen
 3. **SESSION_LOG.md** — Chronologisches Log aller Sessions (was wurde wann gemacht, was ist der aktuelle Stand)
+4. **MODULE_AND_CASE_CATALOG.md** — Verbindlicher Katalog aller Cases, Module und Kompatibilitäten. Kein Chat darf Cases oder Module erfinden die dort nicht stehen.
 
-Diese drei Dateien zusammen sind die vollständige Wahrheit. Es gibt keine anderen Koordinations-Dokumente. Kein Chat startet ohne diese drei Dateien vollständig gelesen zu haben.
+Diese vier Dateien zusammen sind die vollständige Wahrheit. Es gibt keine anderen Koordinations-Dokumente. Kein Chat startet ohne diese vier Dateien vollständig gelesen zu haben.
 
 Am Ende jeder Session aktualisiert der Chat **SESSION_LOG.md** mit einem neuen Eintrag (Datum, was gemacht, nächster Schritt). BUILD_PLAN.md wird nur aktualisiert wenn sich strukturell was am Plan ändert. CLAUDE.md wird nur angepasst wenn Grundsätze sich ändern.
 
