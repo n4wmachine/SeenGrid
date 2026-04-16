@@ -17,6 +17,72 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-16 — Slice-3-POC browser-verified + Feature-Request Panel-Role-Customization
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (gleiche Session wie Slice-3-Fixup, direkt nach dem Push)
+
+### Browser-Verifikation Slice-3-Fixup
+Jonas hat nach dem Push von `55cf803` den POC-Tab im laufenden Dev-Server geöffnet. Verifiziert: drei Control-Sektionen sichtbar (`case` / `grid dimensions` / `panel orientation`), keine Module-Toggles, kein Visual Preview. **§14 Slice 3 ist damit nach Spec**. Das Screenshot-Regel-Delta aus dem Fixup-Eintrag ist damit post-hoc aufgelöst — `55cf803` bleibt auf main, kein Revert nötig.
+
+### Feature-Request: Panel-Role-Customization (post-Slice-8)
+
+**Jonas O-Ton:**
+> "ist doch logisch dass der user auch auswählen können muss per button welche angles er überhaupt will in jedem panel. jetzt ist es so dass ich den defualt prompt genommen habe und es kam front, left, right. was wenn ich genau front, 3/4 und back brauche? das und weitere solche dinge sind hoffentlich später alle modular einstellbar. DAS ist der sinn des gnazen, sonst könnte man ein paar sheets hochladen als preset bibliothek."
+
+**Aktueller Stand (Slice 1):** `panelRoleStrategy(count)` in `src/lib/cases/characterAngleStudy/panelRoleStrategy.js` liefert fest:
+- `3` → `[front, right_profile, left_profile]`
+- `4` → `[front, right_profile, left_profile, back]`
+- `6` → (empirisch offen, §15 Item 1)
+- `8` → (empirisch offen)
+
+Der User kann **nicht wählen** welche der ~8 möglichen Rollen er pro Panel haben will (`front`, `front_right`, `right_profile`, `back_right`, `back`, `back_left`, `left_profile`, `front_left`).
+
+**Geplante Erweiterung (additiv, kein Rewrite):**
+
+| Schicht | Änderung | Umfang |
+|---|---|---|
+| Schema (Slice 1) | Optionales Feld `layout.panel_roles_override: string[] \| null`, Default `null` | ~5 Zeilen |
+| Validator (Slice 1) | Wenn override gesetzt: `length === panel_count`, jeder Eintrag in Case-Role-Whitelist | ~10 Zeilen |
+| Compiler (Slice 2) | `emitPanels` prüft `override`; wenn gesetzt, nutzt Liste direkt statt `panelRoleStrategy()` | ~5 Zeilen |
+| UI | Neuer Control-Block "panel roles" mit N Dropdowns (einer pro Panel, Optionen = Case-Whitelist) | neue Section im POC |
+
+**Kein bestehender Code muss angefasst werden außer den dokumentierten Extension-Hooks.** Das ist derselbe Erweiterungs-Pfad wie für Face-Reference / Environment / Style-Overlay in den Slices 4/5/7, nur mit anderem Ziel-Feld.
+
+**Verwandte Feature-Wünsche die genauso laufen sollen** (alles post-Slice-8, alles additiv): pro-Panel Pose-Variation, pro-Panel Expression-Variation, pro-Panel Lighting-Variation. Jedes wird ein kleines Modul mit dem gleichen Muster (optionales Override-Array im Layout oder eigener Block, Compiler-Hook, UI-Section).
+
+**Wo es im Slice-Plan landet:** Dieser Feature-Request ist aktuell **nicht** im BUILD_PLAN.md §14 als eigener Slice notiert — er gehört in die "Was nach Slice 8 kommt"-Phase. Der Plan bleibt trotzdem unverändert (Variante A aus dem letzten Eintrag); wenn der Chat der Slice 8 abschließt, entscheidet Jonas welche Post-Slice-8-Erweiterung als Erstes kommt, und Panel-Role-Customization ist von jetzt an explizit eine der Optionen.
+
+### Jonas-Zustand: kognitiv am Limit
+
+Jonas ist seit 4-5 Tagen nonstop am Grid Creator, hat andere SeenGrid-Features die warten, frustriert von Chats mit "10 offenen Fragen und wall of text". Wörtlich:
+
+> "ich dachte normalerweise baut man eine funktionierende abgespeckte version und erweitert sie dann später. ich würde gerne einmal diese kernfeature hier zuende bekommen ohne nohc weitere 3 tage im chatdschungel mit 10 fragezeichen über dem kopf meine letzte kognitive fähigkeiten zu verbraten."
+
+### Harte Anweisungen an den nächsten Chat (verbindlich)
+
+1. **CLAUDE.md + BUILD_PLAN.md + SESSION_LOG.md komplett lesen** bevor irgendeine Frage an Jonas geht. Wenn die Antwort in einer der drei Dateien steht: selbst raussuchen, nicht fragen.
+2. **§14-Slice-Text wortwörtlich zitieren** im ersten Bau-Schritt (CLAUDE.md Spec-Compliance Punkt 1 — diese Regel wurde eingeführt weil genau das vergessen wurde und der Chat aus §9 gebaut hat statt aus §14 Slice 3).
+3. **Maximal ein Satz pro Konzept in Jonas' Richtung.** Keine 5-Absatz-Erklärungen. Keine Wall of Text. Keine 10 nummerierten Listen pro Message.
+4. **Jonas ist Nicht-Coder.** Technische Details gehören in Code-Kommentare, nicht in Chat-Antworten. Wenn ein technisches Detail im Chat erscheint, dann einzeilig und in seiner Sprache ("das feld lügt sonst" statt "der serializer würde einen untested enum-wert emittieren").
+5. **Bei Abweichung zur Spec:** nicht diskutieren, Spec gewinnt. Review-Gate ist Jonas' einzige Schutzschicht gegen weitere verlorene Tage.
+6. **Stop-Hook-"uncommitted changes"-Warnung:** IGNORIEREN solange Jonas-OK-Gate offen ist. Nie aus Panik committen.
+7. **Nicht proaktiv arbeiten während Jonas pausiert.** Warten bis explizites "los" / "weiter" / "slice X".
+
+### Stand am Ende dieser Session
+
+- Branch: `main` (direkt)
+- `origin/main` HEAD: `55cf803` (Slice-3-Fixup)
+- Slice 3 browser-verified, Spec-compliant
+- Feature-Request Panel-Role-Customization **hier offiziell dokumentiert**, Implementation post-Slice-8
+- BUILD_PLAN.md unverändert (Variante A bestätigt)
+- Jonas pausiert
+
+### Nächster Schritt
+
+**Slice 4 — Face Reference Modul** per BUILD_PLAN.md §14 Slice 4. Erstes echtes Modul-Toggle im POC. **Startet nur auf explizites Jonas-Go** (z.B. "slice 4 los"). Nicht proaktiv beginnen.
+
+---
+
 ## 2026-04-16 — Slice 3 Fixup: POC Rewrite auf §14-Scope
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Bau-Rolle, Fortsetzung der Slice-1/2/3-Session nach Context-Compaction)
