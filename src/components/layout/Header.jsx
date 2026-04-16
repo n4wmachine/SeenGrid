@@ -64,6 +64,7 @@ export default function Header({ activeTab, tabs, onTabChange }) {
         <span className="headerWordmark">
           Seen<span className="headerWordmarkAccent">Grid</span>
         </span>
+        <span className="headerSubtitle">AI Film Operator</span>
       </div>
 
       <nav className="tabNav" role="tablist">

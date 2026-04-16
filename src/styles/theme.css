@@ -1,43 +1,51 @@
-:root {
-  --sg-black:            #080808;
-  --sg-bg-root:          #0a0a0a;
-  --sg-bg-app:           #111111;
-  --sg-bg-surface-0:     #141414;
-  --sg-bg-surface-1:     #181818;
-  --sg-bg-surface-2:     #1e1e1e;
-  --sg-bg-surface-3:     #242424;
-  --sg-bg-elevated:      #2a2a2a;
-  --sg-bg-hover:         #1e1e1e;
-  --sg-bg-input:         #0e0e0e;
-  --sg-border-subtle:    #1c1c1c;
-  --sg-border-default:   #282828;
-  --sg-border-strong:    #383838;
-  --sg-border-focus:     #2bb5b2;
-  --sg-text-primary:     #e0e0e0;
-  --sg-text-secondary:   #909090;
-  --sg-text-tertiary:    #606060;
-  --sg-text-disabled:    #404040;
-  --sg-text-inverse:     #080808;
-  /* Placeholder hints in input/textarea — bright enough to read against
-     #141414 surfaces (~3.8:1 contrast) but still clearly "not real text". */
-  --sg-placeholder:      #7a7a7a;
+/* ============================================================
+   SEENGRID — THEME.CSS
+   Design-System. Referenz: DaVinci Resolve, Runway ML, Rive.
+   ============================================================ */
 
-  /* ACCENT: Teal aus dem Logo */
-  --sg-gold-dim:         #1e8785;
-  --sg-gold:             #2bb5b2;
-  --sg-gold-bright:      #3dcfcc;
-  --sg-gold-text:        #5ae0dd;
-  --sg-gold-glow:        rgba(43, 181, 178, 0.12);
-  --sg-gold-glow-strong: rgba(43, 181, 178, 0.22);
-  --sg-gold-glow-subtle: rgba(43, 181, 178, 0.06);
-  --sg-gold-gradient:    linear-gradient(135deg, #2bb5b2 0%, #3dcfcc 100%);
+:root {
+  /* ---- SURFACE PALETTE (dunkel → hell, blue-tinted) ---- */
+  --sg-black:            #050508;
+  --sg-bg-root:          #07070c;
+  --sg-bg-app:           #0a0a12;
+  --sg-bg-surface-0:     #0d0d17;
+  --sg-bg-surface-1:     #11111d;
+  --sg-bg-surface-2:     #161624;
+  --sg-bg-surface-3:     #1b1b2b;
+  --sg-bg-elevated:      #1f1f32;
+  --sg-bg-hover:         #24243a;
+  --sg-bg-input:         #0e0e19;
+
+  /* ---- BORDERS ---- */
+  --sg-border-subtle:    #1a1a2e;
+  --sg-border-default:   #242440;
+  --sg-border-strong:    #2e2e4d;
+  --sg-border-focus:     #d4952a;
+
+  /* ---- TEXT ---- */
+  --sg-text-primary:     #e8e8f0;
+  --sg-text-secondary:   #9a9ab0;
+  --sg-text-tertiary:    #6a6a82;
+  --sg-text-disabled:    #4a4a60;
+  --sg-text-inverse:     #050508;
+  --sg-placeholder:      #5a5a72;
+
+  /* ---- ACCENT: GOLD (primär für alle UI-Interaktionen) ---- */
+  --sg-gold-dim:         #8a6518;
+  --sg-gold:             #d4952a;
+  --sg-gold-bright:      #e8a420;
+  --sg-gold-text:        #f0b840;
+  --sg-gold-glow:        rgba(212, 149, 42, 0.25);
+  --sg-gold-glow-strong: rgba(212, 149, 42, 0.45);
+  --sg-gold-glow-subtle: rgba(212, 149, 42, 0.10);
+  --sg-gold-gradient:    linear-gradient(135deg, #d4952a 0%, #e8a420 50%, #f0b840 100%);
+
+  /* ---- ACCENT: TEAL (sekundär — nur Logo + rare Highlights) ---- */
   --sg-teal:             #2bb5b2;
   --sg-teal-dim:         #1e8785;
-  --sg-teal-glow:        rgba(43, 181, 178, 0.15);
+  --sg-teal-glow:        rgba(43, 181, 178, 0.20);
 
-  /* SIGNATURE GOLD: echtes Gold für SeenGrid Signature Elemente
-     (Stern, Signature-Mode-Button, Signature-Preset-Gruppen, Badges).
-     Teal bleibt die Standard-Akzentfarbe für Core/Custom/UI. */
+  /* ---- SIGNATURE GOLD (für Signature-Mode-Elemente) ---- */
   --sg-signature-gold:        #d4a256;
   --sg-signature-gold-bright: #e8bd6b;
   --sg-signature-gold-dim:    #a07e3a;
@@ -46,21 +54,24 @@
   --sg-signature-glow-subtle: rgba(212, 162, 86, 0.07);
   --sg-signature-gradient:    linear-gradient(135deg, #d4a256 0%, #e8bd6b 100%);
 
+  /* ---- SEMANTIC ---- */
   --sg-success:          #2ea043;
   --sg-warning:          #d4952a;
   --sg-error:            #c44040;
   --sg-info:             #2bb5b2;
 
-  --sg-chip-bg:          #141414;
-  --sg-chip-bg-hover:    #1e1e1e;
-  --sg-chip-bg-active:   rgba(43, 181, 178, 0.08);
-  --sg-chip-border:      #1c1c1c;
-  --sg-chip-border-hover:#282828;
-  --sg-chip-border-active:#2bb5b2;
-  --sg-chip-text:        #909090;
-  --sg-chip-text-hover:  #c0c0c0;
-  --sg-chip-text-active: #5ae0dd;
+  /* ---- CHIP STATES ---- */
+  --sg-chip-bg:          #0f0f1e;
+  --sg-chip-bg-hover:    #17172c;
+  --sg-chip-bg-active:   rgba(212, 149, 42, 0.10);
+  --sg-chip-border:      #1c1c34;
+  --sg-chip-border-hover:#28284a;
+  --sg-chip-border-active:#d4952a;
+  --sg-chip-text:        #8a8aa0;
+  --sg-chip-text-hover:  #c0c0d0;
+  --sg-chip-text-active: #f0b840;
 
+  /* ---- TYPOGRAPHY ---- */
   --sg-font-body:        'Space Grotesk', system-ui, sans-serif;
   --sg-font-mono:        'JetBrains Mono', 'Fira Code', monospace;
 
@@ -72,6 +83,7 @@
   --sg-text-xl:          1.25rem;
   --sg-text-2xl:         1.5rem;
 
+  /* ---- SPACING ---- */
   --sg-space-xs:         4px;
   --sg-space-sm:         8px;
   --sg-space-md:         12px;
@@ -82,71 +94,139 @@
   --sg-space-4xl:        40px;
   --sg-space-5xl:        48px;
 
+  /* ---- RADII ---- */
   --sg-radius-sm:        3px;
   --sg-radius-md:        4px;
   --sg-radius-lg:        6px;
   --sg-radius-xl:        8px;
 
+  /* ---- SHADOWS ---- */
   --sg-shadow-sm:        0 1px 2px rgba(0,0,0,0.5);
-  --sg-shadow-md:        0 2px 8px rgba(0,0,0,0.4);
-  --sg-shadow-lg:        0 4px 16px rgba(0,0,0,0.5);
-  --sg-shadow-gold:      0 0 12px rgba(43,181,178,0.12);
+  --sg-shadow-md:        0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+  --sg-shadow-lg:        0 4px 16px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
+  --sg-shadow-gold:      0 0 12px rgba(212,149,42,0.15), 0 0 4px rgba(212,149,42,0.10);
   --sg-shadow-inset:     inset 0 1px 3px rgba(0,0,0,0.4);
 
+  /* ---- TRANSITIONS ---- */
   --sg-transition-fast:  80ms ease;
   --sg-transition:       120ms ease;
   --sg-transition-slow:  200ms ease;
 
-  --sg-header-height:    96px;
+  /* ---- LAYOUT ---- */
+  --sg-header-height:    56px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/* ============================================================
+   GLOBAL RESETS & BASE
+   ============================================================ */
 
-body, button, input, select, textarea, option, label, span, div, p, a, li, ol, ul, h1, h2, h3, h4, h5, h6 {
-  font-family: var(--sg-font-body);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
+  font-family: var(--sg-font-body);
   font-size: var(--sg-text-base);
+  font-weight: 400;
+  line-height: 1.5;
   color: var(--sg-text-primary);
   background: var(--sg-black);
   min-height: 100vh;
   overflow: hidden;
 }
 
-#root { background: var(--sg-bg-root); min-height: 100vh; overflow: hidden; }
+#root {
+  background: var(--sg-bg-root);
+  min-height: 100vh;
+  overflow: hidden;
+}
 
-::-webkit-scrollbar { width: 6px; }
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--sg-border-default); border-radius: 3px; }
+::-webkit-scrollbar-thumb {
+  background: var(--sg-border-default);
+  border-radius: 3px;
+}
 ::-webkit-scrollbar-thumb:hover { background: var(--sg-border-strong); }
+::-webkit-scrollbar-corner { background: transparent; }
 * { scrollbar-width: thin; scrollbar-color: var(--sg-border-default) transparent; }
 
-::selection { background: rgba(43, 181, 178, 0.25); color: var(--sg-text-primary); }
-:focus-visible { outline: 1px solid var(--sg-gold); outline-offset: 2px; }
-button:focus:not(:focus-visible), input:focus:not(:focus-visible) { outline: none; }
+/* ============================================================
+   SELECTION
+   ============================================================ */
 
-input[type="text"], input[type="search"], textarea {
+::selection {
+  background: rgba(212, 149, 42, 0.30);
+  color: var(--sg-text-primary);
+}
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
+
+:focus-visible {
+  outline: 1px solid var(--sg-gold);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible) { outline: none; }
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+
+input[type="text"],
+input[type="search"],
+textarea {
   font-family: var(--sg-font-body);
-  font-size: var(--sg-text-md);
+  font-size: var(--sg-text-base);
   color: var(--sg-text-primary);
   background: var(--sg-bg-input);
   border: 1px solid var(--sg-border-subtle);
-  border-radius: var(--sg-radius-lg);
+  border-radius: var(--sg-radius-md);
   padding: var(--sg-space-md) var(--sg-space-lg);
   transition: border-color var(--sg-transition), box-shadow var(--sg-transition);
   width: 100%;
   outline: none;
 }
-input[type="text"]:focus, input[type="search"]:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus {
   border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 0 3px var(--sg-gold-glow-subtle);
+  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
 }
-input::placeholder, textarea::placeholder { color: var(--sg-placeholder); }
+input::placeholder,
+textarea::placeholder {
+  color: var(--sg-placeholder);
+  font-style: italic;
+}
 
-button { font-family: var(--sg-font-body); cursor: pointer; border: none; background: none; color: inherit; }
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 
+button {
+  font-family: var(--sg-font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* Primary (copy, generate) */
 .sg-btn-primary {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
@@ -156,50 +236,63 @@ button { font-family: var(--sg-font-body); cursor: pointer; border: none; backgr
   color: var(--sg-text-inverse);
   background: var(--sg-gold-gradient);
   border: none;
-  border-radius: var(--sg-radius-lg);
-  padding: 12px var(--sg-space-2xl);
+  border-radius: var(--sg-radius-md);
+  padding: var(--sg-space-md) var(--sg-space-2xl);
   transition: opacity var(--sg-transition), box-shadow var(--sg-transition);
+  box-shadow: var(--sg-shadow-sm);
 }
-.sg-btn-primary:hover { box-shadow: var(--sg-shadow-gold); opacity: 0.92; }
+.sg-btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: var(--sg-shadow-gold);
+}
+.sg-btn-primary:active { opacity: 0.8; }
 
+/* Ghost (random, reset) */
 .sg-btn-ghost {
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--sg-text-secondary);
   background: transparent;
   border: 1px solid var(--sg-border-default);
-  border-radius: var(--sg-radius-lg);
+  border-radius: var(--sg-radius-md);
   padding: var(--sg-space-sm) var(--sg-space-lg);
   transition: all var(--sg-transition);
 }
-.sg-btn-ghost:hover { background: var(--sg-bg-hover); border-color: var(--sg-border-strong); color: var(--sg-text-primary); }
+.sg-btn-ghost:hover {
+  color: var(--sg-text-primary);
+  border-color: var(--sg-border-strong);
+  background: var(--sg-bg-hover);
+}
 
-/* Global chip class — used by JSX without CSS Module */
+/* Global chip class — used by PromptVault and other non-module contexts */
 .chip {
   font-family: var(--sg-font-body);
-  font-size: 13px;
+  font-size: var(--sg-text-sm);
   font-weight: 400;
   color: var(--sg-chip-text);
-  background: var(--sg-bg-surface-1);
+  background: var(--sg-chip-bg);
   border: 1px solid var(--sg-chip-border);
-  border-radius: var(--sg-radius-lg);
-  padding: 8px 12px;
+  border-radius: var(--sg-radius-md);
+  padding: var(--sg-space-sm) var(--sg-space-md);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all var(--sg-transition-fast);
   text-align: left;
   line-height: 1.3;
+  white-space: nowrap;
+  user-select: none;
 }
 .chip:hover {
   color: var(--sg-chip-text-hover);
+  background: var(--sg-chip-bg-hover);
   border-color: var(--sg-chip-border-hover);
-  background: var(--sg-bg-hover);
-  transform: scale(1.02);
 }
 .chip.active {
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 12px rgba(43,181,178,0.08);
+  box-shadow: 0 0 8px rgba(212,149,42,0.10);
+  font-weight: 500;
 }
