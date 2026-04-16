@@ -60,10 +60,10 @@
   transition: color var(--sg-transition);
 }
 .headerLogo:hover .headerWordmark {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal);
 }
 .headerLogo:hover .headerWordmarkAccent {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal);
 }
 
 .headerSubtitle {
@@ -109,11 +109,11 @@
 }
 
 .tabNavItem.active {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal);
   font-weight: 500;
 }
 
-/* Gold underline — only on active tab */
+/* Teal underline — only on active tab */
 .tabNavItem.active::after {
   content: '';
   position: absolute;
@@ -121,7 +121,7 @@
   left: var(--sg-space-xl);
   right: var(--sg-space-xl);
   height: 2px;
-  background: var(--sg-gold-gradient);
+  background: var(--sg-teal);
   border-radius: 1px 1px 0 0;
 }
 
@@ -131,7 +131,7 @@
   font-size: 5px;
   margin-right: var(--sg-space-sm);
   opacity: 0.3;
-  color: var(--sg-gold);
+  color: var(--sg-teal);
 }
 .tabNavItem.active::before {
   opacity: 1;

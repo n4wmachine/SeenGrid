@@ -52,9 +52,9 @@
 }
 .sortBtn:hover { border-color: var(--sg-border-default); }
 .sortBtn.active {
-  color: var(--sg-gold-text);
-  border-color: var(--sg-gold);
-  background: var(--sg-gold-glow);
+  color: var(--sg-teal-text);
+  border-color: var(--sg-teal);
+  background: var(--sg-teal-glow);
 }
 
 .catGroup {
@@ -80,9 +80,9 @@
 }
 .catBtn:hover { color: var(--sg-text-secondary); border-color: var(--sg-border-default); }
 .catBtn.active {
-  color: var(--sg-gold-text);
-  border-color: var(--sg-gold);
-  background: var(--sg-gold-glow);
+  color: var(--sg-teal-text);
+  border-color: var(--sg-teal);
+  background: var(--sg-teal-glow);
 }
 
 .promptGrid {
@@ -138,8 +138,8 @@
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--sg-gold-text);
-  background: var(--sg-gold-glow);
+  color: var(--sg-teal-text);
+  background: var(--sg-teal-glow);
   border-radius: var(--sg-radius-sm);
   padding: 2px 6px;
 }
@@ -175,7 +175,7 @@
 .showMore {
   font-family: var(--sg-font-mono);
   font-size: 10px;
-  color: var(--sg-gold);
+  color: var(--sg-teal);
   cursor: pointer;
   background: none;
   border: none;
@@ -210,8 +210,8 @@
 .vaultTitle { font-family: var(--sg-font-body); font-size: 20px; font-weight: 600; color: var(--sg-text-primary); margin-bottom: 2px; display: flex; align-items: baseline; gap: 12px; }
 .vaultCount { font-family: var(--sg-font-mono); font-size: var(--sg-text-sm); color: var(--sg-text-tertiary); font-weight: 400; }
 .vaultSubtitle { font-family: var(--sg-font-body); font-size: 13px; color: var(--sg-text-tertiary); }
-.vaultSubtitle a { color: var(--sg-gold); text-decoration: none; }
+.vaultSubtitle a { color: var(--sg-teal); text-decoration: none; }
 .vaultSubtitle a:hover { text-decoration: underline; }
 .categoryChips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; flex-shrink: 0; }
 .cardGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; flex: 1; }
-.active { color: var(--sg-gold-text) !important; border-color: var(--sg-gold) !important; background: var(--sg-gold-glow) !important; }
+.active { color: var(--sg-teal-text) !important; border-color: var(--sg-teal) !important; background: var(--sg-teal-glow) !important; }

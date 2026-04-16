@@ -89,7 +89,7 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 - **MJ Cinematic Builder** — Tab 3. Funktionsfähiger Platzhalter.
 - **Prompt Vault** — 1500+ Community-Prompts, Tab 4. Funktionsfähiger Platzhalter.
 - **Look Lab** — Style-Playground. Funktionsfähiger Platzhalter.
-- **Design System** — cinematic dark theme, Gold-Akzent, i18n DE/EN.
+- **Design System** — cinematic dark theme, Teal-Akzent (Markenfarbe), Gold nur für Signature, i18n DE/EN.
 
 ### Grid Engine (Slices 1-8 fertig)
 - Schema: `src/lib/cases/characterAngleStudy/{schema,defaults,panelRoleStrategy}.js`
@@ -104,9 +104,9 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 - Slice 8: Normalizer Two-Step (character_normalizer Case + Compiler + Serializer)
 
 ### Visual Overhaul (fertig)
-- **theme.css**: Gold (#d4952a) als primärer UI-Akzent, Teal nur noch für Logo. Blue-tinted Surfaces. 56px Header.
-- **Header**: Kompakt (56px), SVG-Mark, Mono-Tabs mit Diamond-Bullets, Gold-Akzent.
-- **Alle Komponenten-CSS**: Teal→Gold Akzentfarbe, Header-Höhe-Referenzen auf `var(--sg-header-height)`, DimAdvice Gold-Farbcodierung.
+- **theme.css**: Teal (#2bb5b2) als primärer UI-Akzent (Markenfarbe). Gold nur für Signature-Mode. Blue-tinted Surfaces. 56px Header.
+- **Header**: Kompakt (56px), SVG-Mark, Mono-Tabs mit Diamond-Bullets, Teal-Akzent.
+- **Alle Komponenten-CSS**: Header-Höhe-Referenzen auf `var(--sg-header-height)`, Teal als UI-Akzent konsistent durchgezogen. Gold nur in GridOperator Signature-Elementen.
 - Betroffene Dateien: `theme.css`, `Header.css`, `Header.jsx`, `PromptBuilder.module.css`, `GridOperator.module.css`, `MJStartframe.module.css`, `PromptVault.module.css`
 
 **Nach Slice 8:** Weitere Cases + Module (siehe `MODULE_AND_CASE_CATALOG.md`), Panel-Role-Customization (User wählt pro Panel welchen Winkel er will).

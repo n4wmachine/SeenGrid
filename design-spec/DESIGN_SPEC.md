@@ -229,8 +229,8 @@ diese Klasse in theme.css einfügen oder als shared module exportieren.
 
 1. Body/Root Background: #050508 / #07070c — NICHT heller
 2. Surfaces steigen in 4-5 Hex-Stufen: 0d → 11 → 16 → 1b → 1f
-3. Gold (#d4952a) NUR für: aktive Chips, aktive Tabs, Output-Glow, Primary Buttons, Section-Titel wenn aktiv
-4. Teal (#2bb5b2) NUR für: Logo-Icon, --sg-info Farbe. NICHT als zweiter UI-Akzent überall
+3. Teal (#2bb5b2) ist die MARKENFARBE und der primäre UI-Akzent: aktive Chips, aktive Tabs, Output-Glow, Primary Buttons, Section-Titel wenn aktiv, Focus-States
+4. Gold (#d4952a) NUR für: Signature-Mode-Elemente (Sterne, Signature-Badges, Signature-Section-Borders). NICHT als allgemeiner UI-Akzent
 5. KEIN Lila, KEIN Blau als Akzent, KEIN Weiß (#fff) nirgendwo
 6. Text-Primary ist #e8e8f0, NICHT #ffffff
 

@@ -71,10 +71,10 @@
 }
 .modeToggleBtn.active {
   color: var(--sg-text-primary);
-  background: rgba(212, 149, 42, 0.14);
-  border-color: var(--sg-gold);
+  background: rgba(43, 181, 178, 0.14);
+  border-color: var(--sg-teal);
   font-weight: 600;
-  box-shadow: 0 0 0 1px var(--sg-gold-glow), 0 0 16px var(--sg-gold-glow);
+  box-shadow: 0 0 0 1px var(--sg-teal-glow), 0 0 16px var(--sg-teal-glow);
 }
 
 /* Signature pill: echtes Gold statt Teal, sowohl im Ruhezustand
@@ -134,7 +134,7 @@
 }
 .quickNavPill:hover {
   color: var(--sg-text-primary);
-  border-color: var(--sg-gold);
+  border-color: var(--sg-teal);
   background: var(--sg-bg-surface-2);
   transform: translateY(-1px);
 }
@@ -145,9 +145,9 @@
 /* Brief highlight flash on the target section after a quick-nav jump.
    Runs once (no infinite), then state clears and the class is removed. */
 @keyframes sgSectionFlash {
-  0%   { box-shadow: 0 0 0 0 rgba(212, 149, 42, 0.0), 0 0 0 0 rgba(212, 149, 42, 0.0); border-color: var(--sg-border-subtle); }
-  15%  { box-shadow: 0 0 0 2px rgba(212, 149, 42, 0.55), 0 0 22px rgba(212, 149, 42, 0.38); border-color: var(--sg-gold); }
-  100% { box-shadow: 0 0 0 0 rgba(212, 149, 42, 0.0), 0 0 0 0 rgba(212, 149, 42, 0.0); border-color: var(--sg-border-subtle); }
+  0%   { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
+  15%  { box-shadow: 0 0 0 2px rgba(43, 181, 178, 0.55), 0 0 22px rgba(43, 181, 178, 0.38); border-color: var(--sg-teal); }
+  100% { box-shadow: 0 0 0 0 rgba(43, 181, 178, 0.0), 0 0 0 0 rgba(43, 181, 178, 0.0); border-color: var(--sg-border-subtle); }
 }
 .section.sectionFlash {
   animation: sgSectionFlash 1400ms ease-out;
@@ -332,9 +332,9 @@
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--sg-gold);
-  background: rgba(212, 149, 42, 0.10);
-  border: 1px solid rgba(212, 149, 42, 0.20);
+  color: var(--sg-teal);
+  background: rgba(43, 181, 178, 0.10);
+  border: 1px solid rgba(43, 181, 178, 0.20);
   border-radius: var(--sg-radius-sm);
   padding: 2px 6px;
   flex-shrink: 0;
@@ -383,7 +383,7 @@
   color: var(--sg-chip-text-active);
   background: var(--sg-chip-bg-active);
   border-color: var(--sg-chip-border-active);
-  box-shadow: 0 0 8px rgba(212, 149, 42, 0.10);
+  box-shadow: 0 0 8px rgba(43, 181, 178, 0.10);
   font-weight: 500;
   animation: chipPulse 200ms ease-out;
 }
@@ -466,9 +466,9 @@
   border-color: var(--sg-border-default);
 }
 .dimBtn.active {
-  border-color: var(--sg-gold-dim);
+  border-color: var(--sg-teal-dim);
   background: var(--sg-chip-bg-active);
-  color: var(--sg-gold-text);
+  color: var(--sg-teal-text);
 }
 
 .dimX {
@@ -582,28 +582,28 @@
 
 /* Hires — ≥1024px cell @ 2K, full-detail final-shot material */
 .dimAdviceHires {
-  border-color: rgba(212, 149, 42, 0.45);
-  background: rgba(212, 149, 42, 0.08);
+  border-color: rgba(43, 181, 178, 0.45);
+  background: rgba(43, 181, 178, 0.08);
 }
 .dimAdviceHires .dimAdviceIcon {
-  color: var(--sg-gold-text);
-  background: rgba(212, 149, 42, 0.22);
+  color: var(--sg-teal-text);
+  background: rgba(43, 181, 178, 0.22);
 }
 .dimAdviceHires .dimAdviceQualityTag {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal-text);
 }
 
 /* Standard — 512…1023px cell @ 2K, solid single-crop quality */
 .dimAdviceStandard {
-  border-color: rgba(212, 149, 42, 0.30);
-  background: rgba(212, 149, 42, 0.04);
+  border-color: rgba(43, 181, 178, 0.30);
+  background: rgba(43, 181, 178, 0.04);
 }
 .dimAdviceStandard .dimAdviceIcon {
-  color: var(--sg-gold-text);
-  background: rgba(212, 149, 42, 0.16);
+  color: var(--sg-teal-text);
+  background: rgba(43, 181, 178, 0.16);
 }
 .dimAdviceStandard .dimAdviceQualityTag {
-  color: var(--sg-gold-text);
+  color: var(--sg-teal-text);
 }
 
 /* Low — 256…511px cell @ 2K, reference material only */
@@ -618,12 +618,12 @@
 
 /* Tiny — <256px cell @ 2K, concept board only */
 .dimAdviceTiny {
-  border-color: rgba(212, 149, 42, 0.40);
-  background: rgba(212, 149, 42, 0.06);
+  border-color: rgba(43, 181, 178, 0.40);
+  background: rgba(43, 181, 178, 0.06);
 }
 .dimAdviceTiny .dimAdviceIcon {
   color: #e8bd6b;
-  background: rgba(212, 149, 42, 0.18);
+  background: rgba(43, 181, 178, 0.18);
 }
 .dimAdviceTiny .dimAdviceQualityTag {
   color: #e8bd6b;
@@ -679,8 +679,8 @@
   resize: vertical;
 }
 .textInput:focus {
-  border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
+  border-color: var(--sg-teal-dim);
+  box-shadow: 0 0 0 1px var(--sg-teal-glow-subtle);
   outline: none;
 }
 
@@ -703,8 +703,8 @@
   transition: border-color var(--sg-transition);
 }
 .panelInputWrap:focus-within {
-  border-color: var(--sg-gold-dim);
-  box-shadow: 0 0 0 1px var(--sg-gold-glow-subtle);
+  border-color: var(--sg-teal-dim);
+  box-shadow: 0 0 0 1px var(--sg-teal-glow-subtle);
 }
 
 .panelInputNum {
@@ -861,21 +861,21 @@
   transition: all var(--sg-transition);
 }
 .expandToggle:hover {
-  color: var(--sg-gold-text);
-  border-color: var(--sg-gold-dim);
+  color: var(--sg-teal-text);
+  border-color: var(--sg-teal-dim);
   background: var(--sg-chip-bg-active);
 }
 
 .outputBox {
   background: var(--sg-bg-surface-0);
-  border: 1px solid var(--sg-gold-dim);
+  border: 1px solid var(--sg-teal-dim);
   border-radius: var(--sg-radius-lg);
   padding: var(--sg-space-xl);
   font-family: var(--sg-font-mono);
   font-size: var(--sg-text-sm);
   line-height: 1.7;
   color: var(--sg-text-primary);
-  box-shadow: 0 0 16px rgba(212, 149, 42, 0.08);
+  box-shadow: 0 0 16px rgba(43, 181, 178, 0.08);
   white-space: pre-wrap;
   cursor: text;
   transition: max-height var(--sg-transition);
@@ -919,7 +919,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--sg-text-inverse);
-  background: var(--sg-gold-gradient);
+  background: var(--sg-teal-gradient);
   border: none;
   border-radius: var(--sg-radius-md);
   padding: var(--sg-space-md) 0;
