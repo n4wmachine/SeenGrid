@@ -79,6 +79,14 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 ## Aktueller Stand
 
+**Letzte Session (2026-04-16):** Doku-Restructure + Brainstorm. Keine Engine-Arbeit.
+- CLAUDE.md komplett neu geschrieben (kompakt, ~170 Zeilen statt 4 Dateien / 1480 Zeilen)
+- Alte Doku archiviert unter `docs/archive/` (BUILD_PLAN_FULL, SESSION_LOG_FULL, CLAUDE_FULL)
+- Feature-Vision erstellt (`docs/FEATURE_VISION.md`) — 6 Zukunftsideen (LLM Filmsystem, Reverse Engineering, Consistency Kit, Community Hub, Shot Dashboard, Grid Cropper+Upscaler)
+- Design-Inspiration in `design-spec/DESIGN_SPEC.md` ergänzt (Resolve, Frame.io, Runway, Rive, Milanote als Referenzen)
+
+**Nächster Schritt:** Slice 4 (Face Reference Modul) oder Visual Overhaul — Jonas entscheidet.
+
 ### Bestehende Module (alles in Arbeit, nichts final)
 - **Prompt Builder** — chip-basiert, Tab 1. Funktionsfähiger Platzhalter.
 - **Grid Operator** — Tab 2. Lädt 18 statische Preset-JSONs, 3 Modi (Core/Signature/Custom). **Wird durch die Engine ERSETZT** sobald diese fertig ist. Bis dahin bleibt er parallel bestehen.
