@@ -79,9 +79,9 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 ## Aktueller Stand
 
-**Letzte Session (2026-04-16):** Doku-Restructure. Keine Engine-Arbeit.
+**Letzte Session (2026-04-16):** Grid Engine Slices 4-8 fertig + Visual Overhaul (Farbsystem + Layout).
 
-**Nächster Schritt:** Slice 4 — Face Reference Modul.
+**Nächster Schritt:** UX Polish auf dem neuen Design. Bestehende Grid Operator UI durch Engine ersetzen.
 
 ### Bestehende Module (alles in Arbeit, nichts final)
 - **Prompt Builder** — chip-basiert, Tab 1. Funktionsfähiger Platzhalter.
@@ -89,23 +89,25 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 - **MJ Cinematic Builder** — Tab 3. Funktionsfähiger Platzhalter.
 - **Prompt Vault** — 1500+ Community-Prompts, Tab 4. Funktionsfähiger Platzhalter.
 - **Look Lab** — Style-Playground. Funktionsfähiger Platzhalter.
-- **Design System** — cinematic dark theme, i18n DE/EN.
+- **Design System** — cinematic dark theme, Gold-Akzent, i18n DE/EN.
 
-### Grid Engine (Slices 1-3 fertig)
+### Grid Engine (Slices 1-8 fertig)
 - Schema: `src/lib/cases/characterAngleStudy/{schema,defaults,panelRoleStrategy}.js`
-- Compiler: `src/lib/compiler/{index.js,serializers/json.js}`
+- Normalizer: `src/lib/cases/characterNormalizer/{schema,defaults}.js`
+- Compiler: `src/lib/compiler/{index.js,serializers/json.js,serializers/normalizerJson.js}`
 - POC UI: `src/components/CustomBuilderPoc.jsx` (throwaway Tab 5 — wird nach Visual Overhaul in den echten Grid Creator integriert)
-- Tests: 33/33 grün (14 Schema + 19 Compiler)
+- Tests: 42/42 grün (14 Schema + 19 Compiler + 9 Normalizer)
+- Slice 4: Face Reference Toggle (Checkbox → references.face_reference erscheint/verschwindet)
+- Slice 5: Environment Mode (inherit / neutral_studio / custom_text)
+- Slice 6: Live Visual Preview (SVG-Silhouetten für 8 Panel-Rollen)
+- Slice 7: Style Overlay (Token-Eingabe → style_overlay Block im Output)
+- Slice 8: Normalizer Two-Step (character_normalizer Case + Compiler + Serializer)
 
-### Offene Slices (4-8)
-
-| Slice | Was | Kern |
-|-------|-----|------|
-| 4 | Face Reference Modul | Checkbox → `references.face_reference` erscheint/verschwindet im Output |
-| 5 | Environment Modul | Drei Modi: inherit (kein Block), neutral_studio, custom_text |
-| 6 | Live Visual Preview | SVG-Dummies für Panel-Rollen (Front/Right/Left/Back) |
-| 7 | Look Lab Integration | Style-Token aus Look Lab in den Prompt einfügen |
-| 8 | Normalizer Two-Step | Optionaler Pre-Step für unvollständige Referenzbilder |
+### Visual Overhaul (fertig)
+- **theme.css**: Gold (#d4952a) als primärer UI-Akzent, Teal nur noch für Logo. Blue-tinted Surfaces. 56px Header.
+- **Header**: Kompakt (56px), SVG-Mark, Mono-Tabs mit Diamond-Bullets, Gold-Akzent.
+- **Alle Komponenten-CSS**: Teal→Gold Akzentfarbe, Header-Höhe-Referenzen auf `var(--sg-header-height)`, DimAdvice Gold-Farbcodierung.
+- Betroffene Dateien: `theme.css`, `Header.css`, `Header.jsx`, `PromptBuilder.module.css`, `GridOperator.module.css`, `MJStartframe.module.css`, `PromptVault.module.css`
 
 **Nach Slice 8:** Weitere Cases + Module (siehe `MODULE_AND_CASE_CATALOG.md`), Panel-Role-Customization (User wählt pro Panel welchen Winkel er will).
 
