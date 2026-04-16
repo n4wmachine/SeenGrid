@@ -1,8 +1,33 @@
-# SEENGRID DESIGN SPEC — Implementierungs-Anleitung für Sonnet
+# SEENGRID DESIGN SPEC — Implementierungs-Anleitung
 
 ## WICHTIG
-Sonnet trifft KEINE eigenen Design-Entscheidungen. Alles ist in den CSS-Dateien definiert.
-Wenn etwas unklar ist: CSS-Datei gilt, nicht Sonnet's Interpretation.
+Keine eigenen Design-Entscheidungen treffen. Alles ist in den CSS-Dateien definiert.
+Wenn etwas unklar ist: CSS-Datei gilt.
+
+---
+
+## DESIGN-INSPIRATION & REFERENZEN
+
+SeenGrid soll sich anfühlen wie ein **professionelles Produktionswerkzeug**, nicht wie eine Webseite oder Consumer-App. Kein "Claude-Template Nr. 593493".
+
+**Referenz-Tools (Ästhetik & UX-Feeling):**
+- **DaVinci Resolve** — Color Page, Media Pool. Kacheln statt Listen, dunkles professionelles UI, Densität ohne Chaos.
+- **Frame.io** — Film-Review-Tool. Timeline-basiert, Thumbnails dominant, Text sekundär.
+- **Runway Editor** — Dunkel, clean, Panels ein/ausblendbar, Preview prominent.
+- **Rive** — Extrem cleanes dark UI, Panels, Properties-Sidebar. Fühlt sich wie ein echtes Werkzeug an.
+- **Milanote** — Visuelles Board-Tool. Karten frei platzierbar, Bilder dominant, Text minimal. **PureRef-mäßiges Kachel-Feeling** — Referenz für Shot Dashboard und Grid-Layouts.
+
+**Kernprinzipien:**
+- Dunkel, nicht grell
+- Bilder/Visuals dominant, Text sekundär
+- Kacheln statt Textwände
+- Fühlt sich an wie ein Werkzeug, nicht wie eine Webseite
+- Densität ohne Chaos
+
+**Fernhalten von:**
+- Canva, Figma-Landingpage-Style (zu consumer/bunt)
+- Notion/Linear (zu textlastig)
+- Higgsfield/OpenArt (generischer AI-Platform-Look)
 
 ---
 
