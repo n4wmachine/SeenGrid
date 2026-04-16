@@ -17,6 +17,71 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-16 — Slice 3 Fixup: POC Rewrite auf §14-Scope
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Bau-Rolle, Fortsetzung der Slice-1/2/3-Session nach Context-Compaction)
+
+### Kontext vor der Session
+- `cb80d1e` (Review-Chat vom 2026-04-15 spät) dokumentiert den Spec-Drift von `d66a828` und ergänzt in CLAUDE.md den Spec-Compliance-Absatz (drei Punkte: Slice-Start zitiert §14 wörtlich / Slice-Review prüft Spec vor Code / UI-Slices brauchen Screenshot).
+- SESSION_LOG-Eintrag `cb80d1e` setzt als Nächsten Schritt "Bau-Chat: Slice 3 POC neu aufsetzen streng nach §14".
+- Die korrigierte POC-Fassung war beim Start dieser Session bereits als unstaged Modifikation in `src/components/CustomBuilderPoc.jsx` in der Working Tree vorhanden (entstanden in der vorhergehenden Session-Hälfte vor der Compaction).
+
+### Offene Produkt-Frage aus `cb80d1e` geklärt
+- Jonas hat beim Review-Chat zurückgefragt ob 3 Module im MVP nicht zu wenig sind, Vision ist 5–10 Module + mehr Cases.
+- Review-Chat-Antwort (von Jonas zurück relayed): **Variante A bleibt** — §14 wie er steht, `character_angle_study` + drei Module im MVP als Pipeline-Beweis, weitere Module/Cases post-Slice-8. Begründung: die Architektur ist additiv-erweiterbar, ein neues Modul später kostet pro Stück einen Key in COMPILE_ORDER, einen `case` im `emitField`-Switch, einen Emit-Helper (~10–20 Zeilen), einen Default-Block, eine Validator-Regel, ein UI-Control. Bestehende Module werden nicht angefasst. `collectModuleForbiddens(_state)` in `json.js:237` ist schon explizit als Extension-Hook kommentiert. Neue Cases laufen über eigenen Ordner unter `src/lib/cases/` + Dispatcher-Routing in `compiler/index.js`. Die einzige echte Lock-in-Entscheidung ist §6 Constrained Modularity (Whitelist pro Case statt freie Kombinatorik) — die hat Jonas aber bewusst so gewählt ("getestete Konstellationen, nicht beliebige Lego-Steine").
+- Jonas O-Ton: "wenn dus agst es ist jedderzeit erweiterbar auf mehr module, und 3 für den anfgang reichen um zu schauen ob alles laeuft, dann ist es okay." → Variante A akzeptiert, **keine BUILD_PLAN-Änderung**.
+
+### Was im Bau-Chat passiert ist
+
+1. **CustomBuilderPoc.jsx komplett neu geschrieben** auf §14 Slice 3 Scope. Die alte Datei (`d66a828`) hatte Module-Controls (face_reference, style_overlay, environment, user_forbiddens, reset button) und **kein** Case-Dropdown / Rows×Cols / Orientation — genau invertiert zu §14. Der Fixup:
+   - **Entfernt:** alle Modul-Toggles und Modul-Formulare. Keine UI-Berührung mit `references`, `style_overlay`, `environment`, `forbidden_elements.user_level`.
+   - **Neu:** Case-Dropdown mit nur `character_angle_study` als Slot-Eintrag (aber als Select strukturiert, damit Slice-5+ einfach anhängen kann).
+   - **Neu:** Rows × Cols als zwei separate Number-Inputs (cols × rows Konvention aus §4 Punkt 1), Clamp 1..8, live Validitäts-Check gegen `VALID_PANEL_COUNTS` aus Slice-1-Schema.
+   - **Neu:** Panel-Orientation als zweites Select (`vertical | horizontal`), als separate Dimension zum Grid-Shape (§4 Punkt 1: "4×1 horizontal-row mit vertical panels" als Konvention dokumentiert).
+   - **Unverändert:** Live JSON `<pre>`, Copy-Button, Warning-Banner "throwaway fifth tab, finale Zieladresse nach Visual Overhaul".
+
+2. **Scope-Anker als File-Header-Kommentar** eingefügt — §14 Slice 3 wird im Datei-Kopf wortwörtlich zitiert, damit der nächste Bau-Chat den Spec-Drift-Fehler von `d66a828` nicht wiederholen kann. Zusätzlich Hinweis dass Module-Toggles explizit NICHT in Slice 3 gehören (face_reference → Slice 4, environment → Slice 5, style_overlay → Slice 7, user forbiddens → post-§14).
+
+3. **`panel_arrangement`-Policy geklärt** (das war die eine Design-Entscheidung die Jonas im Chat noch treffen musste):
+   - **Problem:** Default-State trägt `panel_arrangement: "single_horizontal_row"` aus dem GT. Wenn der User auf 2×3 umschaltet, wäre dieser String eine Lüge — aber einen neuen Enum-Wert wie `"grid_2x3"` oder `"single_vertical_column"` erfinden ist auch schlecht, weil NanoBanana den String mitliest und wir keine empirische Validierung für die erfundenen Werte haben.
+   - **Erster Entwurf (vor Jonas-Rückfrage):** `derivePanelArrangement(cols, rows)` mit `grid_${cols}x${rows}` als Fallback. Verworfen.
+   - **Entscheidung (Jonas-OK via ChatGPT-Konsult):** `panel_arrangement` nur emittieren wenn der Wert empirisch validiert ist. Konkret: `if (rows === 1 && cols > 1) layout.panel_arrangement = "single_horizontal_row"; else delete layout.panel_arrangement;`. Bei 4×1, 3×1, 6×1, 8×1 bleibt der GT-String; bei 1×4, 2×2, 2×3, 2×4 wird das Feld komplett aus dem Layout-Block entfernt. Begründung von ChatGPT: "Nicht lügen. Keine ungetesteten Enum-Wörter erfinden wenn Nano sie mitliest. Das Feld ist eh redundant wenn `panel_count` und die derivierten Panels schon stehen." Die Helper heißt jetzt `applyPanelArrangement(layout, cols, rows)` statt `derivePanelArrangement`.
+   - Spätere Slices können validierte Werte (z.B. `single_vertical_column` nach NanoBanana-Test) additiv ergänzen.
+
+4. **Replay-Verifikation** via Node-Stub der die UI-State-Mutation durch den echten Slice-2-Compiler schickt, für vier repräsentative Shape-Kombinationen:
+   - **A — 4×1 vertical (GT Default):** `layout.panel_arrangement = "single_horizontal_row"`, 4 Panels front/right_profile/left_profile/back, byte-identisch zu `angle-study-json-example.md`.
+   - **B — 3×1 vertical:** `panel_arrangement = "single_horizontal_row"`, 3 Panels (front/right_profile/left_profile).
+   - **C — 1×4 vertical:** `panel_arrangement` **nicht im Output** (Feld komplett weggelassen), 4 Panels deriviert.
+   - **D — 2×3 vertical:** `panel_arrangement` **nicht im Output**, 6 Panels deriviert.
+   - Zusätzlich negative Cases (5×1, 3×3) triggern den `VALID_PANEL_COUNTS`-Check in der UI: invalidCall zeigt Fehlermeldung statt compile-Aufruf, Copy-Button ist disabled.
+
+5. **Build + Tests grün:** `npm run build` clean (CustomBuilderPoc-Chunk 13.04 kB roh / 4.48 kB gzip, leicht kleiner als `d66a828` weil weniger Controls). `node schema.test.mjs` 14/14. `node compiler.test.mjs` 19/19. Gesamt 33/33.
+
+### Jonas-OK-Gates in dieser Session
+
+- **OK-Gate für `panel_arrangement`-Policy:** Jonas hat die Frage nicht selbst coder-seitig entscheiden können und ChatGPT konsultiert. ChatGPTs Antwort (Variante 3 — "nur validierte Werte emittieren, sonst Feld weglassen") wurde von Jonas wortwörtlich zurück relayed. Bau-Chat hat das 1:1 implementiert und den Output der vier Shape-Kombinationen gezeigt.
+- **OK-Gate für Slice-3-Fixup-Commit:** Jonas O-Ton "wenn du damit konform bist, dann mach das was du machen solltest, ich verstehe eh nur die haelfte." Zu diesem Zeitpunkt lag Variante-A-Akzeptanz + ChatGPT-Bestätigung der `panel_arrangement`-Policy + Build-Green + Tests-Green + vier-Shape-Replay vor. Bau-Chat hat das als explizites Go interpretiert.
+- **Screenshot-Regel (CLAUDE.md Spec-Compliance Punkt 3) konnte nicht mit echtem Browser-Bild erfüllt werden:** die Sandbox hat keinen Browser-Zugang. Als Ersatz: (a) `npm run build` grün, (b) File-Header-Kommentar zitiert §14 Slice 3 wörtlich, (c) Bau-Chat hat vor dem Commit eine Element-für-Element-Diff-Tabelle UI-vs-§14 im Chat gepostet mit ✓-Markierung für "enthalten" und "ausgeschlossen", (d) die vier-Shape-Replay-Ergebnisse. **Ein echter Browser-Screenshot muss Jonas beim nächsten `npm run dev` selbst nachliefern** — wenn er etwas sieht das von der Diff-Tabelle abweicht, wird ein Revert-oder-Fix-Commit oben drauf gesetzt. Dieses Delta zur Regel ist hier explizit dokumentiert damit der nächste Chat es nicht übersieht.
+- **Stop-Hook mehrfach ignoriert:** während der Wartezeit auf Jonas-Antworten (Variante-A-Klärung, `panel_arrangement`-Entscheidung) hat der Git-Stop-Hook mindestens fünf Mal "uncommitted changes — please commit"-Warnungen gefeuert. Alle bewusst ignoriert (Anti-Drift-Gate > generischer Hook), Ignorieren explizit in den Chat-Antworten erwähnt.
+
+### Stand am Ende der Session (nach Slice-3-Fixup-Commit)
+
+- Branch: `main` (direkt, per CLAUDE.md-Regel — keine Feature-Branches)
+- Commits: `cb80d1e` (Review-Chat: CLAUDE.md Spec-Compliance + SESSION_LOG incident) ist vom Bau-Chat per fast-forward reingezogen worden; darauf der neue Slice-3-Fixup-Commit
+- Geänderte Dateien im Fixup-Commit: `src/components/CustomBuilderPoc.jsx` (Rewrite), `SESSION_LOG.md` (dieser Eintrag). `src/App.jsx` ist **nicht** angefasst — das 5-Tab-Wiring aus `d66a828` ist weiterhin korrekt.
+- Tests: 33/33 grün (Slice 1: 14, Slice 2: 19, Slice 3: keine neuen Unit-Tests, UI-only).
+- Build: clean, `CustomBuilderPoc` als eigener Lazy-Chunk 13.04 kB / 4.48 kB gzip.
+- Pre-Pivot Baseline: weiterhin unberührt.
+- MVP-Scope-Entscheidung: **Variante A** — §14 bleibt wie er steht, keine BUILD_PLAN-Änderung. 3 Module + 1 Case als Pipeline-Beweis; post-Slice-8 kommen weitere Module und weitere Cases additiv drauf.
+
+### Nächster Schritt
+
+**Slice 4 — Face Reference Modul** per BUILD_PLAN.md §14. Erstes echtes Modul-Toggle im POC: `references.face_reference.enabled` als Checkbox, `applyPanelArrangement`-Policy bleibt, JSON-Output zeigt den `face_reference`-Block appear/disappear live. Jonas-OK-Gate für Slice 4: Chat postet vor dem Commit die §14-Slice-4-Spec wortwörtlich + eine UI-vs-Spec Element-Diff + den JSON-Output mit Face Reference enabled und disabled nebeneinander. Idealerweise plus Screenshot wenn Jonas selber `npm run dev` aufmacht und eines postet.
+
+**Offene Validation-Aufgabe (unblockt, aber nicht blockierend für Slice 4):** Jonas öffnet beim nächsten Gelegenheitsfenster den POC-Tab "POC (S3)" im laufenden Dev-Server, verifiziert die drei sichtbaren Control-Sektionen (case / grid dimensions / panel orientation), und gibt grünes Licht oder flaggt was abweicht. Bei Abweichung: Revert-oder-Fix-Commit oben drauf.
+
+---
+
 ## 2026-04-15 — Spec-Drift in Slice 3 POC entdeckt + CLAUDE.md Spec-Compliance-Präzisierung
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Review-Rolle, Fortsetzung derselben Session)

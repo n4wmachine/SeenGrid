@@ -1,32 +1,36 @@
 /**
- * CustomBuilderPoc — Slice 3 Throwaway UI
+ * CustomBuilderPoc — Slice 3 Throwaway UI (BUILD_PLAN §14 conforming)
  *
- * WICHTIG: Dies ist KEINE finale Komponente. Sie ist bewusst Throwaway:
- * nackter Funktionsbeweis dass der Slice-2-Compiler von einem echten React
- * State-Holder angetrieben werden kann. Kein Polish, kein Design, keine
- * i18n, keine SVG-Preview.
+ * Strikt nach BUILD_PLAN.md §14 Slice 3:
  *
- * Die Zieladresse für den echten Custom Builder ist per BUILD_PLAN §14
- * Slice 3/4 → `src/components/GridOperator/CustomBuilder.jsx`. Der Wechsel
- * dorthin passiert NACH Jonas' Visual Overhaul (eigener Track, nicht
- * Teil dieser Slice-Kette). Bis dahin lebt diese POC-Komponente als
- * temporärer fünfter Tab in `App.jsx`.
+ *   > Der Custom-Builder-Tab zeigt: Case-Dropdown (nur character_angle_study
+ *   > bisher), Rows/Cols/Orientation-Picker, Live-JSON-Prompt-Output,
+ *   > Copy-JSON-Button. KEIN Module-Panel, KEIN Visual Preview.
  *
- * Was die POC beweisen muss:
- *   1. buildDefaultState() + compileToString() funktionieren im Browser
- *      (nicht nur in Node-Tests).
- *   2. Live-Edits am State produzieren live-updates am JSON-Output.
- *   3. panel_count-Slider, Module-Toggles, Environment-Modi, User-Level-
- *      Forbiddens sind alle als Controls verdrahtet und ändern den Output
- *      sichtbar.
- *   4. Der fertige JSON-String ist per Copy-Button paste-ready.
+ * Scope-Grenze (wichtig, hier lief der erste Versuch schief): Module-
+ * Toggles gehören explizit NICHT in diese Slice:
+ *   - face_reference           → Slice 4
+ *   - environment mode picker  → Slice 5
+ *   - SVG visual preview       → Slice 6
+ *   - style_overlay token      → Slice 7
+ *   - user-level forbiddens    → nicht in §14, später
  *
- * Was die POC NICHT macht:
- *   - Kein LookLab-Browsing, Token-Picker wird nackt als Text-Input gebaut
- *   - Keine SVG-Dummy-Preview der Panels (kommt in einem späteren Slice)
- *   - Keine History, Undo, oder State-Persistence
- *   - Kein Empty-State-Design, keine Onboarding-Texte
- *   - Kein Fokus auf Styling — inline styles gegen die globalen CSS-Vars
+ * Die panel_count-Whitelist [3,4,6,8] für character_angle_study ist §6
+ * Constrained Modularity (nicht ein Bug, sondern der ganze Punkt). Der
+ * User erlebt sie via Rows × Cols mit einer Validitäts-Prüfung gegen
+ * VALID_PANEL_COUNTS, nicht via nacktes panel_count-Dropdown — siehe
+ * §4 Punkt 1 ("Rows × Cols als echtes Feature, plus Panel-Orientierung
+ * als separate Dimension").
+ *
+ * Spalten-Konvention aus §4 Punkt 1: "4×1 horizontal-row mit vertical
+ * panels" = 4 Spalten × 1 Reihe. Also cols × rows (width × height).
+ * Die UI labelt beide Felder explizit, damit die Konvention nicht
+ * geraten werden muss.
+ *
+ * Die Komponente ist weiterhin throwaway: inline styles, keine
+ * .module.css, keine i18n. Finale Zieladresse per §14 ist
+ * `src/components/GridOperator/CustomBuilder.jsx` nach Jonas' Visual
+ * Overhaul (eigener Track).
  */
 
 import React, { useState, useMemo } from 'react'
@@ -34,13 +38,37 @@ import { buildDefaultState } from '../lib/cases/characterAngleStudy/defaults.js'
 import { compileToString } from '../lib/compiler/index.js'
 import {
   VALID_PANEL_COUNTS,
-  ENVIRONMENT_MODES,
+  CASE_ID,
 } from '../lib/cases/characterAngleStudy/schema.js'
-import { isEmpiricallyValidated } from '../lib/cases/characterAngleStudy/panelRoleStrategy.js'
 
-// Inline-Style-Tokens. Bewusst nicht in eine .module.css ausgelagert damit
-// beim Wegwerfen der Komponente auch wirklich alles weg ist — kein
-// CSS-Fragment das irgendwo hängen bleibt.
+// Case-Registry für die POC. Nur ein Eintrag bisher, aber der Slot
+// ist da — Slice 5+ kann hier einfach anhängen ohne die UI umzubauen.
+const AVAILABLE_CASES = [
+  { id: CASE_ID, label: 'character_angle_study' },
+]
+
+// Panel-Orientation ist eine separate Dimension zum Grid-Shape
+// (§4 Punkt 1). Ein 4×1 Grid mit vertical panels sieht völlig anders
+// aus als ein 4×1 Grid mit horizontal panels.
+const PANEL_ORIENTATIONS = ['vertical', 'horizontal']
+
+// panel_arrangement-Policy: der Default-State trägt "single_horizontal_row",
+// was strukturell nur zu rows === 1 && cols > 1 passt (4×1, 3×1, 6×1, 8×1 —
+// alle in VALID_PANEL_COUNTS). Bei allen anderen Shapes (1×4, 2×3, 2×2, …)
+// wird das Feld aus dem Layout-Block entfernt statt einen neuen, nicht
+// empirisch getesteten Enum-Wert wie "grid_2x3" zu erfinden (Jonas-OK
+// 2026-04-16: "Nicht lügen, keine ungetesteten Enum-Wörter an NanoBanana
+// schicken"). Spätere Slices können validierte Werte ergänzen, aber erst
+// nach NanoBanana-Gegentest.
+function applyPanelArrangement(layout, cols, rows) {
+  if (rows === 1 && cols > 1) {
+    layout.panel_arrangement = 'single_horizontal_row'
+  } else {
+    delete layout.panel_arrangement
+  }
+}
+
+// Inline style tokens — throwaway, no .module.css
 const styles = {
   wrap: {
     display: 'grid',
@@ -99,8 +127,14 @@ const styles = {
     fontFamily: 'var(--sg-font-mono, monospace)',
   },
   label: {
-    fontSize: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    fontSize: '11px',
     color: 'var(--sg-text-secondary, #bbb)',
+    fontFamily: 'var(--sg-font-mono, monospace)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
   },
   control: {
     padding: '6px 8px',
@@ -112,11 +146,20 @@ const styles = {
     borderRadius: '4px',
     outline: 'none',
   },
-  checkRow: {
+  gridRow: {
     display: 'flex',
+    gap: '12px',
     alignItems: 'center',
-    gap: '8px',
-    fontSize: '12px',
+  },
+  validityOk: {
+    fontSize: '11px',
+    fontFamily: 'var(--sg-font-mono, monospace)',
+    color: 'var(--sg-text-tertiary, #888)',
+  },
+  validityBad: {
+    fontSize: '11px',
+    fontFamily: 'var(--sg-font-mono, monospace)',
+    color: '#f6c35c',
   },
   preview: {
     display: 'flex',
@@ -163,29 +206,44 @@ const styles = {
 }
 
 export default function CustomBuilderPoc() {
-  const [state, setState] = useState(() => buildDefaultState())
+  // Slice 3 State: nur die vier Dinge aus §14 Slice 3.
+  const [caseId, setCaseId] = useState(CASE_ID)
+  const [cols, setCols] = useState(4)
+  const [rows, setRows] = useState(1)
+  const [panelOrientation, setPanelOrientation] = useState('vertical')
   const [copied, setCopied] = useState(false)
 
-  // Immutable partial update helper. structuredClone ist in modernen
-  // Browsern überall verfügbar; alle unsere Target-Browser unterstützen es.
-  const update = (mutator) => {
-    setState((prev) => {
-      const next = structuredClone(prev)
-      mutator(next)
-      return next
-    })
-  }
+  const panelCount = cols * rows
+  const panelCountValid = VALID_PANEL_COUNTS.includes(panelCount)
 
-  // Compile bei jedem Render. Wenn compile() wirft (z.B. weil ein Control
-  // kurzzeitig einen invaliden State produziert), zeigen wir die Fehler-
-  // Message statt die React-Tree zu crashen.
+  // Build state from UI state each render. Kein persistenter React-
+  // State-Holder nötig — die vier Controls sind die single source of
+  // truth, alles andere ist derived.
   const compiled = useMemo(() => {
+    const s = buildDefaultState()
+    s.case = caseId
+    s.layout.panel_count = panelCount
+    s.layout.panel_orientation = panelOrientation
+    applyPanelArrangement(s.layout, cols, rows)
+
+    if (!panelCountValid) {
+      return {
+        ok: false,
+        output:
+          `invalid panel_count for ${caseId}\n\n` +
+          `  cols × rows = ${cols} × ${rows} = ${panelCount}\n` +
+          `  supported:   ${VALID_PANEL_COUNTS.join(', ')}\n\n` +
+          `pick cols and rows so their product is in the supported list.\n` +
+          `e.g. 4×1, 1×4, 3×1, 1×3, 6×1, 2×3, 2×4.`,
+      }
+    }
+
     try {
-      return { ok: true, output: compileToString(state) }
+      return { ok: true, output: compileToString(s) }
     } catch (err) {
       return { ok: false, output: err?.message ?? String(err) }
     }
-  }, [state])
+  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid])
 
   const onCopy = async () => {
     if (!compiled.ok) return
@@ -194,17 +252,15 @@ export default function CustomBuilderPoc() {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
     } catch {
-      // Ignore clipboard failures in the POC — throwaway UI.
+      // Ignore clipboard failures in the POC.
     }
   }
 
-  const onReset = () => {
-    setState(buildDefaultState())
+  const clampDim = (v) => {
+    const n = Number(v)
+    if (!Number.isFinite(n)) return 1
+    return Math.max(1, Math.min(8, Math.floor(n)))
   }
-
-  const userLevelText = state.forbidden_elements.user_level.join('\n')
-  const panelCount = state.layout.panel_count
-  const panelCountValidated = isEmpiricallyValidated(panelCount)
 
   return (
     <div style={styles.wrap}>
@@ -213,174 +269,100 @@ export default function CustomBuilderPoc() {
         <div>
           <h2 style={styles.header}>Custom Builder — POC (Slice 3)</h2>
           <p style={styles.subheader}>
-            character_angle_study · throwaway ui · wired to src/lib/compiler
+            §14 slice 3 scope · case · rows×cols · orientation · copy
           </p>
         </div>
 
         <div style={styles.warning}>
           Provisorischer fünfter Tab. Finale Zieladresse:
           src/components/GridOperator/CustomBuilder.jsx nach Visual Overhaul.
+          Module-Toggles (face_reference, environment, style_overlay) kommen
+          erst in Slices 4/5/7.
         </div>
 
-        {/* panel_count */}
+        {/* (a) Case */}
         <div style={styles.section}>
-          <span style={styles.sectionTitle}>layout.panel_count</span>
+          <span style={styles.sectionTitle}>case</span>
           <select
             style={styles.control}
-            value={panelCount}
-            onChange={(e) =>
-              update((n) => {
-                n.layout.panel_count = Number(e.target.value)
-              })
-            }
+            value={caseId}
+            onChange={(e) => setCaseId(e.target.value)}
           >
-            {VALID_PANEL_COUNTS.map((c) => (
-              <option key={c} value={c}>
-                {c} panels
+            {AVAILABLE_CASES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.label}
               </option>
             ))}
           </select>
-          {!panelCountValidated && (
-            <span style={{ ...styles.subheader, color: '#f6c35c' }}>
-              ⚠ not empirically validated in NanoBanana
+          <span style={styles.subheader}>
+            only 1 case wired so far — more in slice 5+
+          </span>
+        </div>
+
+        {/* (b) Rows × Cols */}
+        <div style={styles.section}>
+          <span style={styles.sectionTitle}>grid dimensions</span>
+          <div style={styles.gridRow}>
+            <label style={styles.label}>
+              cols
+              <input
+                style={{ ...styles.control, width: '60px' }}
+                type="number"
+                min={1}
+                max={8}
+                value={cols}
+                onChange={(e) => setCols(clampDim(e.target.value))}
+              />
+            </label>
+            <span
+              style={{
+                ...styles.subheader,
+                alignSelf: 'end',
+                paddingBottom: '8px',
+              }}
+            >
+              ×
             </span>
-          )}
-        </div>
-
-        {/* face_reference */}
-        <div style={styles.section}>
-          <span style={styles.sectionTitle}>references.face_reference</span>
-          <label style={styles.checkRow}>
-            <input
-              type="checkbox"
-              checked={state.references.face_reference.enabled}
-              onChange={(e) =>
-                update((n) => {
-                  n.references.face_reference.enabled = e.target.checked
-                })
-              }
-            />
-            enabled
-          </label>
-        </div>
-
-        {/* style_overlay */}
-        <div style={styles.section}>
-          <span style={styles.sectionTitle}>style_overlay (Look Lab hook)</span>
-          <label style={styles.checkRow}>
-            <input
-              type="checkbox"
-              checked={state.style_overlay.enabled}
-              onChange={(e) =>
-                update((n) => {
-                  n.style_overlay.enabled = e.target.checked
-                })
-              }
-            />
-            enabled
-          </label>
-          {state.style_overlay.enabled && (
-            <>
-              <label style={styles.label}>source</label>
+            <label style={styles.label}>
+              rows
               <input
-                style={styles.control}
-                type="text"
-                value={state.style_overlay.source ?? ''}
-                placeholder="look_lab"
-                onChange={(e) =>
-                  update((n) => {
-                    n.style_overlay.source = e.target.value || null
-                  })
-                }
+                style={{ ...styles.control, width: '60px' }}
+                type="number"
+                min={1}
+                max={8}
+                value={rows}
+                onChange={(e) => setRows(clampDim(e.target.value))}
               />
-              <label style={styles.label}>token</label>
-              <input
-                style={styles.control}
-                type="text"
-                value={state.style_overlay.token ?? ''}
-                placeholder="warm_neon_diner_glow"
-                onChange={(e) =>
-                  update((n) => {
-                    n.style_overlay.token = e.target.value || null
-                  })
-                }
-              />
-            </>
-          )}
+            </label>
+          </div>
+          <span style={panelCountValid ? styles.validityOk : styles.validityBad}>
+            panel_count = {cols} × {rows} = {panelCount}
+            {!panelCountValid &&
+              ` — invalid, must be one of ${VALID_PANEL_COUNTS.join(', ')}`}
+          </span>
+          <span style={styles.subheader}>
+            §4: cols × rows convention. e.g. 4×1 = horizontal row of 4.
+          </span>
         </div>
 
-        {/* environment */}
+        {/* (c) Panel Orientation */}
         <div style={styles.section}>
-          <span style={styles.sectionTitle}>environment</span>
-          <label style={styles.checkRow}>
-            <input
-              type="checkbox"
-              checked={state.environment.enabled}
-              onChange={(e) =>
-                update((n) => {
-                  n.environment.enabled = e.target.checked
-                })
-              }
-            />
-            enabled
-          </label>
-          <label style={styles.label}>mode</label>
+          <span style={styles.sectionTitle}>panel orientation</span>
           <select
             style={styles.control}
-            value={state.environment.mode}
-            onChange={(e) =>
-              update((n) => {
-                n.environment.mode = e.target.value
-              })
-            }
+            value={panelOrientation}
+            onChange={(e) => setPanelOrientation(e.target.value)}
           >
-            {ENVIRONMENT_MODES.map((m) => (
-              <option key={m} value={m}>
-                {m}
+            {PANEL_ORIENTATIONS.map((o) => (
+              <option key={o} value={o}>
+                {o}
               </option>
             ))}
           </select>
-          {state.environment.mode === 'custom_text' && (
-            <>
-              <label style={styles.label}>custom_text</label>
-              <textarea
-                style={{ ...styles.control, minHeight: '60px' }}
-                value={state.environment.custom_text ?? ''}
-                placeholder="misty forest at dawn, shallow fog"
-                onChange={(e) =>
-                  update((n) => {
-                    n.environment.custom_text = e.target.value || null
-                  })
-                }
-              />
-            </>
-          )}
+          <span style={styles.subheader}>
+            individual panel shape, separate dimension from grid (§4 pt 1)
+          </span>
         </div>
-
-        {/* forbidden_elements.user_level */}
-        <div style={styles.section}>
-          <span style={styles.sectionTitle}>forbidden_elements.user_level</span>
-          <textarea
-            style={{ ...styles.control, minHeight: '80px' }}
-            value={userLevelText}
-            placeholder={'one item per line\ne.g. neon_signs\nrain'}
-            onChange={(e) =>
-              update((n) => {
-                n.forbidden_elements.user_level = e.target.value
-                  .split('\n')
-                  .map((s) => s.trim())
-                  .filter((s) => s.length > 0)
-              })
-            }
-          />
-        </div>
-
-        <button
-          style={{ ...styles.copyBtn, alignSelf: 'flex-start' }}
-          onClick={onReset}
-        >
-          reset to default
-        </button>
       </div>
 
       {/* ---- Preview -------------------------------------------------- */}
