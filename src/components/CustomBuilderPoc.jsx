@@ -34,13 +34,15 @@
  */
 
 import React, { useState, useMemo } from 'react'
-import { buildDefaultState } from '../lib/cases/characterAngleStudy/defaults.js'
+import { buildDefaultState as buildAngleStudyDefault } from '../lib/cases/characterAngleStudy/defaults.js'
+import { buildDefaultState as buildNormalizerDefault } from '../lib/cases/characterNormalizer/defaults.js'
 import { compileToString } from '../lib/compiler/index.js'
 import {
   VALID_PANEL_COUNTS,
   CASE_ID,
   ENVIRONMENT_MODES,
 } from '../lib/cases/characterAngleStudy/schema.js'
+import { CASE_ID as NORMALIZER_CASE_ID } from '../lib/cases/characterNormalizer/schema.js'
 import { panelRoleStrategy } from '../lib/cases/characterAngleStudy/panelRoleStrategy.js'
 
 // Case-Registry für die POC. Nur ein Eintrag bisher, aber der Slot
@@ -286,16 +288,26 @@ export default function CustomBuilderPoc() {
   const [envCustomText, setEnvCustomText] = useState('')
   const [styleOverlay, setStyleOverlay] = useState(false)
   const [styleToken, setStyleToken] = useState('')
+  const [needsNormalization, setNeedsNormalization] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const panelCount = cols * rows
   const panelCountValid = VALID_PANEL_COUNTS.includes(panelCount)
 
-  // Build state from UI state each render. Kein persistenter React-
-  // State-Holder nötig — die vier Controls sind die single source of
-  // truth, alles andere ist derived.
+  // Normalizer Step 1 (Slice 8): compiled independently, always valid
+  const normalizerCompiled = useMemo(() => {
+    if (!needsNormalization) return null
+    try {
+      const ns = buildNormalizerDefault()
+      return { ok: true, output: compileToString(ns) }
+    } catch (err) {
+      return { ok: false, output: err?.message ?? String(err) }
+    }
+  }, [needsNormalization])
+
+  // Angle Study (Step 2, or only step if no normalization)
   const compiled = useMemo(() => {
-    const s = buildDefaultState()
+    const s = buildAngleStudyDefault()
     s.case = caseId
     s.layout.panel_count = panelCount
     s.layout.panel_orientation = panelOrientation
@@ -519,11 +531,62 @@ export default function CustomBuilderPoc() {
               look lab style token · later: dropdown from saved styles
             </span>
           </div>
+
+          {/* (h) Normalizer Two-Step — Slice 8 */}
+          <div style={{ borderTop: '1px solid var(--sg-border, #2a2a2a)', paddingTop: '10px', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <label style={{ ...styles.label, flexDirection: 'row', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={needsNormalization}
+                onChange={(e) => setNeedsNormalization(e.target.checked)}
+                style={{ accentColor: 'var(--sg-accent, #7c6aef)' }}
+              />
+              needs_normalization
+            </label>
+            <span style={styles.subheader}>
+              pre-step: generates clean full-body ref from cropped image
+            </span>
+          </div>
         </div>
       </div>
 
       {/* ---- Preview -------------------------------------------------- */}
       <div style={styles.preview}>
+
+        {/* Normalizer Step 1 Output — Slice 8 */}
+        {normalizerCompiled && (
+          <>
+            <div style={styles.previewHeader}>
+              <div>
+                <div style={styles.sectionTitle}>step 1 — normalizer prompt</div>
+                <div style={styles.subheader}>
+                  {normalizerCompiled.ok
+                    ? `${normalizerCompiled.output.length} chars · paste with cropped ref into NanoBanana`
+                    : 'compile error'}
+                </div>
+              </div>
+              <button
+                style={styles.copyBtn}
+                onClick={async () => {
+                  if (!normalizerCompiled.ok) return
+                  try { await navigator.clipboard.writeText(normalizerCompiled.output) } catch {}
+                }}
+              >
+                copy step 1
+              </button>
+            </div>
+            <pre
+              style={{
+                ...styles.output,
+                maxHeight: '200px',
+                flex: 'none',
+                ...(normalizerCompiled.ok ? {} : styles.error),
+              }}
+            >
+              {normalizerCompiled.output}
+            </pre>
+          </>
+        )}
 
         {/* (f) Visual Preview — Slice 6 */}
         {panelCountValid && (
@@ -550,7 +613,9 @@ export default function CustomBuilderPoc() {
 
         <div style={styles.previewHeader}>
           <div>
-            <div style={styles.sectionTitle}>compiled prompt-json</div>
+            <div style={styles.sectionTitle}>
+              {needsNormalization ? 'step 2 — ' : ''}compiled prompt-json
+            </div>
             <div style={styles.subheader}>
               {compiled.ok
                 ? `${compiled.output.length} chars · paste-ready for NanoBanana`

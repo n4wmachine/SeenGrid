@@ -30,7 +30,12 @@ import {
   validateState as validateAngleStudyState,
   CASE_ID as ANGLE_STUDY_CASE_ID,
 } from "../cases/characterAngleStudy/schema.js";
+import {
+  validateState as validateNormalizerState,
+  CASE_ID as NORMALIZER_CASE_ID,
+} from "../cases/characterNormalizer/schema.js";
 import { compileAngleStudyJson } from "./serializers/json.js";
+import { compileNormalizerJson } from "./serializers/normalizerJson.js";
 
 /**
  * Compile-Dispatch — routet auf den case-spezifischen Serializer.
@@ -49,10 +54,14 @@ export function compile(state) {
       validateAngleStudyState(state);
       return compileAngleStudyJson(state);
 
+    case NORMALIZER_CASE_ID:
+      validateNormalizerState(state);
+      return compileNormalizerJson(state);
+
     default:
       throw new Error(
         `compile: unsupported case ${JSON.stringify(state.case)}. ` +
-          `Known: ${ANGLE_STUDY_CASE_ID}.`
+          `Known: ${ANGLE_STUDY_CASE_ID}, ${NORMALIZER_CASE_ID}.`
       );
   }
 }
