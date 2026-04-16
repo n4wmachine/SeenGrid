@@ -84,6 +84,6 @@ Kein klassisches Text-Dashboard. Ein visuelles Produktionsboard im PureRef-Stil:
 
 ---
 
-## 6. Grid Cropper
+## 6. Grid Cropper + Upscaler
 
-Statt 6 oder 9 Panels einzeln zu croppen: User lädt seine generierten Grids auf SeenGrid hoch, SeenGrid croppt alle Panels automatisch auf einen Schlag zu Vollbild-Frames. Per Python-Skript, FFmpeg oder clientseitig.
+Statt 6 oder 9 Panels einzeln zu croppen: User lädt seine generierten Grids auf SeenGrid hoch, SeenGrid croppt alle Panels automatisch auf einen Schlag und **upscaled sie auf Vollbild-Format** (soweit mit Gratis-Upscaler oder Python möglich — kein Topaz-Niveau, aber brauchbar für Startframes). Der User weiß vorher bereits durch den Dim Advisory im Grid Creator wie groß seine Panels in 2K/4K sein werden und ob sie als Startframe tauglich sind.

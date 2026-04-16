@@ -105,6 +105,8 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 **Nach Slice 8:** Weitere Cases + Module (siehe `MODULE_AND_CASE_CATALOG.md`), Panel-Role-Customization (User wählt pro Panel welchen Winkel er will).
 
+**Wichtig bei der Engine-Fertigstellung:** Der bestehende Grid Operator (`GridOperator.jsx`) hat einen **Dim Advisory** (`getDimAdvice()`) der dem User pro Grid-Kombination die exakten Panel-Pixel-Größen bei 2K und 4K zeigt, mit Quality-Tags (Hires/Standard/Low/Tiny). Das muss in die neue Engine übernommen werden — der User muss vor der Generierung wissen ob seine Panels als Startframes tauglich sind.
+
 ---
 
 ## Roadmap nach der Engine
