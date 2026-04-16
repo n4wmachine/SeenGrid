@@ -81,7 +81,7 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 **Letzte Session (2026-04-16):** Doku-Restructure. Keine Engine-Arbeit.
 
-**Nächster Schritt:** Slice 4 (Face Reference Modul) oder Visual Overhaul — Jonas entscheidet.
+**Nächster Schritt:** Slice 4 — Face Reference Modul.
 
 ### Bestehende Module (alles in Arbeit, nichts final)
 - **Prompt Builder** — chip-basiert, Tab 1. Funktionsfähiger Platzhalter.
