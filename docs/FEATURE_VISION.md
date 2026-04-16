@@ -68,6 +68,22 @@ Beides schließt sich nicht gegenseitig aus — Priorität bestimmt wohin die En
 
 ---
 
-## 5. Grid Cropper
+## 5. Shot Dashboard / Visual Production Board
+
+Kein klassisches Text-Dashboard. Ein visuelles Produktionsboard im PureRef-Stil:
+
+- Alle Szenen und Shots des Films als visuelle Leiste — du siehst deinen Film als Bilderfolge
+- Generierte Startframes/Frames direkt per Drag & Drop reinschieben
+- Visuelles Storyboard/Direction Board: jeder Shot hat seinen Slot, du siehst sofort wo Lücken sind, wo Farbstimmung nicht passt, wo Übergänge fehlen
+- Fortschritt des Films auf einen Blick sichtbar
+- Szenen und Shots können umgeordnet, angepasst, annotiert werden
+
+**Verbindung zum Filmsystem:** Der Director erzeugt den Szenenplan → das Board zeigt die leeren Slots visuell → User füllt sie nach und nach mit generierten Frames.
+
+**Eigenständig nutzbar:** Auch ohne LLM-Filmsystem sinnvoll für jeden der einen Film manuell plant und Übersicht braucht.
+
+---
+
+## 6. Grid Cropper
 
 Statt 6 oder 9 Panels einzeln zu croppen: User lädt seine generierten Grids auf SeenGrid hoch, SeenGrid croppt alle Panels automatisch auf einen Schlag zu Vollbild-Frames. Per Python-Skript, FFmpeg oder clientseitig.
