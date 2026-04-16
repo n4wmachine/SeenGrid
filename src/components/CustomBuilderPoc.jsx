@@ -41,6 +41,7 @@ import {
   CASE_ID,
   ENVIRONMENT_MODES,
 } from '../lib/cases/characterAngleStudy/schema.js'
+import { panelRoleStrategy } from '../lib/cases/characterAngleStudy/panelRoleStrategy.js'
 
 // Case-Registry für die POC. Nur ein Eintrag bisher, aber der Slot
 // ist da — Slice 5+ kann hier einfach anhängen ohne die UI umzubauen.
@@ -67,6 +68,74 @@ function applyPanelArrangement(layout, cols, rows) {
   } else {
     delete layout.panel_arrangement
   }
+}
+
+/**
+ * SVG silhouette paths per view direction — Slice 6.
+ * Simple head+torso+legs outlines, distinguishable at small sizes.
+ * viewBox is 0 0 60 120 for all.
+ */
+const SILHOUETTE_PATHS = {
+  // Front: symmetric figure facing viewer
+  front: 'M30 8 a8 8 0 1 0 .1 0 Z M22 24 L18 60 L22 60 L24 90 L20 112 L26 112 L30 95 L34 112 L40 112 L36 90 L38 60 L42 60 L38 24 Z',
+  // Back: same shape, horizontal line across shoulders to suggest "away"
+  back: 'M30 8 a8 8 0 1 0 .1 0 Z M22 24 L18 60 L22 60 L24 90 L20 112 L26 112 L30 95 L34 112 L40 112 L36 90 L38 60 L42 60 L38 24 Z M24 30 L36 30',
+  // Right profile: figure shifted left, legs staggered
+  right_profile: 'M28 8 a8 8 0 1 0 .1 0 Z M24 24 L20 60 L24 60 L22 90 L18 112 L24 112 L28 90 L32 60 L40 60 L36 24 Z M28 90 L32 112 L38 112 L34 90',
+  // Left profile: mirrored right
+  left_profile: 'M32 8 a8 8 0 1 0 .1 0 Z M24 24 L20 60 L28 60 L28 90 L22 112 L28 112 L32 90 L36 60 L40 60 L36 24 Z M32 90 L28 112 L22 112 L26 90',
+  // Diagonal views — slight offset to suggest 3/4 angle
+  front_right: 'M28 8 a8 8 0 1 0 .1 0 Z M21 24 L17 60 L21 60 L23 90 L19 112 L25 112 L29 95 L33 112 L39 112 L35 90 L37 60 L41 60 L37 24 Z',
+  front_left: 'M32 8 a8 8 0 1 0 .1 0 Z M23 24 L19 60 L23 60 L25 90 L21 112 L27 112 L31 95 L35 112 L41 112 L37 90 L39 60 L43 60 L39 24 Z',
+  back_right: 'M28 8 a8 8 0 1 0 .1 0 Z M21 24 L17 60 L21 60 L23 90 L19 112 L25 112 L29 95 L33 112 L39 112 L35 90 L37 60 L41 60 L37 24 Z M23 30 L35 30',
+  back_left: 'M32 8 a8 8 0 1 0 .1 0 Z M23 24 L19 60 L23 60 L25 90 L21 112 L27 112 L31 95 L35 112 L41 112 L37 90 L39 60 L43 60 L39 24 Z M25 30 L37 30',
+}
+
+// Fallback for any view not in the map
+const FALLBACK_SILHOUETTE = SILHOUETTE_PATHS.front
+
+function PanelDummy({ index, view, isVertical }) {
+  const path = SILHOUETTE_PATHS[view] || FALLBACK_SILHOUETTE
+  const w = isVertical ? 60 : 90
+  const h = isVertical ? 90 : 60
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '4px',
+    }}>
+      <div style={{
+        width: w,
+        height: h,
+        border: '1px solid var(--sg-border, #2a2a2a)',
+        borderRadius: '4px',
+        background: 'var(--sg-bg-input, #0d0d0d)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+      }}>
+        <svg
+          viewBox="0 0 60 120"
+          width={isVertical ? 40 : 28}
+          height={isVertical ? 70 : 48}
+          style={{ opacity: 0.5 }}
+        >
+          <path d={path} fill="var(--sg-text-tertiary, #888)" fillRule="evenodd" />
+        </svg>
+      </div>
+      <span style={{
+        fontSize: '9px',
+        fontFamily: 'var(--sg-font-mono, monospace)',
+        color: 'var(--sg-text-tertiary, #888)',
+        textAlign: 'center',
+        lineHeight: 1.2,
+      }}>
+        {index}. {view}
+      </span>
+    </div>
+  )
 }
 
 // Inline style tokens — throwaway, no .module.css
@@ -422,6 +491,30 @@ export default function CustomBuilderPoc() {
 
       {/* ---- Preview -------------------------------------------------- */}
       <div style={styles.preview}>
+
+        {/* (f) Visual Preview — Slice 6 */}
+        {panelCountValid && (
+          <div style={styles.section}>
+            <span style={styles.sectionTitle}>panel preview</span>
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}>
+              {panelRoleStrategy(panelCount).map((role, i) => (
+                <PanelDummy
+                  key={i}
+                  index={i + 1}
+                  view={role.view}
+                  isVertical={panelOrientation === 'vertical'}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style={styles.previewHeader}>
           <div>
             <div style={styles.sectionTitle}>compiled prompt-json</div>
