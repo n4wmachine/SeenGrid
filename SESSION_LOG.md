@@ -17,6 +17,51 @@ Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Cha
 
 ---
 
+## 2026-04-16 — Brainstorm: MODULE_AND_CASE_CATALOG.md erstellt
+
+**Teilnehmer:** Jonas + Claude Opus 4.6 Chat (Brainstorm-Modus, kein Code)
+
+### Was passiert ist
+
+Jonas war kognitiv am Limit nach 4-5 Tagen nonstop Grid-Creator-Arbeit. Jeder neue Chat hat Dinge vergessen die bereits definiert waren, Jonas musste alles neu erklären. Das Kernproblem: es gab keine einzige Datei die alle Cases und Module verbindlich auflistet.
+
+Brainstorm-Session direkt im Chat (kein externer LLM-Chat — ChatGPT und Opus haben beide bei externem Brainstorm-Prompt versagt). Ergebnis:
+
+1. **10 Base Cases definiert:** character_sheet, character_angle_study, character_normalizer, start_end_frame, world_zone_board, world_angle_study, shot_coverage, story_sequence, expression_sheet, outfit_variation
+2. **13 Module definiert:** style_overlay, panel_content_fields, random_fill, forbidden_elements_user, environment_mode, camera_angle, weather_atmosphere, wardrobe, pose_override, expression_emotion, face_reference, multi_character, object_anchor
+3. **Kompatibilitäts-Matrix** erstellt (welches Modul passt zu welchem Case)
+4. **Custom Content Fields** als universelles Konzept verankert (ein Mechanismus für alle Cases)
+5. **Abgleich** mit BUILD_PLAN §7, §8, Grundgerüst, Strategy-Briefing — keine Widersprüche
+
+### Wichtige Klärungen aus der Session
+
+- **Character Sheet ≠ Angle Study:** Sheet = klassisches Referenzblatt, Angle Study = cinematische Panels
+- **World Zone Board ≠ World Angle Study:** Zone Board = verschiedene Orte einer Welt, Angle Study = ein Ort aus mehreren Kamerawinkeln
+- **Start/End Frame:** Zwei Bilder als Leitplanken für Video-KI. NICHT Story Sequence mit 2 Panels. Konsistenz-Locks auf Identität/Stil, Action ist frei.
+- **Core-Templates (Tier 2) = Presets für Custom Builder** (BUILD_PLAN §9.3), kein eigener Tab
+- **Random Fill / "Überrasch mich":** Button der alle Panel-Fields mit Zufallswerten aus Case-Pool füllt
+- **Look Lab → Grid Pipeline:** Kern-Feature, User kreiert Style → speichert Token → Token im Custom Builder auswählbar
+- **Neue Cases ergänzt** die in BUILD_PLAN §7 fehlten: character_sheet, world_angle_study, expression_sheet, outfit_variation
+- **Neue Module ergänzt:** camera_angle, weather_atmosphere, wardrobe, multi_character, object_anchor, random_fill, panel_content_fields
+
+### Artefakte
+
+- **NEU:** `MODULE_AND_CASE_CATALOG.md` — verbindlicher Katalog, vierte Pflichtlektüre
+- **GEÄNDERT:** `CLAUDE.md` — Session-Start-Protokoll von 3 auf 4 Dateien erweitert
+
+### Stand am Ende der Session
+
+- Branch: `main` (direkt)
+- `origin/main` HEAD: `6499965`
+- MVP-Scope (Slices 1-8) **unverändert** — Katalog dokumentiert was NACH dem MVP kommt
+- Slices 1-3 fertig, Slice 4 wartet auf Jonas-Go
+
+### Nächster Schritt
+
+**Slice 4 — Face Reference Modul** per BUILD_PLAN.md §14. Startet nur auf explizites Jonas-Go. Der Katalog ändert nichts am Slice-Plan — er verhindert nur dass künftige Chats raten müssen was es alles geben soll.
+
+---
+
 ## 2026-04-16 — Slice-3-POC browser-verified + Feature-Request Panel-Role-Customization
 
 **Teilnehmer:** Jonas + Claude Opus 4.6 Chat (gleiche Session wie Slice-3-Fixup, direkt nach dem Push)
