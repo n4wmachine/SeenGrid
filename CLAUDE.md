@@ -118,7 +118,7 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 ## Roadmap nach der Engine
 
 1. **Grid Engine fertig bauen** ← jetzt, kein Kompromiss
-2. **Visual Overhaul** — komplette Layout-Neugestaltung. Visuelle Kacheln statt Textwände, professionelles Look & Feel. Design-Spec liegt bereit in `design-spec/DESIGN_SPEC.md` mit CSS-Dateien, Typographie, Farbsystem, Layout-Strukturen.
+2. **Visual Overhaul** — komplette Layout-Neugestaltung. Canvas-Pattern Grid Creator, Prompt Hub (ex Vault+Trendy), Shell-System. Plan liegt in `docs/VISUAL_OVERHAUL_PLAN.md`.
 3. **UX Polish + Fixes** — auf dem neuen Design, nicht auf dem alten
 
 ---
@@ -133,7 +133,8 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 | `DISTILLATIONS/character-study-chatgpt-groundtruth.md` | Original-Paragraph-Prompt. **Locked** — nicht verändern ohne neuen NanoBanana-Test. |
 | `SeenGrid_grundgeruest_fuer_claude.md` | Konzeptionelles Grundgerüst: Operator/Mode/Preset-Architektur, Projektidentität |
 | `SEENGRID_STRATEGY_AND_FUTURE_VISION_BRIEFING.txt` | Langfrist-Vision: Pre-Production OS, Automationsschicht, strategische Richtung |
-| `design-spec/DESIGN_SPEC.md` | Visual Overhaul Spec: CSS, Layout, Typographie, Farbsystem |
+| `docs/VISUAL_OVERHAUL_PLAN.md` | Visual Overhaul Plan: Canvas-Pattern Grid Creator, Prompt Hub, Layout-Architektur |
+| `design-spec/DESIGN_SPEC.md` | Alt — wird gelöscht/ersetzt. Farbregeln waren falsch (Gold/Teal invertiert). |
 | `docs/archive/BUILD_PLAN_FULL.md` | Vollständiger Rebuild-Plan mit allen Details. Nachschlagewerk. |
 | `docs/archive/SESSION_LOG_FULL.md` | Chronologisches Session-Log. Nachschlagewerk. |
 
