@@ -30,10 +30,10 @@ Konkret: Ein neuer Case = neue Config-Dateien unter `src/lib/cases/`, kein neuer
 
 Der Grid Creator hat vier Tiers:
 
-1. **Signature** — Jonas' handoptimierte, NanoBanana-validierte Sheets. Ein Klick, fertiger Prompt. Aktuell Platzhalter, echte Sheets kommen rein sobald die Engine steht.
-2. **Core** — Basis-Starter-Templates die als **vorgefüllte Zustände in den Custom Builder laden** (nicht ein eigener Tab — der User kann sie danach frei editieren).
-3. **Trendy** — Kuratierte Community-Grids aus dem Prompt Vault / Trending-Prompts-Repo. **Eigenständige Preset-Sammlung mit Copy-Paste-Output** — werden NICHT in den Custom Builder geladen, weil Community-Prompts nicht zwingend in das Case/Modul-Schema passen. Eher eine Grid-spezifische Vault-Galerie.
-4. **Custom Builder** — Die echte modulare Live-Engine. User wählt Case, Grid-Dimensionen, Panel-Orientierung, toggled Module, bearbeitet Panel-Rollen — Prompt passt sich in Echtzeit an. Live Visual Preview mit SVG-Dummies zeigt was jedes Panel darstellt.
+1. **Signature** — Jonas' handoptimierte, NanoBanana-validierte Sheets. Ein Klick, fertiger Prompt, direkt kopierbar. **Läuft nicht über die Engine** — das sind fertige, getestete Prompts die so bleiben wie sie sind. Aktuell Platzhalter, echte Sheets kommen rein sobald die Engine steht.
+2. **Core** — Basis-Starter-Templates die als **vorgefüllte Zustände in den Custom Builder laden** (nicht ein eigener Tab — der User kann sie danach frei editieren). **Läuft über die Engine.**
+3. **Trendy** — Kuratierte Community-Grids aus dem Prompt Vault / Trending-Prompts-Repo. **Eigenständige Preset-Sammlung mit Copy-Paste-Output** — werden NICHT in den Custom Builder geladen, weil Community-Prompts nicht zwingend in das Case/Modul-Schema passen. **Läuft nicht über die Engine.**
+4. **Custom Builder** — Die echte modulare Live-Engine. User wählt Case, Grid-Dimensionen, Panel-Orientierung, toggled Module, bearbeitet Panel-Rollen — Prompt passt sich in Echtzeit an. Live Visual Preview mit SVG-Dummies zeigt was jedes Panel darstellt. **Das Herzstück.**
 
 ---
 
