@@ -39,6 +39,7 @@ import { compileToString } from '../lib/compiler/index.js'
 import {
   VALID_PANEL_COUNTS,
   CASE_ID,
+  ENVIRONMENT_MODES,
 } from '../lib/cases/characterAngleStudy/schema.js'
 
 // Case-Registry für die POC. Nur ein Eintrag bisher, aber der Slot
@@ -212,6 +213,8 @@ export default function CustomBuilderPoc() {
   const [rows, setRows] = useState(1)
   const [panelOrientation, setPanelOrientation] = useState('vertical')
   const [faceReference, setFaceReference] = useState(true)
+  const [envMode, setEnvMode] = useState('inherit_from_reference')
+  const [envCustomText, setEnvCustomText] = useState('')
   const [copied, setCopied] = useState(false)
 
   const panelCount = cols * rows
@@ -227,6 +230,8 @@ export default function CustomBuilderPoc() {
     s.layout.panel_orientation = panelOrientation
     applyPanelArrangement(s.layout, cols, rows)
     s.references.face_reference.enabled = faceReference
+    s.environment.mode = envMode
+    s.environment.custom_text = envMode === 'custom_text' ? envCustomText : null
 
     if (!panelCountValid) {
       return {
@@ -245,7 +250,7 @@ export default function CustomBuilderPoc() {
     } catch (err) {
       return { ok: false, output: err?.message ?? String(err) }
     }
-  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid, faceReference])
+  }, [caseId, cols, rows, panelOrientation, panelCount, panelCountValid, faceReference, envMode, envCustomText])
 
   const onCopy = async () => {
     if (!compiled.ok) return
@@ -278,8 +283,8 @@ export default function CustomBuilderPoc() {
         <div style={styles.warning}>
           Provisorischer fünfter Tab. Finale Zieladresse:
           src/components/GridOperator/CustomBuilder.jsx nach Visual Overhaul.
-          Module-Toggles: face_reference (Slice 4) live. environment,
-          style_overlay kommen in Slices 5/7.
+          Module-Toggles: face_reference (Slice 4), environment (Slice 5)
+          live. style_overlay kommt in Slice 7.
         </div>
 
         {/* (a) Case */}
@@ -381,6 +386,37 @@ export default function CustomBuilderPoc() {
           <span style={styles.subheader}>
             adds a second reference image slot for facial identity
           </span>
+
+          {/* (e) Environment Mode — Slice 5 */}
+          <div style={{ borderTop: '1px solid var(--sg-border, #2a2a2a)', paddingTop: '10px', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <label style={styles.label}>
+              environment
+              <select
+                style={styles.control}
+                value={envMode}
+                onChange={(e) => setEnvMode(e.target.value)}
+              >
+                {ENVIRONMENT_MODES.map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            </label>
+            {envMode === 'custom_text' && (
+              <label style={styles.label}>
+                custom environment
+                <input
+                  style={styles.control}
+                  type="text"
+                  placeholder="e.g. misty forest at dawn"
+                  value={envCustomText}
+                  onChange={(e) => setEnvCustomText(e.target.value)}
+                />
+              </label>
+            )}
+            <span style={styles.subheader}>
+              inherit = from reference · neutral_studio = plain backdrop · custom = your text
+            </span>
+          </div>
         </div>
       </div>
 
