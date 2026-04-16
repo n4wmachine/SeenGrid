@@ -134,7 +134,7 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 | `SeenGrid_grundgeruest_fuer_claude.md` | Konzeptionelles Grundgerüst: Operator/Mode/Preset-Architektur, Projektidentität |
 | `SEENGRID_STRATEGY_AND_FUTURE_VISION_BRIEFING.txt` | Langfrist-Vision: Pre-Production OS, Automationsschicht, strategische Richtung |
 | `docs/VISUAL_OVERHAUL_PLAN.md` | Visual Overhaul Plan: Canvas-Pattern Grid Creator, Prompt Hub, Layout-Architektur |
-| `design-spec/DESIGN_SPEC.md` | Alt — wird gelöscht/ersetzt. Farbregeln waren falsch (Gold/Teal invertiert). |
+| `design-spec/SGLogo5.png` | Original-Logo (1.6MB). Einziges verbleibendes Asset aus der alten Design-Spec. |
 | `docs/archive/BUILD_PLAN_FULL.md` | Vollständiger Rebuild-Plan mit allen Details. Nachschlagewerk. |
 | `docs/archive/SESSION_LOG_FULL.md` | Chronologisches Session-Log. Nachschlagewerk. |
 
