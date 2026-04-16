@@ -1,5 +1,21 @@
 # SESSION_LOG.md — SeenGrid
 
+## ⚡ AKTUELLER STAND (lies nur diesen Block wenn du schnell starten willst)
+
+- **Datum:** 2026-04-16
+- **origin/main HEAD:** `0da32d1`
+- **Slices fertig:** 1 (Schema), 2 (Compiler), 3 (POC-UI) — alle für `character_angle_study`
+- **Nächster Slice:** 4+5 (Face Reference + Environment Modul)
+- **Neue Datei:** `MODULE_AND_CASE_CATALOG.md` — 10 Cases, 13 Module, Kompatibilitäts-Matrix. **Pflichtlektüre.**
+- **Jonas will:** Ground-Truth JSON-Prompts für Base Cases liefern → unter `DISTILLATIONS/` ablegen → dann Slices weiter bauen
+- **Jonas-Zustand:** kognitiv am Limit, max 1 Satz pro Konzept, keine Walls of Text, keine Rückfragen die in den 4 Dateien stehen
+- **Tests:** 33/33 grün (14 Schema + 19 Compiler)
+- **Build:** clean
+
+Für Details zu vergangenen Sessions: lies die Einträge unten. Sie sind vollständig und chronologisch.
+
+---
+
 Chronologisches Log aller Arbeits-Sessions am SeenGrid-Rebuild. **Jeder neue Chat** liest diese Datei beim Start (als drittes Dokument nach CLAUDE.md und BUILD_PLAN.md) und fügt am Ende der Session einen neuen Eintrag hinzu.
 
 **Format pro Eintrag:**
