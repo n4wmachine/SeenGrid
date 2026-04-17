@@ -156,7 +156,7 @@
   background: linear-gradient(180deg, rgba(43, 181, 178, 0.15) 0%, rgba(43, 181, 178, 0.08) 100%);
   color: var(--sg2-teal);
   border: none;
-  box-shadow: 0 0 32px rgba(43, 181, 178, 0.18), inset 0 0 0 1px rgba(43, 181, 178, 0.15);
+  box-shadow: 0 0 28px rgba(43, 181, 178, 0.35);
 }
 
 .itemActive::before {
