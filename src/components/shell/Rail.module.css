@@ -205,3 +205,21 @@
 .utilSection .item:hover {
   opacity: 1;
 }
+
+/* ---- FOCUS RING ----
+   :focus-visible zeigt den Ring nur bei Tastatur-Fokus (Tab, F12-Shift).
+   :focus mit outline:none unterdrueckt den Browser-Default bei Maus-Klick.
+   Reihenfolge: :focus zuerst, :focus-visible danach — gleiche Specificity,
+   :focus-visible gewinnt bei Tastatur weil spaeter in CSS.
+*/
+
+:global(.sg2-shell) .logo:focus,
+:global(.sg2-shell) .item:focus {
+  outline: none;
+}
+
+:global(.sg2-shell) .logo:focus-visible,
+:global(.sg2-shell) .item:focus-visible {
+  outline: 2px solid rgba(60, 207, 204, 0.6);
+  outline-offset: 2px;
+}
