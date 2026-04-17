@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import DocRenderer from './components/DocRenderer';
 import { getAllDocs, saveDoc, deleteDoc, importFiles } from './lib/storage';
+import { categorize, autoName, getCategory, getAllCategories } from './lib/categorizer';
 
 export default function App() {
   const [docs, setDocs] = useState([]);
@@ -10,6 +11,7 @@ export default function App() {
   const [dragging, setDragging] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [editingName, setEditingName] = useState(null);
+  const [collapsedCats, setCollapsedCats] = useState({});
   const dragCounter = useRef(0);
   const fileInput = useRef(null);
 
@@ -32,6 +34,19 @@ export default function App() {
     return true;
   });
 
+  const grouped = useMemo(() => {
+    const groups = {};
+    for (const doc of filtered) {
+      const cat = doc.category || 'notizen';
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(doc);
+    }
+    const order = getAllCategories().map(c => c.id);
+    return order
+      .filter(id => groups[id]?.length > 0)
+      .map(id => ({ category: getCategory(id), docs: groups[id] }));
+  }, [filtered]);
+
   const allTags = [...new Set(docs.flatMap(d => d.tags))].sort();
 
   const handleDrop = useCallback(async (e) => {
@@ -42,16 +57,16 @@ export default function App() {
       f.type === 'text/plain' || f.name.endsWith('.txt') || f.name.endsWith('.md') || f.type === ''
     );
     if (!files.length) return;
-    const newDocs = await importFiles(files);
-    const all = await reload();
+    const newDocs = await importFiles(files, { categorizeFn: categorize, autoNameFn: autoName });
+    await reload();
     if (newDocs.length > 0) setActiveId(newDocs[0].id);
   }, [reload]);
 
   const handleFileSelect = useCallback(async (e) => {
     const files = [...e.target.files];
     if (!files.length) return;
-    const newDocs = await importFiles(files);
-    const all = await reload();
+    const newDocs = await importFiles(files, { categorizeFn: categorize, autoNameFn: autoName });
+    await reload();
     if (newDocs.length > 0) setActiveId(newDocs[0].id);
     e.target.value = '';
   }, [reload]);
@@ -99,6 +114,17 @@ export default function App() {
     reload();
   };
 
+  const handleChangeCategory = async (id, newCat) => {
+    const doc = docs.find(d => d.id === id);
+    if (!doc) return;
+    await saveDoc({ ...doc, category: newCat, updatedAt: Date.now() });
+    reload();
+  };
+
+  const toggleCat = (catId) => {
+    setCollapsedCats(prev => ({ ...prev, [catId]: !prev[catId] }));
+  };
+
   return (
     <div
       className="app"
@@ -129,6 +155,7 @@ export default function App() {
             </svg>
             DocLab
           </h1>
+          {docs.length > 0 && <span className="doc-count">{docs.length} Dokumente</span>}
         </div>
 
         <div className="sidebar-search">
@@ -158,43 +185,56 @@ export default function App() {
         )}
 
         <div className="doc-list">
-          {filtered.map(doc => (
-            <div
-              key={doc.id}
-              className={`doc-item ${doc.id === activeId ? 'active' : ''}`}
-              onClick={() => setActiveId(doc.id)}
-            >
-              <div className="doc-item-header">
-                {editingName === doc.id ? (
-                  <input
-                    className="rename-input"
-                    defaultValue={doc.name}
-                    autoFocus
-                    onBlur={e => handleRename(doc.id, e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter') handleRename(doc.id, e.target.value);
-                      if (e.key === 'Escape') setEditingName(null);
-                    }}
-                    onClick={e => e.stopPropagation()}
-                  />
-                ) : (
-                  <span
-                    className="doc-name"
-                    onDoubleClick={(e) => { e.stopPropagation(); setEditingName(doc.id); }}
-                  >{doc.name}</span>
-                )}
-                <button
-                  className="doc-delete"
-                  onClick={e => { e.stopPropagation(); handleDelete(doc.id); }}
-                  title="Löschen"
-                >&times;</button>
-              </div>
-              {doc.tags.length > 0 && (
-                <div className="doc-item-tags">
-                  {doc.tags.map(t => <span key={t} className="mini-tag">{t}</span>)}
+          {grouped.map(({ category, docs: catDocs }) => (
+            <div key={category.id} className="cat-group">
+              <button
+                className="cat-header"
+                onClick={() => toggleCat(category.id)}
+              >
+                <span className="cat-dot" style={{ background: category.color }} />
+                <span className="cat-label">{category.label}</span>
+                <span className="cat-count">{catDocs.length}</span>
+                <span className={`cat-arrow ${collapsedCats[category.id] ? 'collapsed' : ''}`}>&#9662;</span>
+              </button>
+              {!collapsedCats[category.id] && catDocs.map(doc => (
+                <div
+                  key={doc.id}
+                  className={`doc-item ${doc.id === activeId ? 'active' : ''}`}
+                  onClick={() => setActiveId(doc.id)}
+                >
+                  <div className="doc-item-header">
+                    {editingName === doc.id ? (
+                      <input
+                        className="rename-input"
+                        defaultValue={doc.name}
+                        autoFocus
+                        onBlur={e => handleRename(doc.id, e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') handleRename(doc.id, e.target.value);
+                          if (e.key === 'Escape') setEditingName(null);
+                        }}
+                        onClick={e => e.stopPropagation()}
+                      />
+                    ) : (
+                      <span
+                        className="doc-name"
+                        onDoubleClick={(e) => { e.stopPropagation(); setEditingName(doc.id); }}
+                      >{doc.name}</span>
+                    )}
+                    <button
+                      className="doc-delete"
+                      onClick={e => { e.stopPropagation(); handleDelete(doc.id); }}
+                      title="Löschen"
+                    >&times;</button>
+                  </div>
+                  {doc.tags.length > 0 && (
+                    <div className="doc-item-tags">
+                      {doc.tags.map(t => <span key={t} className="mini-tag">{t}</span>)}
+                    </div>
+                  )}
+                  <span className="doc-date">{new Date(doc.updatedAt).toLocaleDateString('de-DE')}</span>
                 </div>
-              )}
-              <span className="doc-date">{new Date(doc.updatedAt).toLocaleDateString('de-DE')}</span>
+              ))}
             </div>
           ))}
         </div>
@@ -216,7 +256,18 @@ export default function App() {
         {activeDoc ? (
           <>
             <header className="doc-header">
-              <h2>{activeDoc.name}</h2>
+              <div className="doc-header-top">
+                <h2>{activeDoc.name}</h2>
+                <select
+                  className="cat-select"
+                  value={activeDoc.category || 'notizen'}
+                  onChange={e => handleChangeCategory(activeDoc.id, e.target.value)}
+                >
+                  {getAllCategories().map(c => (
+                    <option key={c.id} value={c.id}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
               <span className="doc-filename">{activeDoc.filename}</span>
               <div className="doc-tags-bar">
                 {activeDoc.tags.map(tag => (

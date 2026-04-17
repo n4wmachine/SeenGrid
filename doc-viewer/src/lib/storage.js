@@ -60,15 +60,17 @@ export async function deleteDoc(id) {
   });
 }
 
-export async function importFiles(fileList) {
+export async function importFiles(fileList, { categorizeFn, autoNameFn } = {}) {
   const docs = [];
   for (const file of fileList) {
     const text = await file.text();
+    const baseName = file.name.replace(/\.[^.]+$/, '');
     const doc = {
       id: crypto.randomUUID(),
-      name: file.name.replace(/\.[^.]+$/, ''),
+      name: autoNameFn ? autoNameFn(text, baseName) : baseName,
       filename: file.name,
       content: text,
+      category: categorizeFn ? categorizeFn(text) : 'notizen',
       tags: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
