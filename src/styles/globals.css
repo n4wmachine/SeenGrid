@@ -57,6 +57,7 @@ input:focus:not(:focus-visible) { outline: none; }
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-synthesis: none;
 }
 
 /* ---- V2 BUTTON BASE ---- */

@@ -12,7 +12,8 @@
   border-radius: 8px;
   padding: 10px 13px;
   min-width: 200px;
-  max-width: 280px;
+  max-width: 260px;
+  overflow: visible;
   box-shadow: var(--sg2-shadow-tooltip);
   pointer-events: none;
   animation: sg2-tooltip-in 0.18s ease;
@@ -65,10 +66,12 @@
 }
 
 .desc {
-  font-family: var(--sg2-font-mono);
+  font-family: var(--sg2-font-body);
   font-size: 11px;
   color: #a0a0b8;
   letter-spacing: 0.02em;
   line-height: 1.45;
   white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }

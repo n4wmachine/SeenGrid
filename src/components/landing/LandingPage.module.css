@@ -290,9 +290,9 @@
 }
 
 :global(.sg2-shell) .qsIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   background: linear-gradient(135deg, rgba(60, 207, 204, 0.2) 0%, rgba(60, 207, 204, 0.08) 100%);
   border: 1px solid rgba(60, 207, 204, 0.4);
   display: flex;
