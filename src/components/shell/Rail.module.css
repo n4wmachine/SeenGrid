@@ -115,6 +115,7 @@
 /* ---- RAIL ITEM ---- */
 
 .item {
+  flex: 1;
   height: 56px;
   margin: 4px 10px;
   border-radius: 12px;
