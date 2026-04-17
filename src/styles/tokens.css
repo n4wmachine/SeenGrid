@@ -70,10 +70,14 @@
   --sg2-error-bg:            rgba(245, 97, 97, 0.08);
   --sg2-error-border:        rgba(245, 97, 97, 0.25);
 
-  /* ---- TYPOGRAPHY ---- */
-  --sg2-font-display:        'Instrument Serif', Georgia, serif;
-  --sg2-font-body:           'Geist', system-ui, -apple-system, sans-serif;
-  --sg2-font-mono:           'Geist Mono', 'SF Mono', 'Fira Code', monospace;
+  /* ---- TYPOGRAPHY ----
+     General Sans trägt Display + Body (engineered-mit-Wärme, Söhne-DNA-Nachfolger).
+     JetBrains Mono für alle Mono-Rollen (Subtitles, Status, Section-Labels, Mono-Hints).
+     Geist bleibt als Fallback falls General Sans nicht lädt.
+  */
+  --sg2-font-display:        'General Sans', 'Geist', system-ui, -apple-system, sans-serif;
+  --sg2-font-body:           'General Sans', 'Geist', system-ui, -apple-system, sans-serif;
+  --sg2-font-mono:           'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', monospace;
 
   --sg2-text-display:        24px;
   --sg2-text-h1:             16px;
