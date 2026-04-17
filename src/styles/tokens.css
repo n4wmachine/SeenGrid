@@ -72,7 +72,7 @@
 
   /* ---- TYPOGRAPHY ---- */
   --sg2-font-display:        'Instrument Serif', Georgia, serif;
-  --sg2-font-body:           'Geist Sans', 'Geist', system-ui, -apple-system, sans-serif;
+  --sg2-font-body:           'Geist', system-ui, -apple-system, sans-serif;
   --sg2-font-mono:           'Geist Mono', 'SF Mono', 'Fira Code', monospace;
 
   --sg2-text-display:        24px;

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { LangProvider } from './context/LangContext.jsx'
 
-// Local font packages — no Google Fonts CDN dependency
+// Local font packages — no CDN dependency
 import '@fontsource/space-grotesk/400.css'
 import '@fontsource/space-grotesk/500.css'
 import '@fontsource/space-grotesk/600.css'
@@ -11,6 +11,12 @@ import '@fontsource/space-grotesk/700.css'
 import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
 import '@fontsource/jetbrains-mono/700.css'
+
+// V2 fonts (Geist family) — local via @fontsource
+import '@fontsource/geist/400.css'
+import '@fontsource/geist/500.css'
+import '@fontsource/geist-mono/400.css'
+import '@fontsource/geist-mono/500.css'
 
 import './styles/theme.css'
 
