@@ -161,7 +161,7 @@
 .itemActive::before {
   content: '';
   position: absolute;
-  left: 12px;
+  left: 18px;
   top: 14px;
   bottom: 14px;
   width: 3px;
