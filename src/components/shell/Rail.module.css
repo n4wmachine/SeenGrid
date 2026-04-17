@@ -138,7 +138,6 @@
 }
 
 .item:hover {
-  background: rgba(255, 255, 255, 0.04);
   color: var(--sg2-text-primary);
 }
 
