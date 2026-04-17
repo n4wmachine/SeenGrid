@@ -6,11 +6,38 @@
    ============================================================ */
 
 /* ---- FONT LOADING ----
-   General Sans wird via <link> in index.html geladen (preconnect + stylesheet)
-   für zuverlaessiges, fruehes Laden. JetBrains Mono + Geist (Fallback) via
-   @fontsource in main.jsx. Kein CDN @import mehr hier — @import blockt spaet
-   wenn die enthaltende CSS selbst erst via JS importiert wird.
+   General Sans wird selbst gehostet aus public/fonts/general-sans/.
+   Vite base ist '/SeenGrid/' — der Pfad gilt sowohl lokal
+   (localhost:5173/SeenGrid/) als auch in Produktion (n4wmachine.github.io/SeenGrid/).
+   Drei echte Schnitte: Regular (400), Medium (500), Bold (700).
+   font-synthesis: none auf .sg2-shell verhindert dass der Browser
+   fehlende Weights synthetisch aus vorhandenen baut.
+   JetBrains Mono + Geist (Fallback) lokal via @fontsource in main.jsx.
 */
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/SeenGrid/fonts/general-sans/GeneralSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/SeenGrid/fonts/general-sans/GeneralSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/SeenGrid/fonts/general-sans/GeneralSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ---- SCROLLBARS (global override) ---- */
 
