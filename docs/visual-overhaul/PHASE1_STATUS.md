@@ -1,8 +1,58 @@
 # Phase 1 Status — Visual Overhaul
 
 **Stand:** 2026-04-17  
-**Branch:** `claude/seengrid-visual-phase-2-5ZC5a`  
-**Vorgänger-Branch:** `claude/seengrid-visual-overhaul-RQLjg` (Phase 1 Shell+Landing, gemergt)
+**Branch:** `claude/seengrid-visual-overhaul-6RK4n`  
+**Vorgänger-Branch:** `claude/seengrid-visual-phase-2-5ZC5a` (Phase 1 Shell+Landing inkl. Rail-Fixes, gemergt als Fast-Forward)  
+**Letzter Commit:** `f468ba9` — docs: Phase 1 Status aktualisiert — Rail-Fixes dokumentiert  
+**Push-Status:** Alles gepusht. Working tree clean.
+
+---
+
+## Session 2026-04-17 (Übergabe an Opus 4.7 1M)
+
+Diese Session war reine Diagnose- und Einlese-Session. Kein Code geschrieben.
+
+**Gemacht:**
+- Phase-2-Branch in aktuellen Branch gemergt (Fast-Forward, keine Konflikte)
+- Handoff v2 + NUANCEN.md + PHASE1_STATUS.md gelesen
+- Hero-Bug diagnostiziert (siehe unten)
+- Mockup `mockup_01_shell_landing.html` gelesen zur Verifikation der Hero-Spec
+
+**Entscheidung zur Mockup-vs-NUANCEN-Diskrepanz:**
+
+Der Mockup `mockup_01_shell_landing.html` hat **keinen Hero-Bereich**. Die Landing geht dort direkt in die drei Bänder (CONTINUE / QUICK START / DISCOVER).
+
+NUANCEN.md Punkt 11 ("Brand-Präsenz ist bewusst stärker als bei etablierten Tools") schreibt aber explizit:
+
+> Landing hat einen expliziten Hero-Bereich mit großem Logo + Wordmark.
+
+**Regel:** NUANCEN gewinnt bei Konflikten mit dem Mockup. Der Hero bleibt. Der Mockup ist in diesem Punkt veraltet — NUANCEN Punkt 11 ist die aktuelle Wahrheit.
+
+---
+
+## Hero-Bug Diagnose (Fix steht aus)
+
+**Symptom:** Jonas misst im Browser-Screenshot das Logo-Quadrat bei ~100-110px statt der spezifizierten 160px.
+
+**Root Cause:** Kein CSS-Override, keine Flex-Compression, kein Parent-Constraint. Die 160px von `.heroLogo` werden korrekt gerendert — sind aber **unsichtbar**, weil `.heroLogo` keinen Border und keinen Hintergrund hat. Die sichtbare Fläche ist `.heroLogoInner` (136×136px mit 2px Teal-Border).
+
+Innerhalb `.heroLogoInner` frisst das interne Padding die sichtbare Zellen-Fläche auf:
+- Box: 136×136px (mit `box-sizing: border-box`)
+- Minus Border: 2×2 = 4px
+- Minus Padding: 16×2 = 32px
+- **Sichtbare Zellen: 136 − 4 − 32 = 100px** ← das misst Jonas
+
+**Fix (empfohlen):** Padding in `.heroLogoInner` von 16px auf **6-8px** reduzieren. Das bringt die sichtbaren Zellen auf ~120-124px bei sonst unveränderten Container-Werten (`.heroLogo` 160×160, `.heroLogoInner` 136×136, `.heroWordmark` 72px).
+
+**Warum nicht Container vergrößern:** Die NUANCEN-Brand-Präsenz-Regel ist erfüllt wenn das Logo "groß genug präsent" ist. 120+px sichtbare Zellen erfüllen das. Container-Vergrößerung wäre auch valide, aber greift unnötig in die Layout-Proportionen der Landing ein.
+
+**Datei:** `src/components/landing/LandingPage.module.css`, `.heroLogoInner` Regel
+
+---
+
+## Tooltip-Position-Bug (weiter offen)
+
+Visuelle Verifikation steht weiterhin aus. Jonas wollte Screenshot schicken, wurde in dieser Session nicht eingelöst (Session endete vorher). Code-Review der `RichTooltip.jsx` zeigt korrekte Fixed-Positionierung via `getBoundingClientRect()` — kein offensichtlicher Code-Bug.
 
 ---
 
