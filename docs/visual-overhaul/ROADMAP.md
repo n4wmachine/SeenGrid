@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
 **Stand:** 2026-04-17
-**Aktive Phase:** Brand-Session (in Vorbereitung)
+**Aktive Phase:** Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik
 
 ---
 
@@ -9,7 +9,8 @@
 
 ```
 [✓] Phase 1: Foundation (Shell + Landing + Rail) ......... fertig 2026-04-17
-[→] Brand-Session: Schrift + Landing-Atmosphäre .......... AKTIV
+[✓] Brand-Session: Schrift + Landing-Atmosphäre .......... fertig 2026-04-17
+[→] Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik ... AKTIV
 [ ] Picker: Grid Creator Picker (Template-Auswahl)
 [ ] Workspace: Grid Creator Workspace (3-Spalten + Bars) ..  größter Brocken
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
@@ -22,7 +23,9 @@
 
 ## Was kommt nach der aktiven Phase
 
-**Nach Brand-Session:** Picker-Phase startet. Picker liest die Brand-Entscheidungen aus `PHASE1_STATUS.md` und `HANDOFF_BRAND_TO_PICKER.md`.
+**Nach Produkt-Strategie:** Picker-Phase startet. Picker liest die Brand-Entscheidungen aus `PHASE1_STATUS.md` und die Produkt-Konzept-Entscheidungen aus dem Strategie-Handoff.
+
+**Warum Produkt-Strategie vor Picker:** Das Continue-Band auf der Landing impliziert eine Projekt-Hierarchie die es im Code noch nicht gibt. Bevor der Picker gebaut wird, muss geklärt sein: Was ist ein Projekt? Wie hängen Grid-Presets an Projekten? Was genau erscheint im Continue-Band? Ohne diese Entscheidung würde der Picker auf einem Produkt-Konzept-Fragezeichen gebaut.
 
 **Reihenfolge ist nicht in Stein gemeißelt** — z.B. könnte SeenLab Visual-Update vorgezogen werden wenn Token-Store gebraucht wird. Aktive Phase wird hier markiert.
 
@@ -32,6 +35,7 @@
 
 - **Architektur** (Komponenten-Struktur, Routing, State-Management) → Spec + NUANCEN, nicht neu verhandeln
 - **Brand** (Schrift, Farben, visuelle Atmosphäre) → Brand-Session
+- **Produkt-Konzept** (Projekte, Presets, Continue-Logik) → Produkt-Strategie-Session
 - **Implementation** (CSS-Werte, JS-Logik, kleine Layout-Details) → Code-Chats
 - **Sequenz** (welche Phase wann) → Jonas + aktiver Planungs-Chat
 
@@ -62,6 +66,9 @@ Shell-Struktur (Rail + Header + StatusBar), Landing-Page mit den drei Bändern (
 
 **Brand-Session**
 Schrift-Auswahl + Landing-Atmosphäre. Behebt die visuelle Unbefriedigung der Phase 1 bevor weitere Komponenten draufgebaut werden. Beinhaltet NICHT: Logo, Slogan, App-Name (separate Brand-Session später).
+
+**Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik**
+Konzept-Session, keine Code-Session. Klärt: Was ist ein Projekt im SeenGrid-Sinn? Wie hängen Grid-Presets an Projekten? Was erscheint konkret im Continue-Band (Grids? Projekte? Sessions?)? Ergebnis: Produkt-Konzept-Spec die der Picker-Phase als Input dient.
 
 **Picker**
 Grid Creator Einstiegs-Page mit Template-Auswahl. 10 Core Templates + Classics + Start from Scratch. Search + Filter-Pills. Card-Pattern.
