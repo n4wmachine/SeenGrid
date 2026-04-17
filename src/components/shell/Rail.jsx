@@ -4,16 +4,19 @@ import icons from './railIcons.jsx'
 import RichTooltip from '../shared/RichTooltip.jsx'
 import styles from './Rail.module.css'
 
-function LogoMark({ onClick }) {
+function BrandZone({ onClick }) {
   return (
-    <button className={styles.logo} onClick={onClick} aria-label="Home">
-      <div className={styles.logoInner}>
-        <div className={styles.logoCell} />
-        <div className={`${styles.logoCell} ${styles.logoCellDim}`} />
-        <div className={`${styles.logoCell} ${styles.logoCellDim}`} />
-        <div className={styles.logoCell} />
-      </div>
-    </button>
+    <div className={styles.brandZone}>
+      <button className={styles.logo} onClick={onClick} aria-label="Home">
+        <div className={styles.logoInner}>
+          <div className={styles.logoCell} />
+          <div className={`${styles.logoCell} ${styles.logoCellDim}`} />
+          <div className={`${styles.logoCell} ${styles.logoCellDim}`} />
+          <div className={styles.logoCell} />
+        </div>
+      </button>
+      <div className={styles.wordmark}>SeenGrid</div>
+    </div>
   )
 }
 
@@ -72,7 +75,7 @@ export default function Rail({ activePage, onPageChange }) {
 
   return (
     <nav className={styles.rail} aria-label="Main navigation">
-      <LogoMark onClick={() => onPageChange('home')} />
+      <BrandZone onClick={() => onPageChange('home')} />
 
       <div className={styles.separator} />
 

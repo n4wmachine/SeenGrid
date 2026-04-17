@@ -1,7 +1,9 @@
-import React, { useState, Suspense, lazy } from 'react'
+import React, { useState, Suspense, lazy, useEffect } from 'react'
 import Header from './components/layout/Header.jsx'
 import Rail from './components/shell/Rail.jsx'
+import ShellHeader from './components/shell/ShellHeader.jsx'
 import ComingSoon from './components/shell/ComingSoon.jsx'
+import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
 import { useLang } from './context/LangContext.jsx'
 import './App.css'
 
@@ -31,10 +33,14 @@ const COMING_PAGES = new Set([
   'film', 'board', 'crop', 'rev', 'kit', 'settings', 'help'
 ])
 
-export default function App() {
+function AppContent({ activePage, onPageChange }) {
   const [activeTab, setActiveTab] = useState('builder')
-  const [activePage, setActivePage] = useState('lab')
   const { t } = useLang()
+  const { clearPageMeta } = usePageMeta()
+
+  useEffect(() => {
+    clearPageMeta()
+  }, [activePage, clearPageMeta])
 
   const TABS = [
     { id: 'builder', label: t('tabs.builder.label'), dot: TAB_DOTS.builder, desc: t('tabs.builder.desc') },
@@ -45,7 +51,7 @@ export default function App() {
   ]
 
   function handlePageChange(pageId) {
-    setActivePage(pageId)
+    onPageChange(pageId)
     if (pageId in PAGE_TO_TAB && PAGE_TO_TAB[pageId]) {
       setActiveTab(PAGE_TO_TAB[pageId])
     }
@@ -59,12 +65,13 @@ export default function App() {
     <div className="app-shell sg2-shell">
       <Rail activePage={activePage} onPageChange={handlePageChange} />
       <div className="app-content">
+        <ShellHeader />
         {showLegacyContent && (
           <>
             <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
               setActiveTab(tabId)
               const pageMap = { builder: 'lab', grid: 'grid', mj: 'frame', vault: 'hub' }
-              if (pageMap[tabId]) setActivePage(pageMap[tabId])
+              if (pageMap[tabId]) onPageChange(pageMap[tabId])
             }} />
             <main className="app-main">
               <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
@@ -81,5 +88,15 @@ export default function App() {
         {showHome && <ComingSoon pageId="home" label="HOME" />}
       </div>
     </div>
+  )
+}
+
+export default function App() {
+  const [activePage, setActivePage] = useState('lab')
+
+  return (
+    <PageMetaProvider activePage={activePage}>
+      <AppContent activePage={activePage} onPageChange={setActivePage} />
+    </PageMetaProvider>
   )
 }
