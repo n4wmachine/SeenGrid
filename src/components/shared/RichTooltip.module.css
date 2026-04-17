@@ -4,17 +4,24 @@
   align-items: center;
 }
 
+/* ---- TOOLTIP ----
+   Kein Border. Abgrenzung traegt Background-Escalation (#22222f, ~8 Werte
+   heller als standard elevated #1a1a26) plus zwei-Ebenen-Shadow:
+   grosser weicher Tiefen-Schatten + kurzer harter Schatten fuer klare Unterkante.
+*/
+
 :global(.sg2-shell) .tooltip {
   position: fixed;
   z-index: 9999;
-  background: var(--sg2-bg-elevated);
-  border: 1px solid var(--sg2-border-teal-subtle);
+  background: #22222f;
   border-radius: 8px;
   padding: 12px 14px;
   min-width: 200px;
   max-width: 280px;
   overflow: visible;
-  box-shadow: var(--sg2-shadow-tooltip);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   animation: sg2-tooltip-in 0.18s ease;
 }
@@ -24,37 +31,38 @@
   to   { opacity: 1; transform: translateX(0); }
 }
 
+/* ---- ARROW ----
+   Nahtlose Verlaengerung des Tooltip-Koerpers: gleiche Background-Farbe,
+   keine Borders (konsistent mit borderlosem Tooltip).
+*/
+
 .arrow {
   position: absolute;
   width: 9px;
   height: 9px;
-  background: var(--sg2-bg-elevated);
+  background: #22222f;
   transform: rotate(45deg);
 }
 
 .right .arrow {
-  left: -5px;
+  left: -4px;
   top: 50%;
   margin-top: -5px;
-  border-left: 1px solid var(--sg2-border-teal-subtle);
-  border-bottom: 1px solid var(--sg2-border-teal-subtle);
 }
 
 .bottom .arrow {
-  top: -5px;
+  top: -4px;
   left: 50%;
   margin-left: -5px;
-  border-left: 1px solid var(--sg2-border-teal-subtle);
-  border-top: 1px solid var(--sg2-border-teal-subtle);
 }
 
 .top .arrow {
-  bottom: -5px;
+  bottom: -4px;
   left: 50%;
   margin-left: -5px;
-  border-right: 1px solid var(--sg2-border-teal-subtle);
-  border-bottom: 1px solid var(--sg2-border-teal-subtle);
 }
+
+/* ---- TEXT ---- */
 
 .title {
   font-family: var(--sg2-font-body);
@@ -67,7 +75,7 @@
 
 .desc {
   font-family: var(--sg2-font-body);
-  font-size: 11px;
+  font-size: 12px;
   color: #a0a0b8;
   letter-spacing: 0.02em;
   line-height: 1.45;
