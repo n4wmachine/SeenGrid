@@ -162,8 +162,8 @@
 .itemActive::after {
   content: '';
   position: absolute;
-  inset: -16px -12px;
-  background: radial-gradient(ellipse at center, rgba(43, 181, 178, 0.18) 0%, transparent 70%);
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(43, 181, 178, 0.10) 0%, transparent 60%);
   pointer-events: none;
   z-index: -1;
 }
