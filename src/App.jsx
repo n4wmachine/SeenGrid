@@ -1,6 +1,7 @@
 import React, { useState, Suspense, lazy } from 'react'
 import Header from './components/layout/Header.jsx'
 import Rail from './components/shell/Rail.jsx'
+import ComingSoon from './components/shell/ComingSoon.jsx'
 import { useLang } from './context/LangContext.jsx'
 import './App.css'
 
@@ -19,11 +20,16 @@ const TAB_DOTS = {
 }
 
 const PAGE_TO_TAB = {
+  home:  null,
   lab:   'builder',
   grid:  'grid',
   frame: 'mj',
   hub:   'vault',
 }
+
+const COMING_PAGES = new Set([
+  'film', 'board', 'crop', 'rev', 'kit', 'settings', 'help'
+])
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('builder')
@@ -40,28 +46,39 @@ export default function App() {
 
   function handlePageChange(pageId) {
     setActivePage(pageId)
-    const mappedTab = PAGE_TO_TAB[pageId]
-    if (mappedTab) setActiveTab(mappedTab)
+    if (pageId in PAGE_TO_TAB && PAGE_TO_TAB[pageId]) {
+      setActiveTab(PAGE_TO_TAB[pageId])
+    }
   }
+
+  const showLegacyContent = activePage in PAGE_TO_TAB && PAGE_TO_TAB[activePage] !== null
+  const showComingSoon = COMING_PAGES.has(activePage)
+  const showHome = activePage === 'home'
 
   return (
     <div className="app-shell sg2-shell">
       <Rail activePage={activePage} onPageChange={handlePageChange} />
       <div className="app-content">
-        <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
-          setActiveTab(tabId)
-          const pageMap = { builder: 'lab', grid: 'grid', mj: 'frame', vault: 'hub' }
-          if (pageMap[tabId]) setActivePage(pageMap[tabId])
-        }} />
-        <main className="app-main">
-          <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
-            {activeTab === 'builder' && <PromptBuilder />}
-            {activeTab === 'grid'    && <GridOperator />}
-            {activeTab === 'mj'     && <MJStartframe />}
-            {activeTab === 'vault'  && <PromptVault />}
-            {activeTab === 'poc'    && <CustomBuilderPoc />}
-          </Suspense>
-        </main>
+        {showLegacyContent && (
+          <>
+            <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
+              setActiveTab(tabId)
+              const pageMap = { builder: 'lab', grid: 'grid', mj: 'frame', vault: 'hub' }
+              if (pageMap[tabId]) setActivePage(pageMap[tabId])
+            }} />
+            <main className="app-main">
+              <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
+                {activeTab === 'builder' && <PromptBuilder />}
+                {activeTab === 'grid'    && <GridOperator />}
+                {activeTab === 'mj'     && <MJStartframe />}
+                {activeTab === 'vault'  && <PromptVault />}
+                {activeTab === 'poc'    && <CustomBuilderPoc />}
+              </Suspense>
+            </main>
+          </>
+        )}
+        {showComingSoon && <ComingSoon pageId={activePage} />}
+        {showHome && <ComingSoon pageId="home" label="HOME" />}
       </div>
     </div>
   )

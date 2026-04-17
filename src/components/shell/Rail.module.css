@@ -154,21 +154,24 @@
 
 .itemComing {
   opacity: 0.55;
+  flex-direction: column;
+  gap: 2px;
+  height: 52px;
 }
 
 .itemComing:hover {
   opacity: 0.85;
 }
 
-.soonTag {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  font-size: 7px;
+.soonPill {
+  font-size: 10px;
   font-family: var(--sg2-font-mono);
   color: var(--sg2-text-muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   line-height: 1;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* ---- STAR DOT (Grid item) ---- */

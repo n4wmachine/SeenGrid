@@ -41,7 +41,7 @@ function RailItem({ page, isActive, onNavigate }) {
       >
         <span className={styles.itemIcon}>{icon}</span>
         {page.starred && <span className={styles.starDot} />}
-        {isComing && <span className={styles.soonTag}>soon</span>}
+        {isComing && <span className={styles.soonPill}>soon</span>}
       </button>
     </RichTooltip>
   )
