@@ -174,9 +174,8 @@
   top: 14px;
   bottom: 14px;
   width: 3px;
-  background: var(--sg2-teal);
+  background: linear-gradient(180deg, transparent, var(--sg2-teal), transparent);
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 10px rgba(43, 181, 178, 0.6);
 }
 
 /* ---- COMING STATE ---- */
