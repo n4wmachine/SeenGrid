@@ -138,7 +138,6 @@
 }
 
 .item:hover {
-  background: rgba(43, 181, 178, 0.06);
   color: var(--sg2-text-primary);
 }
 
@@ -163,10 +162,10 @@
 .itemActive::after {
   content: '';
   position: absolute;
-  inset: -8px -6px;
-  background: rgba(43, 181, 178, 0.15);
-  border-radius: 20px;
-  filter: blur(14px);
+  inset: -10px -8px;
+  background: rgba(43, 181, 178, 0.10);
+  border-radius: 24px;
+  filter: blur(18px);
   pointer-events: none;
   z-index: -1;
 }
