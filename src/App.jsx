@@ -4,6 +4,7 @@ import Rail from './components/shell/Rail.jsx'
 import ShellHeader from './components/shell/ShellHeader.jsx'
 import StatusBar from './components/shell/StatusBar.jsx'
 import ComingSoon from './components/shell/ComingSoon.jsx'
+import LandingPage from './components/landing/LandingPage.jsx'
 import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
 import { useLang } from './context/LangContext.jsx'
 import './App.css'
@@ -86,7 +87,7 @@ function AppContent({ activePage, onPageChange }) {
           </>
         )}
         {showComingSoon && <ComingSoon pageId={activePage} />}
-        {showHome && <ComingSoon pageId="home" label="HOME" />}
+        {showHome && <LandingPage onNavigate={handlePageChange} />}
         <StatusBar />
       </div>
     </div>
