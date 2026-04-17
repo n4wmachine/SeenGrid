@@ -138,6 +138,7 @@
 }
 
 .item:hover {
+  background: rgba(255, 255, 255, 0.04);
   color: var(--sg2-text-primary);
 }
 
@@ -153,7 +154,7 @@
 
 .item.itemActive,
 .item.itemActive:hover {
-  background: rgba(43, 181, 178, 0.05);
+  background: none;
   color: var(--sg2-teal);
   border: none;
 }
@@ -197,10 +198,11 @@
 
 .starDot {
   position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 6px;
-  height: 6px;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
   background: var(--sg2-gold);
   border-radius: 50%;
   box-shadow: var(--sg2-gold-glow);
