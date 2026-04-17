@@ -153,23 +153,9 @@
 
 .item.itemActive,
 .item.itemActive:hover {
-  background: none;
+  background: radial-gradient(circle at center, rgba(43, 181, 178, 0.12) 0%, transparent 70%);
   color: var(--sg2-teal);
   border: none;
-  isolation: isolate;
-}
-
-.itemActive::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(43, 181, 178, 0.10) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.itemComing.itemActive::after {
-  display: none;
 }
 
 .itemActive::before {
