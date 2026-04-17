@@ -2,6 +2,7 @@ import React, { useState, Suspense, lazy, useEffect } from 'react'
 import Header from './components/layout/Header.jsx'
 import Rail from './components/shell/Rail.jsx'
 import ShellHeader from './components/shell/ShellHeader.jsx'
+import StatusBar from './components/shell/StatusBar.jsx'
 import ComingSoon from './components/shell/ComingSoon.jsx'
 import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
 import { useLang } from './context/LangContext.jsx'
@@ -86,6 +87,7 @@ function AppContent({ activePage, onPageChange }) {
         )}
         {showComingSoon && <ComingSoon pageId={activePage} />}
         {showHome && <ComingSoon pageId="home" label="HOME" />}
+        <StatusBar />
       </div>
     </div>
   )

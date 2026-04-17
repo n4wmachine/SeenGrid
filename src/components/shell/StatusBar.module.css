@@ -1,0 +1,49 @@
+.bar {
+  height: var(--sg2-statusbar-height);
+  background: var(--sg2-bg-secondary);
+  border-top: 1px solid var(--sg2-border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  flex-shrink: 0;
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.04em;
+  gap: 14px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.readyDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sg2-teal);
+  box-shadow: 0 0 10px rgba(60, 207, 204, 0.8);
+  flex-shrink: 0;
+}
+
+.readyLabel {
+  color: var(--sg2-text-secondary);
+}
+
+.divider {
+  width: 1px;
+  height: 11px;
+  background: var(--sg2-border-emphasized);
+  margin: 0 4px;
+}
+
+.info {
+  color: var(--sg2-text-tertiary);
+}
+
+.timestamp {
+  margin-left: auto;
+  color: var(--sg2-text-tertiary);
+}
