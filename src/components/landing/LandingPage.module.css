@@ -18,8 +18,8 @@
 }
 
 .heroLogo {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,8 +27,8 @@
 }
 
 .heroLogoInner {
-  width: 136px;
-  height: 136px;
+  width: 180px;
+  height: 180px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
