@@ -1,0 +1,75 @@
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: var(--sg2-bg-elevated);
+  border: 1px solid var(--sg2-border-teal-subtle);
+  border-radius: 8px;
+  padding: 10px 13px;
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: var(--sg2-shadow-tooltip);
+  pointer-events: none;
+  animation: sg2-tooltip-in 0.18s ease;
+}
+
+@keyframes sg2-tooltip-in {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.arrow {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--sg2-bg-elevated);
+  transform: rotate(45deg);
+}
+
+.right .arrow {
+  left: -5px;
+  top: 50%;
+  margin-top: -5px;
+  border-left: 1px solid var(--sg2-border-teal-subtle);
+  border-bottom: 1px solid var(--sg2-border-teal-subtle);
+}
+
+.bottom .arrow {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  border-left: 1px solid var(--sg2-border-teal-subtle);
+  border-top: 1px solid var(--sg2-border-teal-subtle);
+}
+
+.top .arrow {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  border-right: 1px solid var(--sg2-border-teal-subtle);
+  border-bottom: 1px solid var(--sg2-border-teal-subtle);
+}
+
+.title {
+  font-family: var(--sg2-font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sg2-text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+}
+
+.desc {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: #a0a0b8;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  white-space: normal;
+}
