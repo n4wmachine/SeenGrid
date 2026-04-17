@@ -14,6 +14,10 @@ import '@fontsource/jetbrains-mono/700.css'
 
 import './styles/theme.css'
 
+// Visual Overhaul v2 — new design system (coexists with theme.css)
+import './styles/tokens.css'
+import './styles/globals.css'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <LangProvider>

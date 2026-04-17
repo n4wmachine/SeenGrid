@@ -1,0 +1,114 @@
+/* ============================================================
+   SEENGRID — TOKENS.CSS
+   Visual Overhaul v2 Design Tokens.
+   Source of truth: SEENGRID_VISUAL_OVERHAUL_HANDOFF_v2.md
+   ============================================================ */
+
+:root {
+
+  /* ---- ACCENT: TEAL (universal active / primary) ---- */
+  --sg2-teal:                #3ccfcc;
+  --sg2-teal-hover-bg:       rgba(60, 207, 204, 0.06);
+  --sg2-teal-hover-bg-mid:   rgba(60, 207, 204, 0.10);
+  --sg2-teal-hover-bg-strong:rgba(60, 207, 204, 0.12);
+  --sg2-teal-active-bg:      rgba(60, 207, 204, 0.15);
+  --sg2-teal-active-bg-strong:rgba(60, 207, 204, 0.22);
+  --sg2-teal-glow-subtle:    0 0 8px rgba(60, 207, 204, 0.08);
+  --sg2-teal-glow:           0 0 12px rgba(60, 207, 204, 0.15);
+  --sg2-teal-glow-strong:    0 0 20px rgba(60, 207, 204, 0.8);
+
+  /* ---- ACCENT: GOLD (signatures only) ---- */
+  --sg2-gold:                #f5c961;
+  --sg2-gold-bg:             rgba(245, 201, 97, 0.10);
+  --sg2-gold-border:         rgba(245, 201, 97, 0.25);
+  --sg2-gold-border-hover:   rgba(245, 201, 97, 0.50);
+  --sg2-gold-border-subtle:  rgba(245, 201, 97, 0.12);
+  --sg2-gold-border-badge:   rgba(245, 201, 97, 0.30);
+  --sg2-gold-glow:           0 0 8px rgba(245, 201, 97, 0.6);
+  --sg2-gold-glow-subtle:    0 4px 12px rgba(245, 201, 97, 0.1);
+
+  /* ---- SURFACES (dark-native, blue-tinted) ---- */
+  --sg2-bg-primary:          #0a0a12;
+  --sg2-bg-secondary:        #0d0d16;
+  --sg2-bg-tertiary:         #0b0b15;
+  --sg2-bg-rail:             #101018;
+  --sg2-bg-surface:          #141420;
+  --sg2-bg-elevated:         #1a1a26;
+  --sg2-bg-preview:          #08080f;
+  --sg2-bg-canvas:           radial-gradient(ellipse at center, #12121e 0%, #0a0a12 80%);
+  --sg2-bg-dim-cell:         #1f1f2e;
+
+  /* ---- TEXT ---- */
+  --sg2-text-primary:        #f0f0fa;
+  --sg2-text-secondary:      #b0b0c8;
+  --sg2-text-secondary-light:#e0e0f0;
+  --sg2-text-tertiary:       #8a8aa0;
+  --sg2-text-tertiary-light: #9a9ab0;
+  --sg2-text-quaternary:     #7a7a92;
+  --sg2-text-muted:          #6a6a82;
+  --sg2-text-on-teal:        #3ccfcc;
+
+  /* ---- BORDERS ---- */
+  --sg2-border-default:      rgba(255, 255, 255, 0.08);
+  --sg2-border-emphasized:   rgba(255, 255, 255, 0.12);
+  --sg2-border-teal:         rgba(60, 207, 204, 0.40);
+  --sg2-border-teal-hover:   rgba(60, 207, 204, 0.50);
+  --sg2-border-teal-subtle:  rgba(60, 207, 204, 0.30);
+  --sg2-border-teal-strong:  rgba(60, 207, 204, 0.50);
+
+  /* ---- SEPARATORS ---- */
+  --sg2-separator:           linear-gradient(90deg, transparent, rgba(60, 207, 204, 0.10), transparent);
+  --sg2-separator-teal:      linear-gradient(90deg, transparent, rgba(60, 207, 204, 0.35), transparent);
+  --sg2-section-line:        linear-gradient(90deg, rgba(255, 255, 255, 0.10), transparent);
+
+  /* ---- SEMANTIC ---- */
+  --sg2-success:             #6adc78;
+  --sg2-success-bg:          rgba(100, 220, 120, 0.15);
+  --sg2-success-border:      rgba(100, 220, 120, 0.30);
+  --sg2-warning:             #f5c961;
+  --sg2-error:               #f0a0a0;
+  --sg2-error-bg:            rgba(245, 97, 97, 0.08);
+  --sg2-error-border:        rgba(245, 97, 97, 0.25);
+
+  /* ---- TYPOGRAPHY ---- */
+  --sg2-font-display:        'Instrument Serif', Georgia, serif;
+  --sg2-font-body:           'Geist Sans', 'Geist', system-ui, -apple-system, sans-serif;
+  --sg2-font-mono:           'Geist Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --sg2-text-display:        24px;
+  --sg2-text-h1:             16px;
+  --sg2-text-h2:             14px;
+  --sg2-text-body:           13px;
+  --sg2-text-small:          12px;
+  --sg2-text-caption:        11px;
+  --sg2-text-mono-label:     10px;
+  --sg2-text-min:            9px;
+
+  /* ---- LAYOUT ---- */
+  --sg2-rail-width:          72px;
+  --sg2-header-height:       56px;
+  --sg2-statusbar-height:    28px;
+  --sg2-toolbar-height:      52px;
+  --sg2-context-width:       260px;
+  --sg2-inspector-width:     320px;
+  --sg2-preview-height:      96px;
+  --sg2-sigbar-height:       52px;
+  --sg2-outputbar-height:    32px;
+
+  /* ---- RADII ---- */
+  --sg2-radius-sm:           4px;
+  --sg2-radius-md:           7px;
+  --sg2-radius-lg:           9px;
+  --sg2-radius-xl:           10px;
+  --sg2-radius-round:        50%;
+
+  /* ---- SHADOWS ---- */
+  --sg2-shadow-card:         0 10px 28px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(60, 207, 204, 0.15);
+  --sg2-shadow-card-gold:    0 10px 28px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(245, 201, 97, 0.15);
+  --sg2-shadow-tooltip:      0 6px 20px rgba(0, 0, 0, 0.7);
+  --sg2-shadow-elevated:     0 4px 16px rgba(0, 0, 0, 0.6);
+
+  /* ---- TRANSITIONS ---- */
+  --sg2-transition:          all 0.18s ease;
+  --sg2-transition-fast:     all 0.10s ease;
+}

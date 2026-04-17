@@ -1,0 +1,148 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "label": "Home",
+      "icon": "home",
+      "route": "/",
+      "status": "active",
+      "tooltip": {
+        "title": "Home",
+        "desc": "where you left off, and where to go next"
+      }
+    },
+    {
+      "id": "film",
+      "label": "Film",
+      "icon": "film",
+      "route": "/film",
+      "status": "coming",
+      "group": "PRE",
+      "tooltip": {
+        "title": "Film \u00b7 soon",
+        "desc": "script in, scene plan out \u2014 two-stage LLM director"
+      }
+    },
+    {
+      "id": "board",
+      "label": "Board",
+      "icon": "board",
+      "route": "/board",
+      "status": "coming",
+      "group": "PRE",
+      "tooltip": {
+        "title": "Shot Board \u00b7 soon",
+        "desc": "your film as a visual sequence of frames"
+      }
+    },
+    {
+      "id": "grid",
+      "label": "Grid",
+      "icon": "grid",
+      "route": "/grid",
+      "status": "active",
+      "group": "MAKE",
+      "starred": true,
+      "tooltip": {
+        "title": "Grid Creator",
+        "desc": "multi-panel prompts for NanoBanana \u00b7 your core workbench"
+      }
+    },
+    {
+      "id": "lab",
+      "label": "Lab",
+      "icon": "lab",
+      "route": "/lab",
+      "status": "active",
+      "group": "MAKE",
+      "tooltip": {
+        "title": "SeenLab",
+        "desc": "develop looks, save as reusable tokens"
+      }
+    },
+    {
+      "id": "frame",
+      "label": "Frame",
+      "icon": "frame",
+      "route": "/frame",
+      "status": "active",
+      "group": "MAKE",
+      "tooltip": {
+        "title": "SeenFrame",
+        "desc": "cinematic stills \u00b7 optimized for Midjourney v7"
+      }
+    },
+    {
+      "id": "hub",
+      "label": "Hub",
+      "icon": "hub",
+      "route": "/hub",
+      "status": "active",
+      "group": "LIB",
+      "tooltip": {
+        "title": "Prompt Hub",
+        "desc": "community \u00b7 signature \u00b7 your saved tokens"
+      }
+    },
+    {
+      "id": "crop",
+      "label": "Crop",
+      "icon": "crop",
+      "route": "/crop",
+      "status": "coming",
+      "group": "TOOLS",
+      "tooltip": {
+        "title": "Cropper \u00b7 soon",
+        "desc": "auto-crop grids, upscale panels for startframes"
+      }
+    },
+    {
+      "id": "rev",
+      "label": "Rev",
+      "icon": "rev",
+      "route": "/rev",
+      "status": "coming",
+      "group": "TOOLS",
+      "tooltip": {
+        "title": "Reverse \u00b7 soon",
+        "desc": "extract look chips from any reference image"
+      }
+    },
+    {
+      "id": "kit",
+      "label": "Kit",
+      "icon": "kit",
+      "route": "/kit",
+      "status": "coming",
+      "group": "TOOLS",
+      "tooltip": {
+        "title": "Consistency Kit \u00b7 soon",
+        "desc": "guided multi-grid workflow for character consistency"
+      }
+    }
+  ],
+  "utilPages": [
+    {
+      "id": "settings",
+      "label": "Settings",
+      "icon": "settings",
+      "route": "/settings",
+      "status": "coming",
+      "tooltip": {
+        "title": "Settings",
+        "desc": "theme, language, storage"
+      }
+    },
+    {
+      "id": "help",
+      "label": "Help",
+      "icon": "help",
+      "route": "/help",
+      "status": "coming",
+      "tooltip": {
+        "title": "Help",
+        "desc": "shortcuts, docs, feedback"
+      }
+    }
+  ]
+}
