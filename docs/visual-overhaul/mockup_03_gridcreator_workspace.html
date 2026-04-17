@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SeenGrid Mockup 03 — Grid Creator Workspace v3</title>
+<style>body { margin: 0; background: #000; padding: 20px; font-family: system-ui, sans-serif; } .container { max-width: 1500px; margin: 0 auto; }</style>
+</head>
+<body>
+<div class="container">
+
+<div style="background: #0a0a12; border-radius: 12px; overflow: hidden; border: 1px solid rgba(43, 181, 178, 0.2);">
+<div style="display: flex; height: 900px; color: #e4e4f0;">
+
+<div style="width: 72px; background: #101018; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 10px 0; flex-shrink: 0;">
+  <div style="height: 50px; display: flex; align-items: center; justify-content: center;">
+    <div style="width: 32px; height: 32px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; padding: 4px; border: 1.5px solid #3ccfcc; border-radius: 6px;">
+      <div style="background: #3ccfcc; border-radius: 1px;"></div><div style="background: #3ccfcc; border-radius: 1px; opacity: 0.45;"></div>
+      <div style="background: #3ccfcc; border-radius: 1px; opacity: 0.45;"></div><div style="background: #3ccfcc; border-radius: 1px;"></div>
+    </div>
+  </div>
+  <div style="height: 1px; margin: 10px 18px; background: linear-gradient(90deg, transparent, rgba(60,207,204,0.35), transparent);"></div>
+  <div class="rd" style="opacity:0.5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-8.5z"/></svg></div>
+  <div class="rgm">PRE</div>
+  <div class="rd" style="opacity:0.3;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="1.5"/></svg></div>
+  <div class="rd" style="opacity:0.3;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="1.5"/></svg></div>
+  <div class="rgm">MAKE</div>
+  <div class="rd rd-act"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+  <div class="rd" style="opacity:0.5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6M10 3v7L5 19a2 2 0 0 0 1.7 3h10.6A2 2 0 0 0 19 19l-5-9V3"/></svg></div>
+  <div class="rd" style="opacity:0.5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="12" cy="12" r="3.5"/></svg></div>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+
+  <div style="height: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 28px; gap: 16px; background: #0d0d16; flex-shrink: 0;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <div style="font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: #f0f0fa;">Grid Creator</div>
+      <div style="font-size: 12px; color: #7a7a92; font-family: monospace;">character_angle_study · untitled</div>
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
+      <button class="hdr-btn">← templates</button>
+      <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1);"></div>
+      <div style="font-size: 11px; color: #7a7a92; font-family: monospace;">v0.4.2</div>
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: #1a2a2a; border: 1px solid rgba(43,181,178,0.5); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #3ccfcc; font-weight: 500;">J</div>
+    </div>
+  </div>
+
+  <div style="height: 52px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; padding: 0 20px; gap: 8px; background: #0b0b15; flex-shrink: 0;">
+    <div class="mod-btn mod-on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="9" r="3"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/></svg><span>face</span></div>
+    <div class="mod-btn mod-on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 20l4-8 5 6 3-4 6 6H3z"/><circle cx="17" cy="7" r="2"/></svg><span>env</span><span class="mod-value">inherit</span></div>
+    <div class="mod-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2l2 5h5l-4 3 1.5 5L12 12l-4.5 3L9 10l-4-3h5z"/></svg><span>style</span></div>
+    <div class="mod-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="1.5"/><circle cx="12" cy="12" r="3"/></svg><span>camera</span></div>
+    <div class="mod-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v10M8 11l4-4 4 4M8 21l4-4 4 4"/></svg><span>pose</span></div>
+    <div class="mod-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M9 14c1 1 5 1 6 0"/></svg><span>expr</span></div>
+    <div class="mod-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2l2 4h8l2-4M4 6h16l-2 16H6z"/></svg><span>wardrobe</span></div>
+    <div style="margin-left: auto; display: flex; gap: 8px;">
+      <button class="mod-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg><span>random</span></button>
+      <button class="mod-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5"/></svg><span>reset</span></button>
+    </div>
+  </div>
+
+  <div style="flex: 1; display: flex; min-height: 0;">
+
+    <div style="width: 260px; background: #0b0b15; border-right: 1px solid rgba(255,255,255,0.06); overflow-y: auto; flex-shrink: 0;">
+      <div style="padding: 20px 18px;">
+
+        <div class="ctx-section">
+          <div class="ctx-label">CASE</div>
+          <div style="background: #141420; border: 1px solid rgba(60,207,204,0.25); border-radius: 7px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div><div style="font-size: 12px; color: #f0f0fa; font-weight: 500;">character_angle_study</div><div style="font-size: 10px; color: #8a8aa0; font-family: monospace; margin-top: 2px;">4 panels · views</div></div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8a8aa0" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <div class="ctx-section">
+          <div class="ctx-label">REFERENCE STATE</div>
+          <div class="norm-toggle">
+            <div class="norm-option"><div class="norm-radio norm-radio-on"><div></div></div><div><div style="font-size: 12px; color: #f0f0fa;">reference is clean</div><div style="font-size: 10px; color: #7a7a92; font-family: monospace;">full body, proper proportions</div></div></div>
+            <div class="norm-option"><div class="norm-radio"></div><div><div style="font-size: 12px; color: #b0b0c8;">needs normalization</div><div style="font-size: 10px; color: #7a7a92; font-family: monospace;">2-step: ref → master → grid</div></div></div>
+          </div>
+        </div>
+
+        <div class="ctx-section">
+          <div class="ctx-label">DIMENSIONS</div>
+          <div class="dim-builder">
+            <div class="dim-builder-grid" id="dim-grid"></div>
+            <div class="dim-builder-readout" id="dim-readout">4 × 1</div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 10px;">
+            <button class="dim-pill" id="dim-cols"><span class="dim-pill-label">cols</span><span class="dim-pill-value">4</span></button>
+            <button class="dim-pill" id="dim-rows"><span class="dim-pill-label">rows</span><span class="dim-pill-value">1</span></button>
+          </div>
+          <div style="font-size: 9px; color: #6a6a82; font-family: monospace; margin-top: 8px; letter-spacing: 0.05em; line-height: 1.4;">click grid to set · pills to fine-tune beyond 6×4</div>
+          <div class="dim-advisory" style="margin-top: 12px;">
+            <div style="font-size: 10px; color: #8a8aa0; font-family: monospace; margin-bottom: 6px; letter-spacing: 0.04em;">PANEL SIZE ADVISORY</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;"><span style="font-size: 11px; color: #b0b0c8; font-family: monospace;">@ 2K</span><span style="font-size: 11px; color: #f0f0fa; font-family: monospace;">512 × 1024</span><span class="quality-tag quality-hires">HIRES</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 11px; color: #b0b0c8; font-family: monospace;">@ 4K</span><span style="font-size: 11px; color: #f0f0fa; font-family: monospace;">1024 × 2048</span><span class="quality-tag quality-perfect">PERFECT</span></div>
+          </div>
+        </div>
+
+        <div class="ctx-section">
+          <div class="ctx-label">PANEL ORIENTATION</div>
+          <div class="ctx-dropdown"><span style="font-size: 12px; color: #f0f0fa;">vertical</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a8aa0" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+
+        <div class="ctx-section">
+          <div class="ctx-label">FORBIDDEN ELEMENTS</div>
+          <div style="background: #141420; border: 1px solid rgba(255,255,255,0.06); border-radius: 7px; padding: 8px; min-height: 56px;">
+            <div class="forbid-pill">no text</div>
+            <div class="forbid-pill">no logos</div>
+            <div class="forbid-pill-add">+ add</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="flex: 1; background: radial-gradient(ellipse at center, #12121e 0%, #0a0a12 80%); display: flex; align-items: center; justify-content: center; padding: 28px; min-width: 0;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 680px;">
+        <div class="panel"><div class="panel-role">1 · front</div><svg viewBox="0 0 100 150" class="panel-silhouette"><path d="M50 25 C 44 25 40 30 40 36 L 40 42 C 40 47 43 51 48 53 L 48 58 L 40 60 C 34 62 30 66 30 72 L 30 130 L 70 130 L 70 72 C 70 66 66 62 60 60 L 52 58 L 52 53 C 57 51 60 47 60 42 L 60 36 C 60 30 56 25 50 25 Z" fill="currentColor" opacity="0.25"/></svg></div>
+        <div class="panel panel-selected"><div class="panel-role">2 · right_profile</div><div class="panel-override-dot"></div><svg viewBox="0 0 100 150" class="panel-silhouette"><path d="M52 25 C 46 25 42 30 42 36 L 42 42 C 42 47 45 51 50 53 L 50 58 L 44 60 C 38 62 34 66 34 72 L 34 130 L 62 130 L 62 72 C 62 66 58 62 54 60 L 52 58 L 52 53 C 56 51 58 48 58 44 L 58 40 C 58 30 55 25 52 25 Z" fill="currentColor" opacity="0.35"/></svg></div>
+        <div class="panel"><div class="panel-role">3 · left_profile</div><svg viewBox="0 0 100 150" class="panel-silhouette"><path d="M48 25 C 54 25 58 30 58 36 L 58 42 C 58 47 55 51 50 53 L 50 58 L 56 60 C 62 62 66 66 66 72 L 66 130 L 38 130 L 38 72 C 38 66 42 62 46 60 L 48 58 L 48 53 C 44 51 42 48 42 44 L 42 40 C 42 30 45 25 48 25 Z" fill="currentColor" opacity="0.25"/></svg></div>
+        <div class="panel"><div class="panel-role">4 · back</div><svg viewBox="0 0 100 150" class="panel-silhouette"><path d="M50 25 C 44 25 40 30 40 36 L 40 42 C 40 47 43 51 48 53 L 48 58 L 40 60 C 34 62 30 66 30 72 L 30 130 L 70 130 L 70 72 C 70 66 66 62 60 60 L 52 58 L 52 53 C 57 51 60 47 60 42 L 60 36 C 60 30 56 25 50 25 Z" fill="currentColor" opacity="0.22"/></svg></div>
+      </div>
+    </div>
+
+    <div style="width: 320px; background: #0b0b15; border-left: 1px solid rgba(255,255,255,0.06); overflow-y: auto; flex-shrink: 0;">
+      <div style="padding: 20px 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+          <div><div style="font-size: 10px; font-family: monospace; color: #8a8aa0; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 3px;">PANEL 2 · SELECTED</div><div style="font-size: 15px; color: #f0f0fa; font-weight: 500;">right_profile</div></div>
+          <button class="inspect-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="ctx-section"><div class="ctx-label">VIEW</div><div class="ctx-dropdown"><span style="font-size: 12px; color: #f0f0fa;">right_profile</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a8aa0" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="ctx-section">
+          <div class="ctx-label">POSE <span class="override-badge">overriding global</span></div>
+          <div style="background: #141420; border: 1px solid rgba(60,207,204,0.3); border-radius: 7px; padding: 10px 12px;"><div style="font-size: 12px; color: #f0f0fa;">hand on pocket, relaxed shoulder</div></div>
+          <div style="font-size: 10px; color: #7a7a92; font-family: monospace; margin-top: 6px; letter-spacing: 0.04em;">global: <span style="color: #8a8aa0; text-decoration: line-through;">neutral stand</span></div>
+        </div>
+        <div class="ctx-section"><div class="ctx-label">EXPRESSION</div><div class="ctx-dropdown"><span style="font-size: 12px; color: #8a8aa0;">— inherit global —</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a8aa0" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="ctx-section">
+          <div class="ctx-label">SIGNATURE</div>
+          <div style="background: #141420; border: 1px solid rgba(245,201,97,0.25); border-radius: 7px; padding: 10px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 5px; background: radial-gradient(ellipse at 35% 55%, rgba(60,207,204,0.2) 0%, transparent 45%), linear-gradient(165deg, #2a2a3a 0%, #0a0a12 100%); flex-shrink: 0; position: relative;"><div style="position: absolute; top: 3px; right: 3px; width: 8px; height: 8px;"><svg viewBox="0 0 24 24" fill="#f5c961"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z"/></svg></div></div>
+            <div style="flex: 1; min-width: 0;"><div style="font-size: 12px; color: #f0f0fa;">deakins noir v2</div><div style="font-size: 10px; color: #7a7a92; font-family: monospace;">signature · applied</div></div>
+            <button class="inspect-remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          </div>
+        </div>
+        <div class="ctx-section"><div class="ctx-label">CUSTOM NOTES</div><div style="background: #141420; border: 1px solid rgba(255,255,255,0.06); border-radius: 7px; padding: 10px; min-height: 60px; font-size: 12px; color: #7a7a92; font-family: monospace;">optional per-panel text instructions...</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="height: 96px; border-top: 1px solid rgba(255,255,255,0.08); background: #08080f; display: flex; align-items: center; padding: 0 24px; gap: 14px; flex-shrink: 0;">
+    <div style="display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;">
+      <div style="font-size: 10px; font-family: monospace; color: #6a6a82; letter-spacing: 0.15em; font-weight: 600;">OUTPUT PREVIEW</div>
+      <div style="font-size: 10px; font-family: monospace; color: #8a8aa0;">4 × 1 · vertical</div>
+    </div>
+    <div style="flex: 1; display: flex; gap: 6px; align-items: center; overflow-x: auto;">
+      <div class="prev-panel"><svg viewBox="0 0 100 150" class="prev-sil"><path d="M50 25 C 44 25 40 30 40 36 L 40 42 C 40 47 43 51 48 53 L 48 58 L 40 60 C 34 62 30 66 30 72 L 30 130 L 70 130 L 70 72 C 70 66 66 62 60 60 L 52 58 L 52 53 C 57 51 60 47 60 42 L 60 36 C 60 30 56 25 50 25 Z" fill="currentColor" opacity="0.45"/></svg><div class="prev-label">front</div></div>
+      <div class="prev-panel prev-has-sig"><svg viewBox="0 0 100 150" class="prev-sil"><path d="M52 25 C 46 25 42 30 42 36 L 42 42 C 42 47 45 51 50 53 L 50 58 L 44 60 C 38 62 34 66 34 72 L 34 130 L 62 130 L 62 72 C 62 66 58 62 54 60 L 52 58 L 52 53 C 56 51 58 48 58 44 L 58 40 C 58 30 55 25 52 25 Z" fill="currentColor" opacity="0.5"/></svg><div class="prev-label">r_profile</div><div class="prev-sig-dot"></div></div>
+      <div class="prev-panel"><svg viewBox="0 0 100 150" class="prev-sil"><path d="M48 25 C 54 25 58 30 58 36 L 58 42 C 58 47 55 51 50 53 L 50 58 L 56 60 C 62 62 66 66 66 72 L 66 130 L 38 130 L 38 72 C 38 66 42 62 46 60 L 48 58 L 48 53 C 44 51 42 48 42 44 L 42 40 C 42 30 45 25 48 25 Z" fill="currentColor" opacity="0.45"/></svg><div class="prev-label">l_profile</div></div>
+      <div class="prev-panel"><svg viewBox="0 0 100 150" class="prev-sil"><path d="M50 25 C 44 25 40 30 40 36 L 40 42 C 40 47 43 51 48 53 L 48 58 L 40 60 C 34 62 30 66 30 72 L 30 130 L 70 130 L 70 72 C 70 66 66 62 60 60 L 52 58 L 52 53 C 57 51 60 47 60 42 L 60 36 C 60 30 56 25 50 25 Z" fill="currentColor" opacity="0.4"/></svg><div class="prev-label">back</div></div>
+    </div>
+    <div style="flex-shrink: 0; text-align: right;">
+      <div style="font-size: 10px; font-family: monospace; color: #6a6a82; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 3px;">PANELS</div>
+      <div style="font-size: 14px; color: #f0f0fa; font-family: monospace; font-weight: 500;">4</div>
+    </div>
+  </div>
+
+  <div class="sig-bar" style="flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c961"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z"/></svg>
+      <span style="font-size: 11px; font-family: monospace; color: #f5c961; letter-spacing: 0.08em; font-weight: 600;">SIGNATURES</span>
+      <span style="font-size: 10px; font-family: monospace; color: #7a7a92;">3 saved · drag onto panels</span>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <div class="sig-pill"><div class="sig-swatch" style="background: radial-gradient(ellipse at 35% 55%, rgba(60,207,204,0.2) 0%, transparent 45%), linear-gradient(165deg, #2a2a3a 0%, #0a0a12 100%);"></div><span>deakins noir</span></div>
+      <div class="sig-pill"><div class="sig-swatch" style="background: linear-gradient(135deg, #3a2820 0%, #1f1410 100%);"></div><span>wong kar-wai</span></div>
+      <div class="sig-pill"><div class="sig-swatch" style="background: linear-gradient(135deg, #1a3a3a 0%, #0a1818 100%);"></div><span>teal drama</span></div>
+      <button class="sig-expand"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 15l-6-6-6 6"/></svg>expand</button>
+    </div>
+  </div>
+
+  <div style="height: 32px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 18px; gap: 14px; background: #0d0d16; font-size: 11px; font-family: monospace; color: #8a8aa0; letter-spacing: 0.04em; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 7px; height: 7px; border-radius: 50%; background: #3ccfcc; box-shadow: 0 0 10px rgba(60,207,204,0.8);"></div><span style="color: #b0b0c8;">READY</span></div>
+    <div style="width: 1px; height: 11px; background: rgba(255,255,255,0.12);"></div>
+    <span>prompt compiled · 847 tokens · 2553 chars</span>
+    <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
+      <button class="out-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>show JSON</button>
+      <button class="out-btn out-btn-primary"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="8" y="8" width="12" height="12" rx="1"/><path d="M16 8V4a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>copy</button>
+      <button class="out-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2zM17 21v-8H7v8M7 3v5h8"/></svg>save as signature</button>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+</div>
+
+<style>
+.rd { height: 44px; margin: 2px 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9090a8; }
+.rd.rd-act { background: linear-gradient(180deg, rgba(60,207,204,0.22) 0%, rgba(60,207,204,0.12) 100%); color: #3ccfcc; box-shadow: inset 0 0 0 1px rgba(60,207,204,0.4); position: relative; }
+.rd.rd-act::before { content: ''; position: absolute; left: -10px; top: 9px; bottom: 9px; width: 3px; background: #3ccfcc; border-radius: 0 2px 2px 0; box-shadow: 0 0 10px rgba(60,207,204,0.8); }
+.rgm { font-size: 10px; font-family: monospace; color: #6a6a82; letter-spacing: 0.2em; padding: 14px 0 4px; text-align: center; font-weight: 600; }
+.hdr-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #b0b0c8; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-family: monospace; letter-spacing: 0.05em; cursor: pointer; transition: all 0.18s ease; }
+.hdr-btn:hover { border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.mod-btn { display: flex; align-items: center; gap: 7px; padding: 8px 14px; min-width: 92px; justify-content: center; border-radius: 7px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #9a9ab0; font-size: 12px; cursor: pointer; transition: all 0.18s ease; font-family: monospace; letter-spacing: 0.04em; }
+.mod-btn:hover { border-color: rgba(60,207,204,0.3); color: #e0e0f0; }
+.mod-btn.mod-on { background: rgba(60,207,204,0.1); border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.mod-btn .mod-value { font-size: 9px; opacity: 0.75; padding: 1px 5px; background: rgba(255,255,255,0.08); border-radius: 3px; letter-spacing: 0.02em; margin-left: 2px; }
+.mod-action { display: flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #b0b0c8; font-size: 11px; font-family: monospace; cursor: pointer; letter-spacing: 0.04em; transition: all 0.18s ease; }
+.mod-action:hover { border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.ctx-section { margin-bottom: 22px; }
+.ctx-label { font-size: 10px; font-family: monospace; color: #6a6a82; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.ctx-dropdown { background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: border-color 0.18s ease; }
+.ctx-dropdown:hover { border-color: rgba(60,207,204,0.3); }
+.norm-toggle { background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; padding: 4px; }
+.norm-option { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 5px; cursor: pointer; transition: background 0.18s ease; }
+.norm-option:hover { background: rgba(255,255,255,0.03); }
+.norm-radio { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
+.norm-radio.norm-radio-on { border-color: #3ccfcc; }
+.norm-radio.norm-radio-on div { width: 6px; height: 6px; border-radius: 50%; background: #3ccfcc; box-shadow: 0 0 6px rgba(60,207,204,0.6); }
+.dim-builder { background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; padding: 12px; position: relative; }
+.dim-builder-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; aspect-ratio: 6/4; }
+.dim-cell { background: #1f1f2e; border: 0.5px solid rgba(255,255,255,0.06); border-radius: 2px; cursor: pointer; transition: all 0.1s ease; }
+.dim-cell.dim-hover { background: rgba(60,207,204,0.25); border-color: rgba(60,207,204,0.5); box-shadow: 0 0 4px rgba(60,207,204,0.3); }
+.dim-cell.dim-selected { background: rgba(60,207,204,0.4); border-color: #3ccfcc; box-shadow: inset 0 0 0 0.5px rgba(60,207,204,0.6); }
+.dim-builder-readout { position: absolute; top: 12px; right: 14px; font-size: 12px; font-family: monospace; color: #3ccfcc; font-weight: 600; letter-spacing: 0.05em; background: rgba(10,10,18,0.8); padding: 3px 8px; border-radius: 4px; border: 0.5px solid rgba(60,207,204,0.3); }
+.dim-pill { flex: 1; background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: border-color 0.18s ease; font-family: monospace; }
+.dim-pill:hover { border-color: rgba(60,207,204,0.3); }
+.dim-pill-label { font-size: 9px; color: #6a6a82; letter-spacing: 0.15em; font-weight: 600; }
+.dim-pill-value { font-size: 14px; color: #f0f0fa; font-weight: 500; }
+.dim-advisory { background: #0f0f1a; border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 10px; }
+.quality-tag { font-size: 9px; font-family: monospace; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.1em; font-weight: 600; }
+.quality-hires { background: rgba(60,207,204,0.15); color: #3ccfcc; border: 0.5px solid rgba(60,207,204,0.3); }
+.quality-perfect { background: rgba(100,220,120,0.15); color: #6adc78; border: 0.5px solid rgba(100,220,120,0.3); }
+.forbid-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(245,97,97,0.08); border: 0.5px solid rgba(245,97,97,0.25); color: #f0a0a0; font-size: 10px; font-family: monospace; padding: 3px 7px; border-radius: 4px; margin: 2px 3px 2px 0; letter-spacing: 0.03em; }
+.forbid-pill-add { display: inline-flex; align-items: center; color: #7a7a92; font-size: 10px; font-family: monospace; padding: 3px 7px; border: 0.5px dashed rgba(255,255,255,0.2); border-radius: 4px; margin: 2px 0; cursor: pointer; letter-spacing: 0.03em; }
+.forbid-pill-add:hover { border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.panel { aspect-ratio: 2/3; background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; position: relative; cursor: pointer; transition: all 0.2s ease; overflow: hidden; }
+.panel:hover { border-color: rgba(60,207,204,0.4); transform: translateY(-2px); }
+.panel.panel-selected { border-color: #3ccfcc; border-width: 2px; box-shadow: 0 0 0 4px rgba(60,207,204,0.08), 0 0 30px rgba(60,207,204,0.15); }
+.panel-role { position: absolute; top: 10px; left: 10px; font-size: 10px; font-family: monospace; color: #8a8aa0; letter-spacing: 0.05em; z-index: 2; background: rgba(10,10,18,0.8); padding: 3px 7px; border-radius: 3px; }
+.panel-selected .panel-role { color: #3ccfcc; border: 0.5px solid rgba(60,207,204,0.3); }
+.panel-silhouette { position: absolute; inset: 0; width: 100%; height: 100%; color: #6a8aa0; }
+.panel-selected .panel-silhouette { color: #3ccfcc; }
+.panel-override-dot { position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #f5c961; box-shadow: 0 0 8px rgba(245,201,97,0.6); z-index: 2; }
+.prev-panel { width: 56px; height: 78px; border-radius: 5px; background: #141420; border: 0.5px solid rgba(255,255,255,0.08); position: relative; flex-shrink: 0; overflow: hidden; }
+.prev-sil { position: absolute; inset: 0; width: 100%; height: 100%; color: #6a8aa0; }
+.prev-label { position: absolute; bottom: 3px; left: 3px; right: 3px; font-size: 8px; font-family: monospace; color: #8a8aa0; text-align: center; letter-spacing: 0.03em; background: rgba(10,10,18,0.7); padding: 1px 2px; border-radius: 2px; }
+.prev-sig-dot { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: #f5c961; box-shadow: 0 0 5px rgba(245,201,97,0.8); }
+.prev-panel.prev-has-sig { border-color: rgba(245,201,97,0.25); }
+.inspect-close, .inspect-remove { background: transparent; border: none; color: #7a7a92; cursor: pointer; padding: 6px; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.18s ease; }
+.inspect-close:hover, .inspect-remove:hover { background: rgba(255,255,255,0.05); color: #e0e0f0; }
+.override-badge { font-size: 9px; font-family: monospace; color: #f5c961; background: rgba(245,201,97,0.1); border: 0.5px solid rgba(245,201,97,0.3); padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; text-transform: none; font-weight: normal; }
+.sig-bar { height: 52px; background: #0b0b15; border-top: 1px solid rgba(245,201,97,0.12); display: flex; align-items: center; padding: 0 18px; gap: 18px; justify-content: space-between; }
+.sig-pill { display: flex; align-items: center; gap: 8px; padding: 5px 9px 5px 5px; border-radius: 20px; background: #141420; border: 1px solid rgba(245,201,97,0.15); cursor: grab; transition: all 0.18s ease; }
+.sig-pill:hover { border-color: rgba(245,201,97,0.5); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,201,97,0.1); }
+.sig-swatch { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 0.5px solid rgba(245,201,97,0.25); }
+.sig-pill span { font-size: 11px; color: #e0e0f0; font-family: monospace; letter-spacing: 0.02em; }
+.sig-expand { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #8a8aa0; padding: 5px 10px; border-radius: 5px; font-size: 10px; font-family: monospace; cursor: pointer; display: flex; align-items: center; gap: 5px; letter-spacing: 0.05em; }
+.sig-expand:hover { border-color: rgba(245,201,97,0.4); color: #f5c961; }
+.out-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #b0b0c8; padding: 4px 10px; border-radius: 5px; font-size: 10px; font-family: monospace; cursor: pointer; display: flex; align-items: center; gap: 5px; letter-spacing: 0.05em; transition: all 0.18s ease; }
+.out-btn:hover { border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.out-btn.out-btn-primary { background: rgba(60,207,204,0.12); border-color: rgba(60,207,204,0.4); color: #3ccfcc; }
+.out-btn.out-btn-primary:hover { background: rgba(60,207,204,0.18); }
+</style>
+
+<script>
+(function() {
+  const gridEl = document.getElementById('dim-grid');
+  const readout = document.getElementById('dim-readout');
+  const colsPill = document.getElementById('dim-cols');
+  const rowsPill = document.getElementById('dim-rows');
+  const MAX_C = 6, MAX_R = 4;
+  let selC = 4, selR = 1;
+  const cells = [];
+  for (let r = 0; r < MAX_R; r++) {
+    for (let c = 0; c < MAX_C; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'dim-cell';
+      cell.dataset.c = c + 1;
+      cell.dataset.r = r + 1;
+      gridEl.appendChild(cell);
+      cells.push(cell);
+    }
+  }
+  function paint(c, r, cls) {
+    cells.forEach(cell => { cell.classList.remove('dim-hover', 'dim-selected'); });
+    cells.forEach(cell => {
+      const cc = +cell.dataset.c, rr = +cell.dataset.r;
+      if (cc <= c && rr <= r) cell.classList.add(cls);
+    });
+  }
+  function repaintSelection() {
+    paint(selC, selR, 'dim-selected');
+    readout.textContent = selC + ' × ' + selR;
+    colsPill.querySelector('.dim-pill-value').textContent = selC;
+    rowsPill.querySelector('.dim-pill-value').textContent = selR;
+  }
+  cells.forEach(cell => {
+    cell.addEventListener('mouseenter', () => {
+      const c = +cell.dataset.c, r = +cell.dataset.r;
+      paint(c, r, 'dim-hover');
+      readout.textContent = c + ' × ' + r;
+    });
+    cell.addEventListener('click', () => {
+      selC = +cell.dataset.c;
+      selR = +cell.dataset.r;
+      repaintSelection();
+    });
+  });
+  gridEl.addEventListener('mouseleave', () => { repaintSelection(); });
+  repaintSelection();
+})();
+</script>
+
+</body>
+</html>

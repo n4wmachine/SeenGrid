@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeenGrid Mockup 01 — Shell + Landing</title>
+<style>
+body { margin: 0; background: #000; padding: 20px; font-family: system-ui, -apple-system, sans-serif; }
+.container { max-width: 1400px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div style="background: #0a0a12; border-radius: 12px; overflow: hidden; border: 1px solid rgba(43, 181, 178, 0.2);">
+<div style="display: flex; height: 780px; color: #e4e4f0;">
+
+<!-- LEFT RAIL -->
+<div id="rail" style="width: 72px; background: #101018; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 10px 0; flex-shrink: 0; position: relative;">
+
+  <div class="logo-mark" onclick="setPage('home')">
+    <div class="logo-inner">
+      <div class="logo-cell"></div><div class="logo-cell"></div>
+      <div class="logo-cell"></div><div class="logo-cell"></div>
+    </div>
+  </div>
+
+  <div style="height: 1px; margin: 10px 18px; background: linear-gradient(90deg, transparent, rgba(43,181,178,0.35), transparent);"></div>
+
+  <div class="rail-item" data-page="home" data-label="Home" data-icon="home" data-tt-title="Home" data-tt-desc="where you left off, and where to go next"></div>
+
+  <div class="rail-group">PRE</div>
+  <div class="rail-item rail-coming" data-page="film" data-label="Film" data-icon="film" data-tt-title="Film · soon" data-tt-desc="script in, scene plan out — two-stage LLM director"></div>
+  <div class="rail-item rail-coming" data-page="board" data-label="Board" data-icon="board" data-tt-title="Shot Board · soon" data-tt-desc="your film as a visual sequence of frames"></div>
+
+  <div class="rail-group">MAKE</div>
+  <div class="rail-item" data-page="grid" data-label="Grid" data-icon="grid" data-star="1" data-tt-title="Grid Creator" data-tt-desc="multi-panel prompts for NanoBanana · your core workbench"></div>
+  <div class="rail-item" data-page="lab" data-label="Lab" data-icon="lab" data-tt-title="SeenLab" data-tt-desc="develop looks, save as reusable tokens"></div>
+  <div class="rail-item" data-page="frame" data-label="Frame" data-icon="frame" data-tt-title="SeenFrame" data-tt-desc="cinematic stills · optimized for Midjourney v7"></div>
+
+  <div class="rail-group">LIB</div>
+  <div class="rail-item" data-page="hub" data-label="Hub" data-icon="hub" data-tt-title="Prompt Hub" data-tt-desc="community · signature · your saved tokens"></div>
+
+  <div class="rail-group">TOOLS</div>
+  <div class="rail-item rail-coming" data-page="crop" data-label="Crop" data-icon="crop" data-tt-title="Cropper · soon" data-tt-desc="auto-crop grids, upscale panels for startframes"></div>
+  <div class="rail-item rail-coming" data-page="rev" data-label="Rev" data-icon="rev" data-tt-title="Reverse · soon" data-tt-desc="extract look chips from any reference image"></div>
+  <div class="rail-item rail-coming" data-page="kit" data-label="Kit" data-icon="kit" data-tt-title="Consistency Kit · soon" data-tt-desc="guided multi-grid workflow for character consistency"></div>
+
+  <div style="margin-top: auto;">
+    <div class="rail-item rail-util" data-icon="settings" data-tt-title="Settings" data-tt-desc="theme, language, storage"></div>
+    <div class="rail-item rail-util" data-icon="help" data-tt-title="Help" data-tt-desc="shortcuts, docs, feedback"></div>
+  </div>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+
+  <div style="height: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 28px; gap: 16px; background: #0d0d16;">
+    <div style="display: flex; align-items: baseline; gap: 14px; min-width: 0;">
+      <div id="page-title" style="font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: #f0f0fa;">Home</div>
+      <div id="page-subtitle" style="font-size: 12px; color: #7a7a92; font-family: monospace; letter-spacing: 0.02em; white-space: nowrap;"></div>
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 14px; align-items: center;">
+      <div style="font-size: 11px; color: #7a7a92; font-family: monospace; letter-spacing: 0.05em;">v0.4.2</div>
+      <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1);"></div>
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: #1a2a2a; border: 1px solid rgba(43,181,178,0.5); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #3ccfcc; font-weight: 500;">J</div>
+    </div>
+  </div>
+
+  <div id="page-content" style="flex: 1; overflow-y: auto; padding: 36px 44px; background: #0a0a12;"></div>
+
+  <div style="height: 28px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 18px; gap: 14px; background: #0d0d16; font-size: 11px; font-family: monospace; color: #8a8aa0; letter-spacing: 0.04em;">
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <div style="width: 7px; height: 7px; border-radius: 50%; background: #3ccfcc; box-shadow: 0 0 10px rgba(60,207,204,0.8);"></div>
+        <span style="color: #b0b0c8;">READY</span>
+      </div>
+      <div style="width: 1px; height: 11px; background: rgba(255,255,255,0.12);"></div>
+      <span>3 signatures · 2 grids · 18 prompts</span>
+      <span style="margin-left: auto;">last save 14m ago</span>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+
+<style>
+#rail, #rail * { box-sizing: border-box; }
+
+.logo-mark { height: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 2px; }
+.logo-inner { width: 30px; height: 30px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; padding: 4px; border: 1px solid rgba(60,207,204,0.5); border-radius: 5px; transition: border-color 0.2s, box-shadow 0.2s; }
+.logo-mark:hover .logo-inner { border-color: #3ccfcc; box-shadow: 0 0 12px rgba(60,207,204,0.3); }
+.logo-cell { background: #3ccfcc; border-radius: 1px; opacity: 0.9; }
+.logo-cell:nth-child(2), .logo-cell:nth-child(3) { opacity: 0.45; }
+
+.rail-item { height: 44px; margin: 2px 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; color: #9090a8; transition: background 0.18s ease, color 0.18s ease; }
+.rail-item svg { transition: transform 0.2s ease; }
+.rail-item:hover { background: rgba(60,207,204,0.1); color: #f0f0fa; }
+.rail-item:hover svg { transform: scale(1.1); }
+.rail-item:active svg { transform: scale(0.94); }
+.rail-item.active { background: linear-gradient(180deg, rgba(60,207,204,0.22) 0%, rgba(60,207,204,0.12) 100%); color: #3ccfcc; box-shadow: inset 0 0 0 1px rgba(60,207,204,0.4), 0 0 20px rgba(60,207,204,0.12); }
+.rail-item.active::before { content: ''; position: absolute; left: -10px; top: 9px; bottom: 9px; width: 3px; background: #3ccfcc; border-radius: 0 2px 2px 0; box-shadow: 0 0 10px rgba(60,207,204,0.8); }
+.rail-item[data-star="1"]::after { content: ''; position: absolute; top: 7px; right: 7px; width: 5px; height: 5px; background: #f5c961; border-radius: 50%; box-shadow: 0 0 8px rgba(245,201,97,0.7); }
+.rail-coming { opacity: 0.55; }
+.rail-coming:hover { opacity: 0.85; }
+.rail-util { opacity: 0.7; }
+.rail-util:hover { opacity: 1; }
+
+.rail-group { font-size: 10px; font-family: monospace; color: #6a6a82; letter-spacing: 0.2em; padding: 16px 0 6px; text-align: center; font-weight: 600; }
+
+.rail-tooltip { position: absolute; left: 58px; top: 50%; transform: translateY(-50%) translateX(-4px); background: #1a1a26; color: #f0f0fa; padding: 10px 13px; border-radius: 8px; font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.18s ease, transform 0.18s ease; z-index: 100; border: 1px solid rgba(60,207,204,0.35); box-shadow: 0 6px 20px rgba(0,0,0,0.7); min-width: 200px; }
+.rail-tooltip::before { content: ''; position: absolute; left: -5px; top: 50%; transform: translateY(-50%) rotate(45deg); width: 9px; height: 9px; background: #1a1a26; border-left: 1px solid rgba(60,207,204,0.35); border-bottom: 1px solid rgba(60,207,204,0.35); }
+.rail-tooltip-title { font-size: 13px; font-weight: 500; color: #f0f0fa; margin-bottom: 3px; letter-spacing: -0.01em; }
+.rail-tooltip-desc { font-size: 11px; color: #a0a0b8; font-family: monospace; letter-spacing: 0.02em; line-height: 1.45; white-space: normal; }
+.rail-item:hover .rail-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+.land-card { background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; overflow: hidden; }
+.land-card:hover { border-color: rgba(60,207,204,0.5); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px rgba(60,207,204,0.2); }
+.land-thumb { aspect-ratio: 16/10; position: relative; overflow: hidden; background: #1a1a28; }
+.land-meta { padding: 14px 16px; }
+.land-title { font-size: 14px; font-weight: 500; color: #f0f0fa; letter-spacing: -0.01em; margin-bottom: 4px; }
+.land-sub { font-size: 11px; color: #8a8aa0; font-family: monospace; letter-spacing: 0.04em; }
+
+.qs-card { background: #141420; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 22px; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
+.qs-card:hover { border-color: rgba(60,207,204,0.5); background: #1a1a28; transform: translateY(-2px); }
+.qs-icon { width: 40px; height: 40px; border-radius: 9px; background: linear-gradient(135deg, rgba(60,207,204,0.2) 0%, rgba(60,207,204,0.08) 100%); border: 1px solid rgba(60,207,204,0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: #3ccfcc; }
+.qs-title { font-size: 15px; font-weight: 500; color: #f0f0fa; margin-bottom: 5px; letter-spacing: -0.01em; }
+.qs-desc { font-size: 12px; color: #9a9ab0; font-family: monospace; letter-spacing: 0.02em; line-height: 1.5; }
+
+.sec-label { font-size: 11px; font-family: monospace; color: #8a8aa0; letter-spacing: 0.2em; margin-bottom: 18px; display: flex; align-items: center; gap: 14px; font-weight: 600; }
+.sec-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent); }
+
+.thumb-grid { position: absolute; inset: 12px; display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; }
+.thumb-grid div { background: linear-gradient(135deg, #2a3048 0%, #1a1f30 100%); border-radius: 3px; border: 0.5px solid rgba(255,255,255,0.05); }
+.thumb-grid div:nth-child(1) { background: linear-gradient(135deg, #2f3a4a 0%, #1a222e 100%); }
+.thumb-grid div:nth-child(2) { background: linear-gradient(135deg, #2a2a35 0%, #181820 100%); }
+.thumb-grid div:nth-child(3) { background: linear-gradient(135deg, #3a2f28 0%, #25201a 100%); }
+.thumb-grid div:nth-child(4) { background: linear-gradient(135deg, #2a3a3a 0%, #182525 100%); }
+
+.thumb-noir { position: absolute; inset: 0; background: radial-gradient(ellipse at 35% 55%, rgba(60,207,204,0.18) 0%, transparent 45%), linear-gradient(165deg, #2a2a3a 0%, #14141f 45%, #0a0a12 100%); }
+.thumb-noir::after { content: ''; position: absolute; bottom: 20%; left: 25%; width: 50%; height: 3px; background: linear-gradient(90deg, transparent, rgba(220,220,240,0.35), transparent); filter: blur(1px); }
+
+.thumb-teal { position: absolute; inset: 0; background: radial-gradient(circle at 75% 25%, rgba(60,207,204,0.35) 0%, transparent 55%), linear-gradient(135deg, #143a3a 0%, #0a2428 50%, #0a1418 100%); }
+
+.thumb-amber { position: absolute; inset: 0; background: linear-gradient(145deg, #2a2010 0%, #181008 100%); }
+.thumb-amber::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, transparent 0px, transparent 4px, rgba(245,201,97,0.1) 4px, rgba(245,201,97,0.1) 5px); }
+
+.thumb-green { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 30%, rgba(60,207,204,0.28) 0%, transparent 55%), linear-gradient(165deg, #142a24 0%, #0a1814 100%); }
+
+.thumb-red { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(220,80,100,0.3) 0%, transparent 50%), linear-gradient(155deg, #3a1a24 0%, #24101a 50%, #140a14 100%); }
+
+.trending-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-family: monospace; color: #3ccfcc; letter-spacing: 0.12em; padding: 4px 8px; background: rgba(10,10,18,0.7); border: 1px solid rgba(60,207,204,0.5); border-radius: 4px; font-weight: 600; }
+
+#page-content::-webkit-scrollbar { width: 8px; }
+#page-content::-webkit-scrollbar-track { background: transparent; }
+#page-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+#page-content::-webkit-scrollbar-thumb:hover { background: rgba(60,207,204,0.3); }
+</style>
+
+<script>
+const ICONS = {
+  home: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-8.5z"/></svg>',
+  film: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M7 4v16M17 4v16"/><circle cx="5" cy="8" r="0.6" fill="currentColor"/><circle cx="5" cy="12" r="0.6" fill="currentColor"/><circle cx="5" cy="16" r="0.6" fill="currentColor"/><circle cx="19" cy="8" r="0.6" fill="currentColor"/><circle cx="19" cy="12" r="0.6" fill="currentColor"/><circle cx="19" cy="16" r="0.6" fill="currentColor"/></svg>',
+  board: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="11" y="4" width="10" height="10" rx="1"/><rect x="3" y="12" width="6" height="8" rx="1"/><rect x="11" y="16" width="10" height="4" rx="1"/></svg>',
+  grid: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+  lab: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v7L5 19a2 2 0 0 0 1.7 3h10.6A2 2 0 0 0 19 19l-5-9V3"/><path d="M7 15h10" opacity="0.5"/><circle cx="10" cy="17" r="0.6" fill="currentColor"/><circle cx="14" cy="18" r="0.6" fill="currentColor"/></svg>',
+  frame: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="12" cy="12" r="3.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>',
+  hub: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M6.5 6.5 10 10M17.5 6.5 14 10M6.5 17.5 10 14M17.5 17.5 14 14" opacity="0.6"/></svg>',
+  crop: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v15a1 1 0 0 0 1 1h15"/><path d="M3 6h15a1 1 0 0 1 1 1v15"/></svg>',
+  rev: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>',
+  kit: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/><path d="M3 13h18" opacity="0.5"/></svg>',
+  settings: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  help: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><path d="M12 17h.01" stroke-width="2.2"/></svg>'
+};
+
+const PAGES = {
+  home:  { title: 'Home', subtitle: '' },
+  film:  { title: 'Film', subtitle: 'pre-production · coming soon' },
+  board: { title: 'Shot Board', subtitle: 'visual sequence · coming soon' },
+  grid:  { title: 'Grid Creator', subtitle: 'multi-panel prompt composer' },
+  lab:   { title: 'SeenLab', subtitle: 'looks · prompts · tokens' },
+  frame: { title: 'SeenFrame', subtitle: 'optimized for Midjourney v7' },
+  hub:   { title: 'Prompt Hub', subtitle: 'community · signature · saved' },
+  crop:  { title: 'Cropper', subtitle: 'auto-crop · coming soon' },
+  rev:   { title: 'Reverse', subtitle: 'reverse engineer · coming soon' },
+  kit:   { title: 'Consistency Kit', subtitle: 'guided workflow · coming soon' }
+};
+
+document.querySelectorAll('.rail-item[data-icon]').forEach(el => {
+  const icon = el.dataset.icon;
+  const ttTitle = el.dataset.ttTitle || el.dataset.label;
+  const ttDesc = el.dataset.ttDesc || '';
+  el.innerHTML = ICONS[icon] + '<div class="rail-tooltip"><div class="rail-tooltip-title">' + ttTitle + '</div><div class="rail-tooltip-desc">' + ttDesc + '</div></div>';
+  if (el.dataset.page) el.addEventListener('click', () => setPage(el.dataset.page));
+});
+
+function setPage(p) {
+  document.querySelectorAll('.rail-item').forEach(el => el.classList.remove('active'));
+  const active = document.querySelector('.rail-item[data-page="' + p + '"]');
+  if (active) active.classList.add('active');
+  document.getElementById('page-title').textContent = PAGES[p].title;
+  document.getElementById('page-subtitle').textContent = PAGES[p].subtitle;
+  renderPage(p);
+}
+
+function renderPage(p) {
+  const c = document.getElementById('page-content');
+  if (p === 'home') {
+    c.innerHTML = `
+      <div style="margin-bottom: 44px;">
+        <div class="sec-label">CONTINUE</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px;">
+          <div class="land-card"><div class="land-thumb"><div class="thumb-grid"><div></div><div></div><div></div><div></div></div></div><div class="land-meta"><div class="land-title">laundromat owner · angle study</div><div class="land-sub">grid · 14m ago</div></div></div>
+          <div class="land-card"><div class="land-thumb"><div class="thumb-noir"></div></div><div class="land-meta"><div class="land-title">deakins lighting · noir variant</div><div class="land-sub">signature · 2h ago</div></div></div>
+          <div class="land-card"><div class="land-thumb"><div class="thumb-teal"></div></div><div class="land-meta"><div class="land-title">diner cook · expression sheet</div><div class="land-sub">grid · yesterday</div></div></div>
+        </div>
+      </div>
+      <div style="margin-bottom: 44px;">
+        <div class="sec-label">QUICK START</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px;">
+          <div class="qs-card" onclick="setPage('grid')"><div class="qs-icon">${ICONS.grid}</div><div class="qs-title">build a character grid</div><div class="qs-desc">angle study · expression · normalizer</div></div>
+          <div class="qs-card" onclick="setPage('lab')"><div class="qs-icon">${ICONS.lab}</div><div class="qs-title">develop a look</div><div class="qs-desc">stack chips · save as signature</div></div>
+          <div class="qs-card" onclick="setPage('frame')"><div class="qs-icon">${ICONS.frame}</div><div class="qs-title">cinematic still</div><div class="qs-desc">midjourney v7 · --raw required</div></div>
+          <div class="qs-card" onclick="setPage('hub')"><div class="qs-icon">${ICONS.hub}</div><div class="qs-title">browse the hub</div><div class="qs-desc">community · classics · saved</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label">DISCOVER</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+          <div class="land-card"><div class="land-thumb" style="aspect-ratio:1;"><div class="thumb-noir"></div><div class="trending-badge">TRENDING</div></div><div class="land-meta"><div class="land-title" style="font-size:13px;">prisoners look</div><div class="land-sub">deakins · noir</div></div></div>
+          <div class="land-card"><div class="land-thumb" style="aspect-ratio:1;"><div class="thumb-green"></div><div class="trending-badge">TRENDING</div></div><div class="land-meta"><div class="land-title" style="font-size:13px;">se7en fluorescence</div><div class="land-sub">accent · green</div></div></div>
+          <div class="land-card"><div class="land-thumb" style="aspect-ratio:1;"><div class="thumb-red"></div></div><div class="land-meta"><div class="land-title" style="font-size:13px;">wong kar-wai</div><div class="land-sub">color · neon</div></div></div>
+          <div class="land-card"><div class="land-thumb" style="aspect-ratio:1;"><div class="thumb-amber"></div></div><div class="land-meta"><div class="land-title" style="font-size:13px;">argento giallo</div><div class="land-sub">style · horror</div></div></div>
+        </div>
+      </div>
+    `;
+  } else {
+    c.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:10px;color:#8a8aa0;"><div style="font-size:15px;color:#b0b0c8;">' + PAGES[p].title + '</div><div style="font-size:11px;font-family:monospace;letter-spacing:0.18em;">' + (p === 'grid' || p === 'lab' || p === 'frame' || p === 'hub' ? 'PAGE CONTENT' : 'COMING SOON') + '</div></div>';
+  }
+}
+
+setPage('home');
+</script>
+
+</body>
+</html>
