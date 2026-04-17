@@ -15,7 +15,6 @@ function BrandZone({ onClick }) {
           <div className={styles.logoCell} />
         </div>
       </button>
-      <div className={styles.wordmark}>SeenGrid</div>
     </div>
   )
 }

@@ -1,4 +1,12 @@
-.page {
+/* ============================================================
+   LANDING PAGE — module CSS
+   Padding/margin-setzende Regeln laufen ueber :global(.sg2-shell)
+   um den globalen `.sg2-shell *` Reset (Specificity 0,1,0) robust
+   zu schlagen (0,2,0). Nur dort, wo's noetig ist — reine Layout-
+   Regeln (display, grid, colors) bleiben einfach.
+   ============================================================ */
+
+:global(.sg2-shell) .page {
   flex: 1;
   width: 100%;
   overflow-y: auto;
@@ -8,7 +16,7 @@
 
 /* ---- HERO ---- */
 
-.hero {
+:global(.sg2-shell) .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +35,7 @@
   flex-shrink: 0;
 }
 
-.heroLogoInner {
+:global(.sg2-shell) .heroLogoInner {
   width: 180px;
   height: 180px;
   display: grid;
@@ -50,18 +58,18 @@
   opacity: 0.4;
 }
 
-.heroWordmark {
+:global(.sg2-shell) .heroWordmark {
   font-family: var(--sg2-font-display);
   font-size: 72px;
   font-weight: 700;
   color: var(--sg2-text-primary);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.005em;
   line-height: 1;
   margin-top: 24px;
   flex-shrink: 0;
 }
 
-.heroTagline {
+:global(.sg2-shell) .heroTagline {
   font-family: var(--sg2-font-body);
   font-size: 15px;
   font-weight: 400;
@@ -74,13 +82,13 @@
 
 /* ---- BANDS ---- */
 
-.band {
+:global(.sg2-shell) .band {
   margin-bottom: 56px;
 }
 
 /* ---- SECTION LABEL ---- */
 
-.sectionLabel {
+:global(.sg2-shell) .sectionLabel {
   font-size: 12px;
   font-family: var(--sg2-font-mono);
   color: #a0a0b8;
@@ -99,13 +107,27 @@
   background: linear-gradient(90deg, rgba(60, 207, 204, 0.18), transparent);
 }
 
-/* ---- CONTINUE CARDS ---- */
+/* ---- CARD GRIDS (auto-fit, sodass wenige Cards den Platz fuellen) ---- */
 
 .continueGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
 }
+
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.discoverGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ---- CONTINUE + DISCOVER CARDS ---- */
 
 .landCard {
   background: var(--sg2-bg-surface);
@@ -133,11 +155,11 @@
   aspect-ratio: 1 / 1;
 }
 
-.landMeta {
+:global(.sg2-shell) .landMeta {
   padding: 16px 18px;
 }
 
-.landTitle {
+:global(.sg2-shell) .landTitle {
   font-family: var(--sg2-font-body);
   font-size: 14px;
   font-weight: 500;
@@ -235,7 +257,7 @@
 
 /* ---- TRENDING BADGE ---- */
 
-.trendingBadge {
+:global(.sg2-shell) .trendingBadge {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -252,17 +274,11 @@
 
 /* ---- QUICK START ---- */
 
-.quickGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-.qsCard {
+:global(.sg2-shell) .qsCard {
   background: var(--sg2-bg-surface);
   border: 1px solid var(--sg2-border-default);
   border-radius: 10px;
-  padding: 28px;
+  padding: 28px 28px;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
@@ -273,7 +289,7 @@
   transform: translateY(-2px);
 }
 
-.qsIcon {
+:global(.sg2-shell) .qsIcon {
   width: 40px;
   height: 40px;
   border-radius: 9px;
@@ -291,7 +307,7 @@
   height: 20px;
 }
 
-.qsTitle {
+:global(.sg2-shell) .qsTitle {
   font-family: var(--sg2-font-body);
   font-size: 15px;
   font-weight: 500;
@@ -306,12 +322,4 @@
   color: var(--sg2-text-tertiary-light);
   letter-spacing: 0.02em;
   line-height: 1.5;
-}
-
-/* ---- DISCOVER ---- */
-
-.discoverGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
 }

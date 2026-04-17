@@ -5,14 +5,12 @@
    (legacy components still reference theme.css).
    ============================================================ */
 
-/* ---- FONT IMPORTS ----
-   General Sans via Fontshare CDN (kostenlos für kommerzielle Nutzung).
-   Primary display + body. Weights 400, 500, 600, 700.
-   JetBrains Mono + Geist (Fallback) werden lokal via @fontsource
-   in main.jsx geladen — kein CDN @import für die.
+/* ---- FONT LOADING ----
+   General Sans wird via <link> in index.html geladen (preconnect + stylesheet)
+   für zuverlaessiges, fruehes Laden. JetBrains Mono + Geist (Fallback) via
+   @fontsource in main.jsx. Kein CDN @import mehr hier — @import blockt spaet
+   wenn die enthaltende CSS selbst erst via JS importiert wird.
 */
-
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 
 /* ---- SCROLLBARS (global override) ---- */
 
