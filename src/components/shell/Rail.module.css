@@ -1,5 +1,5 @@
 /* ============================================================
-   RAIL — 72px left navigation
+   RAIL — 88px left navigation
    ============================================================ */
 
 .rail {
@@ -8,7 +8,7 @@
   border-right: 1px solid var(--sg2-border-default);
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  padding: 12px 0;
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
@@ -18,38 +18,38 @@
 /* ---- LOGO ---- */
 
 .logo {
-  height: 48px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   background: none;
   border: none;
   padding: 0;
 }
 
 .logoInner {
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 38px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 3px;
-  padding: 4px;
+  padding: 5px;
   border: 1px solid rgba(60, 207, 204, 0.5);
-  border-radius: 5px;
+  border-radius: 6px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .logo:hover .logoInner {
   border-color: var(--sg2-teal);
-  box-shadow: 0 0 12px rgba(60, 207, 204, 0.3);
+  box-shadow: 0 0 14px rgba(60, 207, 204, 0.3);
 }
 
 .logoCell {
   background: var(--sg2-teal);
-  border-radius: 1px;
+  border-radius: 2px;
   opacity: 0.9;
 }
 
@@ -61,7 +61,7 @@
 
 .separator {
   height: 1px;
-  margin: 10px 18px;
+  margin: 10px 20px;
   background: var(--sg2-separator-teal);
 }
 
@@ -82,11 +82,11 @@
 /* ---- GROUP LABEL ---- */
 
 .group {
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--sg2-font-mono);
   color: var(--sg2-text-muted);
   letter-spacing: 0.2em;
-  padding: 16px 0 6px;
+  padding: 20px 0 8px;
   text-align: center;
   font-weight: 600;
   user-select: none;
@@ -95,9 +95,9 @@
 /* ---- RAIL ITEM ---- */
 
 .item {
-  height: 44px;
-  margin: 2px 10px;
-  border-radius: 8px;
+  height: 56px;
+  margin: 4px 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +106,7 @@
   color: #9090a8;
   background: transparent;
   border: none;
-  padding: 0;
+  padding: 0 8px;
   transition: background 0.18s ease, color 0.18s ease;
 }
 
@@ -141,9 +141,9 @@
 .itemActive::before {
   content: '';
   position: absolute;
-  left: -10px;
-  top: 9px;
-  bottom: 9px;
+  left: -12px;
+  top: 12px;
+  bottom: 12px;
   width: 3px;
   background: var(--sg2-teal);
   border-radius: 0 2px 2px 0;
@@ -155,8 +155,8 @@
 .itemComing {
   opacity: 0.55;
   flex-direction: column;
-  gap: 2px;
-  height: 52px;
+  gap: 3px;
+  height: 64px;
 }
 
 .itemComing:hover {
@@ -178,10 +178,10 @@
 
 .starDot {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 5px;
-  height: 5px;
+  top: 9px;
+  right: 9px;
+  width: 6px;
+  height: 6px;
   background: var(--sg2-gold);
   border-radius: 50%;
   box-shadow: var(--sg2-gold-glow);
