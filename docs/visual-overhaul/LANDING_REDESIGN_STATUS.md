@@ -201,14 +201,81 @@ Aktuelle Items haben kein `image`-Feld → Fallback-Pfad bleibt aktiv. Sobald ei
 
 ---
 
+## Follow-up: Dimensions Pass + Fade-on-Overflow (2026-04-18)
+
+Live-Check nach Hierarchie-Korrektur zeigte zwei Probleme:
+- Whitespace unten: ~55% Leerraum auf 1080p-Viewport. Das "Linear/Figma-Pattern" aus dem Briefing meint typischerweise 15-25%, nicht 55% — der Planner hat Card-Höhen nicht gegengerechnet.
+- Gradient-Fade rechts: immer sichtbar, auch wenn nichts überläuft. Irreführende Scroll-Affordance.
+
+**Fix:**
+- **Create-Cards:** 110px → 200px. Icon + Title/Tagline haben Atmung, Downstream-Polish für Tool-Previews (z.B. geometrische Mini-Previews, Swatches) erst später sobald man live sieht was fehlt.
+- **Discover-Cards:** 120px → 200px. 260×200 ≈ 13:10, filmischer. Netflix-Treatment hat wieder Raum.
+- **Continue-Cards:** 72px → 100px. Bleibt Utility-Charakter, aber Label hat Luft.
+- **`useOverflowDetection`-Hook** neu unter `src/hooks/useOverflowDetection.js`. ResizeObserver + Window-Resize. Wiederverwendet in Discover + Continue — Fade **und** Scroll-Hint-Text werden jetzt nur bei echtem `scrollWidth > clientWidth` gerendert.
+
+**Effekt:** Content-Höhe ~700px → Whitespace ~34% (noch komfortabel, nicht überladen).
+
+---
+
+## Follow-up: Scroll-Snap Mandatory (2026-04-18)
+
+Auf `.row` in Discover + Continue: `scroll-snap-type: x proximity` → `x mandatory`. Cards haben `scroll-snap-align: start` bereits. Bei >5 Cards konsequent saubere Kanten beim horizontalen Scrollen, keine halb-abgeschnittenen Cards mehr.
+
+**Bottom-Separator aus dem Planner-Brief bewusst weggelassen:** Eine 1px-Linie mit 24px margin würde im ~34%-Whitespace schweben ohne etwas abzuschließen. Echter Whitespace-Fix ist Content hinzufügen (siehe Classics-Slice unten), nicht dekorative Linien.
+
+---
+
+## Follow-up: Classics Strip (2026-04-18)
+
+Zwischen Continue und Discover eingefügt: kuratiertes Arbeitsmaterial (Grid-Templates), nicht Community-Aktivität — die bleibt im Prompt Hub als eigene Kategorie. Entscheidung vs. "Trending" aus OPEN_DECISIONS #1: Classics = Arbeitsmaterial gehört auf Tool-Landing, Trending = Community gehört in den Hub wo User aktiv danach sucht.
+
+**Was gebaut:**
+- `src/data/classic-grids.json` — 5 Items (angle-study, expression-sheet, world-board, shot-coverage, story-sequence) mit `{id, title, tagline, pattern}`. Pattern-Keys referenzieren die existierende `ThumbPattern.jsx`-Komponente aus der Picker-Phase.
+- `src/components/landing/ClassicsStrip.jsx` + `.module.css` — horizontal scroll (analog Discover + Continue), 260×120px Cards, Thumb edge-to-edge oben (72px), Text-Section unten mit kleiner Surface-Background.
+- **`ThumbPattern`-Wiederverwendung** via Import aus `src/components/gridcreator/picker/`. `aspect-ratio: 16/10` aus der Pattern-Komponente wird per `:global(.sg2-shell)` Specificity überschrieben, damit der Thumb im 260×72-Fenster ohne Verzerrung sitzt.
+- `useOverflowDetection`-Hook wiederverwendet.
+- Section-Header: **"CLASSICS"** (konsistent mit PRODUCT_STRATEGY + OPEN_DECISIONS, ohne "Grids"-Zusatz — Pattern-Thumb signalisiert das bereits).
+- Link rechts: **"more in prompt hub →"** statt neutralem "see all" — macht Hub-Zugehörigkeit explizit, Peripherie-Awareness für Hub ohne Content-Vermischung.
+
+**Visueller Kontrast zu Discover (später Trendy, siehe nächster Block):** Classics = geometrische Pattern-Thumbs (bauen), Trendy = fotografische Output-Previews (anschauen). Vermeidet Streaming-Page-Feel bei zwei Scroll-Strips untereinander.
+
+**Whitespace nach Classics:** ~19% (von 34%), in der Linear/Figma-Zone.
+
+---
+
+## Follow-up: Discover → Trendy Rename (2026-04-18)
+
+**Grund:** Discover-Cards zeigten Filmlooks ohne sinnvolles Klick-Ziel. LookLab wäre logisch, aber dann müsste die Klick-Logik pro Card den Look in LookLab öffnen — das verlagert Business-Logik auf die Landing. Besser: Filmlook-Discovery wandert in den LookLab als interner Bereich; die Landing-Strip wird zu trendigen Community-Prompts mit eindeutigem Klick-Pfad (Prompt Hub).
+
+**Thematischer Gewinn:** Landing dreht sich jetzt komplett um Grids — Classics (Struktur/Template) + Trendy (Output/Inspiration) sind beide Grid-bezogen. Kein thematischer Bruch mehr.
+
+**Umgesetzt:**
+- `DiscoverStrip.jsx` → `TrendyStrip.jsx` (`git mv`)
+- `DiscoverStrip.module.css` → `TrendyStrip.module.css`
+- `discover.json` → `trendy-prompts.json`
+- `public/images/discover/` → `public/images/trendy/` (inkl. der 4 bereits abgelegten Bilder)
+- Image-Pfade in JSON aktualisiert (`/SeenGrid/images/trendy/...`)
+- Section-Header `DISCOVER` → `TRENDY`
+- Link `trending looks · see all →` → `more in prompt hub →` (konsistent mit Classics-Link)
+- `LandingPage.jsx`-Import aktualisiert, Reihenfolge: **Masthead → Create → Continue → Classics → Trendy**
+
+**Unverändert:** Komplette Image-Infrastruktur (Netflix-Treatment, moodColor-Fallback, useOverflowDetection), 200px Card-Höhe, scroll-snap, JSON-Struktur. Auch Item-IDs (`prisoners`, `se7en`, `wong`, `argento`) und Titles/Taglines bleiben — sie funktionieren als Prompt-Output-Showcases genauso wie vorher als Filmlook-Labels. Jonas kann die Labels später bei Bedarf umschreiben.
+
+**Konsequenz für LookLab:** Filmlook-Discovery-Bereich ist dort zu bauen — sobald LookLab-Visual-Update-Phase ansteht. Nicht Teil dieses Slices.
+
+---
+
 ## Bekannte kleine Punkte (nicht blockierend)
 
-- Session-Metadata-Zahlen sind Dummy-Werte — gleiche Zahlen wie die StatusBar-Dummies, aber bewusst nicht geshared (siehe Briefing: keine Shared-State-Infrastruktur).
+- Session-Metadata-Zahlen im Masthead sind Dummy-Werte — gleiche Zahlen wie die StatusBar-Dummies, aber bewusst nicht geshared (siehe Briefing: keine Shared-State-Infrastruktur). Drei `TODO(token-store)` / `TODO(workspace-store)`-Marker stehen für späteren Store-Anschluss bereit.
+- Create-Zone-Cards haben vier `TODO(routing)`-Marker (eine pro Card) für späteren Workspace-Routing-Anschluss. Per `grep -r "TODO(routing)"` auffindbar. Kein Navigation in diesem Slice.
 - Gradient-Fade rechts fadet gegen `--sg2-bg-primary`. Sollte der Landing-Container später in einen anderen Surface-Background wechseln, muss der Fade angepasst werden.
 - Continue-Projekte bleiben weiterhin hardcodiert als `CONTINUE_PROJECTS` in `ContinueStrip.jsx` bis der Projekt-Store in der Workspace-Phase gebaut wird.
-- Responsive-Breakpoints: 1100px (Masthead-Meta kürzt), 900px (Discover/QuickStart auf 2-Column, Masthead-Meta kürzt weiter). Mobile <600px ist nicht Scope (Briefing explizit).
-- Quick-Start hat aktuell Icon-Placeholder-Kästchen, keine echten Icons. Echte Icons würden die bestehende `railIcons.jsx`-Sammlung wiederverwenden (aus Scope-Gründen nicht mit reingepackt, kleiner Polish-Punkt für nächste Session).
-- Discover-Bilder: keine im Repo, leerer Ordner mit `.gitkeep` reserviert. Sobald Bilder da sind: in `public/images/discover/` ablegen + JSON-Item mit `image`-Pfad versehen + Text-Farben auf helle Neutraltöne anpassen.
+- Classics-Items und Trendy-Prompts sind statisches JSON; werden später zu echten kuratierten Listen aus dem Prompt Hub (Classics = Hub-Kategorie, Trendy = Hub-Trending-Sektion). Kein Store-Anschluss in diesem Slice.
+- Responsive-Breakpoints: 1100px (Masthead-Meta kürzt), 900px (Create-Zone auf 2-Column, Masthead-Meta kürzt weiter). Mobile <600px ist nicht Scope (Briefing explizit).
+- Create-Zone hat aktuell Icon-Placeholder-Kästchen (24×24), keine echten Icons. Und auf 200px Card-Höhe sitzen sie mit viel Luft drumrum — Downstream-Polish (Größer-Skalierung, echte Icons aus `railIcons.jsx`, oder Tool-Preview-Visuals) nach weiterem Live-Check.
+- Trendy-Items behalten vorerst die Filmlook-Labels aus der Discover-Ära (`prisoners look`, `se7en fluorescence`, etc.). Funktionieren als Prompt-Output-Showcases, können aber bei Bedarf durch echte trendige Community-Prompt-Labels ersetzt werden — reines JSON-Edit in `src/data/trendy-prompts.json`.
+- Bottom-Whitespace: ~19% auf 1080p nach Classics + Trendy-Rename. Im Linear/Figma-Bereich. Falls live noch zu viel: Discover/Trendy-Card-Höhe von 200 auf 170 (Stellhebel war in der Diskussion).
 
 ---
 

@@ -1,10 +1,14 @@
 /* ============================================================
-   DISCOVER STRIP — support content, kompakter Horizontal-Scroll.
-   Vormals 4-Column-Hero oben auf der Landing — durch Hierarchie-
-   Korrektur jetzt nach unten gewandert als Support-Strip analog
-   zum Continue-Band (Netflix-Row-Pattern).
-   Farben kommen inline aus discover.json (Filmlook-Hexes).
+   TRENDY STRIP — fotografischer Support-Content am Ende der Landing.
+   Kuratierte trendige Community-Prompts mit Preview-Bild, Title
+   und Stil-Tagline. Klick-Pfad fuehrt in den Prompt Hub.
+   Farben kommen inline aus trendy-prompts.json (Palette-Hexes).
    Image-Support (Netflix-Treatment) bleibt aktiv.
+
+   Historie: hiess vormals DiscoverStrip und zeigte Filmlooks —
+   diese Rolle wandert jetzt in den LookLab. Die Infrastruktur
+   (horizontal scroll + Netflix-Treatment + useOverflowDetection)
+   wird 1:1 wiederverwendet.
    ============================================================ */
 
 :global(.sg2-shell) .section {

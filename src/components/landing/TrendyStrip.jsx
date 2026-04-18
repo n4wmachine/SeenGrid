@@ -1,36 +1,38 @@
 import { useRef } from 'react'
-import discoverData from '../../data/discover.json'
+import trendyData from '../../data/trendy-prompts.json'
 import useOverflowDetection from '../../hooks/useOverflowDetection.js'
-import styles from './DiscoverStrip.module.css'
+import styles from './TrendyStrip.module.css'
 
-// Discover wandert durch das Redesign nach oben und wird zum
-// visuellen Anker der Landing. Mood-Colors sind Filmlook-
-// Repraesentationen aus dem Preset-File, nicht an --sg2-*
-// Semantik-Tokens gebunden — daher inline via style.
-// Text-Farben kommen ebenfalls pro-Item explizit aus dem Preset
-// (robuster als Laufzeit-Berechnung).
+// Trendy-Strip = fotografischer Support-Content am Ende der Landing.
+// Zeigt kuratierte trendige Community-Prompts mit Preview-Bild,
+// Title (was der Prompt erzeugt) und Tagline (Stil-Kategorie).
+// Der Klick-Pfad fuehrt in den Prompt Hub — eindeutig, im Gegensatz
+// zu den frueheren Filmlook-Cards die kein sinnvolles Klick-Ziel
+// hatten. Filmlook-Discovery wandert in den LookLab als interner
+// Bereich.
+//
+// Visueller Kontrast zu Classics (geometrische Grid-Pattern-Thumbs)
+// durch fotografische Bilder mit Netflix-Treatment. Signalisiert
+// "Classics = bauen, Trendy = anschauen was andere gebaut haben".
 //
 // Image-Support: Items mit `image`-Feld rendern das Bild als
-// Background-Layer mit Gradient-Overlay (Netflix-Treatment).
-// moodColor bleibt als Loading-Fallback erhalten — die Card ist
-// nie schwarz, sondern startet in der Mood-Farbe und das Bild
-// fadet darueber, sobald geladen.
+// Background-Layer mit Gradient-Overlay. moodColor bleibt als
+// Loading-Fallback erhalten — die Card ist nie schwarz, sondern
+// startet in der Mood-Farbe und das Bild fadet darueber.
 //
-// Fade-Affordance: der Gradient-Fade rechts wird nur gerendert
-// wenn die Row tatsaechlich ueberlaeuft (useOverflowDetection).
-// Ohne Overflow ist der Fade irrefuehrend ("scroll fuer mehr"),
-// obwohl alle Cards sichtbar sind.
-export default function DiscoverStrip() {
-  const items = discoverData.items || []
+// Fade-Affordance: Gradient-Fade rechts nur bei tatsaechlichem
+// Overflow (useOverflowDetection).
+export default function TrendyStrip() {
+  const items = trendyData.items || []
   const rowRef = useRef(null)
   const hasOverflow = useOverflowDetection(rowRef)
 
   return (
     <section className={styles.section}>
       <div className={styles.header}>
-        <span className={styles.label}>DISCOVER</span>
+        <span className={styles.label}>TRENDY</span>
         <a className={styles.hint} href="#" onClick={(e) => e.preventDefault()}>
-          trending looks · see all →
+          more in prompt hub →
         </a>
       </div>
 

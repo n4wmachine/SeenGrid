@@ -1,9 +1,9 @@
 /* ============================================================
    LANDING PAGE — container only.
    Der Landing-Redesign-Slice hat Hero + Section-Labels + Thumbs +
-   Create-Cards + Discover-Grid in eigene Sub-Komponenten ausgelagert
-   (Masthead / CreateZone / ContinueStrip / DiscoverStrip). Dieses
-   File definiert nur noch den Container der vier Sections.
+   Create-Cards + Content-Strips in eigene Sub-Komponenten ausgelagert
+   (Masthead / CreateZone / ContinueStrip / ClassicsStrip /
+   TrendyStrip). Dieses File definiert nur noch den Container.
    padding ueber :global(.sg2-shell) um den globalen `.sg2-shell *`
    Reset (Specificity 0,1,0) mit 0,2,0 zu schlagen.
    ============================================================ */

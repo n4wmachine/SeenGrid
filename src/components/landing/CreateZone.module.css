@@ -2,8 +2,8 @@
    CREATE ZONE — Primary-Zone der Landing.
    Vier grosse Entry-Point-Cards (110px hoch) fuer die vier
    Tool-Workspaces. Loest die alte 60px-Quick-Start-Leiste ab:
-   die Primary-Aktion muss visuell dominieren, Inspiration
-   (Discover) ist Support.
+   die Primary-Aktion muss visuell dominieren, die Content-Strips
+   (Classics / Trendy) sind Support.
    padding/margin ueber :global(.sg2-shell) .xyz — Reset-Schutz.
    ============================================================ */
 

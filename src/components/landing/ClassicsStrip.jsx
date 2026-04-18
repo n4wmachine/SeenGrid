@@ -4,11 +4,11 @@ import ThumbPattern from '../gridcreator/picker/ThumbPattern.jsx'
 import useOverflowDetection from '../../hooks/useOverflowDetection.js'
 import styles from './ClassicsStrip.module.css'
 
-// Classics-Strip sitzt zwischen Continue und Discover — Tool-naher
+// Classics-Strip sitzt zwischen Continue und Trendy — Tool-naher
 // Support-Content (kuratiertes Arbeitsmaterial), nicht Community-
 // Aktivitaet (die bleibt im Prompt Hub als eigene Kategorie).
 //
-// Visuell bewusst anders als Discover: geometrische SVG-Grid-
+// Visuell bewusst anders als Trendy: geometrische SVG-Grid-
 // Pattern-Thumbs (aus der Picker-Phase wiederverwendet) statt
 // fotografische Mood-Cards. Signalisiert "oben = bauen" vs
 // "unten = schauen" — vermeidet Disney+/Streaming-Feel auf
