@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "id": "angle-study",
+      "title": "character angle study",
+      "tagline": "4 panels · front/profile/back",
+      "pattern": "grid-4x1-figures"
+    },
+    {
+      "id": "expression-sheet",
+      "title": "expression sheet",
+      "tagline": "6 faces · emotional range",
+      "pattern": "grid-3x2-faces"
+    },
+    {
+      "id": "world-board",
+      "title": "world board",
+      "tagline": "4 tiles · location coverage",
+      "pattern": "grid-2x2-world"
+    },
+    {
+      "id": "shot-coverage",
+      "title": "shot coverage",
+      "tagline": "4 framings · wide to close",
+      "pattern": "grid-2x2-framing"
+    },
+    {
+      "id": "story-sequence",
+      "title": "story sequence",
+      "tagline": "4 beats · narrative arc",
+      "pattern": "grid-4x1-story"
+    }
+  ]
+}
