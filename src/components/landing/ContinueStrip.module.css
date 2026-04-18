@@ -85,7 +85,7 @@
 :global(.sg2-shell) .newCard {
   flex: 0 0 130px;
   width: 130px;
-  height: 66px;
+  height: 72px;
   background: transparent;
   border: 1px dashed var(--sg2-border-teal-subtle);
   border-radius: var(--sg2-radius-md);
@@ -98,7 +98,7 @@
   color: var(--sg2-teal);
   transition: var(--sg2-transition);
   scroll-snap-align: start;
-  padding: 0 10px;
+  padding: 0 12px;
 }
 
 .newCard:hover {
@@ -120,7 +120,7 @@
 :global(.sg2-shell) .projectCard {
   flex: 0 0 130px;
   width: 130px;
-  height: 66px;
+  height: 72px;
   border-radius: var(--sg2-radius-md);
   position: relative;
   overflow: hidden;
@@ -129,7 +129,7 @@
   scroll-snap-align: start;
   display: flex;
   align-items: flex-end;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 0.5px solid var(--sg2-border-default);
 }
 
@@ -141,8 +141,8 @@
 .projectLabel {
   font-family: var(--sg2-font-display);
   font-weight: 500;
-  font-size: var(--sg2-text-mono-label);
-  letter-spacing: -0.005em;
+  font-size: var(--sg2-text-body);
+  letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--sg2-text-primary);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);

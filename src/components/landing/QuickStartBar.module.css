@@ -46,9 +46,9 @@
 :global(.sg2-shell) .card {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 8px 10px;
+  gap: 10px;
+  height: 60px;
+  padding: 10px 12px;
   background: var(--sg2-bg-surface);
   border: 0.5px solid var(--sg2-border-default);
   border-radius: var(--sg2-radius-md);
@@ -65,8 +65,8 @@
 
 .icon {
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   background: var(--sg2-teal-active-bg);
   border-radius: var(--sg2-radius-sm);
@@ -76,9 +76,9 @@
 :global(.sg2-shell) .labelText {
   font-family: var(--sg2-font-display);
   font-weight: 500;
-  font-size: var(--sg2-text-mono-label);
+  font-size: var(--sg2-text-body);
   color: var(--sg2-text-primary);
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
