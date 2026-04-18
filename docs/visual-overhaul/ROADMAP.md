@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
 **Stand:** 2026-04-18
-**Aktive Phase:** Workspace-Planung ODER Token-Store Stufe 1 (Reihenfolge entscheidet Jonas)
+**Aktive Phase:** Landing-Redesign (Typografie + Layout-Konsistenz)
 
 ---
 
@@ -13,7 +13,8 @@
 [✓] Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik ... fertig 2026-04-18
 [✓] Picker-Planung: Grid Creator Picker (Spec + Entscheidungen) ... fertig 2026-04-18
 [✓] Picker-Bau: Grid Creator Picker + CONTINUE-Band-Adaption .... fertig 2026-04-18
-[→] NEXT: Workspace-Planung ODER Token-Store Stufe 1 ....  Reihenfolge offen
+[→] Landing-Redesign: Typografie + Layout-Konsistenz ....  AKTIV
+[ ] Workspace-Planung: Spec für Grid Creator Workspace
 [ ] Workspace-Bau: Grid Creator Workspace (3-Spalten + Bars) .. größter Brocken
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)
