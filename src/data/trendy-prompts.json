@@ -7,8 +7,7 @@
       "image": "/SeenGrid/images/trendy/Taxi.jpeg",
       "moodColor": "#0F6E56",
       "titleColor": "#f0f0fa",
-      "taglineColor": "#c8c8d8",
-      "trending": true
+      "taglineColor": "#c8c8d8"
     },
     {
       "id": "se7en",
@@ -17,8 +16,7 @@
       "image": "/SeenGrid/images/trendy/iron.jpeg",
       "moodColor": "#3C3489",
       "titleColor": "#f0f0fa",
-      "taglineColor": "#c8c8d8",
-      "trending": true
+      "taglineColor": "#c8c8d8"
     },
     {
       "id": "wong",
@@ -27,8 +25,7 @@
       "image": "/SeenGrid/images/trendy/julira.jpeg",
       "moodColor": "#791F1F",
       "titleColor": "#f0f0fa",
-      "taglineColor": "#c8c8d8",
-      "trending": false
+      "taglineColor": "#c8c8d8"
     },
     {
       "id": "argento",
@@ -37,8 +34,7 @@
       "image": "/SeenGrid/images/trendy/sicilian.jpeg",
       "moodColor": "#633806",
       "titleColor": "#f0f0fa",
-      "taglineColor": "#c8c8d8",
-      "trending": false
+      "taglineColor": "#c8c8d8"
     }
   ]
 }

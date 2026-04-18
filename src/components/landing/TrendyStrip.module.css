@@ -114,16 +114,6 @@
   filter: brightness(1.08);
 }
 
-.badge {
-  font-family: var(--sg2-font-mono);
-  font-weight: 500;
-  font-size: var(--sg2-text-mono-label);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-  align-self: flex-start;
-}
-
 :global(.sg2-shell) .body {
   display: flex;
   flex-direction: column;
@@ -150,7 +140,7 @@
    .cardWithImage liegt zusaetzlich auf .card. Die inline gesetzte
    background-color (moodColor) bleibt als Loading-Platzhalter aktiv
    bis das <img> geladen ist. ::after-Gradient liegt zwischen Bild
-   und Text, daher z-index:1 auf badge + body. */
+   und Text, daher z-index:1 auf body. */
 
 .cardImage {
   position: absolute;
@@ -172,14 +162,6 @@
     transparent 55%
   );
   pointer-events: none;
-}
-
-:global(.sg2-shell) .cardWithImage .badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  z-index: 1;
 }
 
 :global(.sg2-shell) .cardWithImage .body {

@@ -59,11 +59,6 @@ export default function TrendyStrip() {
                     decoding="async"
                   />
                 )}
-                {item.trending && (
-                  <div className={styles.badge} style={{ color: item.titleColor }}>
-                    TRENDING
-                  </div>
-                )}
                 <div className={styles.body}>
                   <div className={styles.title} style={{ color: item.titleColor }}>
                     {item.title}
