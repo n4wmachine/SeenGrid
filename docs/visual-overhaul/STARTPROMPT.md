@@ -6,6 +6,21 @@ Chat überschreibt sie am Ende seiner Session mit dem Startprompt für
 seinen Nachfolger. Historische Versionen liegen in git-log, nicht
 separat im Repo.
 
+**End-of-Session-Pflicht — Branch-Name propagieren:**
+Wenn du am Ende deiner Session einen neuen STARTPROMPT schreibst, trage
+den **aktuellen Arbeits-Branch** an zwei Stellen ein:
+1. Im Meta-Feld "Arbeits-Branch" oben (Zeile ca. 15)
+2. In der "ALLERERSTE AKTION — BRANCH-WECHSEL"-Sektion im Prompt-Body
+   (die drei `git`-Zeilen)
+
+**Arbeits-Branch heißt:** Der Branch auf dem die committed Arbeit lebt
+(`git log`-Historie, Push-Ziel) — **nicht** der Branch auf dem die Harness
+dich gestartet hat. Die Harness legt oft eigene Zufalls-Branches an; die
+reale Arbeit landet aber auf dem etablierten Feature-Branch. Im Zweifel:
+`git branch --show-current` NACH dem ersten Branch-Wechsel, oder Jonas
+fragen. Niemals den Harness-Start-Branch eintragen — sonst bricht die
+Kette für den nächsten Chat.
+
 **Aktuell für:** Picker-Planungs-Chat (Grid Creator Picker)
 
 **Arbeits-Branch:** `claude/seengrid-visual-overhaul-6RK4n`
@@ -121,7 +136,11 @@ Danach: Picker-Struktur und Card-Pattern.
    — Übergabe an den Code-Chat der den Picker baut
 4. Text-Hinweis für ROADMAP-Update: Picker-Planung [→] → [✓], Picker-Bau [→]
 5. Neuer `STARTPROMPT.md`-Inhalt für den nächsten Chat (Picker-Code-Chat) —
-   überschreibt das aktuelle File im Repo
+   überschreibt das aktuelle File im Repo. **Pflicht dabei:** Trage den
+   aktuellen Arbeits-Branch-Namen an beiden Stellen ein (Meta-Feld oben +
+   `git checkout`-Zeile im Prompt-Body). Nicht den Harness-Start-Branch
+   verwenden — der Arbeits-Branch ist der, auf dem die committed Arbeit
+   lebt. Siehe STARTPROMPT.md Meta-Header für Details.
 
 Ich kopiere die Text-Blöcke aus dem Chat und committe sie selbst. Du
 schreibst nichts direkt ins Repo.
