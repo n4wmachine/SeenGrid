@@ -45,7 +45,7 @@ und Produkt-Strategie) sind abgeschlossen.
 6. `docs/visual-overhaul/NUANCEN.md` — komplett, Anti-Drift
 7. `docs/visual-overhaul/SEENGRID_VISUAL_OVERHAUL_HANDOFF_v2.md` — NUR
    Abschnitt 10 (Grid Creator Specs)
-8. `docs/visual-overhaul/MODULE_AND_CASE_CATALOG.md` — für Cases-Verständnis
+8. `MODULE_AND_CASE_CATALOG.md` (Repo-Root, NICHT unter `docs/`) — für Cases-Verständnis
 
 **NICHT lesen:** Mockup-Files, andere Spec-Abschnitte, Code-Files.
 

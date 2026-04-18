@@ -94,7 +94,7 @@ In dieser Reihenfolge:
 5. `docs/visual-overhaul/NUANCEN.md` — Anti-Drift, besonders Punkte 1, 6, 10
 6. `docs/visual-overhaul/SEENGRID_VISUAL_OVERHAUL_HANDOFF_v2.md` Abschnitt 10 (Grid Creator Specs)
 7. Dieses Dokument
-8. `docs/visual-overhaul/MODULE_AND_CASE_CATALOG.md` — für Verständnis der Cases die im Picker sichtbar werden
+8. `MODULE_AND_CASE_CATALOG.md` (Repo-Root, nicht unter `docs/`) — für Verständnis der Cases die im Picker sichtbar werden
 
 ---
 
