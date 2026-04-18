@@ -169,6 +169,38 @@ Aktuelle Items haben kein `image`-Feld → Fallback-Pfad bleibt aktiv. Sobald ei
 
 ---
 
+## Follow-up: Hierarchie-Korrektur — Create Zone als Primary, Discover als Support (2026-04-18)
+
+**Landing-Hierarchie strukturell korrigiert.** Die ursprüngliche Discover-als-Hero-Strategie war Branding-Logik verkleidet als UX-Logik — bei einem Produktions-Tool muss die Primary-Aktion visuell dominieren (Tool-Entry-Points), Inspiration ist Support. Analog zu Spotify (Jump back in oben, kuratierte Playlists unten), Figma (deine Files + Create-Button oben, Templates unten), Linear (deine Issues oben, Community unten).
+
+**Was gebaut wurde:**
+
+- `QuickStartBar.jsx` + `.module.css` **gelöscht**, ersetzt durch **`CreateZone.jsx`** + `.module.css`. Section-Header `QUICK START` → `CREATE`. Vier große 110px-Entry-Point-Cards (vormals 60px-Utility-Leiste) mit Icon-Placeholder (24×24) oben und Title + Tagline unten. Hover: `teal-hover-bg` + `border-teal-subtle` + `teal-glow-subtle`.
+- **Card-Inhalte** zeigen auf die vier aktiven Tool-Workspaces statt willkürliche Templates:
+  - grid creator · build a grid
+  - seenlab · develop a look
+  - seenframe · cinematic still
+  - prompt hub · browse prompts
+- **Routing als TODO(routing)-Marker geparkt:** Jede Card hat einen eigenständigen `onClick={() => console.log('TODO(routing): navigate to ... workspace')}`. Vier Cards bewusst ausgerollt (keine `.map`), damit die Marker pro Card grep-bar bleiben. Wird später in einem Durchgang angeschlossen wenn die finalen Workspace-Routen stehen — konsistent mit `TODO(token-store)` / `TODO(workspace-store)` im Masthead.
+- **`DiscoverStrip`** umgebaut von 4-Column-Grid (150px hohe Cards) auf horizontalen Scroll-Strip (260×120px Cards) mit Gradient-Fade rechts, analog zu Continue. Netflix-Treatment (image-support aus vorherigem Slice) bleibt aktiv — Bilder rendern proportional kleiner, aber identischem Verhalten. `discover.json` und Card-Typo unverändert.
+- **`LandingPage.jsx`** Reihenfolge: Masthead → Create → Continue → Discover. Ersetzt die alte Reihenfolge Masthead → Discover → Continue → QuickStart.
+
+**Briefing-Optionen, bewusst entschieden:**
+
+- **Labeling:** Default-Register gewählt (Tool-Name als Title + Aktion als Tagline). Einheitlich über alle vier Cards.
+- **Prompt-Hub-Icon-Differenzierung:** nicht aktiviert. Alle vier Icon-Placeholder gleichförmig (`--sg2-teal-active-bg`). Wenn später gewünscht, 1-Zeilen-Edit in `CreateZone.jsx`.
+
+**Whitespace unter Discover:** ~400–500px auf 1080p bleiben absichtlich leer. Linear/Figma-Pattern — Page schließt ruhig ab nach Primary-Zonen, kein Füll-Content.
+
+**Betroffene Files:**
+- Neu: `src/components/landing/CreateZone.jsx`, `CreateZone.module.css`
+- Gelöscht: `src/components/landing/QuickStartBar.jsx`, `QuickStartBar.module.css`
+- Geändert: `src/components/landing/DiscoverStrip.jsx`, `DiscoverStrip.module.css`, `LandingPage.jsx`
+
+**Akzeptanz geprüft:** Rename vollzogen, CREATE-Header, 110px-Cards, vier TODO(routing)-Marker vorhanden, Discover auf horizontal scroll 260×120, neue Reihenfolge, keine neuen Tokens, kein Bottom-Content.
+
+---
+
 ## Bekannte kleine Punkte (nicht blockierend)
 
 - Session-Metadata-Zahlen sind Dummy-Werte — gleiche Zahlen wie die StatusBar-Dummies, aber bewusst nicht geshared (siehe Briefing: keine Shared-State-Infrastruktur).
