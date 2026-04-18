@@ -1,4 +1,6 @@
+import { useRef } from 'react'
 import discoverData from '../../data/discover.json'
+import useOverflowDetection from '../../hooks/useOverflowDetection.js'
 import styles from './DiscoverStrip.module.css'
 
 // Discover wandert durch das Redesign nach oben und wird zum
@@ -13,8 +15,15 @@ import styles from './DiscoverStrip.module.css'
 // moodColor bleibt als Loading-Fallback erhalten — die Card ist
 // nie schwarz, sondern startet in der Mood-Farbe und das Bild
 // fadet darueber, sobald geladen.
+//
+// Fade-Affordance: der Gradient-Fade rechts wird nur gerendert
+// wenn die Row tatsaechlich ueberlaeuft (useOverflowDetection).
+// Ohne Overflow ist der Fade irrefuehrend ("scroll fuer mehr"),
+// obwohl alle Cards sichtbar sind.
 export default function DiscoverStrip() {
   const items = discoverData.items || []
+  const rowRef = useRef(null)
+  const hasOverflow = useOverflowDetection(rowRef)
 
   return (
     <section className={styles.section}>
@@ -26,7 +35,7 @@ export default function DiscoverStrip() {
       </div>
 
       <div className={styles.rowWrap}>
-        <div className={styles.row}>
+        <div ref={rowRef} className={styles.row}>
           {items.map((item, idx) => {
             const hasImage = Boolean(item.image)
             const cardClass = hasImage
@@ -65,7 +74,7 @@ export default function DiscoverStrip() {
             )
           })}
         </div>
-        {items.length > 0 && <div className={styles.fade} aria-hidden="true" />}
+        {hasOverflow && <div className={styles.fade} aria-hidden="true" />}
       </div>
     </section>
   )

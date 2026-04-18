@@ -85,7 +85,7 @@
 :global(.sg2-shell) .newCard {
   flex: 0 0 130px;
   width: 130px;
-  height: 72px;
+  height: 100px;
   background: transparent;
   border: 1px dashed var(--sg2-border-teal-subtle);
   border-radius: var(--sg2-radius-md);
@@ -120,7 +120,7 @@
 :global(.sg2-shell) .projectCard {
   flex: 0 0 130px;
   width: 130px;
-  height: 72px;
+  height: 100px;
   border-radius: var(--sg2-radius-md);
   position: relative;
   overflow: hidden;
