@@ -8,6 +8,11 @@ separat im Repo.
 
 **Aktuell für:** Picker-Planungs-Chat (Grid Creator Picker)
 
+**Arbeits-Branch:** `claude/seengrid-visual-overhaul-6RK4n`
+Der Startprompt unten enthält die `git checkout`-Anweisung als erste
+Aktion. Nicht streichen — ohne diesen Checkout findet der neue Chat
+keine der Planungs-Docs (sie liegen nicht auf main).
+
 **Nutzung:** Den Text-Block zwischen den beiden Backtick-Zeilen
 unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 
@@ -17,6 +22,29 @@ unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Wir starten die
 Picker-Planungs-Phase für meine App SeenGrid. Vorgänger-Phasen (Brand-Session
 und Produkt-Strategie) sind abgeschlossen.
+
+**ALLERERSTE AKTION — BRANCH-WECHSEL (nicht überspringen):**
+
+Die gesamte Arbeit (Brand, Strategy, alle Planungs-Docs) liegt auf dem
+Feature-Branch `claude/seengrid-visual-overhaul-6RK4n`, NICHT auf main.
+Die Harness startet dich auf einem frischen Branch von main — dort fehlen
+die Primärquellen die du lesen sollst.
+
+Bevor du IRGENDWAS anderes tust, führe aus:
+
+    git fetch origin claude/seengrid-visual-overhaul-6RK4n
+    git checkout claude/seengrid-visual-overhaul-6RK4n
+    git pull
+
+Wenn das an Harness-Policies scheitert: stoppe, meld dich bei mir, wir klären
+das. Nicht improvisieren, nicht auf main weiterarbeiten.
+
+Verifikation nach Checkout: `ls docs/visual-overhaul/` muss **mindestens**
+diese Files zeigen: ROADMAP.md, OPEN_DECISIONS.md, PRODUCT_STRATEGY_V1.md,
+HANDOFF_STRATEGY_TO_PICKER.md, PHASE1_STATUS.md, NUANCEN.md. Wenn sie fehlen,
+bist du noch auf dem falschen Branch.
+
+---
 
 **Deine Rolle:**
 - Du bist **Konzept- und Layout-Planer** für den Grid Creator Picker.
