@@ -1,10 +1,17 @@
-# Startprompt: Picker-Planungs-Chat
+# STARTPROMPT — aktueller Chat-Start-Prompt
 
-**Zweck:** Diesen Prompt in den nächsten Chat kopieren um die Picker-Phase zu starten.
+**Konvention:** Es gibt **eine** `STARTPROMPT.md` im Repo. Sie enthält
+immer den Startprompt für den **nächsten** zu startenden Chat. Jeder
+Chat überschreibt sie am Ende seiner Session mit dem Startprompt für
+seinen Nachfolger. Historische Versionen liegen in git-log, nicht
+separat im Repo.
+
+**Aktuell für:** Picker-Planungs-Chat (Grid Creator Picker)
+
+**Nutzung:** Den Text-Block zwischen den beiden Backtick-Zeilen
+unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 
 ---
-
-## Prompt (zum Reinkopieren)
 
 ```
 Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Wir starten die
@@ -17,6 +24,19 @@ und Produkt-Strategie) sind abgeschlossen.
 - Du planst: Picker-Aufbau, Interaktionen, Adaptivität, Card-Pattern.
 - Du entscheidest nichts alleine — du präsentierst Optionen mit Konsequenzen.
 - Ich entscheide, du strukturierst und dokumentierst.
+
+**Repo-Zugriff: nur lesen, nie schreiben.**
+- **Erlaubt:** Files lesen (Read, Glob, Grep). Git-Lese-Befehle (`git log`,
+  `git show`, `git diff`, `git status`) zum Nachvollziehen von Historie.
+- **Verboten:** Jegliche Schreib-Aktion. Kein Write, Edit, `git add`,
+  `git commit`, `git push`, `git reset`, `git checkout <file>`, `mkdir`,
+  keine Bash-Commands die Files erzeugen/ändern/löschen.
+- Deine drei Ergebnis-Dokumente (siehe unten) gibst du als vollständige
+  Text-Blöcke im Chat aus. Ich kopiere sie selbst ins Repo oder committe
+  via separater Code-Session.
+- Parallel kann eine Code-Session laufen die deine Planungs-Outputs umsetzt.
+  Die beiden Sessions sind sauber nebeneinander solange du kein git-write
+  anfasst.
 
 **Mein Arbeitsstil:**
 - Deutsch, direkte Kommunikation
@@ -45,7 +65,8 @@ und Produkt-Strategie) sind abgeschlossen.
 6. `docs/visual-overhaul/NUANCEN.md` — komplett, Anti-Drift
 7. `docs/visual-overhaul/SEENGRID_VISUAL_OVERHAUL_HANDOFF_v2.md` — NUR
    Abschnitt 10 (Grid Creator Specs)
-8. `MODULE_AND_CASE_CATALOG.md` (Repo-Root, NICHT unter `docs/`) — für Cases-Verständnis
+8. `MODULE_AND_CASE_CATALOG.md` (Repo-Root, NICHT unter `docs/`) — für
+   Cases-Verständnis
 
 **NICHT lesen:** Mockup-Files, andere Spec-Abschnitte, Code-Files.
 
@@ -62,24 +83,27 @@ Start mit OPEN_DECISIONS #1 (Classics-Verortung) — ich muss prüfen ob ich in
 alten Chats/Logs die frühere Entscheidung finde, sonst entscheiden wir neu.
 Danach: Picker-Struktur und Card-Pattern.
 
-**Was am Ende dieser Session vorliegen muss:**
-1. `docs/visual-overhaul/PICKER_SPEC_V1.md` — vollständige Picker-Spec bereit
-   für Code-Chat (Layout, Sektionen, Card-Pattern, Interaktionen, Adaptivität)
-2. `OPEN_DECISIONS.md` aktualisiert: #1 Classics + #3 Continue-Capacity
-   entschieden oder bewusst verschoben
-3. `HANDOFF_PICKER_TO_CODE.md` — Übergabe an den Code-Chat der den Picker baut
-4. ROADMAP aktualisiert: Picker-Planung [→] → [✓], Picker-Bau [→]
+**Was am Ende dieser Session als Text-Blöcke im Chat vorliegen muss:**
+1. Vollständiger Inhalt für `docs/visual-overhaul/PICKER_SPEC_V1.md` —
+   vollständige Picker-Spec bereit für Code-Chat (Layout, Sektionen,
+   Card-Pattern, Interaktionen, Adaptivität)
+2. Aktualisierte Einträge für `OPEN_DECISIONS.md`: #1 Classics und #3
+   Continue-Capacity — entschieden oder bewusst verschoben (mit Begründung)
+3. Vollständiger Inhalt für `docs/visual-overhaul/HANDOFF_PICKER_TO_CODE.md`
+   — Übergabe an den Code-Chat der den Picker baut
+4. Text-Hinweis für ROADMAP-Update: Picker-Planung [→] → [✓], Picker-Bau [→]
+5. Neuer `STARTPROMPT.md`-Inhalt für den nächsten Chat (Picker-Code-Chat) —
+   überschreibt das aktuelle File im Repo
+
+Ich kopiere die Text-Blöcke aus dem Chat und committe sie selbst. Du
+schreibst nichts direkt ins Repo.
 
 **Wichtig:**
 Wenn während der Session eine Entscheidung auftaucht die nicht in den Picker-
-Scope gehört oder spekulativ wäre → sofort in OPEN_DECISIONS.md eintragen,
-nicht in anderen Dokumenten als "für später" vermerken. Verstreute "später"-
-Vermerke sind der häufigste Failure-Mode in diesem Projekt — wir konsolidieren
-in EINER Datei.
+Scope gehört oder spekulativ wäre → sofort als Vorschlag für OPEN_DECISIONS.md
+formulieren, nicht in anderen Dokumenten als "für später" vermerken. Verstreute
+"später"-Vermerke sind der häufigste Failure-Mode in diesem Projekt — wir
+konsolidieren in EINER Datei.
 
 Bereit? Leg los mit Schritt 0: Lesen, Zusammenfassung, Pitch-Check.
 ```
-
----
-
-**Ende Startprompt.**

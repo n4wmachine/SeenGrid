@@ -63,6 +63,14 @@
 
 ---
 
+## Konvention: STARTPROMPT.md
+
+Es gibt **eine** `STARTPROMPT.md` im `docs/visual-overhaul/`-Ordner. Sie enthält immer den Startprompt für den **nächsten** zu startenden Chat. Jeder Chat überschreibt sie am Ende seiner Session mit dem Startprompt für seinen Nachfolger. Historische Versionen liegen in git-log, nicht separat im Repo. Keine versionierten Kopien (`STARTPROMPT_PICKER_*.md`, `STARTPROMPT_BRAND_*.md`, etc.).
+
+Handoff-Docs (`HANDOFF_*_TO_*.md`) bleiben versioniert — sie sind adressierte Briefe an spätere Phasen und können nachträglich gelesen werden.
+
+---
+
 ## Phasen-Definitionen (Kurz)
 
 **Phase 1: Foundation**
