@@ -4,36 +4,40 @@
       "id": "prisoners",
       "title": "prisoners look",
       "tagline": "deakins · noir",
+      "image": "/SeenGrid/images/discover/Taxi.jpeg",
       "moodColor": "#0F6E56",
-      "titleColor": "#E1F5EE",
-      "taglineColor": "#9FE1CB",
+      "titleColor": "#f0f0fa",
+      "taglineColor": "#c8c8d8",
       "trending": true
     },
     {
       "id": "se7en",
       "title": "se7en fluorescence",
       "tagline": "accent · green",
+      "image": "/SeenGrid/images/discover/iron.jpeg",
       "moodColor": "#3C3489",
-      "titleColor": "#EEEDFE",
-      "taglineColor": "#CECBF6",
+      "titleColor": "#f0f0fa",
+      "taglineColor": "#c8c8d8",
       "trending": true
     },
     {
       "id": "wong",
       "title": "wong kar-wai",
       "tagline": "color · neon",
+      "image": "/SeenGrid/images/discover/julira.jpeg",
       "moodColor": "#791F1F",
-      "titleColor": "#FCEBEB",
-      "taglineColor": "#F7C1C1",
+      "titleColor": "#f0f0fa",
+      "taglineColor": "#c8c8d8",
       "trending": false
     },
     {
       "id": "argento",
       "title": "argento giallo",
       "tagline": "style · horror",
+      "image": "/SeenGrid/images/discover/sicilian.jpeg",
       "moodColor": "#633806",
-      "titleColor": "#FAEEDA",
-      "taglineColor": "#FAC775",
+      "titleColor": "#f0f0fa",
+      "taglineColor": "#c8c8d8",
       "trending": false
     }
   ]
