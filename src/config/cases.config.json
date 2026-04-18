@@ -1,0 +1,110 @@
+{
+  "cases": [
+    {
+      "id": "character_angle_study",
+      "displayName": "Character Angle Study",
+      "category": "character",
+      "panelCount": 4,
+      "defaultRoles": ["front", "right", "left", "back"],
+      "description": "cinematic angles of one character · vertical panels side by side",
+      "keywords": ["angle", "character", "portrait", "figure", "cinematic", "profile"],
+      "thumbPattern": "grid-4x1-figures"
+    },
+    {
+      "id": "character_sheet",
+      "displayName": "Character Sheet",
+      "category": "character",
+      "panelCount": 4,
+      "defaultRoles": ["front", "side", "back", "detail"],
+      "description": "classic ref sheet · front, side, back, detail — concept-art format",
+      "keywords": ["sheet", "reference", "ref", "character", "portrait", "concept"],
+      "thumbPattern": "grid-4x1-figures"
+    },
+    {
+      "id": "character_normalizer",
+      "displayName": "Character Normalizer",
+      "category": "character",
+      "panelCount": 2,
+      "defaultRoles": ["ref", "master"],
+      "description": "2-step · crop or bust reference → full-body master reference",
+      "keywords": ["normalizer", "normalize", "full body", "reference", "fix", "master"],
+      "thumbPattern": "split-ref-master"
+    },
+    {
+      "id": "expression_sheet",
+      "displayName": "Expression Sheet",
+      "category": "character",
+      "panelCount": 6,
+      "defaultRoles": ["neutral", "happy", "angry", "sad", "surprised", "contempt"],
+      "description": "same character, same angle, different emotions — expression library",
+      "keywords": ["expression", "emotion", "face", "mood", "feeling", "reaction"],
+      "thumbPattern": "grid-3x2-faces"
+    },
+    {
+      "id": "outfit_variation",
+      "displayName": "Outfit Variation",
+      "category": "character",
+      "panelCount": 4,
+      "defaultRoles": ["outfit 1", "outfit 2", "outfit 3", "outfit 4"],
+      "description": "same character, same angle, different outfits — wardrobe sheet",
+      "keywords": ["outfit", "wardrobe", "clothes", "costume", "fashion", "dress"],
+      "thumbPattern": "grid-4x1-figures"
+    },
+    {
+      "id": "world_zone_board",
+      "displayName": "World Zone Board",
+      "category": "world",
+      "panelCount": 3,
+      "defaultRoles": ["zone 1", "zone 2", "zone 3"],
+      "description": "multiple locations across one world — marketplace, throne room, harbor",
+      "keywords": ["world", "location", "zone", "place", "environment", "scenery", "map"],
+      "thumbPattern": "world-zones"
+    },
+    {
+      "id": "world_angle_study",
+      "displayName": "World Angle Study",
+      "category": "world",
+      "panelCount": 4,
+      "defaultRoles": ["eye-level", "low angle", "high angle", "detail"],
+      "description": "one location from multiple camera angles — location-scout style",
+      "keywords": ["world", "location", "angle", "camera", "environment", "scout"],
+      "thumbPattern": "grid-2x2-world"
+    },
+    {
+      "id": "shot_coverage",
+      "displayName": "Shot Coverage",
+      "category": "sequence",
+      "panelCount": 4,
+      "defaultRoles": ["wide", "medium", "close-up", "detail"],
+      "description": "same scene in different framings — wide, medium, close-up, detail",
+      "keywords": ["shot", "coverage", "framing", "wide", "close-up", "medium", "scene"],
+      "thumbPattern": "grid-2x2-framing"
+    },
+    {
+      "id": "story_sequence",
+      "displayName": "Story Sequence",
+      "category": "sequence",
+      "panelCount": 4,
+      "defaultRoles": ["action A", "action B", "action C", "action D"],
+      "description": "mini narrative across panels — action A → B → C → D",
+      "keywords": ["story", "sequence", "narrative", "action", "progression", "beat"],
+      "thumbPattern": "grid-4x1-story"
+    },
+    {
+      "id": "start_end_frame",
+      "displayName": "Start · End Frame",
+      "category": "sequence",
+      "panelCount": 2,
+      "defaultRoles": ["start", "end"],
+      "description": "first and last frame for a video AI to fill between — motion guide",
+      "keywords": ["start", "end", "frame", "video", "motion", "clip", "bookend"],
+      "thumbPattern": "split-start-end"
+    }
+  ],
+  "filterCategories": [
+    { "id": "all", "label": "all" },
+    { "id": "character", "label": "character" },
+    { "id": "world", "label": "world" },
+    { "id": "sequence", "label": "sequence" }
+  ]
+}

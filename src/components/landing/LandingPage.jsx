@@ -1,10 +1,14 @@
 import icons from '../shell/railIcons.jsx'
 import styles from './LandingPage.module.css'
 
-const CONTINUE_ITEMS = [
-  { title: 'laundromat owner · angle study', sub: 'grid · 14m ago', thumb: 'grid4' },
-  { title: 'deakins lighting · noir variant', sub: 'signature · 2h ago', thumb: 'noir' },
-  { title: 'diner cook · expression sheet', sub: 'grid · yesterday', thumb: 'teal' },
+// CONTINUE-Band zeigt laut PRODUCT_STRATEGY §5.3 NUR Projekte,
+// nicht lose Library-Assets. Diese Dummy-Liste steht als
+// Placeholder bis Projekt-Store gebaut ist (Workspace-Phase).
+// Adaptivitaet: Leeres Array → Band wird komplett weggelassen.
+const CONTINUE_PROJECTS = [
+  { id: 'tokio',      title: 'Tokio Kurzfilm',      sub: '3h ago',        thumb: 'teal',  modifiedAt: Date.now() - 3 * 60 * 60 * 1000 },
+  { id: 'laundromat', title: 'Laundromat Kapitel 1', sub: 'yesterday',    thumb: 'amber', modifiedAt: Date.now() - 28 * 60 * 60 * 1000 },
+  { id: 'berlin',     title: 'Berlin Doku',         sub: '2d ago',        thumb: 'noir',  modifiedAt: Date.now() - 2 * 24 * 60 * 60 * 1000 },
 ]
 
 const QUICK_START = [
@@ -50,6 +54,9 @@ function Thumb({ type }) {
 }
 
 export default function LandingPage({ onNavigate }) {
+  const projects = [...CONTINUE_PROJECTS].sort((a, b) => b.modifiedAt - a.modifiedAt)
+  const hasProjects = projects.length > 0
+
   return (
     <div className={styles.page}>
 
@@ -66,22 +73,32 @@ export default function LandingPage({ onNavigate }) {
         <div className={styles.heroTagline}>pre-production OS for AI filmmakers</div>
       </div>
 
-      <div className={styles.band}>
-        <SectionLabel text="CONTINUE" />
-        <div className={styles.continueGrid}>
-          {CONTINUE_ITEMS.map((item) => (
-            <div key={item.title} className={styles.landCard}>
-              <div className={styles.landThumb}>
-                <Thumb type={item.thumb} />
+      {hasProjects && (
+        <div className={styles.band}>
+          <SectionLabel text="CONTINUE" />
+          <div className={styles.continueRow}>
+            <button className={styles.newProjectCard} onClick={() => onNavigate('home')} aria-label="New project">
+              <div className={styles.newProjectIcon}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
               </div>
-              <div className={styles.landMeta}>
-                <div className={styles.landTitle}>{item.title}</div>
-                <div className={styles.landSub}>{item.sub}</div>
+              <div className={styles.newProjectLabel}>new project</div>
+            </button>
+            {projects.map((p) => (
+              <div key={p.id} className={`${styles.landCard} ${styles.continueCard}`}>
+                <div className={styles.landThumb}>
+                  <Thumb type={p.thumb} />
+                </div>
+                <div className={styles.landMeta}>
+                  <div className={styles.landTitle}>{p.title}</div>
+                  <div className={styles.landSub}>{p.sub}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className={styles.band}>
         <SectionLabel text="QUICK START" />

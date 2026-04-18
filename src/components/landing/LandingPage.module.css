@@ -109,10 +109,80 @@
 
 /* ---- CARD GRIDS (auto-fit, sodass wenige Cards den Platz fuellen) ---- */
 
-.continueGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+/* ---- CONTINUE BAND ---- single row + horizontal scroll,
+       [+ new] slot vorne, Projekte danach (zuletzt-bearbeitet
+       zuerst). OPEN_DECISIONS #3 Variante A. ---- */
+
+:global(.sg2-shell) .continueRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 4px 14px;
+  margin: -4px -4px 0;
+  scroll-snap-type: x proximity;
+}
+
+.continueRow::-webkit-scrollbar { height: 8px; }
+.continueRow::-webkit-scrollbar-track { background: transparent; }
+.continueRow::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.continueRow::-webkit-scrollbar-thumb:hover {
+  background: rgba(60, 207, 204, 0.30);
+}
+
+:global(.sg2-shell) .continueCard {
+  flex: 0 0 260px;
+  width: 260px;
+  scroll-snap-align: start;
+}
+
+:global(.sg2-shell) .newProjectCard {
+  flex: 0 0 180px;
+  width: 180px;
+  background: var(--sg2-bg-surface);
+  border: 1px dashed var(--sg2-border-teal-subtle);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 16px;
+  color: var(--sg2-teal);
+  scroll-snap-align: start;
+}
+
+.newProjectCard:hover {
+  border-color: rgba(60, 207, 204, 0.6);
+  background: var(--sg2-bg-elevated);
+  transform: translateY(-2px);
+}
+
+:global(.sg2-shell) .newProjectIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--sg2-teal-active-bg);
+  border: 1px solid var(--sg2-border-teal-subtle);
+  color: var(--sg2-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:global(.sg2-shell) .newProjectLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--sg2-text-secondary-light);
+  text-transform: uppercase;
 }
 
 .quickGrid {

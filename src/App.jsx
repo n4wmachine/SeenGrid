@@ -5,28 +5,28 @@ import ShellHeader from './components/shell/ShellHeader.jsx'
 import StatusBar from './components/shell/StatusBar.jsx'
 import ComingSoon from './components/shell/ComingSoon.jsx'
 import LandingPage from './components/landing/LandingPage.jsx'
+import GridCreator from './components/gridcreator/GridCreator.jsx'
 import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
 import { useLang } from './context/LangContext.jsx'
 import './App.css'
 
 const PromptBuilder = lazy(() => import('./components/PromptBuilder.jsx'))
-const GridOperator = lazy(() => import('./components/GridOperator.jsx'))
 const MJStartframe = lazy(() => import('./components/MJStartframe.jsx'))
 const PromptVault = lazy(() => import('./components/PromptVault.jsx'))
 const CustomBuilderPoc = lazy(() => import('./components/CustomBuilderPoc.jsx'))
 
 const TAB_DOTS = {
   builder: '#e8a624',
-  grid:    '#5c9fc4',
   mj:      '#c9a040',
   vault:   '#4aab7a',
   poc:     '#d46bbf',
 }
 
+// Legacy-Pages die weiter ueber den alten Tab-Header laufen.
+// Grid ist raus — Grid Creator ist eigene Page hinter dem Rail.
 const PAGE_TO_TAB = {
   home:  null,
   lab:   'builder',
-  grid:  'grid',
   frame: 'mj',
   hub:   'vault',
 }
@@ -46,7 +46,6 @@ function AppContent({ activePage, onPageChange }) {
 
   const TABS = [
     { id: 'builder', label: t('tabs.builder.label'), dot: TAB_DOTS.builder, desc: t('tabs.builder.desc') },
-    { id: 'grid',    label: t('tabs.grid.label'),    dot: TAB_DOTS.grid,    desc: t('tabs.grid.desc') },
     { id: 'mj',      label: t('tabs.mj.label'),      dot: TAB_DOTS.mj,      desc: t('tabs.mj.desc') },
     { id: 'vault',   label: t('tabs.vault.label'),   dot: TAB_DOTS.vault,   desc: t('tabs.vault.desc') },
     { id: 'poc',     label: 'POC (S3)',               dot: TAB_DOTS.poc,     desc: 'Custom Builder POC — Slice 3 throwaway' },
@@ -62,6 +61,7 @@ function AppContent({ activePage, onPageChange }) {
   const showLegacyContent = activePage in PAGE_TO_TAB && PAGE_TO_TAB[activePage] !== null
   const showComingSoon = COMING_PAGES.has(activePage)
   const showHome = activePage === 'home'
+  const showGridCreator = activePage === 'grid'
 
   return (
     <div className="app-shell sg2-shell">
@@ -72,13 +72,12 @@ function AppContent({ activePage, onPageChange }) {
           <>
             <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
               setActiveTab(tabId)
-              const pageMap = { builder: 'lab', grid: 'grid', mj: 'frame', vault: 'hub' }
+              const pageMap = { builder: 'lab', mj: 'frame', vault: 'hub' }
               if (pageMap[tabId]) onPageChange(pageMap[tabId])
             }} />
             <main className="app-main">
               <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
                 {activeTab === 'builder' && <PromptBuilder />}
-                {activeTab === 'grid'    && <GridOperator />}
                 {activeTab === 'mj'     && <MJStartframe />}
                 {activeTab === 'vault'  && <PromptVault />}
                 {activeTab === 'poc'    && <CustomBuilderPoc />}
@@ -86,6 +85,7 @@ function AppContent({ activePage, onPageChange }) {
             </main>
           </>
         )}
+        {showGridCreator && <GridCreator />}
         {showComingSoon && <ComingSoon pageId={activePage} />}
         {showHome && <LandingPage onNavigate={handlePageChange} />}
         <StatusBar />
@@ -95,7 +95,7 @@ function AppContent({ activePage, onPageChange }) {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState('lab')
+  const [activePage, setActivePage] = useState('home')
 
   return (
     <PageMetaProvider activePage={activePage}>
