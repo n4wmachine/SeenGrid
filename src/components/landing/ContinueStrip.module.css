@@ -1,0 +1,188 @@
+/* ============================================================
+   CONTINUE STRIP — horizontal scrolling, kompakte Mood-Tiles.
+   Iteration der bestehenden .continueRow/.newProjectCard-Basis
+   aus der Picker-Phase: Card-Dims verkleinert (260x200 -> 130x66),
+   Thumb-Block raus, Gradient-Fade rechts als Scroll-Affordance.
+   Mood-Varianten sind Adaptionen der .thumbXxx-Backgrounds aus
+   LandingPage.module.css, aber direkt auf der Card (kein absolute).
+   Keine --sg2-success-/error-/gold-Tokens fuer Deko (NUANCEN 1).
+   ============================================================ */
+
+:global(.sg2-shell) .section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- SECTION HEADER ---- */
+
+:global(.sg2-shell) .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hint {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-mono-label);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.02em;
+}
+
+/* ---- ROW + FADE ----
+   rowWrap ist relative Container, fade liegt absolute rechts.
+   Der Fade endet auf --sg2-bg-primary (Landing .page-BG). */
+
+.rowWrap {
+  position: relative;
+}
+
+:global(.sg2-shell) .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 10px;
+  margin: -2px -2px 0;
+  scroll-snap-type: x proximity;
+}
+
+.row::-webkit-scrollbar { height: 6px; }
+.row::-webkit-scrollbar-track { background: transparent; }
+.row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+.row::-webkit-scrollbar-thumb:hover {
+  background: rgba(60, 207, 204, 0.30);
+}
+
+.fade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 10px;
+  width: 48px;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--sg2-bg-primary));
+}
+
+/* ---- NEW PROJECT CARD ---- */
+
+:global(.sg2-shell) .newCard {
+  flex: 0 0 130px;
+  width: 130px;
+  height: 66px;
+  background: transparent;
+  border: 1px dashed var(--sg2-border-teal-subtle);
+  border-radius: var(--sg2-radius-md);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--sg2-teal);
+  transition: var(--sg2-transition);
+  scroll-snap-align: start;
+  padding: 0 10px;
+}
+
+.newCard:hover {
+  background: var(--sg2-teal-hover-bg);
+  border-color: var(--sg2-border-teal-hover);
+  transform: translateY(-1px);
+}
+
+:global(.sg2-shell) .newLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-mono-label);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--sg2-text-secondary-light);
+}
+
+/* ---- PROJECT CARD ---- */
+
+:global(.sg2-shell) .projectCard {
+  flex: 0 0 130px;
+  width: 130px;
+  height: 66px;
+  border-radius: var(--sg2-radius-md);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  scroll-snap-align: start;
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 10px;
+  border: 0.5px solid var(--sg2-border-default);
+}
+
+.projectCard:hover {
+  transform: translateY(-1px);
+  border-color: var(--sg2-border-emphasized);
+}
+
+.projectLabel {
+  font-family: var(--sg2-font-display);
+  font-weight: 500;
+  font-size: var(--sg2-text-mono-label);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  color: var(--sg2-text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ---- MOOD VARIANTS ----
+   Direkt-Background-Adaptionen von .thumbNoir/Teal/Amber/Green/Red
+   aus LandingPage.module.css. Kein position:absolute — die Card
+   selbst traegt den Background. */
+
+.moodNoir {
+  background:
+    radial-gradient(ellipse at 35% 55%, rgba(60, 207, 204, 0.18) 0%, transparent 45%),
+    linear-gradient(165deg, #2a2a3a 0%, #14141f 45%, #0a0a12 100%);
+}
+
+.moodTeal {
+  background:
+    radial-gradient(circle at 75% 25%, rgba(60, 207, 204, 0.35) 0%, transparent 55%),
+    linear-gradient(135deg, #143a3a 0%, #0a2428 50%, #0a1418 100%);
+}
+
+.moodGreen {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(60, 207, 204, 0.28) 0%, transparent 55%),
+    linear-gradient(165deg, #142a24 0%, #0a1814 100%);
+}
+
+.moodRed {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(220, 80, 100, 0.3) 0%, transparent 50%),
+    linear-gradient(155deg, #3a1a24 0%, #24101a 50%, #140a14 100%);
+}
+
+.moodAmber {
+  background:
+    repeating-linear-gradient(180deg, transparent 0px, transparent 4px, rgba(245, 201, 97, 0.1) 4px, rgba(245, 201, 97, 0.1) 5px),
+    linear-gradient(145deg, #2a2010 0%, #181008 100%);
+}

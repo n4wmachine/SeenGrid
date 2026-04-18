@@ -1,0 +1,85 @@
+/* ============================================================
+   QUICK START BAR — 4-column utility strip, 44px cards.
+   Ersetzt die alten grossen QS-Kacheln mit Descriptions. Keine
+   Sub-Texte, keine Icon-Boxen groesser 16px, keine Cards hoeher
+   48px. Teal-Hover als universeller UI-Akzent (NUANCEN 1).
+   ============================================================ */
+
+:global(.sg2-shell) .section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- SECTION HEADER ---- */
+
+:global(.sg2-shell) .header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---- GRID ---- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---- CARD ---- */
+
+:global(.sg2-shell) .card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 8px 10px;
+  background: var(--sg2-bg-surface);
+  border: 0.5px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  text-align: left;
+}
+
+.card:hover {
+  background: var(--sg2-teal-hover-bg);
+  border-color: var(--sg2-border-teal-subtle);
+  transform: translateY(-1px);
+}
+
+.icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background: var(--sg2-teal-active-bg);
+  border-radius: var(--sg2-radius-sm);
+  border: 0.5px solid var(--sg2-border-teal-subtle);
+}
+
+:global(.sg2-shell) .labelText {
+  font-family: var(--sg2-font-display);
+  font-weight: 500;
+  font-size: var(--sg2-text-mono-label);
+  color: var(--sg2-text-primary);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

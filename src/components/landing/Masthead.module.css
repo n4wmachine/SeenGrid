@@ -1,0 +1,101 @@
+/* ============================================================
+   MASTHEAD — editorial header strip (~75px).
+   Ersetzt den alten zentrierten Hero-Block. Single row, Wordmark
+   + Claim links, Session-Metadata rechts. Keine Subtitle-Stacks,
+   kein Glyph (Rail traegt die Logo-Praesenz), kein Shadow.
+   padding/margin ueber :global(.sg2-shell) .xyz — schlaegt den
+   globalen `.sg2-shell *` Reset (Specificity 0,1,0) mit 0,2,0.
+   ============================================================ */
+
+:global(.sg2-shell) .masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--sg2-bg-surface);
+  border: 0.5px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+}
+
+/* ---- LEFT BLOCK: wordmark + claim ---- */
+
+:global(.sg2-shell) .left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+:global(.sg2-shell) .wordmark {
+  font-family: var(--sg2-font-display);
+  font-weight: 700;
+  font-size: var(--sg2-text-display);
+  letter-spacing: -0.01em;
+  color: var(--sg2-text-primary);
+  line-height: 1;
+}
+
+.divider {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: var(--sg2-border-emphasized);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+:global(.sg2-shell) .claim {
+  font-family: var(--sg2-font-body);
+  font-weight: 400;
+  font-size: var(--sg2-text-small);
+  color: var(--sg2-text-secondary);
+  letter-spacing: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- RIGHT BLOCK: session metadata ----
+   Vier eigenstaendige <span>s, damit die TODO-Marker pro Wert
+   grep-bar bleiben (grep -r "TODO(token-store)"). Bullets sitzen
+   als ::before am Folge-Span. */
+
+:global(.sg2-shell) .meta {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-mono-label);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.metaItem {
+  white-space: nowrap;
+}
+
+.metaItem + .metaItem::before {
+  content: '·';
+  color: var(--sg2-text-muted);
+  margin: 0 10px;
+}
+
+/* ---- RESPONSIVE: Metadata progressiv kuerzen bei engeren Viewports ---- */
+
+@media (max-width: 1100px) {
+  /* letzter Metadata-Span ("saved Xm ago") verschwindet zuerst */
+  .meta .metaItem:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  /* dann "18 prompts" raus */
+  .meta .metaItem:nth-child(3) {
+    display: none;
+  }
+}

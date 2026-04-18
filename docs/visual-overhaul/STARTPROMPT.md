@@ -16,12 +16,11 @@ den **aktuellen Arbeits-Branch** an zwei Stellen ein:
 (`git log`-Historie, Push-Ziel) — **nicht** der Branch auf dem die Harness
 dich gestartet hat.
 
-**Aktuell für:** Landing-Redesign-Chat (Code-Chat). Setzt das externe
-Briefing `landing-masthead-composition` um, das Jonas in der **nächsten
-Nachricht** mitschickt. Radikaler Umbau: Masthead statt Hero, Discover
-als visueller Anker nach oben, Continue kompakter, Quick Start
-komprimiert. NUANCEN 11 (großer Hero-Wordmark) wird durch dieses
-Redesign bewusst überholt — mit Jonas-OK.
+**Aktuell für:** Workspace-Planning-Chat (Konzept-Session, keine
+Bau-Session). Spec für den Grid Creator Workspace wird ausgearbeitet —
+3-Spalten-Layout, Preview-Strip, Signatures-Bar, Output-Bar,
+Projekt-Kontext im Header. Ergebnis: `WORKSPACE_SPEC_V1.md` +
+`HANDOFF_WORKSPACE_TO_CODE.md` + ggf. Updates in `OPEN_DECISIONS.md`.
 
 **Arbeits-Branch:** `claude/seengrid-visual-overhaul-6RK4n`
 
@@ -31,15 +30,14 @@ unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 ---
 
 ```
-Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Der Grid Creator
-Picker ist fertig. Jetzt kommt das **Landing-Redesign** (Slice-Name:
-landing-masthead-composition). Die aktuelle Landing ist inkonsistent —
-Hero frisst den Fold, Geisterslots bei < 4 Projekten, Discover landet
-unten statt als Brand-Träger oben. Ich schicke dir in der **nächsten
-Nachricht** den vollständigen Briefing-Text aus einer externen Design-
-Review-Session. Dein Job: Briefing umsetzen, aber gegen die Repo-
-Konventionen abgleichen — das Briefing kennt unsere Tokens und
-NUANCEN nicht.
+Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Picker und
+Landing-Redesign sind fertig. Jetzt kommt die **Workspace-Planung**
+für den Grid Creator — die Konzept-Session bevor ein Bau-Chat den
+Workspace tatsächlich implementiert.
+
+Das ist eine **Konzept-Session, keine Bau-Session.** Am Ende liegt
+eine Spec vor, kein Code. Analog zur Picker-Planungs-Phase
+(`PICKER_SPEC_V1.md`).
 
 **ALLERERSTE AKTION — BRANCH-WECHSEL (nicht überspringen):**
 
@@ -52,7 +50,7 @@ Die gesamte Arbeit liegt auf dem Feature-Branch
 
 Verifikation: `ls docs/visual-overhaul/` muss u.a. zeigen: ROADMAP.md,
 PRODUCT_STRATEGY_V1.md, PHASE1_STATUS.md, PICKER_BUILD_STATUS.md,
-NUANCEN.md. Wenn sie fehlen, falscher Branch.
+NUANCEN.md, LANDING_REDESIGN_STATUS.md (neu, landing-phase).
 
 Die CLAUDE.md-Regel "direkt auf main" ist überholt — stammt aus der
 Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
@@ -60,142 +58,137 @@ Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
 ---
 
 **Deine Rolle:**
-- **Code-Chat** für die Landing-Page
-- Zuerst die Repo-Docs (unten Liste) lesen, DANN auf Briefing warten
-- Briefing umsetzen, Konflikte mit mir klären (nicht raten)
-- Code schreiben, commiten, pushen auf den Work-Branch
+- **Konzept-/Planungs-Chat** für den Grid Creator Workspace
+- Zuerst die Repo-Docs (unten Liste) lesen, DANN Fragen an mich stellen
+- Kein Code schreiben — nur Spec + Handoff am Ende
+- Mit mir Option für Option durchgehen, nicht mir eine fertige
+  Lösung vorsetzen
 
 **Mein Arbeitsstil:**
 - Deutsch, direkt, brutal ehrlich, keine Sycophancy
 - Kurze Antworten, kein Coding-Jargon
 - Nicht-Coder
-- Code-Übergabe: komplette Files, keine Diffs, ein File pro Antwort
-  bevorzugt. Ich kopiere 1:1 in VS Code.
+- In Konzept-Sessions: du stellst Optionen (A/B/C) mit Trade-offs,
+  ich entscheide, wir fixieren im Protokoll
+- Keine großen Wall-of-Text-Exposés ohne mein Eingrenzen
 
-**Was das Redesign leistet — Kurzfassung (Details im Briefing):**
-- **Masthead** (neu, ~70px) ersetzt den zentrierten Hero. Wordmark max
-  22px, Claim rechts daneben, Session-Metadata (`v0.4.2 · 3 signatures
-  · 18 prompts · saved 14m ago`) ganz rechts. **Bewusst editorial, nicht
-  Marketing-Splash.**
-- **Discover** wandert direkt unter den Masthead als visueller Anker.
-  Cards 140–160px hoch (aktuell ~400px), Mood-Farben bleiben
-  Filmstock/Look-Repräsentationen.
-- **Continue** als horizontaler Scroll-Strip (~66px Card-Höhe, Breite
-  ~130px). `[+ new project]` vorne, dann Projekte, Gradient-Fade
-  rechts als Scroll-Affordance. **Hinweis:** In der Picker-Phase haben
-  wir CONTINUE schon auf Horizontal-Scroll umgebaut — das Briefing
-  iteriert das weiter (kleiner, Fade-Element neu). Unsere aktuelle
-  Version als Ausgangspunkt, nicht komplett neu bauen.
-- **Quick Start** komprimiert auf 4-Column Utility-Leiste, Cards 44px
-  hoch, keine Descriptions mehr.
-- Ziel: alle Sections above the fold auf 1080p/1440p.
+**Was in dieser Session zu klären ist (Kurzfassung):**
+
+1. **3-Spalten-Layout** (Case Context | Canvas | Inspector)
+   - Genaue Breiten (Token `--sg2-context-width: 260px` und
+     `--sg2-inspector-width: 320px` existieren bereits — reichen sie?)
+   - Collapse-Verhalten der Seiten-Spalten (NUANCEN 3: Rail ist
+     nicht collapsible — gilt das auch für Context/Inspector?)
+   - Was genau landet in Case Context (Case-Name, Module-Toggles,
+     globale Settings)? Was in Inspector (per-Panel Overrides,
+     Signature-Auswahl, Panel-Role-Edit)?
+
+2. **Full-Width Preview-Strip** (96px, NUANCEN 7: unter 3-Spalten-Row,
+   NICHT in Canvas-Spalte)
+   - Zeigt er das Master-Grid oder die Einzel-Panels scrollbar?
+   - Klick auf Strip-Item → Canvas springt zu Panel?
+   - Position: strikt full-width unter Row, über Output-Bar?
+
+3. **Signatures-Bar** (52px, Token `--sg2-sigbar-height`)
+   - Horizontal-Scroll wie Continue auf Landing?
+   - Nur angewendete Signatures oder Pin-Favoriten + Zuletzt-genutzt?
+   - Gold-Akzent auf Applied-Card (NUANCEN 1)
+   - Applied-State-Signal: Gold-Border-Tint + Glow (NUANCEN 2)?
+
+4. **Output-Bar** (32px, Token `--sg2-outputbar-height`)
+   - Inhalt: "Copy as JSON", "Copy as Paragraph", "Save as Preset",
+     Token-Count? Warnings (Dim-Advisory aus CLAUDE.md)?
+   - Layout: links Actions, rechts Meta?
+
+5. **Projekt-Kontext im Header** (PRODUCT_STRATEGY §7)
+   - Wo genau erscheint das Projekt-Label? (ShellHeader? Eigener
+     Workspace-Chrome?)
+   - OPEN_DECISIONS #7 (Projekt-Wechsel-UI) wird hier entschieden
+
+6. **Save-as-Preset-Flow** (PRODUCT_STRATEGY §2.2)
+   - Wo ist der Save-Button? (Output-Bar? Header-Ecke?)
+   - Popup-Design (4 Checkboxen + Projekt-Dropdown) —
+     kommt das Mockup bereits in dieser Spec oder erst im Bau?
+
+7. **Dim Advisory** (aus CLAUDE.md „Wichtig bei Engine-
+   Fertigstellung") — pro Grid-Kombo exakte Panel-Pixel-Größen bei
+   2K/4K mit Quality-Tags. Wo im Workspace sichtbar?
+
+8. **Panel-Role-Customization** (aus CLAUDE.md "Nach Slice 8") —
+   User wählt pro Panel welchen Winkel er will. UI dafür?
 
 **Anti-Drift für diese Session (kritisch):**
-- **NUANCEN 11 (große Brand-Präsenz / 72px Wordmark) wird durch dieses
-  Redesign bewusst überholt.** Der Briefing hat dafür eine klare
-  Rationale ("Pro-Tool wie Linear/Figma, Brand durch Editorial-Sprache
-  + kuratierte Discover-Cards statt durch Raumverbrauch"). Übernehmen,
-  nicht neu verhandeln. NUANCEN 11 muss am Ende der Session aktualisiert
-  werden (oder explizit als "überholt durch Landing-Redesign" markiert).
-- **NUANCEN 1 (Gold/Teal-Systematik) bleibt unverhandelbar.** Falls das
-  Briefing andere Farben impliziert, zurückfragen. Gold = nur
-  User-persönlich, Teal = universeller UI-Akzent.
-- **CSS-Token-Mapping:** Das Briefing nennt generische Namen
-  (`border-tertiary`, `text-secondary`, `bg-info`, `border-radius-md`,
-  `color-background-secondary`). Wir haben `--sg2-*`-Tokens in
-  `src/styles/tokens.css`. **Mappe auf unsere Tokens**, führe keine
-  neuen CSS-Variablen ein. Im Zweifel: `tokens.css` lesen, dort gibt
-  es schon text-primary/secondary/tertiary/quaternary, border-default/
-  emphasized/teal, bg-primary/surface/elevated, radius-sm/md/lg/xl.
-- **Specificity-Pattern** (`:global(.sg2-shell) .xyz` für padding/
-  margin innerhalb `.sg2-shell`) konsequent beibehalten
-  (PHASE1_STATUS).
-- **Scope eng:** Nur Landing-Page + deren Sub-Komponenten + deren CSS
-  + evtl. ein neuer Daten-File (`src/data/discover.json` oder ähnlich).
-  Nichts an Rail, Shell, Header, StatusBar, Picker, GridCreator,
-  Grid Engine ändern.
-- **Grid Engine (Slices 1-8, 42 Tests) muss grün bleiben.**
-- **Keine neuen npm-Packages.** Briefing schreibt das auch vor.
-- Bei neuen Produkt-Ideen: `OPEN_DECISIONS.md`, nicht spontan.
+- **NUANCEN 1** (Gold/Teal) unverhandelbar. Gold nur Signatures +
+  Override-Dots + Grid-Rail-Stern + Signatures-Bar + Applied-Card.
+- **NUANCEN 2** (Override-Dot vs. Signature-Applied — zwei
+  unabhängige Visual-States) muss im Workspace erhalten bleiben.
+- **NUANCEN 6** (Picker/Workspace = zwei Page-States, KEIN Modal,
+  kein Split) — Workspace ist volle Page hinter State-Wechsel.
+- **NUANCEN 7** (Preview-Strip full-width, nicht in Canvas-Spalte) —
+  wurde in alten Mockups falsch gemacht, darf nicht zurückkommen.
+- **NUANCEN 11 neu** (Editorial statt Hero) bleibt konsistent — der
+  Workspace-Header wird nicht wieder zum Splash-Bereich.
+- **PRODUCT_STRATEGY_V1 §1.1 Live-Link** (Signature per ID-Referenz,
+  nicht Snapshot) — Signature-Edits im LookLab wirken im Workspace
+  automatisch.
+- **Grid Engine (Slices 1-8, 42 Tests)** bleibt unberührt. Das ist
+  Konzept-Session, kein Code.
 
-**Bitte lies in dieser Reihenfolge, BEVOR du das Briefing liest:**
-1. `docs/visual-overhaul/PHASE1_STATUS.md` — aktueller Landing-Stand
-   (Typo, Farben, Specificity-Pattern). Achtung: 72px-Wordmark wird
-   durch das Redesign obsolet.
-2. `docs/visual-overhaul/NUANCEN.md` — besonders 1 (unverhandelbar),
-   11 (wird durch Redesign überholt), 12 (Pro-Tool-Details bleiben)
-3. `docs/visual-overhaul/PRODUCT_STRATEGY_V1.md` §5 — Landing-Logik
-   (Continue adaptiv, NUR Projekte, Quick Start, Discover)
-4. `docs/visual-overhaul/PICKER_BUILD_STATUS.md` — was seit Brand-
-   Session geändert wurde (Continue ist bereits horizontal-scroll)
-5. `docs/visual-overhaul/OPEN_DECISIONS.md` — #2 (Hero-Verhalten) wird
-   durch dieses Redesign entschieden → am Ende aktualisieren
-6. `docs/visual-overhaul/ROADMAP.md` — aktive Phase
-7. `src/components/landing/LandingPage.jsx` + `LandingPage.module.css`
-   — der aktuelle Code, den du ersetzt
-8. `src/styles/tokens.css` — die `--sg2-*`-Tokens (NICHT neue
-   einführen)
-9. `src/components/landing/` — schauen ob dort was anderes liegt
+**Bitte lies in dieser Reihenfolge, BEVOR du mit mir ins Gespräch
+gehst:**
+1. `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md` — was gerade
+   fertig wurde
+2. `docs/visual-overhaul/PICKER_BUILD_STATUS.md` — Picker-Phase als
+   Blueprint für Planungs-Arbeit
+3. `docs/visual-overhaul/PICKER_SPEC_V1.md` — Format-Vorlage für
+   die Spec die du schreiben wirst
+4. `docs/visual-overhaul/PRODUCT_STRATEGY_V1.md` — Datenmodell +
+   Save-Mechanik + §7 Projekt-Kontext
+5. `docs/visual-overhaul/NUANCEN.md` — besonders 1, 2, 6, 7, 8, 11
+6. `docs/visual-overhaul/OPEN_DECISIONS.md` — #4, #5, #7, #9 sind
+   potenziell relevant. #7 wird hier entschieden.
+7. `docs/visual-overhaul/ROADMAP.md` — aktive Phase
+8. `CLAUDE.md` — besonders den Hinweis zum Dim Advisory und
+   Panel-Role-Customization
+9. `MODULE_AND_CASE_CATALOG.md` — welche Panel-Rollen existieren,
+   welche Module gibt's
+10. `src/components/gridcreator/` — aktueller Code-Stand
+    (Picker fertig, Workspace ist Placeholder)
+11. `src/styles/tokens.css` — Layout-Tokens für Workspace
+    (context-width, inspector-width, preview-height, sigbar-height,
+    outputbar-height)
+12. `docs/visual-overhaul/mockup_03_gridcreator_workspace.html` —
+    historischer Mockup, NUANCEN gewinnt bei Konflikten
 
-**Danach — warte auf meine Briefing-Nachricht.**
-
-**Bevor du mit Code anfängst:**
-- Bestätige: Repo-Docs gelesen
-- Fasse in 3-5 Sätzen zusammen: aktueller Landing-Stand + was das
-  Redesign ändert + wo ich Konflikte erwarte (Token-Mapping, NUANCEN 11)
-- Warte auf Briefing
-- Nach dem Briefing: Kurz-Abgleich Briefing ↔ Repo (Token-Mapping,
-  File-Pfade wie `src/components/landing/` und nicht `src/pages/Home.jsx`,
-  existierende Continue-Horizontal-Scroll-Basis)
-- Konflikte als Fragen an mich, nicht als Fait-accompli
-- Dann Komponenten-Reihenfolge vorschlagen, abwarten, Code schreiben
+**Nach dem Lesen:**
+- Bestätige: Docs gelesen
+- Fasse in 3-5 Sätzen zusammen: aktueller Stand + 8 Klärungspunkte
+  (du kannst die Liste oben übernehmen) + wo du Konflikte mit
+  NUANCEN erwartest
+- Warte auf mein Go
+- Dann gehen wir die Klärungspunkte durch — du stellst Optionen mit
+  Trade-offs, ich entscheide, wir protokollieren
 
 **Was am Ende dieser Session vorliegen muss:**
-1. Landing-Page komplett umgebaut gemäß Briefing:
-   - `Masthead.jsx` + `.module.css`
-   - `DiscoverStrip.jsx` + `.module.css`
-   - `ContinueStrip.jsx` + `.module.css`
-   - `QuickStartBar.jsx` + `.module.css`
-   - `LandingPage.jsx` als schlanker Container für die vier
-   - `src/data/discover.json` (oder passender Pfad) mit Discover-Items
-2. Akzeptanzkriterien-Check (alle 8 aus dem Briefing) im Status-Doc
-3. NUANCEN.md: Punkt 11 aktualisiert (überholt / neu gefasst)
-4. OPEN_DECISIONS.md: #2 (Hero-Verhalten) als entschieden markiert
-5. `LANDING_REDESIGN_STATUS.md` (neu, analog PICKER_BUILD_STATUS) —
-   was gebaut, welche Briefing-Punkte übernommen/angepasst/abgelehnt
-   mit Begründung, welche Tokens gemappt wurden
-6. ROADMAP aktualisiert (Landing-Redesign `[→]` → `[✓]`, Workspace-
-   Planung `[→]`)
-7. Neuer STARTPROMPT für den Workspace-Planning-Chat (Vorlage liegt
-   in `git log` — Commit direkt vor diesem)
-8. Grid Engine (42 Tests) bleibt grün
+1. `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` — vollständige Bau-
+   Anleitung für den Workspace (analog `PICKER_SPEC_V1.md`)
+2. `docs/visual-overhaul/HANDOFF_WORKSPACE_TO_CODE.md` — kompakte
+   Übergabe an den Code-Chat (analog `HANDOFF_PICKER_TO_CODE.md`)
+3. Updates in `OPEN_DECISIONS.md` (#7 entschieden, ggf. weitere
+   neu)
+4. ROADMAP aktualisiert (Workspace-Planung `[→]` → `[✓]`,
+   Workspace-Bau `[ ]` → `[→]`)
+5. Neuer STARTPROMPT für den Workspace-Bau-Chat
+6. Grid Engine (42 Tests) bleibt grün — kein Code angefasst
 
 **Wichtig:**
-- Das Briefing sagt „complete replacement files" — das passt zu meinem
-  Wunsch „komplette Files, keine Diffs"
-- Der Briefing spezifiziert konkrete Hex-Farben für Discover-Mood-Cards
-  (#0F6E56, #3C3489, #791F1F, #633806) — die dürfen rein, sind
-  Filmlook-Repräsentationen, nicht UI-Akzente
-- **Continue-Card-Styling (Platzhalter-Regel):** Das Briefing schlägt
-  rotierende semantische Farben (`bg-info` / `bg-warning` /
-  `bg-secondary`) für Continue-Projekt-Cards vor — **nicht übernehmen.**
-  Das würde UI-Status-Semantik zweckentfremden. Später kommen echte
-  Keyframe-Thumbnails; bis dahin: einfarbige dunkle Card-Flächen mit
-  dezenter Mood-Variation, analog zu den bestehenden Landing-Thumbs
-  (`thumbNoir`, `thumbTeal`, `thumbAmber`, `thumbGreen`, `thumbRed`,
-  `thumbAmber` in `LandingPage.module.css`). Keine bunten Status-Farben.
-- **Session-Metadata im Masthead** (`v0.4.2 · 3 signatures · 18 prompts
-  · saved 14m ago`): als statische Texte einbauen, aber jeden Zähler
-  mit `{/* TODO(token-store): connect to signatures count */}` o.ä.
-  markieren (ausser Version, die ist statisch). Einheitliches Format
-  `TODO(token-store):` verwenden, damit der Token-Store-Chat später
-  alles per `grep -r "TODO(token-store)"` findet. **Keine Fake-
-  Zähl-Logik, keine halbfertige Store-Infrastruktur.** Saved-Time
-  hängt vom Projekt-Store ab — nutze `TODO(workspace-store):` dafür.
-- Mobile (<600px) ist kein Ziel für dieses Slice — im Briefing steht's,
-  nicht überengineeren
-- Bei Zweifel: nachfragen, nicht vorpreschen
+- **Keine Code-Änderungen.** Du liest, fragst, schreibst Specs.
+- Keine Placeholder-Komponenten anlegen. Keine `WIP`-Files.
+- Konzeptionelle Entscheidungen ohne mein OK werden nicht fixiert.
+- Bei Unklarheiten: fragen, nicht raten.
+- Wenn ein Mockup (aktuell `mockup_03_gridcreator_workspace.html`)
+  gegen NUANCEN steht: NUANCEN gewinnt.
 
 Bereit? Schritt 0: Branch-Wechsel + Repo-Docs lesen + Zusammenfassung.
-Dann warte auf das Briefing.
+Dann gehen wir Klärungspunkte durch.
 ```

@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "prisoners",
+      "title": "prisoners look",
+      "tagline": "deakins · noir",
+      "moodColor": "#0F6E56",
+      "titleColor": "#E1F5EE",
+      "taglineColor": "#9FE1CB",
+      "trending": true
+    },
+    {
+      "id": "se7en",
+      "title": "se7en fluorescence",
+      "tagline": "accent · green",
+      "moodColor": "#3C3489",
+      "titleColor": "#EEEDFE",
+      "taglineColor": "#CECBF6",
+      "trending": true
+    },
+    {
+      "id": "wong",
+      "title": "wong kar-wai",
+      "tagline": "color · neon",
+      "moodColor": "#791F1F",
+      "titleColor": "#FCEBEB",
+      "taglineColor": "#F7C1C1",
+      "trending": false
+    },
+    {
+      "id": "argento",
+      "title": "argento giallo",
+      "tagline": "style · horror",
+      "moodColor": "#633806",
+      "titleColor": "#FAEEDA",
+      "taglineColor": "#FAC775",
+      "trending": false
+    }
+  ]
+}

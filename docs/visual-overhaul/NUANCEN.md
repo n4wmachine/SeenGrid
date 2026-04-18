@@ -190,19 +190,31 @@ Das ist der Ton den wir treffen wollen: **kreatives Werkzeug, nicht Dev-Tool.**
 
 ---
 
-## 11. Brand-Präsenz ist bewusst stärker als bei etablierten Tools
+## 11. Brand-Präsenz: Editorial statt Splash (überholt + neu gefasst 2026-04-18)
 
-**Regel:** Logo in der Rail-Brand-Zone ist 72×72 groß mit "SeenGrid" Wordmark darunter. Landing hat einen expliziten Hero-Bereich mit großem Logo + Wordmark. Header selbst bleibt ruhig mit Page-Info.
+**Frühere Regel (Brand-Session 2026-04-17, durch Landing-Redesign 2026-04-18 überholt):**
+> Landing hat einen expliziten Hero-Bereich mit großem Logo + Wordmark (72px). Brand-Präsenz durch Raumverbrauch.
 
-**Warum nicht Linear/Frame/Notion nachmachen:**
+**Warum die Änderung:**
+Der Hero fraß den Fold — bei 1080p war unter dem 200px-Logo-Block + 72px-Wordmark + 80px-Abstand nur noch Continue sichtbar, Quick Start und Discover erforderten Scrolling. Brand-Moment ja, aber auf Kosten der Nutzbarkeit als Pro-Tool-Home.
 
-Diese Tools haben Mini-Logos in Rail-Ecken weil **jeder sie eh kennt.** Ihre Marke ist etabliert. Sie können unterspielen weil der User schon "weiß wo er ist".
+**Neue Regel:**
+Landing trägt Brand durch **Editorial-Layout**, nicht durch Raumverbrauch. Drei parallele Mechanismen:
 
-SeenGrid ist neu. Wenn hier ein User landet (Screenshot, YouTube, Freund-Empfehlung) und sieht eine schwarze Page mit nur einem Mini-Icon in der Ecke, kriegt er **keinen Brand-Moment**. Die App wird austauschbar wirken.
+1. **Masthead als konstanter Präsenz-Träger ohne Fold-Kosten** — schmale Leiste (~75px) mit Wordmark (24px), Claim, Session-Metadata. Liest sich wie Zeitungskopfzeile / DAW-Header (Ableton, Resolve). Selbstbewusst, nicht prahlerisch.
+2. **Discover als Hero-Ersatz** — kuratierte Mood-Cards mit Filmmaker-Sprache (`prisoners look · deakins · noir`) sind bereits Identität. Kein anderes Tool verwendet diese Sprache. Das ist die Marke, nicht der Wordmark.
+3. **Session-Metadata im Masthead** (`v0.4.2 · 3 signatures · 18 prompts · saved 14m ago`) — signalisiert echtes Produkt mit echter Arbeit, kein leeres SaaS-Template.
 
-Deshalb: Logo groß genug dass es präsent ist. Wordmark lesbar daneben. Landing hat Hero-Moment. Nicht prahlerisch, aber **selbstbewusst** dass die Marke noch Einprägung braucht.
+**Was bleibt aus der alten Fassung:**
+- Rail-Brand-Zone (Logo-Mark ohne Wordmark) bleibt unverändert — ist nicht Hero, sondern Utility.
+- Wordmark wird im Content-Bereich weiterhin geführt (jetzt im Masthead, nicht zentriert groß).
 
-**Anti-Pattern:** Agent argumentiert "Linear macht das auch kleiner". → Ja aber Linear ist Linear. Wir sind wir. Die Design-Entscheidung ist Kontext-abhängig, nicht konventions-abhängig.
+**Anti-Pattern (neu):**
+- Agent argumentiert "Linear/Figma machen den Header noch kleiner, lass das Session-Metadata weg". → Ablehnen. Die Metadata ist der Brand-Moment-Ersatz für den entfallenen Hero.
+- Agent will den alten 72px-Hero zurückholen ("mehr Brand-Präsenz"). → Ablehnen. Die Entscheidung wurde empirisch getroffen.
+- Agent baut eine Pre-Landing / Splash-Page vor der Landing. → Ablehnen. Generisches SaaS-Muster.
+
+**Quelle:** `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md`
 
 ---
 

@@ -63,11 +63,17 @@ function AppContent({ activePage, onPageChange }) {
   const showHome = activePage === 'home'
   const showGridCreator = activePage === 'grid'
 
+  // Shell-Header wird auf Home unterdrueckt — der Landing-Masthead
+  // uebernimmt dort die Kopfrolle allein (Landing-Redesign Slice,
+  // OPEN_DECISIONS #2). Auf allen anderen Pages bleibt der globale
+  // ShellHeader die Kopfzeile.
+  const showShellHeader = !showHome
+
   return (
     <div className="app-shell sg2-shell">
       <Rail activePage={activePage} onPageChange={handlePageChange} />
       <div className="app-content">
-        <ShellHeader />
+        {showShellHeader && <ShellHeader />}
         {showLegacyContent && (
           <>
             <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {

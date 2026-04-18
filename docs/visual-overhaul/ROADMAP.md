@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
 **Stand:** 2026-04-18
-**Aktive Phase:** Landing-Redesign (Typografie + Layout-Konsistenz)
+**Aktive Phase:** Workspace-Planung (Spec für Grid Creator Workspace)
 
 ---
 
@@ -13,8 +13,8 @@
 [✓] Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik ... fertig 2026-04-18
 [✓] Picker-Planung: Grid Creator Picker (Spec + Entscheidungen) ... fertig 2026-04-18
 [✓] Picker-Bau: Grid Creator Picker + CONTINUE-Band-Adaption .... fertig 2026-04-18
-[→] Landing-Redesign: Typografie + Layout-Konsistenz ....  AKTIV
-[ ] Workspace-Planung: Spec für Grid Creator Workspace
+[✓] Landing-Redesign: Masthead-Composition .......................fertig 2026-04-18
+[→] Workspace-Planung: Spec für Grid Creator Workspace ........... AKTIV
 [ ] Workspace-Bau: Grid Creator Workspace (3-Spalten + Bars) .. größter Brocken
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)
@@ -91,6 +91,9 @@ Konzept-Session, keine Code-Session. Geklärt: Picker-Sektionen (YOUR PRESETS / 
 
 **Picker-Bau**
 Code-Phase. Umsetzung der `PICKER_SPEC_V1.md` plus CONTINUE-Band-Adaption auf der Landing. Workspace nicht Scope.
+
+**Landing-Redesign: Masthead-Composition**
+Code-Phase. Ersetzt zentrierten Hero durch editorialen Masthead (~75px), schiebt Discover nach oben als visuellen Anker (150px Mood-Cards), komprimiert Continue auf 130×66px mit Gradient-Fade rechts, Quick Start auf 44px-Utility-Leiste. ShellHeader wird auf Home unterdrückt. Ziel: alles above the fold auf 1080p. Entscheidet OPEN_DECISIONS #2. Ergebnis: `LANDING_REDESIGN_STATUS.md`, NUANCEN 11 neu gefasst.
 
 **Workspace**
 Grid Creator Edit-Modus. 3-Spalten-Layout (Case Context | Canvas | Inspector) + Full-Width Preview-Strip + Signatures-Bar + Output-Bar. Größter Bau-Block der Phase. Integriert auch: Projekt-Kontext im Header (siehe PRODUCT_STRATEGY_V1 §7).

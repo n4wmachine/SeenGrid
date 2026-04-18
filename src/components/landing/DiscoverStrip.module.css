@@ -1,0 +1,110 @@
+/* ============================================================
+   DISCOVER STRIP — new hero anchor.
+   4 flache Mood-Cards (150px hoch), Farben kommen inline aus
+   discover.json (projekt-eigene Filmlook-Hexes, keine --sg2-*
+   Semantik-Tokens, daher inline). Kein Border, kein Shadow —
+   die Farbflaeche ist das Element.
+   ============================================================ */
+
+:global(.sg2-shell) .section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- SECTION HEADER ---- */
+
+:global(.sg2-shell) .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hint {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-mono-label);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: var(--sg2-transition);
+}
+
+.hint:hover {
+  color: var(--sg2-teal);
+}
+
+/* ---- GRID: 4 columns, 150px cards ---- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---- CARD ---- */
+
+:global(.sg2-shell) .card {
+  position: relative;
+  height: 150px;
+  padding: 10px;
+  border-radius: var(--sg2-radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.badge {
+  font-family: var(--sg2-font-mono);
+  font-weight: 500;
+  font-size: var(--sg2-text-min);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  align-self: flex-start;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--sg2-font-display);
+  font-weight: 500;
+  font-size: var(--sg2-text-small);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+
+:global(.sg2-shell) .tagline {
+  font-family: var(--sg2-font-mono);
+  font-weight: 400;
+  font-size: var(--sg2-text-mono-label);
+  letter-spacing: 0.03em;
+  margin-top: 2px;
+}

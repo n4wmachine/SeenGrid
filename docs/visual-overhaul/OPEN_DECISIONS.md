@@ -20,24 +20,6 @@
 
 ## Offene Entscheidungen
 
-### 2. Hero-Verhalten auf Landing (dauerhaft vs. Splash-Pre-Page)
-
-**Kontext:** Aktuell ist der Hero (Logo + Wordmark + Tagline) dauerhaft auf der Landing präsent — NUANCEN-11-konform (bewusst starke Brand-Präsenz). Das kostet Rückkehrer jeden Tag vertikalen Platz vor Continue/Quick Start.
-
-**Zwei legitime Varianten:**
-- **Variante A (aktuell):** Hero dauerhaft auf Landing. Brand-Präsenz konstant, keine State-Logik, aber Rückkehrer scrollen täglich daran vorbei.
-- **Variante B:** Splash-Pre-Page einmal pro Session. Brand-Moment für Erstbesucher/Rückkehrer einmal, danach direkt dichte Pro-Tool-Home. Braucht State-Tracking (schon gesehen / noch nicht).
-
-Beide sind professionell, beide brand-konform. Keine von beiden beeinflusst die Produkt-Strategie (CONTINUE-Logik funktioniert bei beiden identisch).
-
-**Abhängig von:** Nichts Blockierendes — reine Landing-Polierung
-
-**Wann entscheiden:** Nach Picker-Phase, in einer kurzen Landing-Review-Session oder integriert in Workspace-Phase
-
-**Status:** offen
-
----
-
 ### 4. Projekt-Overview-Layout
 
 **Kontext:** Wenn ein User auf "Tokio-Kurzfilm" klickt — was sieht er?
@@ -133,6 +115,20 @@ Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
 
 ---
 
+### 9. Avatar-Platzierung global
+
+**Kontext:** Durch die ShellHeader-Suppression auf Home (Landing-Redesign 2026-04-18) ist auf der Landing-Page kein User-Avatar sichtbar. Auf anderen Pages bleibt der ShellHeader erhalten, dort existiert aktuell auch kein Avatar. Der Masthead führt bewusst keinen Avatar — Teal-Avatar rechts würde den editorialen Mono-Rhythmus brechen, und Account-Actions finden auf der Landing ohnehin nicht statt.
+
+**Ergebnis (Landing-Redesign-Session):** Auf Home kein User-Avatar sichtbar, weil ShellHeader dort unterdrückt und Masthead ihn bewusst nicht führt. Avatar-Platzierung global TBD (Kandidat: Rail bottom, analog Linear/Figma).
+
+**Abhängig von:** Account-/Auth-Phase (noch nicht geplant). Solange kein Login-Flow existiert, ist ein Avatar reine Deko.
+
+**Wann entscheiden:** Wenn Account-System gebaut wird oder Workspace-Phase explizit Multi-User-Kontext aufnimmt.
+
+**Status:** offen
+
+---
+
 ## Entschiedene Punkte
 
 ### 1. Classics-Verortung (Grid Creator Picker vs. Prompt Hub) — ENTSCHIEDEN
@@ -155,6 +151,27 @@ Classics wandern komplett in den **Prompt Hub** als **separate, klar erkennbare 
 
 ---
 
+### 2. Hero-Verhalten auf Landing (dauerhaft vs. Splash-Pre-Page) — ENTSCHIEDEN
+
+**Entscheidung (2026-04-18, Landing-Redesign-Session):**
+**Weder A noch B** — beide Varianten aus der ursprünglichen Liste (dauerhafter Hero vs. Splash-Pre-Page) wurden verworfen. Stattdessen: **Editorial Masthead** statt zentriertem Hero.
+
+- Hero-Bereich mit 72px-Wordmark + 200px-Logo-Block entfällt komplett auf der Landing
+- Stattdessen schmaler Masthead (~75px) mit 24px-Wordmark + Claim + Session-Metadata rechts
+- Brand-Präsenz durch Editorial-Layout + kuratierte Discover-Cards + Metadata-Signal, nicht durch Raumverbrauch
+- Keine Splash-Pre-Page (generisches SaaS-Muster)
+- ShellHeader wird auf Home via Conditional in `App.jsx` unterdrückt — der Masthead ist die einzige Kopfzeile der Landing
+
+**Begründung:** Der ursprüngliche Hero fraß den Fold — bei 1080p war unter Logo-Block + Wordmark + 80px-Abstand nur noch CONTINUE sichtbar. Die naive Lösung wäre ein größerer Hero (aktueller Zustand) oder eine Pre-Landing mit Marketing-Splash. Beide falsch. Die Profi-Lösung ist editorial: Zeitungskopfzeile / DAW-Header-Register. Brand durch Content-Qualität (Discover-Mood-Cards mit Filmmaker-Sprache) + Session-Signal (Metadata rechts), nicht durch Splash.
+
+**Folge für NUANCEN 11:** Regel zu Brand-Präsenz wurde neu gefasst — siehe `NUANCEN.md` §11.
+
+**Folge für Avatar-Frage:** Auf Home kein Avatar sichtbar (ShellHeader unterdrückt, Masthead bewusst ohne Avatar). Globale Avatar-Platzierung bleibt offen, siehe #9.
+
+**Quelle:** `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md`
+
+---
+
 ### 3. CONTINUE-Band Kapazität / Überlauf-Verhalten — ENTSCHIEDEN
 
 **Entscheidung (2026-04-18, Picker-Planungs-Session):**
@@ -172,8 +189,9 @@ Classics wandern komplett in den **Prompt Hub** als **separate, klar erkennbare 
 **Folge für die Landing-Page (Code-Umsetzung):**
 - Container-CSS wechselt von `grid auto-fit` zu `flex-row nowrap` + Horizontal-Scroll
 - Scrollbar-Styling gemäß `globals.css`-Pattern (custom, nicht Browser-Default)
+- Landing-Redesign-Session (2026-04-18) hat die Card-Dimensionen zusätzlich verkleinert (130×66px statt 260×200px) und einen Gradient-Fade rechts als Scroll-Affordance ergänzt.
 
-**Quelle:** `docs/visual-overhaul/PICKER_SPEC_V1.md` §9
+**Quelle:** `docs/visual-overhaul/PICKER_SPEC_V1.md` §9, `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md`
 
 ---
 
