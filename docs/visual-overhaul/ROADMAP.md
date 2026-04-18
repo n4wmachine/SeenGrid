@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
 **Stand:** 2026-04-18
-**Aktive Phase:** Picker: Grid Creator Picker (Template-Auswahl + YOUR PRESETS)
+**Aktive Phase:** Picker-Bau (Grid Creator Picker + CONTINUE-Band-Adaption)
 
 ---
 
@@ -11,7 +11,8 @@
 [✓] Phase 1: Foundation (Shell + Landing + Rail) ......... fertig 2026-04-17
 [✓] Brand-Session: Schrift + Landing-Atmosphäre .......... fertig 2026-04-17
 [✓] Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik ... fertig 2026-04-18
-[→] Picker: Grid Creator Picker (Template-Auswahl + YOUR PRESETS) .. AKTIV
+[✓] Picker-Planung: Grid Creator Picker (Spec + Entscheidungen) ... fertig 2026-04-18
+[→] Picker-Bau: Grid Creator Picker + CONTINUE-Band-Adaption .... AKTIV
 [ ] Workspace: Grid Creator Workspace (3-Spalten + Bars) ..  größter Brocken
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)
@@ -24,7 +25,7 @@
 
 ## Was kommt nach der aktiven Phase
 
-**Nach Picker-Planung:** Picker-Bau (Code-Chat). Danach Workspace-Planung, Workspace-Bau, Token-Store.
+**Nach Picker-Bau:** Workspace-Planung, Workspace-Bau, Token-Store.
 
 **Offene Detail-Entscheidungen** leben zentral in `OPEN_DECISIONS.md` statt verstreuter "für später"-Vermerke in einzelnen Dokumenten. Jede Phase prüft dort welche Punkte für sie relevant sind.
 
@@ -37,7 +38,7 @@
 - **Architektur** (Komponenten-Struktur, Routing, State-Management) → Spec + NUANCEN, nicht neu verhandeln
 - **Brand** (Schrift, Farben, visuelle Atmosphäre) → Brand-Session (abgeschlossen)
 - **Produkt-Konzept** (Projekte, Presets, Continue-Logik) → Produkt-Strategie-Session (abgeschlossen)
-- **Picker-Layout** (Sektionen, Card-Pattern, Adaptivität) → Picker-Planungs-Phase
+- **Picker-Layout** (Sektionen, Card-Pattern, Adaptivität) → Picker-Planungs-Phase (abgeschlossen)
 - **Implementation** (CSS-Werte, JS-Logik, kleine Layout-Details) → Code-Chats
 - **Sequenz** (welche Phase wann) → Jonas + aktiver Planungs-Chat
 
@@ -47,11 +48,12 @@
 
 1. `OPEN_DECISIONS.md` lesen (alle offenen Entscheidungen zentral)
 2. `PRODUCT_STRATEGY_V1.md` lesen (finale Produkt-Entscheidungen)
-3. `PHASE1_STATUS.md` lesen (was ist technisch Stand)
-4. Diese Roadmap lesen (du bist hier)
-5. Phasen-Handoff lesen (`HANDOFF_*_TO_*.md`, falls für aktive Phase vorhanden)
-6. `NUANCEN.md` lesen (Anti-Drift)
-7. Erst dann fragen oder eine Annahme treffen
+3. `PICKER_SPEC_V1.md` lesen (finale Picker-Entscheidungen)
+4. `PHASE1_STATUS.md` lesen (was ist technisch Stand)
+5. Diese Roadmap lesen (du bist hier)
+6. Phasen-Handoff lesen (`HANDOFF_*_TO_*.md`, falls für aktive Phase vorhanden)
+7. `NUANCEN.md` lesen (Anti-Drift)
+8. Erst dann fragen oder eine Annahme treffen
 
 ---
 
@@ -82,8 +84,11 @@ Schrift-Auswahl + Landing-Atmosphäre. Behebt die visuelle Unbefriedigung der Ph
 **Produkt-Strategie: Projekte + Grid-Presets + Continue-Logik**
 Konzept-Session, keine Code-Session. Geklärt: Datenmodell (Library + Projekte), Speicher-Mechanik (Flexi-Payload Presets), Projekt-Erstellung (explizit + implizit), Landing Continue-Logik (adaptiv), SeenFrame-Isolation, LIB-Konzept. Ergebnis: `PRODUCT_STRATEGY_V1.md`.
 
-**Picker**
-Grid Creator Einstiegs-Page mit Template-Auswahl. Sektionen: YOUR PRESETS (neu, Gold, adaptiv), Core Templates (10 Cases), Classics (Verortung offen, siehe OPEN_DECISIONS #1), Start from Scratch. Search + Filter-Pills. Card-Pattern.
+**Picker-Planung**
+Konzept-Session, keine Code-Session. Geklärt: Picker-Sektionen (YOUR PRESETS / CORE TEMPLATES / START FROM SCRATCH), Card-Patterns, Suche + Filter, Adaptivität, Leerzustände, CONTINUE-Band-Kapazität (Variante A), Classics-Verortung (wandert in den Hub). Ergebnis: `PICKER_SPEC_V1.md`, `HANDOFF_PICKER_TO_CODE.md`, Updates in `OPEN_DECISIONS.md`.
+
+**Picker-Bau**
+Code-Phase. Umsetzung der `PICKER_SPEC_V1.md` plus CONTINUE-Band-Adaption auf der Landing. Workspace nicht Scope.
 
 **Workspace**
 Grid Creator Edit-Modus. 3-Spalten-Layout (Case Context | Canvas | Inspector) + Full-Width Preview-Strip + Signatures-Bar + Output-Bar. Größter Bau-Block der Phase. Integriert auch: Projekt-Kontext im Header (siehe PRODUCT_STRATEGY_V1 §7).

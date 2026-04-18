@@ -20,28 +20,6 @@
 
 ## Offene Entscheidungen
 
-### 1. Classics-Verortung (Grid Creator Picker vs. Prompt Hub)
-
-**Kontext:** In einer früheren Session (vor der Produkt-Strategie-Session 2026-04-18) wurde laut Jonas entschieden:
-- Classics = erprobte Fertig-Prompts für bestimmte Cases (z.B. Character Sheets, Szenen-Bauplanerstellung)
-- Classics bekommen **keinen Gold-/Premium-Marker** (NUANCEN-konform: neutral)
-- Classics werden eventuell aus dem Grid Creator Picker in den Prompt Hub verschoben
-
-Diese frühere Entscheidung ist **nicht in den aktuellen Handoff-Dokumenten** dokumentiert. Jonas konnte sich in der Strategie-Session nicht 100% erinnern.
-
-**Offen:**
-- Bleiben Classics als Sektion im Grid Creator Picker?
-- Oder wandern sie in den Prompt Hub?
-- Oder gibt's beide Zugriffswege?
-
-**Abhängig von:** Picker-Phase (Bau) + Prompt-Hub-Phase (späterer Bau)
-
-**Wann entscheiden:** Vor oder zu Beginn der Picker-Phase. Jonas prüft alte Session-Logs/Chats zur früheren Entscheidung. Falls nicht rekonstruierbar, wird neu entschieden.
-
-**Status:** offen
-
----
-
 ### 2. Hero-Verhalten auf Landing (dauerhaft vs. Splash-Pre-Page)
 
 **Kontext:** Aktuell ist der Hero (Logo + Wordmark + Tagline) dauerhaft auf der Landing präsent — NUANCEN-11-konform (bewusst starke Brand-Präsenz). Das kostet Rückkehrer jeden Tag vertikalen Platz vor Continue/Quick Start.
@@ -55,23 +33,6 @@ Beide sind professionell, beide brand-konform. Keine von beiden beeinflusst die 
 **Abhängig von:** Nichts Blockierendes — reine Landing-Polierung
 
 **Wann entscheiden:** Nach Picker-Phase, in einer kurzen Landing-Review-Session oder integriert in Workspace-Phase
-
-**Status:** offen
-
----
-
-### 3. CONTINUE-Band Kapazität / Überlauf-Verhalten
-
-**Kontext:** Wenn ein User 30+ Projekte hat — wie verhält sich das CONTINUE-Band?
-
-**Mögliche Lösungen:**
-- Horizontales Scrollen bis N Projekte, dann "Show all" → LIB-Tab mit Projects-View
-- Feste Anzahl (z.B. 5-8 zuletzt bearbeitet) + Link zu "alle Projekte"
-- Pagination
-
-**Abhängig von:** Picker-Phase (weil Picker-Phase sich mit Landing-Detail beschäftigt) oder separater Landing-Polish
-
-**Wann entscheiden:** Picker-Phase
 
 **Status:** offen
 
@@ -142,9 +103,77 @@ Beide sind professionell, beide brand-konform. Keine von beiden beeinflusst die 
 
 ---
 
+### 8. Hub-Prompt-Customization + Auto-Einpflege-Pipeline (überholungsbedürftig)
+
+**Kontext:** In `docs/archive/VISUAL_OVERHAUL_PLAN.md` ist ein altes Konzept dokumentiert:
+- Slot-System mit drei Slot-Typen (Text-Slot / Bild-Hinweis / Text+Bild)
+- Drei Beispiel-Slots: `[CHARACTER]`, `[SETTING]`, `[STYLE]`
+- Auto-Pipeline: Claude analysiert hochgeladene Prompts, erkennt austauschbare Stellen, setzt Slot-Klammern, weist Kategorie+Tags zu, erkennt Bild-Referenz-Hinweise. Jonas reviewed nur.
+
+Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
+- Drei Slot-Typen reichen definitiv nicht
+- Multi-Panel-Sheets brauchen Per-Panel-Inputs (vgl. `panel_fields` aus `MODULE_AND_CASE_CATALOG.md` für Custom-Builder-Cases) — das fehlt im alten Slot-System komplett
+- Classics (vom Picker in den Hub gewandert, siehe #1) sind genau solche Multi-Panel-Sheets — ohne Per-Panel-Inputs nicht sinnvoll bedienbar
+
+**Offen — neu zu konzipieren:**
+- Welcher Customization-Mechanismus für Hub-Prompts insgesamt (Trendy, Classics, Community)?
+- Erweiterung des Slot-Systems oder Übernahme des `panel_fields`-Mechanismus aus der Engine oder Hybrid?
+- Wie funktioniert die Auto-Einpflege-Pipeline für die ~1500 Community-Prompts? Welche Erkennungs-Regeln, welcher Output, welcher Review-Flow?
+- Was passiert mit Prompts wo Per-Panel-Inputs keinen Sinn machen (Single-Image-Prompts)? Pipeline muss differenzieren.
+
+**ToDo:**
+- Eigene Hub-Architektur-Session: konsolidierter Customization-Mechanismus + Pipeline-Spec für die ~1500 Prompts
+- Davor: Hub-Phase darf nicht mit dem alten 3-Slot-System gebaut werden
+
+**Abhängig von:** Hub-Phase (noch nicht geplant)
+
+**Wann entscheiden:** Vor Hub-Bau. Eigene Konzept-Session nötig.
+
+**Status:** offen — überholungsbedürftig
+
+---
+
 ## Entschiedene Punkte
 
-*(Bisher keine. Hier werden entschiedene Punkte aus dieser Liste dokumentiert, nachdem sie geklärt sind — mit Datum, Entscheidung, Link zur Quelle.)*
+### 1. Classics-Verortung (Grid Creator Picker vs. Prompt Hub) — ENTSCHIEDEN
+
+**Entscheidung (2026-04-18, Picker-Planungs-Session):**
+Classics wandern komplett in den **Prompt Hub** als **separate, klar erkennbare Sektion** (nicht vermischt mit Trendy/Community-Prompts). Classics werden **nicht im Grid Creator Picker** angezeigt.
+
+**Begründung:** Jonas' ursprüngliche Intuition (aus einer früheren Session erinnert, jetzt bestätigt): Classics sind erprobte erweiterte Alternativ-Sheets für bestimmte Use-Cases (z.B. andere Character Sheets, technische Bauplan-Erstellung von Szenen). Sie sind keine Premium-/Magic-Prompts (deshalb auch kein Gold, NUANCEN-konform). Im Picker würden sie den Fokus auf Custom Builder + eigene Presets verwässern. Im Hub stehen sie als kuratierte Alternativen neben Community und Trendy.
+
+**Folge für den Picker:**
+- CLASSICS-Sektion aus dem Picker gestrichen
+- Picker hat nur noch drei Sektionen: YOUR PRESETS / CORE TEMPLATES / START FROM SCRATCH
+- Im Picker unter CORE TEMPLATES ein Mini-Hinweis "more templates in Prompt Hub →" (Wortlaut TBD)
+
+**Folge für den Hub (spätere Phase):**
+- Classics erhalten eigene Sektion, visuell von Community/Trendy getrennt
+- Customization-Mechanismus für Hub-Prompts ist offen (siehe #8)
+
+**Quelle:** `docs/visual-overhaul/PICKER_SPEC_V1.md` §4, §12
+
+---
+
+### 3. CONTINUE-Band Kapazität / Überlauf-Verhalten — ENTSCHIEDEN
+
+**Entscheidung (2026-04-18, Picker-Planungs-Session):**
+**Variante A** — Single-Row mit horizontalem Scroll.
+
+- Eine Reihe, immer
+- `[+ neu]`-Slot ganz vorne (links)
+- Projekte daneben, **zuletzt bearbeitet zuerst** (links nach rechts absteigend nach Modified-Timestamp)
+- Bei Überlauf: horizontal scrollen/swipen
+- Keine Abhängigkeit zu LIB-Tab — funktioniert sofort
+- Wenn LIB später gebaut wird: "show all"-Link rechts optional nachrüstbar
+
+**Begründung:** CONTINUE-Band = Wiedereinstieg-Schnellzugriff, kein Archiv. Konstante Höhe (kein Layout-Wachstum wenn Projekte zunehmen). Keine Dependency auf noch-nicht-existierende LIB-Page.
+
+**Folge für die Landing-Page (Code-Umsetzung):**
+- Container-CSS wechselt von `grid auto-fit` zu `flex-row nowrap` + Horizontal-Scroll
+- Scrollbar-Styling gemäß `globals.css`-Pattern (custom, nicht Browser-Default)
+
+**Quelle:** `docs/visual-overhaul/PICKER_SPEC_V1.md` §9
 
 ---
 
