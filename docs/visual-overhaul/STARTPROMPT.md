@@ -176,8 +176,22 @@ Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
 - Der Briefing spezifiziert konkrete Hex-Farben für Discover-Mood-Cards
   (#0F6E56, #3C3489, #791F1F, #633806) — die dürfen rein, sind
   Filmlook-Repräsentationen, nicht UI-Akzente
-- Session-Metadata im Masthead (`v0.4.2 · 3 signatures · 18 prompts ·
-  saved 14m ago`) ist v1 Placeholder — noch kein echter Store dahinter
+- **Continue-Card-Styling (Platzhalter-Regel):** Das Briefing schlägt
+  rotierende semantische Farben (`bg-info` / `bg-warning` /
+  `bg-secondary`) für Continue-Projekt-Cards vor — **nicht übernehmen.**
+  Das würde UI-Status-Semantik zweckentfremden. Später kommen echte
+  Keyframe-Thumbnails; bis dahin: einfarbige dunkle Card-Flächen mit
+  dezenter Mood-Variation, analog zu den bestehenden Landing-Thumbs
+  (`thumbNoir`, `thumbTeal`, `thumbAmber`, `thumbGreen`, `thumbRed`,
+  `thumbAmber` in `LandingPage.module.css`). Keine bunten Status-Farben.
+- **Session-Metadata im Masthead** (`v0.4.2 · 3 signatures · 18 prompts
+  · saved 14m ago`): als statische Texte einbauen, aber jeden Zähler
+  mit `{/* TODO(token-store): connect to signatures count */}` o.ä.
+  markieren (ausser Version, die ist statisch). Einheitliches Format
+  `TODO(token-store):` verwenden, damit der Token-Store-Chat später
+  alles per `grep -r "TODO(token-store)"` findet. **Keine Fake-
+  Zähl-Logik, keine halbfertige Store-Infrastruktur.** Saved-Time
+  hängt vom Projekt-Store ab — nutze `TODO(workspace-store):` dafür.
 - Mobile (<600px) ist kein Ziel für dieses Slice — im Briefing steht's,
   nicht überengineeren
 - Bei Zweifel: nachfragen, nicht vorpreschen
