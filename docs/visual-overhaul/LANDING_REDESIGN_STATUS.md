@@ -128,6 +128,47 @@ Das Briefing nannte generische Namen. Mapping auf `--sg2-*`-System:
 
 ---
 
+## Follow-up: Differentiated Content Typo (2026-04-18)
+
+Nach der ersten Live-Sicht: Card-Labels waren auf 10px Chrome-Skala gesetzt — Hierarchie-Inversion gegenüber den Mood-Flächen (Farbe schreit, Text flüstert). Korrektur:
+
+- **Discover Title:** `--sg2-text-h1` (16px) Medium statt `--sg2-text-small` (12)
+- **Discover Tag-Line:** `--sg2-text-small` (12px) Mono statt `--sg2-text-mono-label` (10)
+- **Discover Trending Badge:** `--sg2-text-mono-label` (10px) statt `--sg2-text-min` (9)
+- **Continue Projekt-Label:** `--sg2-text-body` (13px) Medium Display statt `--sg2-text-mono-label` (10)
+- **Continue Card-Höhe:** 72px (von 66) für angemessenes Padding bei 13px-Label
+- **Quick Start Label:** `--sg2-text-body` (13px) Medium Display statt `--sg2-text-mono-label` (10)
+- **Quick Start Card-Höhe:** 60px (von 44), Icon 16×16 (von 14×14), Card-Padding 10/12, Gap 10
+
+Chrome-Register (Section-Header, Section-Hints, Masthead-Wordmark/Claim/Metadata) bleibt unverändert. Keine neuen Tokens, keine neuen Weights.
+
+**Zusatz-Fix (Alignment-Bug):** Bei Discover-Cards ohne Trending-Badge wurde Text oben statt unten dargestellt. `justify-content: space-between` mit nur einem Kind fällt auf `flex-start` zurück. Fix: `:global(.sg2-shell) .body { margin-top: auto }` — Specificity (0,2,0) gegen den globalen `.sg2-shell *` Reset (0,1,0). Erste Iteration des Fix ohne Specificity-Pattern wurde vom Reset überschrieben — Pattern muss bei jedem padding/margin innerhalb `.sg2-shell` angewendet werden.
+
+---
+
+## Follow-up: Discover Image Support — Infrastructure (2026-04-18)
+
+`DiscoverStrip` rendert jetzt optional Bilder pro Card (Netflix-Treatment). Bilder selbst kommen später durch Kurator-Arbeit.
+
+**Was gebaut wurde:**
+- `DiscoverStrip.jsx` prüft pro Item `Boolean(item.image)`. Mit Bild: `<img>` als absolut positionierter Background-Layer + zusätzliche `.cardWithImage`-Klasse. Ohne Bild: bestehender Mood-only-Pfad unverändert.
+- `<img>`-Attribute: `loading="eager"` für Card[0], `loading="lazy"` für alle weiteren, `decoding="async"`, `alt={item.title}`.
+- `DiscoverStrip.module.css` neue Klassen:
+  - `.cardImage` — `position: absolute; inset: 0; object-fit: cover; filter: saturate(0.92) contrast(1.05)` (Treatment-Layer, kann später raus wenn MJ-Output schon konsistent genug ist).
+  - `.cardWithImage::after` — Linear-Gradient von `rgba(0,0,0,0.85)` bottom auf `transparent` ab 55% Höhe, sorgt für Text-Lesbarkeit.
+  - `.cardWithImage .badge` und `.body` werden absolut positioniert (top/bottom 12px) mit `z-index: 1` damit sie über dem `::after`-Gradient liegen.
+- `moodColor` bleibt **immer** als inline `background-color` gesetzt — auch bei Bild-Cards. Funktioniert als Loading-Fallback, sodass die Card nicht schwarz startet, sondern in der Mood-Farbe und das Bild fadet darüber sobald geladen.
+- `public/images/discover/` Ordner mit `.gitkeep` angelegt. Bilder kommen dort manuell rein.
+
+**Schema in `discover.json` vorbereitet, aber nicht aktiviert:**
+Aktuelle Items haben kein `image`-Feld → Fallback-Pfad bleibt aktiv. Sobald ein Item ein `image`-Feld bekommt (z.B. `"image": "/SeenGrid/images/discover/prisoners.webp"`), schaltet die Card automatisch in den Bild-Modus. Bei Bild-Cards sollten `titleColor`/`taglineColor` auf helle Neutraltöne (z.B. `#f0f0fa`) angepasst werden statt Palette-Stops, weil der Gradient-Overlay den Hintergrund dunkel hält.
+
+**Aspect-Ratio:** Bleibt bei `height: 150px` (≈16:10 bei den meisten Viewports). Strikte `aspect-ratio: 16/10` ist Folge-Entscheidung für die Phase wenn Bilder live sind.
+
+**Nicht im Browser verifiziert:** Test-Bild + Test-Item-Edit + Browser-Reload muss Jonas selbst durchführen — keine Bilder im Repo, kein Browser-Zugriff von hier. Code-Pfad gegen die spezifizierten Akzeptanzkriterien gelesen, Logik korrekt; sichtbarer Self-Check liegt beim User.
+
+---
+
 ## Bekannte kleine Punkte (nicht blockierend)
 
 - Session-Metadata-Zahlen sind Dummy-Werte — gleiche Zahlen wie die StatusBar-Dummies, aber bewusst nicht geshared (siehe Briefing: keine Shared-State-Infrastruktur).
@@ -135,6 +176,7 @@ Das Briefing nannte generische Namen. Mapping auf `--sg2-*`-System:
 - Continue-Projekte bleiben weiterhin hardcodiert als `CONTINUE_PROJECTS` in `ContinueStrip.jsx` bis der Projekt-Store in der Workspace-Phase gebaut wird.
 - Responsive-Breakpoints: 1100px (Masthead-Meta kürzt), 900px (Discover/QuickStart auf 2-Column, Masthead-Meta kürzt weiter). Mobile <600px ist nicht Scope (Briefing explizit).
 - Quick-Start hat aktuell Icon-Placeholder-Kästchen, keine echten Icons. Echte Icons würden die bestehende `railIcons.jsx`-Sammlung wiederverwenden (aus Scope-Gründen nicht mit reingepackt, kleiner Polish-Punkt für nächste Session).
+- Discover-Bilder: keine im Repo, leerer Ordner mit `.gitkeep` reserviert. Sobald Bilder da sind: in `public/images/discover/` ablegen + JSON-Item mit `image`-Pfad versehen + Text-Farben auf helle Neutraltöne anpassen.
 
 ---
 
