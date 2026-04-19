@@ -245,7 +245,7 @@ Das ist nicht Kosmetik. Das ist **Wahrnehmungs-Arbeit.** Der User merkt nicht da
 Das bedeutet: Wenn im Grid Creator eine Funktion geplant ist die ein **technisches Verhalten der Generatoren** voraussetzt (z.B. Normalizer 2-Step, Seamless-Layout, Grid-Size-Limits), dann sind diese Entscheidungen **empirisch validiert**. Nicht in Frage stellen. Nicht "wäre doch einfacher ohne".
 
 Beispiele:
-- 6×4 Dimension-Builder mit Advisory "PERFECT / HIRES / STANDARD / LOW / TINY" — das sind validierte Quality-Regions basierend auf Pixel-pro-Panel-Berechnungen
+- 6×4 Dimension-Builder mit Advisory "HIRES / STANDARD / LOW / TINY" — das sind vier validierte Quality-Regions basierend auf Pixel-pro-Panel-Berechnungen (frühere Fassung listete fünf Stufen inkl. "PERFECT"; korrigiert in der Workspace-Planungs-Session 2026-04-19 nach Git-History-Abgleich von `getDimAdvice()`)
 - Normalizer 2-Step — das ist ein validierter Workflow-Fix für das Problem dass Referenzbilder oft Portraits statt Full-Body sind
 - 12px Gap zwischen Panels im Canvas — das ist der Wert bei dem Grids in NanoBanana sauber getrennt werden ohne dass der Grid-Character verloren geht
 

@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
-**Stand:** 2026-04-18
-**Aktive Phase:** Workspace-Planung (Spec für Grid Creator Workspace)
+**Stand:** 2026-04-19
+**Aktive Phase:** Workspace-Bau (Umsetzung WORKSPACE_SPEC_V1.md)
 
 ---
 
@@ -14,8 +14,8 @@
 [✓] Picker-Planung: Grid Creator Picker (Spec + Entscheidungen) ... fertig 2026-04-18
 [✓] Picker-Bau: Grid Creator Picker + CONTINUE-Band-Adaption .... fertig 2026-04-18
 [✓] Landing-Redesign: Masthead-Composition .......................fertig 2026-04-18
-[→] Workspace-Planung: Spec für Grid Creator Workspace ........... AKTIV
-[ ] Workspace-Bau: Grid Creator Workspace (3-Spalten + Bars) .. größter Brocken
+[✓] Workspace-Planung: Spec für Grid Creator Workspace ........... fertig 2026-04-19
+[→] Workspace-Bau: Grid Creator Workspace (3-Spalten + Bars) .. AKTIV (größter Brocken)
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)
 [ ] LIB-Tab: Library-Management-Page
@@ -95,8 +95,11 @@ Code-Phase. Umsetzung der `PICKER_SPEC_V1.md` plus CONTINUE-Band-Adaption auf de
 **Landing-Redesign: Masthead-Composition**
 Code-Phase. Ersetzt zentrierten Hero durch editorialen Masthead (~75px), schiebt Discover nach oben als visuellen Anker (150px Mood-Cards), komprimiert Continue auf 130×66px mit Gradient-Fade rechts, Quick Start auf 44px-Utility-Leiste. ShellHeader wird auf Home unterdrückt. Ziel: alles above the fold auf 1080p. Entscheidet OPEN_DECISIONS #2. Ergebnis: `LANDING_REDESIGN_STATUS.md`, NUANCEN 11 neu gefasst.
 
-**Workspace**
-Grid Creator Edit-Modus. 3-Spalten-Layout (Case Context | Canvas | Inspector) + Full-Width Preview-Strip + Signatures-Bar + Output-Bar. Größter Bau-Block der Phase. Integriert auch: Projekt-Kontext im Header (siehe PRODUCT_STRATEGY_V1 §7).
+**Workspace-Planung**
+Konzept-Session 2026-04-19. Geklärt: vertikaler Stack (56+52+flex+96+52+32), 3-Spalten-Inhalte, Preview-Strip als Panel-Thumbs (full-width), Signatures-Bar mit Gold-Territorium, Output-Bar mit Copy-Primary + Dim-Warning, Save-as-Preset-Popup (Center-Modal, 4 Checkboxen), Projekt-Dropdown im ShellHeader (OPEN_DECISIONS #7 entschieden), Dim-Advisory (4 Stufen aus Git-History portiert), Panel-Role-Customization (aus `panel_fields`-Schema), Random-Field-Auto-Fill mit Confirm, Back-to-Picker-Element, Toast-System generisch. Ergebnis: `WORKSPACE_SPEC_V1.md` + `HANDOFF_WORKSPACE_TO_CODE.md` + OPEN_DECISIONS #7 geschlossen + NUANCEN 13 korrigiert (4 statt 5 Stufen) + neuer OPEN_DECISIONS-Eintrag #10 (Min-Width-Message).
+
+**Workspace-Bau**
+Code-Phase. Umsetzung `WORKSPACE_SPEC_V1.md`. Größter Bau-Block der Phase — 6 Stack-Zonen, 3-Spalten-Layout, datengetriebener Inspector, Preview-Strip, Signatures-Bar, Output-Bar, Save-Popup, Random-Confirm, Toast-System, Back-to-Picker. Grid Engine (42 Tests, Slices 1-8) bleibt unberührt.
 
 **Token-Store Stufe 1**
 Zentraler Signature-Store. SeenLab schreibt Signatures, Grid Creator liest sie. Stufe 2 (Hub-Integration) und Stufe 3 (Vision-Features) kommen später. Grid-Presets kommen in Stufe 2 dazu, nicht jetzt.

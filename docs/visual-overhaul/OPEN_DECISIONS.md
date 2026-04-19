@@ -67,21 +67,20 @@
 
 ---
 
-### 7. Projekt-Wechsel-UI (wie wechselt der User aktiv zwischen Projekten)
+### 10. Workspace Min-Width-Message (Responsive unter 1100px)
 
-**Kontext:** PRODUCT_STRATEGY_V1 §3.3 sagt: Arbeit ist projekt-agnostisch, Wechsel ist harmlos. Aber wie **vollzieht** der User den Wechsel konkret?
+**Kontext:** Der Grid Creator Workspace verlangt minimal ~1100px (Rail 88 + Context 260 + Canvas-flex + Inspector 320 + Scrollbar). Unter dieser Breite bricht das Layout. v1 akzeptiert das brutal — kein Min-Width-Check, keine Warn-Page. Pro-Tool, kein Tablet-Ziel.
 
-**Mögliche Orte:**
-- Dropdown im Header
-- Klick auf Projekt-Label → Projekt-Switcher öffnet sich
-- Nur über Landing CONTINUE-Band
-- Keyboard-Shortcut
+**Offen:** Soll eine spätere Phase eine Min-Width-Message nachrüsten? Formen:
+- Overlay `workspace requires ≥1100px width — resize your window` (volle Abdeckung)
+- Inline-Banner oben: `your window is too narrow for the workspace`
+- Gar nichts (bleibt bei v1-Verhalten)
 
-**Abhängig von:** Workspace-Phase (Header-Gestaltung + Projekt-Kontext-Anzeige)
+**Abhängig von:** Realer Nutzer-Feedback (bricht jemand tatsächlich auf schmalem Screen?)
 
-**Wann entscheiden:** Workspace-Phase
+**Wann entscheiden:** Nach erstem echten Workspace-Nutzungs-Feedback. Nicht proaktiv.
 
-**Status:** offen
+**Status:** offen / niedrig priorisiert
 
 ---
 
@@ -169,6 +168,28 @@ Classics wandern komplett in den **Prompt Hub** als **separate, klar erkennbare 
 **Folge für Avatar-Frage:** Auf Home kein Avatar sichtbar (ShellHeader unterdrückt, Masthead bewusst ohne Avatar). Globale Avatar-Platzierung bleibt offen, siehe #9.
 
 **Quelle:** `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md`
+
+---
+
+### 7. Projekt-Wechsel-UI — ENTSCHIEDEN
+
+**Entscheidung (2026-04-19, Workspace-Planungs-Session):**
+Projekt-Wechsel via **Inline-Dropdown am ShellHeader-Projekt-Label**. Nicht via Projekt-Overview-Page (diese bleibt optionaler Folge-Klick aus dem Dropdown-Footer).
+
+**Mechanik:**
+- Projekt-Label sitzt im ShellHeader neben dem Page-Title: `grid creator · tokio-kurzfilm ▾` (lowercase, Bullet-Trenner via `::before` analog Masthead)
+- Klick auf Label öffnet Inline-Dropdown mit: `[no project]` + Projekt-Liste (aktuelles Projekt mit `✓`) + `[+ new project]` + Footer-Eintrag `open project page →`
+- `[no project]` wechselt in kontextfreien Modus (Library-only)
+- `[+ new project]` öffnet Inline-Input für Projektnamen
+- `open project page →` führt zur Projekt-Overview (Placeholder bis diese gebaut ist, siehe #4)
+- Keyboard: Escape schließt, Arrow-Keys navigieren, Enter = select
+- Kontextfrei-Zustand: Label zeigt `no project ▾`
+
+**Begründung:** Projekt-Overview-Page existiert nicht und wäre ein Umweg (zwei Klicks + Page-Load). Dropdown ist Quick-Switch-Pattern. `open project page →` bleibt als Footer-Link für Management-Use-Cases.
+
+**Folge:** Die dedizierte Projekt-Overview (OPEN_DECISIONS #4) bleibt offen, ist aber nicht Blocker für Projekt-Wechsel im Workspace.
+
+**Quelle:** `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` §2.2
 
 ---
 

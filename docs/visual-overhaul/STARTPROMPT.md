@@ -12,17 +12,18 @@ den **aktuellen Arbeits-Branch** an zwei Stellen ein:
 1. Im Meta-Feld "Arbeits-Branch" oben
 2. In der "ALLERERSTE AKTION — BRANCH-WECHSEL"-Sektion im Prompt-Body
 
-**Arbeits-Branch heißt:** Der Branch auf dem die committed Arbeit lebt
-(`git log`-Historie, Push-Ziel) — **nicht** der Branch auf dem die Harness
-dich gestartet hat.
-
-**Aktuell für:** Workspace-Planning-Chat (Konzept-Session, keine
-Bau-Session). Spec für den Grid Creator Workspace wird ausgearbeitet —
-3-Spalten-Layout, Preview-Strip, Signatures-Bar, Output-Bar,
-Projekt-Kontext im Header. Ergebnis: `WORKSPACE_SPEC_V1.md` +
-`HANDOFF_WORKSPACE_TO_CODE.md` + ggf. Updates in `OPEN_DECISIONS.md`.
+**Aktuell für:** Workspace-Bau-Chat (Code-Session). Umsetzung der
+`WORKSPACE_SPEC_V1.md` — 6 Stack-Zonen, 3-Spalten-Layout, Preview-Strip,
+Signatures-Bar, Output-Bar, Save-Popup, Random-Confirm, Toast-System,
+Back-to-Picker, Projekt-Dropdown im ShellHeader. Größter Bau-Block der
+Visual-Overhaul-Phase.
 
 **Arbeits-Branch:** `claude/seengrid-visual-overhaul-6RK4n`
+
+(Die Workspace-Planungs-Session lief auf `claude/workspace-planning-
+grid-creator-earBn`. Die dort entstandenen Docs werden in den
+Overhaul-Branch gemerged. Falls noch nicht passiert: zuerst Merge klären
+mit Jonas, dann Bau.)
 
 **Nutzung:** Den Text-Block zwischen den beiden Backtick-Zeilen
 unten in ein neues Chat-Fenster kopieren. Mehr nicht.
@@ -30,27 +31,28 @@ unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 ---
 
 ```
-Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Picker und
-Landing-Redesign sind fertig. Jetzt kommt die **Workspace-Planung**
-für den Grid Creator — die Konzept-Session bevor ein Bau-Chat den
-Workspace tatsächlich implementiert.
+Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Die Workspace-
+Planung ist fertig (`WORKSPACE_SPEC_V1.md` + `HANDOFF_WORKSPACE_TO_
+CODE.md` liegen bereit). Jetzt kommt der **Workspace-Bau** — Umsetzung
+der Spec im Code. Das ist der größte Bau-Block der Visual-Overhaul-
+Phase.
 
-Das ist eine **Konzept-Session, keine Bau-Session.** Am Ende liegt
-eine Spec vor, kein Code. Analog zur Picker-Planungs-Phase
-(`PICKER_SPEC_V1.md`).
+Das ist eine **Bau-Session, keine Konzept-Session.** Code-Output.
+Keine neuen Produkt-/Design-Entscheidungen — alles steht in der Spec.
 
 **ALLERERSTE AKTION — BRANCH-WECHSEL (nicht überspringen):**
 
-Die gesamte Arbeit liegt auf dem Feature-Branch
+Die Arbeit liegt auf dem Feature-Branch
 `claude/seengrid-visual-overhaul-6RK4n`, NICHT auf main.
 
     git fetch origin claude/seengrid-visual-overhaul-6RK4n
     git checkout claude/seengrid-visual-overhaul-6RK4n
     git pull
 
-Verifikation: `ls docs/visual-overhaul/` muss u.a. zeigen: ROADMAP.md,
-PRODUCT_STRATEGY_V1.md, PHASE1_STATUS.md, PICKER_BUILD_STATUS.md,
-NUANCEN.md, LANDING_REDESIGN_STATUS.md (neu, landing-phase).
+Verifikation: `ls docs/visual-overhaul/` muss u.a. zeigen:
+WORKSPACE_SPEC_V1.md, HANDOFF_WORKSPACE_TO_CODE.md, ROADMAP.md,
+OPEN_DECISIONS.md, NUANCEN.md, PRODUCT_STRATEGY_V1.md,
+PICKER_SPEC_V1.md, LANDING_REDESIGN_STATUS.md, PICKER_BUILD_STATUS.md.
 
 Die CLAUDE.md-Regel "direkt auf main" ist überholt — stammt aus der
 Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
@@ -58,137 +60,135 @@ Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
 ---
 
 **Deine Rolle:**
-- **Konzept-/Planungs-Chat** für den Grid Creator Workspace
-- Zuerst die Repo-Docs (unten Liste) lesen, DANN Fragen an mich stellen
-- Kein Code schreiben — nur Spec + Handoff am Ende
-- Mit mir Option für Option durchgehen, nicht mir eine fertige
-  Lösung vorsetzen
+- Code-Chat für den Grid Creator Workspace
+- `WORKSPACE_SPEC_V1.md` ist primäre Quelle — nichts erfinden, nichts
+  weglassen
+- `HANDOFF_WORKSPACE_TO_CODE.md` hat die Umsetzungs-Schritte + Quick-
+  Lookup-Tabelle
+- Bei Unklarheit: Jonas fragen, nicht raten
+- Komplette Files liefern, keine Diffs
 
 **Mein Arbeitsstil:**
 - Deutsch, direkt, brutal ehrlich, keine Sycophancy
 - Kurze Antworten, kein Coding-Jargon
-- Nicht-Coder
-- In Konzept-Sessions: du stellst Optionen (A/B/C) mit Trade-offs,
-  ich entscheide, wir fixieren im Protokoll
-- Keine großen Wall-of-Text-Exposés ohne mein Eingrenzen
+- Nicht-Coder — Coding-Details gehören in Kommentare, nicht in den
+  Chat
+- Ein File pro Antwort bevorzugt
 
-**Was in dieser Session zu klären ist (Kurzfassung):**
+**Was zu bauen ist (Kurzfassung — Details in der Spec):**
 
-1. **3-Spalten-Layout** (Case Context | Canvas | Inspector)
-   - Genaue Breiten (Token `--sg2-context-width: 260px` und
-     `--sg2-inspector-width: 320px` existieren bereits — reichen sie?)
-   - Collapse-Verhalten der Seiten-Spalten (NUANCEN 3: Rail ist
-     nicht collapsible — gilt das auch für Context/Inspector?)
-   - Was genau landet in Case Context (Case-Name, Module-Toggles,
-     globale Settings)? Was in Inspector (per-Panel Overrides,
-     Signature-Auswahl, Panel-Role-Edit)?
+Stack vertikal (Token-Werte aus `src/styles/tokens.css`):
+- ShellHeader 56px mit Back-to-Picker + Projekt-Dropdown
+- Module-Toolbar 52px (alle Module sichtbar, Case-Whitelist = Pre-
+  Aktivierung)
+- 3-Spalten-Row (Context 260 | Canvas flex | Inspector 320)
+- Preview-Strip 96px full-width (Panel-Thumbs scrollbar)
+- Signatures-Bar 52px full-width (Gold-Territorium, Applied fix links)
+- Output-Bar 32px full-width (Copy-Primary + Save + Meta rechts)
 
-2. **Full-Width Preview-Strip** (96px, NUANCEN 7: unter 3-Spalten-Row,
-   NICHT in Canvas-Spalte)
-   - Zeigt er das Master-Grid oder die Einzel-Panels scrollbar?
-   - Klick auf Strip-Item → Canvas springt zu Panel?
-   - Position: strikt full-width unter Row, über Output-Bar?
+Plus:
+- Save-as-Preset-Popup (Center-Modal, 4 Checkboxen + Projekt-Radio)
+- Random-Confirm-Dialog (Default-Focus Cancel)
+- Reset-Confirm-Dialog
+- Generisches Toast-System (bottom-right, pause-on-hover, max 3)
+- Dim-Advisory-Utility aus Git-History portieren
+  (`git show 13ca30f~1:src/components/GridOperator.jsx` →
+  `getDimAdvice` → `src/lib/dimAdvisory.js`)
 
-3. **Signatures-Bar** (52px, Token `--sg2-sigbar-height`)
-   - Horizontal-Scroll wie Continue auf Landing?
-   - Nur angewendete Signatures oder Pin-Favoriten + Zuletzt-genutzt?
-   - Gold-Akzent auf Applied-Card (NUANCEN 1)
-   - Applied-State-Signal: Gold-Border-Tint + Glow (NUANCEN 2)?
+**Anti-Drift (kritisch — aus Spec + NUANCEN):**
+- **NUANCEN 1** (Gold/Teal) unverhandelbar. Gold nur Signatures-Bar-
+  Label, Applied-Signature-Border + Glow, Override-Dots, Inspector-
+  Signature-Card. Alles andere Teal oder neutral.
+- **NUANCEN 2** (Override-Dot + Signature-Applied sind zwei unabhängige
+  Visual-States, koexistieren am selben Panel gleichzeitig) strikt.
+- **NUANCEN 6** (Picker + Workspace = zwei Page-States, kein Modal,
+  kein Split) — Back-to-Picker ist State-Switch in `GridCreator.jsx`,
+  kein Route-Change.
+- **NUANCEN 7** (Preview-Strip + Signatures-Bar + Output-Bar strikt
+  full-width unter 3-Spalten-Row, NICHT in Canvas-Spalte).
+- **NUANCEN 8** (Workspace from scratch bauen, nicht alten GridOperator
+  recyceln). Einzige Ausnahme: `getDimAdvice`-Logik aus Git-History
+  portieren.
+- **NUANCEN 13** (Dim-Advisory = 4 Stufen HIRES/STANDARD/LOW/TINY,
+  Casing uppercase in UI). Alte NUANCEN-Fassung hatte PERFECT als 5.
+  Stufe — falsch, korrigiert.
+- **Grid Engine (42 Tests, Slices 1-8) bleibt unberührt.**
+- **Case-Wechsel im Workspace nicht möglich** — nur via Back-to-
+  Picker.
 
-4. **Output-Bar** (32px, Token `--sg2-outputbar-height`)
-   - Inhalt: "Copy as JSON", "Copy as Paragraph", "Save as Preset",
-     Token-Count? Warnings (Dim-Advisory aus CLAUDE.md)?
-   - Layout: links Actions, rechts Meta?
-
-5. **Projekt-Kontext im Header** (PRODUCT_STRATEGY §7)
-   - Wo genau erscheint das Projekt-Label? (ShellHeader? Eigener
-     Workspace-Chrome?)
-   - OPEN_DECISIONS #7 (Projekt-Wechsel-UI) wird hier entschieden
-
-6. **Save-as-Preset-Flow** (PRODUCT_STRATEGY §2.2)
-   - Wo ist der Save-Button? (Output-Bar? Header-Ecke?)
-   - Popup-Design (4 Checkboxen + Projekt-Dropdown) —
-     kommt das Mockup bereits in dieser Spec oder erst im Bau?
-
-7. **Dim Advisory** (aus CLAUDE.md „Wichtig bei Engine-
-   Fertigstellung") — pro Grid-Kombo exakte Panel-Pixel-Größen bei
-   2K/4K mit Quality-Tags. Wo im Workspace sichtbar?
-
-8. **Panel-Role-Customization** (aus CLAUDE.md "Nach Slice 8") —
-   User wählt pro Panel welchen Winkel er will. UI dafür?
-
-**Anti-Drift für diese Session (kritisch):**
-- **NUANCEN 1** (Gold/Teal) unverhandelbar. Gold nur Signatures +
-  Override-Dots + Grid-Rail-Stern + Signatures-Bar + Applied-Card.
-- **NUANCEN 2** (Override-Dot vs. Signature-Applied — zwei
-  unabhängige Visual-States) muss im Workspace erhalten bleiben.
-- **NUANCEN 6** (Picker/Workspace = zwei Page-States, KEIN Modal,
-  kein Split) — Workspace ist volle Page hinter State-Wechsel.
-- **NUANCEN 7** (Preview-Strip full-width, nicht in Canvas-Spalte) —
-  wurde in alten Mockups falsch gemacht, darf nicht zurückkommen.
-- **NUANCEN 11 neu** (Editorial statt Hero) bleibt konsistent — der
-  Workspace-Header wird nicht wieder zum Splash-Bereich.
-- **PRODUCT_STRATEGY_V1 §1.1 Live-Link** (Signature per ID-Referenz,
-  nicht Snapshot) — Signature-Edits im LookLab wirken im Workspace
-  automatisch.
-- **Grid Engine (Slices 1-8, 42 Tests)** bleibt unberührt. Das ist
-  Konzept-Session, kein Code.
-
-**Bitte lies in dieser Reihenfolge, BEVOR du mit mir ins Gespräch
-gehst:**
-1. `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md` — was gerade
-   fertig wurde
-2. `docs/visual-overhaul/PICKER_BUILD_STATUS.md` — Picker-Phase als
-   Blueprint für Planungs-Arbeit
-3. `docs/visual-overhaul/PICKER_SPEC_V1.md` — Format-Vorlage für
-   die Spec die du schreiben wirst
-4. `docs/visual-overhaul/PRODUCT_STRATEGY_V1.md` — Datenmodell +
-   Save-Mechanik + §7 Projekt-Kontext
-5. `docs/visual-overhaul/NUANCEN.md` — besonders 1, 2, 6, 7, 8, 11
-6. `docs/visual-overhaul/OPEN_DECISIONS.md` — #4, #5, #7, #9 sind
-   potenziell relevant. #7 wird hier entschieden.
-7. `docs/visual-overhaul/ROADMAP.md` — aktive Phase
-8. `CLAUDE.md` — besonders den Hinweis zum Dim Advisory und
-   Panel-Role-Customization
-9. `MODULE_AND_CASE_CATALOG.md` — welche Panel-Rollen existieren,
-   welche Module gibt's
-10. `src/components/gridcreator/` — aktueller Code-Stand
-    (Picker fertig, Workspace ist Placeholder)
-11. `src/styles/tokens.css` — Layout-Tokens für Workspace
-    (context-width, inspector-width, preview-height, sigbar-height,
-    outputbar-height)
-12. `docs/visual-overhaul/mockup_03_gridcreator_workspace.html` —
-    historischer Mockup, NUANCEN gewinnt bei Konflikten
+**Pflicht-Lektüre (in dieser Reihenfolge):**
+1. `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` — primäre Quelle, 22
+   Sektionen + Definition of Done
+2. `docs/visual-overhaul/HANDOFF_WORKSPACE_TO_CODE.md` — Umsetzungs-
+   Schritte, Quick-Lookup
+3. `docs/visual-overhaul/NUANCEN.md` — Anti-Drift (1, 2, 6, 7, 8, 13)
+4. `docs/visual-overhaul/OPEN_DECISIONS.md` — #4, #5, #10 potenziell
+   relevant (alle offen)
+5. `docs/visual-overhaul/PRODUCT_STRATEGY_V1.md` — Datenmodell + Save-
+   Mechanik + §7 Projekt-Kontext
+6. `MODULE_AND_CASE_CATALOG.md` — 10 Cases + 13 Module +
+   Kompatibilitäts-Matrix (verbindlich)
+7. `src/components/gridcreator/` — aktueller Stand (Picker fertig,
+   Workspace-Placeholder ersetzbar)
+8. `src/styles/tokens.css` — alle Workspace-Tokens bereits vorhanden
+9. `src/hooks/useOverflowDetection.js` — wiederverwendbar für Preview-
+   Strip + Signatures-Bar
+10. `docs/visual-overhaul/PICKER_BUILD_STATUS.md` — Pattern-Referenz
+    (ThumbPattern wiederverwendbar)
+11. `docs/visual-overhaul/LANDING_REDESIGN_STATUS.md` — Continue-
+    Scroll-Pattern, Specificity-Pattern, Überlauf-Handling
 
 **Nach dem Lesen:**
-- Bestätige: Docs gelesen
-- Fasse in 3-5 Sätzen zusammen: aktueller Stand + 8 Klärungspunkte
-  (du kannst die Liste oben übernehmen) + wo du Konflikte mit
-  NUANCEN erwartest
+- Bestätige: Docs gelesen, Spec verstanden
+- Schlage konkreten Bau-Plan vor (in welcher Reihenfolge baust du die
+  Komponenten? Welche Daten-Stubs legst du zuerst an?)
 - Warte auf mein Go
-- Dann gehen wir die Klärungspunkte durch — du stellst Optionen mit
-  Trade-offs, ich entscheide, wir protokollieren
+- Dann bau Komponente für Komponente, File pro File
 
 **Was am Ende dieser Session vorliegen muss:**
-1. `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` — vollständige Bau-
-   Anleitung für den Workspace (analog `PICKER_SPEC_V1.md`)
-2. `docs/visual-overhaul/HANDOFF_WORKSPACE_TO_CODE.md` — kompakte
-   Übergabe an den Code-Chat (analog `HANDOFF_PICKER_TO_CODE.md`)
-3. Updates in `OPEN_DECISIONS.md` (#7 entschieden, ggf. weitere
-   neu)
-4. ROADMAP aktualisiert (Workspace-Planung `[→]` → `[✓]`,
-   Workspace-Bau `[ ]` → `[→]`)
-5. Neuer STARTPROMPT für den Workspace-Bau-Chat
-6. Grid Engine (42 Tests) bleibt grün — kein Code angefasst
+1. Funktionaler Grid Creator Workspace gemäß `WORKSPACE_SPEC_V1.md`
+   §22 Definition of Done (19 Check-Punkte)
+2. `WORKSPACE_BUILD_STATUS.md` analog `PICKER_BUILD_STATUS.md` +
+   `LANDING_REDESIGN_STATUS.md` — was wurde gebaut, was ist bekannt
+   offen, welche TODO-Marker stehen
+3. ROADMAP aktualisiert (Workspace-Bau `[→]` → `[✓]`, nächste Phase
+   `[→]`)
+4. STARTPROMPT überschreiben für Nachfolger-Chat (Jonas entscheidet:
+   Token-Store Stufe 1 / LookLab Visual-Update / LIB-Tab / anderes)
+5. Grid Engine (42 Tests) bleibt grün — kein Code an `src/lib/`
+   außer neuer `src/lib/dimAdvisory.js` (Port von getDimAdvice)
+
+**Daten-Stubs (in v1 ausreichend):**
+- `src/data/signatures.stub.json` — 3-5 Dummy-Signatures (Name,
+  Swatch-Color, Tagline) bis Token-Store Stufe 1 gebaut ist
+- `src/data/projects.stub.json` — analog zu Continue-Band-Dummies
+- `src/data/random/` — Field-Type-Pools (Legacy konsolidieren, Lücken
+  füllen pragmatisch)
+- `src/config/modules.config.json` — aus `MODULE_AND_CASE_CATALOG.md`
+  extrahieren (id, displayName, category, hasGlobalSettings,
+  hasPerPanelSettings, compatibility-Array)
+
+**TODO-Marker-Convention** (Code-Markers, grep-bar):
+- `TODO(looklab-jump)` — Body-Klick auf Applied-Signature-Card (Spec
+  §8.5)
+- `TODO(token-store)` — Stub-Ersetzung wenn Token-Store Stufe 1 live
+- `TODO(projects-store)` — Stub-Ersetzung wenn Projekt-Store live
+- `TODO(workspace-store)` — falls Grid-State später persistiert werden
+  soll (v1: session-lokal)
+- `TODO(routing)` — falls Back-to-Picker auf Router umgestellt wird
 
 **Wichtig:**
-- **Keine Code-Änderungen.** Du liest, fragst, schreibst Specs.
-- Keine Placeholder-Komponenten anlegen. Keine `WIP`-Files.
-- Konzeptionelle Entscheidungen ohne mein OK werden nicht fixiert.
-- Bei Unklarheiten: fragen, nicht raten.
-- Wenn ein Mockup (aktuell `mockup_03_gridcreator_workspace.html`)
-  gegen NUANCEN steht: NUANCEN gewinnt.
+- Bei Unklarheiten: fragen, nicht raten
+- Komplette Files liefern, keine Diffs
+- Specificity-Pattern konsequent: `:global(.sg2-shell) .xyz` für alle
+  padding/margin innerhalb Shell
+- Keine neuen Tokens ohne Jonas-OK
+- Keine Experimente — Spec gewinnt
+- Bei Konflikt Mockup vs. Spec: Spec gewinnt
+- Bei Konflikt Spec vs. NUANCEN: NUANCEN gewinnt (Spec ist kompatibel
+  gebaut, aber bei versehentlicher Abweichung korrigiert NUANCEN)
+- Grid Engine niemals anfassen (außer neuer dimAdvisory-Port)
 
-Bereit? Schritt 0: Branch-Wechsel + Repo-Docs lesen + Zusammenfassung.
-Dann gehen wir Klärungspunkte durch.
+Bereit? Schritt 0: Branch-Wechsel + Pflicht-Lektüre + Bau-Plan vorschlagen.
+Dann baue ich Komponente für Komponente.
 ```
