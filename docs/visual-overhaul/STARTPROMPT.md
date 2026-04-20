@@ -12,11 +12,10 @@ den **aktuellen Arbeits-Branch** an zwei Stellen ein:
 1. Im Meta-Feld "Arbeits-Branch" oben
 2. In der "ALLERERSTE AKTION — BRANCH-WECHSEL"-Sektion im Prompt-Body
 
-**Aktuell für:** Workspace-Bau **Part B — Workspace-Layout + 3 Spalten**
-(Code-Session, 2 von 3 Parts). Part A (Foundation + Infra) ist fertig
-gemerged auf den Branch. Part B baut die Workspace-Komponente selbst:
-Parent + Case Context + Canvas + Inspector. Part C macht danach Bars
-+ Save-Popup + Integration + Docs.
+**Aktuell für:** Workspace-Bau **Part C — Bars + Save-Popup +
+Integration + Docs** (Code-Session, 3 von 3 Parts). Part A (Foundation
++ Infra) und Part B (Workspace-Parent + 3 Spalten) sind fertig
+committed auf dem Branch. Part C schließt den Workspace-Bau ab.
 
 **Arbeits-Branch:** `claude/seengrid-visual-overhaul-6RK4n`
 
@@ -27,10 +26,10 @@ unten in ein neues Chat-Fenster kopieren. Mehr nicht.
 
 ```
 Hi. Ich bin Jonas, Solo AI-Filmmaker und Nicht-Coder. Der Workspace-
-Bau wurde in **drei Staffel-Chats** gesplittet. Du bist **Part B —
-Workspace-Layout + 3 Spalten**, der zweite von drei Bau-Chats. Part A
-(Foundation + Infra) ist fertig und liegt committed auf dem Branch.
-Part C macht danach Bars + Save-Popup + Integration + Docs.
+Bau wurde in **drei Staffel-Chats** gesplittet. Du bist **Part C —
+Bars + Save-Popup + Integration + Docs**, der letzte von drei Bau-
+Chats. Part A (Foundation + Infra) und Part B (Workspace-Layout + 3
+Spalten) sind fertig und liegen committed auf dem Branch.
 
 Das ist eine **Bau-Session, keine Konzept-Session.** Code-Output.
 Keine neuen Produkt-/Design-Entscheidungen — alles steht in der Spec.
@@ -45,199 +44,241 @@ Die Arbeit liegt auf dem Feature-Branch
     git pull
 
 Verifikation: `ls docs/visual-overhaul/` muss u.a. zeigen:
-WORKSPACE_SPEC_V1.md, WORKSPACE_BUILD_STATUS_PART_A.md, NUANCEN.md.
+WORKSPACE_SPEC_V1.md, WORKSPACE_BUILD_STATUS_PART_A.md,
+WORKSPACE_BUILD_STATUS_PART_B.md, NUANCEN.md.
 
 Die CLAUDE.md-Regel "direkt auf main" ist überholt — stammt aus der
 Engine-Phase. Für Visual-Overhaul gilt der Feature-Branch.
 
 ---
 
-**Deine Rolle — Part B von 3:**
+**Deine Rolle — Part C von 3:**
 
-Du baust die **Workspace-Komponente selbst** + die **drei Spalten**.
-Bars (Module-Toolbar Aktionen, Preview-Strip, Signatures-Bar, Output-
-Bar), Save-Popup, Random/Reset-Confirm, ToastProvider-Verkabelung
-und Docs-Update macht Part C.
+Du schließt den Workspace-Bau ab: Module-Toolbar-Inhalt, Preview-
+Strip, Signatures-Bar, Output-Bar, Save-as-Preset-Popup,
+ToastProvider-Verkabelung in App.jsx, presetStore-Erweiterung, Docs-
+Update. Danach ist der Workspace produktiv nutzbar.
 
-**Scope Part B (Stufen 4-7 aus dem Gesamtplan):**
+**Scope Part C (Stufen 8-14 aus dem Gesamtplan):**
 
-Stufe 4 — Workspace-Parent:
-1. `src/components/gridcreator/workspace/Workspace.jsx` +
-   `Workspace.module.css` — 6-Zonen-Grid-CSS (Header / Toolbar /
-   3-Spalten / Preview / Sigs / Output). Höhen aus tokens.css
-   (`--sg2-toolbar-height`, `--sg2-preview-height`, `--sg2-sigbar-
-   height`, `--sg2-outputbar-height`). Die Bar-Zonen für Toolbar /
-   Preview / Sigs / Output sind in Part B nur als Platzhalter-Divs
-   mit korrekter Höhe + Border angelegt — Inhalt füllt Part C.
-2. **`WorkspacePlaceholder.jsx` ersetzen** im `GridCreator.jsx`-Mode-
-   Switch: `mode === 'workspace'` rendert `Workspace` umwrappt mit
-   `WorkspaceStoreProvider` (initial aus selection ableiten:
-   `caseId`, `defaultRoles`) und `WorkspaceHeaderProvider`
-   (`onBackToPicker`, `currentProjectId=null` v1).
-3. **`WorkspacePlaceholder.jsx` + CSS löschen** sobald der Switch
-   sauber rendert.
+Stufe 8 — Module-Toolbar (oberhalb der 3 Spalten):
+1. `src/components/gridcreator/workspace/ModuleToolbar.jsx` +
+   `ModuleToolbar.module.css` — Spec §3. Linke Seite: **Modul-Chips**
+   datengetrieben aus `modules.config.json` (nur Module mit
+   `compatibility.includes(caseId)` sind sichtbar; aktive Module
+   haben Teal-Border + Checkmark; Klick toggled `activeModules`-Array
+   im Store). Rechte Seite: **Random**-Button + **Reset**-Button.
+   - **Random** → ConfirmDialog ("alle Modul-Settings werden zufällig
+     überschrieben, custom_notes bleibt") → bei OK:
+     `actions.randomizeAll()`. Der Store-Action existiert in Part A.
+     Pools kommen aus `src/data/random/index.js` (`getRandomPool`,
+     `pickRandom`).
+   - **Reset** → ConfirmDialog ("alle Settings zurück auf Case-
+     Defaults, Panel-Overrides werden gelöscht, custom_notes
+     geleert") → bei OK: `actions.resetAllToCaseDefaults()`.
+   - ConfirmDialog-Component liegt in `src/components/ui/
+     ConfirmDialog.jsx` (Part A).
 
-Stufe 5 — Case Context Sidebar (260px, links):
-4. `src/components/gridcreator/workspace/CaseContext.jsx` +
-   `CaseContext.module.css` — alle 6 Sektionen aus Spec §4:
-   - **CASE** — Read-only Readout aus `cases.config.json` (kein
-     Edit; Spec §4.2 + §15.3 Case-Wechsel-Block).
-   - **REFERENCE STATE** — 2 Radio-Optionen, nur sichtbar wenn Case
-     Normalizer-kompatibel ist (character-Cases).
-   - **DIMENSIONS** — 6×4 Klick-Matrix mit **Hover-Highlight bis zur
-     Hover-Zelle** (Google-Docs-Pattern), Display-Line oben (`6 × 4 ·
-     24 panels`), Dim-Advisory darunter (2 Zeilen @2K + @4K) mit
-     Quality-Tag rechts. Logik aus `src/lib/dimAdvisory.js`. Cases
-     mit `VALID_PANEL_COUNTS` (z.B. angle_study `[3,4,6,8]`) →
-     ungültige Zellen disabled mit Tooltip.
-   - **PANEL ORIENTATION** — Segmented-Control (vertical / horizontal
-     / square).
-   - **FORBIDDEN ELEMENTS** — Chip-List oder Textarea, ein Eintrag pro
-     Zeile, `[+ add forbidden]`-Button.
-   - **Modul-globale Settings** — datengetrieben aus
-     `modules.config.json` (`hasGlobalSettings: true` + Modul aktiv).
-     v1: nur `environment_mode` + `style_overlay` voll umgesetzt,
-     Rest als Mini-Section (Modul-Name + Mono-Hint).
+Stufe 9 — Preview-Strip (full-width, unter den 3 Spalten):
+2. `src/components/gridcreator/workspace/PreviewStrip.jsx` +
+   `PreviewStrip.module.css` — Spec §7. Horizontale Panel-Vorschau
+   mit Mini-Silhouetten (aus Canvas-SVG-Paths, kleinere Variante),
+   Panel-Nummer, Rolle-Label. Klick auf Mini-Panel →
+   `actions.selectPanel(id)`. Aktives Panel = Teal-Border.
+   - **Overflow-Detection** via `useOverflowDetection`-Hook
+     (`src/hooks/useOverflowDetection.js` — Part A). Wenn zu viele
+     Panels nicht in die Strip-Breite passen: horizontal scrollbar
+     mit custom scrollbar-Style (NUANCEN 11: Scrollbar nur wenn
+     overflow).
+   - Höhe aus `--sg2-preview-height`.
 
-Stufe 6 — Canvas (Mitte, flex):
-5. `src/components/gridcreator/workspace/Canvas.jsx` +
-   `Canvas.module.css` — zentrierte SVG-Panel-Darstellung. Grid-
-   Anordnung aus `gridDims`, 12px Gap (NUANCEN 13). State-Visuals
-   (Spec §5.3 + NUANCEN 2):
-   - Default: neutrale Border, Silhouette `--sg2-text-tertiary`.
-   - Hover: Teal-Outline subtle.
-   - Selected: Teal-Border strong.
-   - Signature-Applied: Gold-Border-Tint + Gold-Glow ums ganze Panel.
-   - Override-vorhanden: Gold-Dot oben rechts (8×8px). Triggert wenn
-     `panel.role !== strategyDefault` ODER `Object.keys(overrides) >
-     0` ODER `customNotes !== ''` ODER `signatureId !== null`.
-   - **Selected + Signature-Applied gleichzeitig:** Teal-Border
-     gewinnt, Gold-Glow bleibt darunter sichtbar (NUANCEN 2 §14.3).
-   Klick auf Panel → `actions.selectPanel(panelId)`. Klick außerhalb
-   eines Panels (im Canvas-Leerraum) → `actions.selectPanel(null)`.
-   Beim Workspace-Start ist Panel 1 auto-selected (initial state in
-   `workspaceStore.js` setzt `selectedPanelId = 'panel-1'`, du musst
-   nichts tun).
+Stufe 10 — Signatures-Bar (full-width, unter Preview-Strip):
+3. `src/components/gridcreator/workspace/SignaturesBar.jsx` +
+   `SignaturesBar.module.css` — Spec §8. Linke Seite: **Gold-Label
+   `SIGNATURES`** (Mono, Spacing, Gold-Farbe). Danach: applied-
+   Signature-Cards für jede angewandte Signature (aus
+   `signaturesStub.json` filtern nach `panel.signatureId !== null`).
+   Jede Card: Swatch + Name + Panel-Reference + Detach-Link.
+   - **Detach-Link** → `actions.detachSignatureFromPanel(panelId)`.
+   - Rechte Seite: **`+ apply signature`** Button (stub für v1 —
+     TODO(signature-picker): eigener Popup-Flow). Klick zeigt Toast
+     "signature picker coming soon".
+   - Leerzustand: nur das `SIGNATURES`-Label + `+ apply`-Button,
+     keine Cards.
+   - Höhe aus `--sg2-sigbar-height`.
 
-Stufe 7 — Inspector + Generic Field Renderer (320px, rechts):
-6. `src/components/gridcreator/workspace/Inspector.jsx` +
-   `Inspector.module.css` — Sektionen-Stack (Spec §6):
-   - Header: `PANEL N` (+ optional Rollen-Hint) + `×` Close-Button
-     → `actions.selectPanel(null)`.
-   - **ROLE** — Dropdown aus Case-Schema-Optionen (strikt). Override-
-     Badge `overriding global` + `↶`-Reset wenn !== strategyDefault.
-   - **Per-Panel-Overrides** — datengetrieben aus aktiven Modulen mit
-     `hasPerPanelSettings: true`. Field-Type-Renderer (siehe unten).
-   - **SIGNATURE** — Card wenn `panel.signatureId !== null`. Gold-
-     Border, Detach-Link. Body-Klick: `TODO(looklab-jump)` Marker.
-   - **CUSTOM NOTES** — Textarea, gefüllter Wert triggert Override-
-     Dot.
-   - **Reset-Footer** — `[ reset panel to case-default ]` →
-     `actions.resetPanel(panelId)`.
-   - **Empty-State** wenn `selectedPanelId === null`: zentrierter
-     Mono-Text `no panel selected — click a panel to edit`.
-7. `src/components/gridcreator/workspace/FieldRenderer.jsx` (oder in
-   Inspector inline) — Generic Renderer für 4 Field-Types: `role`
-   (strikt-Dropdown), `select` (frei-Dropdown), `text` (Single-line),
-   `textarea` (Multi-line). Pro Field aus Schema: `id`, `type`,
-   `label`, `options?`, `default?`, `global_or_panel`. Architektur-
-   Klausel Spec §13: keine hardcoded case-specific Inspector-Code.
+Stufe 11 — Output-Bar (full-width, Footer):
+4. `src/components/gridcreator/workspace/OutputBar.jsx` +
+   `OutputBar.module.css` — Spec §9. Drei Zonen:
+   - **Links:** `TOKEN-COUNT: ~1234` (approximiert via
+     `src/lib/tokenCount.js` — Part A: `countTokens(str)`). Warnung
+     rot wenn > 8000.
+   - **Mitte:** **Dim-Warning** wenn `getDimAdvice(rows, cols)`
+     `isWarningQuality(q2K) === true` → Mono-Text `LOW / TINY @ 2K —
+     not startframe-ready` in Warning-Farbe.
+   - **Rechts:** **Save**-Button (öffnet Save-Popup) + **Copy**-
+     Button (kopiert Compile-Output JSON via `navigator.clipboard.
+     writeText`, zeigt Toast "copied").
+   - Compile-Call: `compileWorkspace(state)` aus
+     `src/lib/compiler/workspaceCompile.js` (Part A-Adapter auf
+     Slices 1-8 Engine). Liefert Prompt-JSON.
+   - Höhe aus `--sg2-outputbar-height`.
 
-**Vorab-Entscheidungen aus Part A (NICHT mehr fragen):**
+Stufe 12 — Save-as-Preset-Popup:
+5. `src/components/gridcreator/workspace/SavePresetDialog.jsx` +
+   `SavePresetDialog.module.css` — Spec §10. Modal mit:
+   - Input: **Preset-Name** (required, default: `{case-displayname}
+     · {date}`).
+   - Input: **Notes** (optional, Textarea).
+   - Preview-Chip: `CASE: {caseDisplayName}` (read-only).
+   - **Save**-Button → `presetActions.saveWorkspaceAsPreset({name,
+     notes, workspaceState})` aus `src/lib/presetStore.js` (siehe
+     Stufe 13). Toast "preset saved". Popup schließt.
+   - **Cancel**-Button → schließt ohne Save.
+   - Lokaler Component-State für Form, kein Store-Wire nötig.
+   - Trigger: OutputBar Save-Button (Stufe 11).
 
-1. WorkspaceStore = React Context + useReducer (in
-   `src/lib/workspaceStore.js`, mit `React.createElement` statt JSX
-   damit `.js`-Endung passt). Provider exportiert hooks. State-Shape
-   + Actions siehe `WORKSPACE_BUILD_STATUS_PART_A.md` Anschluss-Punkte.
-2. WorkspaceHeaderProvider wird in `GridCreator.jsx` um die
-   Workspace-Komponente gewrappt (Part B macht das in Stufe 4 Punkt
-   2). ShellHeader liest den Context bereits, du musst dort nichts
-   ändern.
-3. Modul-Catalog in `src/config/modules.config.json` (13 Module mit
-   `compatibility`-Array). Pre-Aktivierung: `compatibility.includes(
-   caseId)`. Toolbar-Inhalt selbst ist Part C.
-4. Random-Pool-API aus `src/data/random/index.js` (`getRandomPool`,
-   `pickRandom`). Part B braucht das nicht direkt — Random-Button
-   sitzt in der Toolbar (Part C).
-5. Dim-Advisory aus `src/lib/dimAdvisory.js` (`getDimAdvice`,
-   `QUALITY_LABELS`, `isWarningQuality`). UPPERCASE-Tags HIRES /
-   STANDARD / LOW / TINY.
-6. Toast/ConfirmDialog aus `src/components/ui/`. Part B braucht
-   ConfirmDialog **nicht** (das ist Part C: Random-Confirm + Reset-
-   Confirm). Toast braucht Part B nur für Optional Empty-State-
-   Feedback (z.B. Klick auf disabled Dim-Zelle) — kann auch ohne.
-7. Lieferung in Gruppen ok (nicht strikt 1-File-pro-Antwort).
+Stufe 13 — presetStore-Erweiterung:
+6. `src/lib/presetStore.js` erweitern (Part A hat Grundstruktur):
+   - `saveWorkspaceAsPreset({name, notes, workspaceState})` — fügt
+     Preset in `userPresets`-Array, speichert in localStorage unter
+     `sg2.userPresets`.
+   - `loadPreset(id)` — liefert gespeichertes Preset.
+   - `deletePreset(id)` — löscht aus Array.
+   - `listUserPresets()` — Array aller User-Presets für Picker
+     "YOUR PRESETS".
+   - Schema: `{id, name, notes, caseId, createdAt, workspaceState}`.
+     **workspaceState** = komplettes State-Snapshot (inkl.
+     activeModules, gridDims, panels-Array, etc.). TODO(preset-
+     hydration): Part B Picker lädt aktuell nur `caseId` beim Preset-
+     Click — Part C muss den Picker-Flow erweitern, damit ein User-
+     Preset den **vollen** workspaceState wiederherstellt (via neuer
+     Action `loadWorkspaceFromPreset(preset)` im workspaceStore).
 
-**Anti-Drift (kritisch — nur die für Part B relevanten NUANCEN):**
+Stufe 14 — ToastProvider-Verkabelung + Integration-Polish:
+7. `src/App.jsx` — `<ToastProvider>` um die ganze App wrappen (Part A
+   hat Provider + useToast-Hook angelegt, aber nicht verkabelt).
+   Smoke-Test: Toast in Copy-Button zeigt sich.
+8. **Bekannte offene Punkte aus Part B beheben:**
+   - **Workspace-State-bei-Rail-Wechsel** — wenn User im Workspace
+     ist und oben einen anderen Tab (Prompt Builder, MJ, etc.)
+     klickt, dann zurück zu Grid Creator: aktuell geht State
+     verloren. Lösung: Store bleibt im GridCreator-Subtree gemounted
+     (Provider nicht bei Rail-Switch unmounten). Falls das
+     architektonisch nicht billig ist: TODO(workspace-persist)
+     markieren und mit Jonas klären.
+   - **SET_DIMS new panels get null role** — wenn User Dimensions
+     ändert, werden neue Panels mit `role: null` angelegt. Check:
+     `panelRoleStrategy` sollte beim Resize die Default-Rollen
+     setzen. Fix im `SET_DIMS`-Reducer in `workspaceStore.js`.
+9. **Docs:**
+   - `docs/visual-overhaul/WORKSPACE_BUILD_STATUS_PART_C.md`
+     anlegen (analog A+B).
+   - `ROADMAP.md`: Workspace-Bau von `[→]` auf `[✓]` umstellen.
+   - `CLAUDE.md` "Aktueller Stand"-Abschnitt aktualisieren.
 
-- **NUANCEN 2** (Override-Dot UND Signature-Border-Tint koexistieren
-  am selben Panel). Pflicht im Canvas-Rendering.
-- **NUANCEN 6** (Picker + Workspace = zwei Page-States, kein Modal,
-  kein Split). Workspace ist Volldarstellung.
+**Vorab-Entscheidungen aus Part A + B (NICHT mehr fragen):**
+
+1. Store-API (hooks, actions) siehe `WORKSPACE_BUILD_STATUS_PART_A
+   .md`.
+2. Alle Bars + Toolbar sind strikt **full-width** unter der 3-Zone-
+   Row (NUANCEN 7). Nicht in Canvas-Spalte verschachteln.
+3. CSS-Modules mit `:global(.sg2-shell)` Specificity-Pattern (Part B-
+   Konvention).
+4. Module-Catalog + Random-Pools liegen schon in `src/config/` +
+   `src/data/random/` (Part A).
+5. `compileWorkspace(state)` ist der Adapter auf Slices 1-8 Engine.
+   Wenn ein aktiver Case kein Schema hat (9/10 Cases in v1), liefert
+   der Compiler Fallback-JSON mit `schema_version`-Warnung. Echte
+   Schema-Erweiterung pro Case kommt later (TODO(panel-fields-
+   schema-{caseId})-Marker sind in Part B gepflanzt).
+6. FROM SCRATCH im Picker ist in v1 **disabled** (OPEN_DECISIONS
+   #11). Part C muss da nichts ändern.
+7. YOUR PRESETS v1 lädt aktuell nur `caseId` — Part C muss den Flow
+   erweitern (siehe Stufe 13 TODO(preset-hydration)).
+8. Lieferung in Gruppen ok (nicht strikt 1-File-pro-Antwort).
+
+**Anti-Drift (kritisch — nur die für Part C relevanten NUANCEN):**
+
+- **NUANCEN 2** (Override-Dot UND Signature-Border-Tint koexistieren).
+  In Part B umgesetzt — Part C muss nichts ändern.
 - **NUANCEN 7** (Preview-Strip + Sigs-Bar + Output-Bar strikt full-
-  width unter der 3-Spalten-Row). Auch wenn du in Part B nur
-  Platzhalter baust — strikt full-width, niemals in Canvas-Spalte.
+  width). Hier echter Content — nicht einrücken.
 - **NUANCEN 8** (from scratch — alten GridOperator nicht
-  reaktivieren). Nur die Engine-Daten + Slices 1-8 dürfen
-  konsumiert werden, nicht die alte UI.
-- **NUANCEN 13** (12px Gap zwischen Panels im Canvas — empirisch
-  validiert in NanoBanana).
+  reaktivieren, auch nicht für Compile-Logik). Nur Engine Slices 1-8.
+- **NUANCEN 11** (Scrollbars nur bei echtem Overflow, nie permanent).
+  PreviewStrip ist der Hauptfall.
+- **NUANCEN 13** (12px Gap zwischen Panels — auch in Preview-Strip
+  Mini-Panels konsistent halten, wenn auch kleiner).
 - **Grid Engine (42 Tests, Slices 1-8) bleibt unberührt.**
 
 **Pflicht-Lektüre (schlank gehalten für Context-Budget):**
 
-1. `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` — **§2** (Header), **§3**
-   (Toolbar — nur Layout-Stelle für Platzhalter), **§4** (Case
-   Context vollständig), **§5** (Canvas vollständig), **§6**
-   (Inspector vollständig), **§12** (Dim-Advisory), **§13** (Panel-
-   Fields-Schema), **§14** (State-Signale), **§15** (Store-Modell —
-   Refresh).
+1. `docs/visual-overhaul/WORKSPACE_SPEC_V1.md` — **§3** (Toolbar
+   vollständig), **§7** (Preview-Strip), **§8** (Signatures-Bar),
+   **§9** (Output-Bar), **§10** (Save-Popup), **§11** (Toast),
+   **§12** (Dim-Advisory Refresh), **§15** (Store-Modell).
 2. `docs/visual-overhaul/WORKSPACE_BUILD_STATUS_PART_A.md` —
-   **Anschluss-Punkte** (Hooks, Actions, State-Shape) sind dein
-   API-Vertrag mit Part A.
-3. `docs/visual-overhaul/NUANCEN.md` — **nur 2, 6, 7, 8, 13** lesen.
-4. `MODULE_AND_CASE_CATALOG.md` — Kompatibilitäts-Matrix nochmal für
-   Modul-Pre-Aktivierung + `panel_fields` pro Case (für Inspector-
-   Render).
-5. `src/styles/tokens.css` — Layout-Tokens schon vorhanden, nichts
-   ergänzen ohne Jonas-OK.
-6. `src/lib/cases/characterAngleStudy/` (Schema + Defaults +
-   panelRoleStrategy) — der einzige Case mit echtem Schema. Andere
-   Cases haben aktuell nur `cases.config.json`-Eintrag, kein voll-
-   ausgebautes `panel_fields`-Schema. v1-Pragma: für nicht-
-   ausgebaute Cases nutzt der Inspector ein Fallback (z.B.
-   single-textarea pro Panel). Echte Schema-Erweiterung kommt later.
+   **Anschluss-Punkte** (Hooks, Actions, State-Shape, ToastProvider,
+   tokenCount, compileWorkspace).
+3. `docs/visual-overhaul/WORKSPACE_BUILD_STATUS_PART_B.md` — was
+   Part B gebaut hat, welche TODO-Marker gepflanzt wurden, welche
+   Anschluss-Punkte Part C bedient.
+4. `docs/visual-overhaul/NUANCEN.md` — **nur 7, 8, 11, 13** lesen.
+5. `docs/visual-overhaul/OPEN_DECISIONS.md` — #11 (FROM SCRATCH
+   disabled) und #12+ (falls Part B was ergänzt hat).
+6. `src/lib/compiler/` — Slices 1-8 Engine, NICHT anfassen. Nur den
+   `workspaceCompile`-Adapter (Part A) nutzen.
 
 **Nach dem Lesen:**
-- Bestätige: Docs gelesen, Scope Part B klar
-- Schlage konkrete Bau-Reihenfolge innerhalb Part B vor
+- Bestätige: Docs gelesen, Scope Part C klar, Store-API-Vertrag
+  klar
+- Schlage konkrete Bau-Reihenfolge innerhalb Part C vor (meine
+  Empfehlung: Toolbar → Preview-Strip → Sigs-Bar → Output-Bar →
+  Save-Popup → presetStore → ToastProvider-Wire → offene Punkte aus
+  Part B → Docs)
 - Warte auf mein Go
-- Dann bau gruppiert
+- Dann bau gruppiert, mit manuellem Browser-Test am Ende
 
 **Was am Ende dieser Session vorliegen muss:**
 
-1. Alle Files aus Scope Part B lauffähig (Workspace rendert nach
-   Picker-Klick, alle 6 Stack-Zonen sichtbar, Case Context + Canvas
-   + Inspector funktional, Toolbar/Preview/Sigs/Output als
-   Platzhalter mit korrekter Höhe).
-2. `docs/visual-overhaul/WORKSPACE_BUILD_STATUS_PART_B.md` neu
-   anlegen (analog Part A: was wurde gebaut, bekannt offen, TODO-
-   Marker, Anschluss-Punkte für Part C).
-3. **STARTPROMPT.md überschreiben** für Part C — Scope: Module-
-   Toolbar-Inhalt + Random/Reset-Buttons mit Confirm, Preview-Strip
-   (mit `useOverflowDetection`), Signatures-Bar (Gold-Label, Applied-
-   Card, Detach), Output-Bar (Copy + Save + Token-Count + Dim-
-   Warning), Save-as-Preset-Popup, ToastProvider-Verkabelung in
-   App.jsx, presetStore-Erweiterung.
-4. ROADMAP nicht anfassen — Workspace-Bau bleibt `[→]` AKTIV bis
-   Part C fertig ist.
-5. Commit + Push auf `claude/seengrid-visual-overhaul-6RK4n`.
+1. Alle Files aus Scope Part C lauffähig. Workspace ist voll
+   funktional: Toolbar toggled Module, Random/Reset mit Confirm,
+   Preview-Strip zeigt alle Panels + scrolled bei Overflow,
+   Signatures-Bar zeigt applied Signatures + Detach-Flow, Output-
+   Bar zeigt Token-Count + Dim-Warning + Copy + Save, Save-Popup
+   speichert Preset in localStorage.
+2. `App.jsx` hat ToastProvider eingebunden, Toasts funktionieren in
+   allen Workspace-Buttons.
+3. Offene Punkte aus Part B (Workspace-State-bei-Rail-Wechsel,
+   SET_DIMS-null-role) adressiert oder sauber als TODO mit
+   Begründung markiert.
+4. `docs/visual-overhaul/WORKSPACE_BUILD_STATUS_PART_C.md` angelegt.
+5. `ROADMAP.md`: Workspace-Bau `[→]` → `[✓]`.
+6. `CLAUDE.md` "Aktueller Stand" aktualisiert.
+7. **STARTPROMPT.md überschreiben** — nächster Scope: Prompt Hub
+   Redesign ODER UX-Polish-Pass auf Grid Creator (je nachdem was
+   Jonas priorisiert — Frage stellen am Ende der Session, nicht
+   selbst entscheiden).
+8. **Manueller Browser-Test vor Commit** (Dev-Server starten,
+   durchklicken: Module togglen → Prompt aktualisiert, Random →
+   Confirm → random values appear, Reset → Confirm → defaults
+   return, Preview-Strip click selects panel, Signatures detach
+   works, Copy button → clipboard + toast, Save button → popup →
+   preset in localStorage). Honest flag wenn CLI-Environment keinen
+   Browser erlaubt.
+9. Commit + Push auf `claude/seengrid-visual-overhaul-6RK4n`.
 
-**TODO-Marker-Convention:**
-- `TODO(looklab-jump)` — Inspector-Signature-Card Body-Klick (Part B
-  pflanzt diesen Marker)
+**TODO-Marker-Convention (aus Part A + B + neu):**
+- `TODO(looklab-jump)` — Inspector Signature-Card body click (Part B)
+- `TODO(panel-fields-schema-{caseId})` — 9 Cases ohne echtes Schema
+  (Part B)
+- `TODO(preset-hydration)` — Picker lädt aktuell nur caseId beim
+  Preset-Click (Part B → Part C erweitert)
+- `TODO(signature-picker)` — Apply-Signature-Popup v2 (Part C pflanzt)
+- `TODO(workspace-persist)` — falls Rail-Wechsel-Persistenz nicht
+  billig ist (Part C-Entscheidung)
 - `TODO(token-store)` — Stub-Ersetzung
-- `TODO(workspace-store)` — Persistent-Switch wenn Session-Recovery
 - `TODO(routing)` — Back-to-Picker auf Router umstellen
 
 **Mein Arbeitsstil:**
@@ -250,8 +291,8 @@ Stufe 7 — Inspector + Generic Field Renderer (320px, rechts):
 - Keine neuen Tokens ohne Jonas-OK
 - Keine Experimente — Spec gewinnt
 - Grid Engine niemals anfassen
-- Part-C-Scope **nicht vorab-bauen** — Context-Budget schonen
+- Post-Workspace-Scope nicht vorab-bauen — Context-Budget schonen
 
 Bereit? Schritt 0: Branch-Wechsel + Pflicht-Lektüre + Bau-
-Reihenfolge innerhalb Part B vorschlagen. Dann baue ich gruppiert.
+Reihenfolge innerhalb Part C vorschlagen. Dann baue ich gruppiert.
 ```

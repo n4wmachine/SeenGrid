@@ -1,0 +1,244 @@
+/* ============================================================
+   INSPECTOR — 320px Sidebar rechts.
+   Sektionen: Header, ROLE, Per-Panel-Overrides, SIGNATURE,
+   CUSTOM NOTES, Reset-Footer.
+   ============================================================ */
+
+:global(.sg2-shell) .root {
+  padding: 14px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: var(--sg2-text-secondary);
+  font-family: var(--sg2-font-body);
+  font-size: var(--sg2-text-body);
+}
+
+.empty {
+  flex: 1;
+  padding: 48px 16px;
+  text-align: center;
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+/* ---- HEADER ---- */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--sg2-border-default);
+}
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.headerTitle {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-secondary);
+}
+.headerHint {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-min);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+.closeBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sg2-text-tertiary);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--sg2-radius-sm);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: var(--sg2-transition);
+}
+.closeBtn:hover {
+  color: var(--sg2-text-primary);
+  border-color: var(--sg2-border-default);
+}
+
+/* ---- SECTIONS ---- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-tertiary);
+}
+.sectionLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+}
+
+/* ---- FIELD ---- */
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fieldControl {
+  flex: 1;
+  min-width: 0;
+}
+.overrideBadge {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-min);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+.resetLink {
+  background: transparent;
+  border: none;
+  color: var(--sg2-text-tertiary);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: var(--sg2-radius-sm);
+}
+.resetLink:hover {
+  color: var(--sg2-teal);
+  background: var(--sg2-teal-hover-bg);
+}
+
+/* ---- INPUTS ---- */
+
+.select, .textInput, .textarea {
+  width: 100%;
+  padding: 7px 9px;
+  background: var(--sg2-bg-tertiary);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  font-family: var(--sg2-font-mono);
+  font-size: 12px;
+  color: var(--sg2-text-primary);
+  outline: none;
+}
+.select:focus, .textInput:focus, .textarea:focus {
+  border-color: var(--sg2-border-teal);
+}
+.textarea {
+  min-height: 68px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* ---- SIGNATURE CARD ---- */
+
+.sigCard {
+  padding: 12px;
+  background: var(--sg2-gold-bg);
+  border: 1px solid var(--sg2-gold-border-hover);
+  border-radius: var(--sg2-radius-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: var(--sg2-transition);
+}
+.sigCard:hover {
+  background: rgba(245, 201, 97, 0.13);
+}
+.sigTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sigStar {
+  color: var(--sg2-gold);
+  font-size: 13px;
+  line-height: 1;
+}
+.sigSwatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--sg2-gold-border);
+  flex-shrink: 0;
+}
+.sigName {
+  font-family: var(--sg2-font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sg2-gold);
+  text-transform: lowercase;
+}
+.sigTagline {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.04em;
+}
+.sigDetach {
+  background: transparent;
+  border: none;
+  color: var(--sg2-text-tertiary);
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  cursor: pointer;
+  padding: 2px 0;
+  text-align: left;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+.sigDetach:hover { color: var(--sg2-warning); }
+
+/* ---- RESET FOOTER ---- */
+
+.resetFooter {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sg2-border-default);
+}
+.resetFooterBtn {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  border: 1px dashed var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: var(--sg2-transition);
+}
+.resetFooterBtn:hover {
+  border-color: var(--sg2-border-teal-subtle);
+  color: var(--sg2-teal);
+}

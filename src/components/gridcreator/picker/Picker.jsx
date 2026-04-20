@@ -66,10 +66,6 @@ export default function Picker({ onPick }) {
     })
   }
 
-  function handleScratch() {
-    onPick({ kind: 'scratch', label: 'empty grid' })
-  }
-
   function handleHubHint() {
     onPick({ kind: 'hub-link', label: 'Prompt Hub (placeholder)' })
   }
@@ -156,7 +152,13 @@ export default function Picker({ onPick }) {
 
           <section className={styles.section}>
             <SectionLabel text="START FROM SCRATCH" tone="neutral" />
-            <button className={styles.scratchCard} onClick={handleScratch}>
+            {/* Disabled in v1 — OPEN_DECISIONS #11. Engine is case-bound;
+                real free-mode is a post-v1 engine extension. */}
+            <div
+              className={`${styles.scratchCard} ${styles.scratchCardDisabled}`}
+              aria-disabled="true"
+              role="presentation"
+            >
               <div className={styles.scratchIcon}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />
@@ -166,8 +168,8 @@ export default function Picker({ onPick }) {
                 <div className={styles.scratchTitle}>empty grid</div>
                 <div className={styles.scratchSub}>choose your own case, dimensions, and modules</div>
               </div>
-              <div className={styles.scratchArrow}>→</div>
-            </button>
+              <div className={styles.scratchComing}>coming soon</div>
+            </div>
           </section>
         </>
       )}

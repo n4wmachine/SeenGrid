@@ -114,6 +114,25 @@ Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
 
 ---
 
+### 11. FROM SCRATCH deferred bis Engine Free-Mode (Post-v1-Phase)
+
+**Kontext:** Die Grid-Engine ist heute **case-gebunden** — Compiler, `panelRoleStrategy`, `panel_fields`-Schema, Module-Kompatibilität hängen alle an einem konkreten `caseId`. Ein echtes "from scratch" bräuchte einen Engine-Free-Mode (Panels ohne Case-Schema, freie Modul-Kombination, generischer Compile-Pfad). Das existiert nicht.
+
+**Aus Workspace-Part-B-Session (2026-04-20):** Die FROM-SCRATCH-Sektion im Picker wird in v1 **disabled + `COMING SOON`-Label** ausgeliefert (analog Coming-Pages-Pattern, NUANCEN 4). Ein Fallback auf `character_angle_study` wurde diskutiert und verworfen — das hätte die Produkt-Separation zwischen CORE TEMPLATES (schnelle Vorlagen) und FROM SCRATCH (echte Freiheit) gebrochen und eine Feature-Versprechung ohne Deckung geliefert.
+
+**Offen:**
+- Wie sieht der Engine-Free-Mode konkret aus (case-loses Panel-Array, minimaler generischer Compiler, universelle Modul-Liste)?
+- Oder andere Architektur: ein "Blank"-Case mit generischem `panel_fields` als Schema-Eintrag?
+- Welche Module sind im Free-Mode erlaubt (alle? minus den case-spezifischen wie `face_reference`)?
+
+**Abhängig von:** Engine-Erweiterung Post-v1. Kein Workspace-Blocker — CORE TEMPLATES + YOUR PRESETS decken den v1-Nutzer ab.
+
+**Wann entscheiden:** Eigene Engine-Phase nach v1-Launch, wenn reale Nutzung zeigt ob echte Free-Mode-Freiheit gebraucht wird oder ob die 10 Cases reichen.
+
+**Status:** offen / deferred Post-v1
+
+---
+
 ### 9. Avatar-Platzierung global
 
 **Kontext:** Durch die ShellHeader-Suppression auf Home (Landing-Redesign 2026-04-18) ist auf der Landing-Page kein User-Avatar sichtbar. Auf anderen Pages bleibt der ShellHeader erhalten, dort existiert aktuell auch kein Avatar. Der Masthead führt bewusst keinen Avatar — Teal-Avatar rechts würde den editorialen Mono-Rhythmus brechen, und Account-Actions finden auf der Landing ohnehin nicht statt.

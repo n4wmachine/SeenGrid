@@ -1,0 +1,125 @@
+/* ============================================================
+   CANVAS — Grid Creator Workspace Mitte (flex, zentriert).
+   SVG-Panels, 12px Gap (NUANCEN 13). State-Visuals:
+   Default / Hover / Selected (Teal) / Signature (Gold-Tint)
+   / Override-Dot (Gold-Dot oben rechts).
+   ============================================================ */
+
+:global(.sg2-shell) .outer {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: var(--sg2-bg-canvas);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  overflow: hidden;
+  cursor: default;
+}
+
+.frame {
+  display: grid;
+  align-items: start;
+  justify-items: center;
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.panelBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sg2-bg-surface);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+  transition: var(--sg2-transition);
+  overflow: hidden;
+}
+
+.panel:hover .panelBox {
+  border-color: var(--sg2-border-teal-subtle);
+}
+
+.panel.selected .panelBox {
+  border-color: var(--sg2-border-teal-strong);
+  box-shadow: var(--sg2-teal-glow);
+}
+
+/* Signature-applied: Gold-Border-Tint + Gold-Glow ums ganze Panel.
+   NUANCEN 2: wenn Panel selected + signature-applied → Teal-Border
+   gewinnt, Gold-Glow bleibt sichtbar. */
+.panel.signatured .panelBox {
+  border-color: var(--sg2-gold-border-hover);
+  box-shadow: var(--sg2-gold-glow-subtle);
+}
+.panel.signatured.selected .panelBox {
+  border-color: var(--sg2-border-teal-strong);
+  box-shadow: var(--sg2-gold-glow-subtle);
+}
+
+.silhouette {
+  width: 60%;
+  height: 75%;
+  opacity: 0.45;
+  color: var(--sg2-text-tertiary);
+  pointer-events: none;
+}
+
+.silhouetteRect {
+  width: 55%;
+  height: 55%;
+  border: 1px dashed var(--sg2-border-emphasized);
+  border-radius: var(--sg2-radius-sm);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.overrideDot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sg2-gold);
+  box-shadow: 0 0 4px rgba(245, 201, 97, 0.6);
+  pointer-events: none;
+}
+
+.panelLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-min);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.panel.selected .panelLabel {
+  color: var(--sg2-teal);
+}
+
+.empty {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-mono-label);
+  color: var(--sg2-text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}

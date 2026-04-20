@@ -331,6 +331,43 @@
   transform: translateX(4px);
 }
 
+/* Disabled state — FROM SCRATCH deferred (OPEN_DECISIONS #11) */
+:global(.sg2-shell) .scratchCardDisabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  border-style: dashed;
+  border-color: var(--sg2-border-default);
+}
+
+.scratchCardDisabled:hover {
+  border-color: var(--sg2-border-default);
+  background: var(--sg2-bg-surface);
+}
+
+.scratchCardDisabled .scratchIcon {
+  background: var(--sg2-bg-elevated);
+  border-color: var(--sg2-border-default);
+  color: var(--sg2-text-muted);
+}
+
+.scratchCardDisabled .scratchTitle {
+  color: var(--sg2-text-secondary);
+}
+
+.scratchComing {
+  font-family: var(--sg2-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-muted);
+  padding: 4px 10px;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ---- EMPTY STATE (Suche ohne Treffer) ---- */
 
 :global(.sg2-shell) .emptyState {
