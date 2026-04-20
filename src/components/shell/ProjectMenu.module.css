@@ -1,0 +1,96 @@
+/* Projekt-Dropdown unter dem ShellHeader-Projekt-Label.
+   Positionierung: absolute unter dem Anchor (ShellHeader setzt
+   den Container auf position: relative). Neutral/Teal, kein Gold
+   (NUANCEN 1). */
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  max-width: 320px;
+  background: var(--sg2-bg-elevated);
+  border: 1px solid var(--sg2-border-emphasized);
+  border-radius: var(--sg2-radius-md);
+  box-shadow: var(--sg2-shadow-elevated);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1100;
+  animation: proj-menu-in 140ms ease;
+  max-height: calc(100vh - var(--sg2-header-height) - 80px);
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--sg2-radius-sm);
+  cursor: pointer;
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-small);
+  color: var(--sg2-text-secondary);
+  text-align: left;
+  width: 100%;
+  transition: var(--sg2-transition-fast);
+}
+
+.item:hover,
+.itemFocused {
+  background: var(--sg2-teal-hover-bg-mid);
+  color: var(--sg2-text-primary);
+}
+
+.itemActive {
+  color: var(--sg2-teal);
+}
+
+.itemAction {
+  color: var(--sg2-text-tertiary);
+}
+
+.itemFooter {
+  color: var(--sg2-text-tertiary);
+  justify-content: space-between;
+}
+
+.itemLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemCheck {
+  flex-shrink: 0;
+  color: var(--sg2-teal);
+  font-size: var(--sg2-text-small);
+}
+
+.itemArrow {
+  flex-shrink: 0;
+  color: var(--sg2-text-tertiary);
+}
+
+.separator {
+  height: 1px;
+  background: var(--sg2-border-default);
+  margin: 4px 6px;
+}
+
+@keyframes proj-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

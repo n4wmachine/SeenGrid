@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "id": "tokio",
+      "name": "tokio-kurzfilm",
+      "modifiedAt": 1713398400000
+    },
+    {
+      "id": "laundromat",
+      "name": "laundromat-kapitel-1",
+      "modifiedAt": 1713312000000
+    },
+    {
+      "id": "berlin",
+      "name": "berlin-doku",
+      "modifiedAt": 1713225600000
+    }
+  ],
+  "noProjectId": null
+}

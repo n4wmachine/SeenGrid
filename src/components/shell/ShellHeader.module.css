@@ -71,3 +71,89 @@
   font-weight: 500;
   user-select: none;
 }
+
+/* ---- Workspace-Mode-Erweiterung (nur aktiv mit
+   WorkspaceHeaderProvider; Back-Button + Projekt-Dropdown).
+   Farben: Teal/neutral, kein Gold (NUANCEN 1). */
+
+.backBtn {
+  flex-shrink: 0;
+  height: 26px;
+  padding: 0 10px 0 8px;
+  background: transparent;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+  color: var(--sg2-text-tertiary);
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: var(--sg2-transition);
+}
+
+.backBtn:hover {
+  color: var(--sg2-teal);
+  border-color: var(--sg2-border-teal-subtle);
+  background: var(--sg2-teal-hover-bg);
+}
+
+.pageTitle {
+  font-family: var(--sg2-font-body);
+  font-size: var(--sg2-text-body);
+  font-weight: 500;
+  color: var(--sg2-text-primary);
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+
+.projectAnchor {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.projectAnchor::before {
+  content: '·';
+  color: var(--sg2-text-quaternary);
+  margin: 0 10px 0 0;
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-small);
+}
+
+.projectTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--sg2-radius-md);
+  color: var(--sg2-text-secondary);
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  text-transform: lowercase;
+}
+
+.projectTrigger:hover,
+.projectTrigger[aria-expanded='true'] {
+  color: var(--sg2-text-primary);
+  border-color: var(--sg2-border-emphasized);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.projectLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.projectCaret {
+  color: var(--sg2-text-tertiary);
+  font-size: 10px;
+  line-height: 1;
+}

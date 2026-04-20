@@ -1,0 +1,28 @@
+{
+  "signatures": [
+    {
+      "id": "sig-prisoners-noir",
+      "name": "prisoners noir",
+      "swatchColor": "#2a2e3a",
+      "tagline": "deakins · noir"
+    },
+    {
+      "id": "sig-kurosawa-rain",
+      "name": "kurosawa rain",
+      "swatchColor": "#3f4a52",
+      "tagline": "tarkovsky · desaturated"
+    },
+    {
+      "id": "sig-pastel-grain",
+      "name": "pastel grain",
+      "swatchColor": "#b39d7c",
+      "tagline": "soft light · 35mm"
+    },
+    {
+      "id": "sig-deakins-dusk",
+      "name": "deakins dusk",
+      "swatchColor": "#6a4b38",
+      "tagline": "golden hour · wide"
+    }
+  ]
+}

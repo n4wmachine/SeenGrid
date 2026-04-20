@@ -1,0 +1,222 @@
+{
+  "modules": [
+    {
+      "id": "style_overlay",
+      "displayName": "style overlay",
+      "category": "style",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "panel_content_fields",
+      "displayName": "panel content fields",
+      "category": "content",
+      "hasGlobalSettings": false,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "random_fill",
+      "displayName": "random fill",
+      "category": "utility",
+      "hasGlobalSettings": false,
+      "hasPerPanelSettings": false,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "forbidden_elements_user",
+      "displayName": "forbidden elements",
+      "category": "constraints",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": false,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "environment_mode",
+      "displayName": "environment",
+      "category": "environment",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "camera_angle",
+      "displayName": "camera angle",
+      "category": "camera",
+      "hasGlobalSettings": false,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence"
+      ]
+    },
+    {
+      "id": "weather_atmosphere",
+      "displayName": "weather · atmosphere",
+      "category": "environment",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "wardrobe",
+      "displayName": "wardrobe",
+      "category": "character",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet"
+      ]
+    },
+    {
+      "id": "pose_override",
+      "displayName": "pose",
+      "category": "character",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "shot_coverage",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "expression_emotion",
+      "displayName": "expression",
+      "category": "character",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": true,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "face_reference",
+      "displayName": "face reference",
+      "category": "character",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": false,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    },
+    {
+      "id": "multi_character",
+      "displayName": "multi character",
+      "category": "character",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": false,
+      "compatibility": [
+        "start_end_frame",
+        "shot_coverage",
+        "story_sequence"
+      ]
+    },
+    {
+      "id": "object_anchor",
+      "displayName": "object anchor",
+      "category": "content",
+      "hasGlobalSettings": true,
+      "hasPerPanelSettings": false,
+      "compatibility": [
+        "character_sheet",
+        "character_angle_study",
+        "character_normalizer",
+        "start_end_frame",
+        "world_zone_board",
+        "world_angle_study",
+        "shot_coverage",
+        "story_sequence",
+        "expression_sheet",
+        "outfit_variation"
+      ]
+    }
+  ]
+}

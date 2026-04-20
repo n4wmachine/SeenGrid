@@ -1,0 +1,17 @@
+/* Toast-Stack-Container (WORKSPACE_SPEC §16.2).
+   bottom-right, Offset vom Viewport-Rand = Output-Bar-Höhe (32px)
+   + 24px = 56px vom absoluten Bottom. Stack wächst von unten nach
+   oben. pointer-events: none am Stack selbst, Toast-Cards sind
+   wieder clickable. */
+
+.stack {
+  position: fixed;
+  right: 24px;
+  bottom: calc(var(--sg2-outputbar-height, 32px) + 24px);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  z-index: 1200;
+  pointer-events: none;
+  align-items: flex-end;
+}

@@ -1,0 +1,85 @@
+/* Toast-Card (WORKSPACE_SPEC §16).
+   Bottom-right positioniert in ToastProvider, Einzel-Card ist
+   layout-agnostisch (wird in Stack vom Provider angeordnet).
+   Border-Tint statt Fill: Body bleibt neutral, nur Border-Farbe
+   signalisiert Typ. */
+
+.toast {
+  min-width: 220px;
+  max-width: 340px;
+  min-height: 40px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--sg2-bg-elevated);
+  border: 1px solid var(--sg2-border-emphasized);
+  border-radius: var(--sg2-radius-md);
+  box-shadow: var(--sg2-shadow-elevated);
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-small);
+  color: var(--sg2-text-primary);
+  pointer-events: auto;
+  animation: toast-slide-in 180ms ease;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.toast.leaving {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+/* ---- Border-Tint per Typ (Body neutral, nur Border farbig) ---- */
+
+.toast--success {
+  border-color: rgba(60, 207, 204, 0.4);
+}
+
+.toast--error {
+  border-color: var(--sg2-error-border);
+}
+
+.toast--info {
+  border-color: var(--sg2-border-emphasized);
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.close {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--sg2-text-tertiary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: var(--sg2-radius-sm);
+  transition: var(--sg2-transition-fast);
+}
+
+.close:hover {
+  color: var(--sg2-text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
