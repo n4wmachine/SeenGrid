@@ -2,14 +2,16 @@
    WORKSPACE
    Grid Creator Edit-State. Full-Page-View (NUANCEN 6).
    Vertikaler Stack:
-     Toolbar (52)   Module-Toolbar (v1 Platzhalter, Part C)
+     ModuleToolbar (52)
      3-Spalten-Row  flex: 1 (Case Context 260 | Canvas | Inspector 320)
-     Preview (96)   Preview-Strip (v1 Platzhalter, Part C)
-     Sigs (52)      Signatures-Bar (v1 Platzhalter, Part C)
-     Output (32)    Output-Bar (v1 Platzhalter, Part C)
+     PreviewStrip (96)
+     SignaturesBar (52)
+     OutputBar (32)
    ShellHeader + StatusBar liegen außerhalb (in App.jsx).
-   Padding/Margin-Regeln via :global(.sg2-shell)-Specificity, damit
-   der globale Reset sie nicht schlägt.
+
+   Jede Bar setzt ihre eigene Höhe + ihren eigenen BG. Padding-Regeln
+   via :global(.sg2-shell)-Specificity, damit der globale Reset sie
+   nicht schlägt.
    ============================================================ */
 
 :global(.sg2-shell) .page {
@@ -21,27 +23,6 @@
   flex-direction: column;
   background: var(--sg2-bg-primary);
   overflow: hidden;
-}
-
-/* ---- TOOLBAR ZONE (Part C fills content) ---- */
-
-:global(.sg2-shell) .toolbar {
-  flex: 0 0 var(--sg2-toolbar-height);
-  height: var(--sg2-toolbar-height);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--sg2-border-default);
-  background: var(--sg2-bg-secondary);
-}
-
-.placeholderLabel {
-  font-family: var(--sg2-font-mono);
-  font-size: var(--sg2-text-mono-label);
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--sg2-text-muted);
 }
 
 /* ---- 3-COL ROW ---- */
@@ -78,37 +59,4 @@
   background: var(--sg2-bg-secondary);
   overflow-y: auto;
   min-height: 0;
-}
-
-/* ---- BOTTOM BARS (full-width — NUANCEN 7) ---- */
-
-:global(.sg2-shell) .previewStrip {
-  flex: 0 0 var(--sg2-preview-height);
-  height: var(--sg2-preview-height);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  border-top: 1px solid var(--sg2-border-default);
-  border-bottom: 1px solid var(--sg2-border-default);
-  background: var(--sg2-bg-preview);
-}
-
-:global(.sg2-shell) .sigsBar {
-  flex: 0 0 var(--sg2-sigbar-height);
-  height: var(--sg2-sigbar-height);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--sg2-border-default);
-  background: var(--sg2-bg-secondary);
-}
-
-:global(.sg2-shell) .outputBar {
-  flex: 0 0 var(--sg2-outputbar-height);
-  height: var(--sg2-outputbar-height);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  background: var(--sg2-bg-tertiary);
-  border-top: 1px solid var(--sg2-border-default);
 }

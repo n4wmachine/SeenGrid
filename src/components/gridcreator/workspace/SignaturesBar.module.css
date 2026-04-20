@@ -1,0 +1,151 @@
+/* ============================================================
+   SIGNATURES BAR — 52px, full-width.
+   WORKSPACE_SPEC §8. Gold-Territorium (NUANCEN 1, 16):
+   Label + Applied-Card-Border = Gold. Inactive Cards = neutral.
+   ============================================================ */
+
+:global(.sg2-shell) .bar {
+  flex: 0 0 var(--sg2-sigbar-height);
+  width: 100%;
+  height: var(--sg2-sigbar-height);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  background: var(--sg2-bg-secondary);
+  border-bottom: 1px solid var(--sg2-border-default);
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-gold);
+  flex-shrink: 0;
+}
+
+.scroller {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sg2-border-emphasized) transparent;
+}
+
+.scroller::-webkit-scrollbar { height: 6px; }
+.scroller::-webkit-scrollbar-track { background: transparent; }
+.scroller::-webkit-scrollbar-thumb {
+  background: var(--sg2-border-emphasized);
+  border-radius: 3px;
+}
+
+.hasOverflow {
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(90deg, #000 0%, #000 92%, transparent 100%);
+}
+
+.emptyHint {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.04em;
+}
+
+/* ---- CARD ---- */
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 8px;
+  background: var(--sg2-bg-elevated);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.cardApplied {
+  border-color: var(--sg2-gold-border-hover);
+  box-shadow: var(--sg2-gold-glow-subtle);
+  background: var(--sg2-gold-bg);
+}
+
+.star {
+  color: var(--sg2-gold);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--sg2-gold-border);
+  flex-shrink: 0;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--sg2-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sg2-gold);
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.tagline {
+  font-family: var(--sg2-font-mono);
+  font-size: 9px;
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.detach {
+  background: transparent;
+  border: none;
+  color: var(--sg2-text-quaternary);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.detach:hover { color: var(--sg2-warning); }
+
+/* ---- APPLY BUTTON ---- */
+
+.applyBtn {
+  flex-shrink: 0;
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px dashed var(--sg2-border-default);
+  border-radius: var(--sg2-radius-md);
+  color: var(--sg2-text-tertiary);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+}
+.applyBtn:hover {
+  border-color: var(--sg2-gold-border-hover);
+  color: var(--sg2-gold);
+}

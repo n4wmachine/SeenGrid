@@ -1,0 +1,88 @@
+/* ============================================================
+   OUTPUT BAR — 32px, full-width Stack-Boden.
+   Links: Save (sekundär) + Copy (primary teal).
+   Rechts: Token-Count + Dim-Warning.
+   WORKSPACE_SPEC §9.
+   ============================================================ */
+
+:global(.sg2-shell) .bar {
+  flex: 0 0 var(--sg2-outputbar-height);
+  width: 100%;
+  height: var(--sg2-outputbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 16px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+/* ---- BUTTONS ---- */
+
+:global(.sg2-shell) .btnPrimary,
+:global(.sg2-shell) .btnSecondary {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  padding: 4px 12px;
+  border-radius: var(--sg2-radius-sm);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  background: transparent;
+  white-space: nowrap;
+}
+
+:global(.sg2-shell) .btnPrimary {
+  border: 1px solid var(--sg2-border-teal);
+  color: var(--sg2-teal);
+  background: var(--sg2-teal-active-bg);
+}
+.btnPrimary:hover {
+  background: var(--sg2-teal-active-bg-strong);
+  border-color: var(--sg2-border-teal-strong);
+}
+
+:global(.sg2-shell) .btnSecondary {
+  border: 1px solid var(--sg2-border-default);
+  color: var(--sg2-text-secondary);
+}
+.btnSecondary:hover {
+  border-color: var(--sg2-border-teal-subtle);
+  color: var(--sg2-text-primary);
+}
+
+/* ---- META RIGHT ---- */
+
+.tokens {
+  color: var(--sg2-text-tertiary);
+}
+.tokensWarn {
+  color: var(--sg2-warning);
+  font-weight: 600;
+}
+
+.sep {
+  color: var(--sg2-text-quaternary);
+  margin: 0 2px;
+}
+
+.dimWarn {
+  color: var(--sg2-warning);
+  font-weight: 600;
+}

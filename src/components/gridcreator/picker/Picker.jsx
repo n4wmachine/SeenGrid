@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import casesConfig from '../../../config/cases.config.json'
 import { useGridPresets } from '../../../lib/presetStore.js'
+import { isCaseActive } from '../../../lib/cases/registry.js'
 import ThumbPattern from './ThumbPattern.jsx'
 import styles from './Picker.module.css'
 
@@ -48,6 +49,7 @@ export default function Picker({ onPick }) {
   }
 
   function handleCorePick(c) {
+    if (!isCaseActive(c.id)) return // disabled cards = coming soon
     onPick({
       kind: 'core',
       caseId: c.id,
@@ -246,13 +248,24 @@ function StarIcon() {
 }
 
 function CoreCard({ caseDef, onClick }) {
+  const active = isCaseActive(caseDef.id)
   const roles = (caseDef.defaultRoles || []).join(', ')
   const sub = `${caseDef.panelCount} panels · ${roles}`
+  const cls = `${styles.card} ${active ? '' : styles.cardDisabled}`
   return (
-    <button className={styles.card} onClick={onClick}>
+    <button
+      className={cls}
+      onClick={onClick}
+      aria-disabled={!active}
+      disabled={!active}
+      title={active ? '' : 'case schema in progress — coming in a later session'}
+    >
       <ThumbPattern pattern={caseDef.thumbPattern} />
       <div className={styles.cardMeta}>
-        <div className={styles.cardTitle}>{caseDef.displayName.toLowerCase()}</div>
+        <div className={styles.cardTitleRow}>
+          <div className={styles.cardTitle}>{caseDef.displayName.toLowerCase()}</div>
+          {!active && <span className={styles.cardComing}>coming soon</span>}
+        </div>
         <div className={styles.cardSub}>{sub}</div>
       </div>
     </button>

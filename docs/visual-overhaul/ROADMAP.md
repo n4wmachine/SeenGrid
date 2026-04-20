@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
 **Stand:** 2026-04-20
-**Aktive Phase:** Workspace-Bau Part C (Bugfixes + Bars + Save + Docs)
+**Aktive Phase:** Engine-Free-Mode-Planung
 
 ---
 
@@ -17,8 +17,8 @@
 [✓] Workspace-Planung: Spec für Grid Creator Workspace ........... fertig 2026-04-19
 [✓] Workspace-Bau Part A: Foundation + Infra .................. fertig 2026-04-19
 [✓] Workspace-Bau Part B: Workspace-Parent + 3 Spalten ........ fertig 2026-04-20
-[→] Workspace-Bau Part C: Bugfixes + Bars + Save + Docs ....... AKTIV
-[ ] Engine-Free-Mode-Planung: Spec für case-losen Builder (Konzept-Session)
+[✓] Workspace-Bau Part C: Bugfixes + Bars + Save + Docs ....... fertig 2026-04-20
+[→] Engine-Free-Mode-Planung: Spec für case-losen Builder (Konzept-Session)
 [ ] Engine-Free-Mode-Bau: Refactor Engine auf case-agnostisch (4-6h Code-Session)
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)

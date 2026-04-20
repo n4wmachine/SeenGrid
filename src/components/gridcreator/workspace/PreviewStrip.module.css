@@ -1,0 +1,150 @@
+/* ============================================================
+   PREVIEW STRIP — 96px, full-width unter der 3-Spalten-Row.
+   WORKSPACE_SPEC §7. NUANCEN 7: niemals in der Canvas-Spalte.
+   ============================================================ */
+
+:global(.sg2-shell) .bar {
+  flex: 0 0 var(--sg2-preview-height);
+  width: 100%;
+  height: var(--sg2-preview-height);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  background: var(--sg2-bg-preview);
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-tertiary);
+  flex-shrink: 0;
+}
+
+.scroller {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 2px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sg2-border-emphasized) transparent;
+  position: relative;
+}
+
+.scroller::-webkit-scrollbar {
+  height: 6px;
+}
+.scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroller::-webkit-scrollbar-thumb {
+  background: var(--sg2-border-emphasized);
+  border-radius: 3px;
+}
+
+.hasOverflow {
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(90deg, #000 0%, #000 92%, transparent 100%);
+}
+
+/* ---- THUMB ---- */
+
+.thumb {
+  flex: 0 0 auto;
+  width: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  scroll-snap-align: start;
+  font-family: var(--sg2-font-mono);
+  color: var(--sg2-text-tertiary);
+}
+
+.thumbBox {
+  width: 100%;
+  height: 56px;
+  position: relative;
+  background: var(--sg2-bg-surface);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--sg2-transition);
+  overflow: hidden;
+}
+
+.thumb:hover .thumbBox {
+  border-color: var(--sg2-border-teal-subtle);
+}
+
+.thumb.selected .thumbBox {
+  border-color: var(--sg2-border-teal-strong);
+  box-shadow: var(--sg2-teal-glow-subtle);
+}
+
+.thumb.signatured .thumbBox {
+  border-color: var(--sg2-gold-border-hover);
+  box-shadow: var(--sg2-gold-glow-subtle);
+}
+
+.thumb.signatured.selected .thumbBox {
+  border-color: var(--sg2-border-teal-strong);
+  box-shadow: var(--sg2-gold-glow-subtle);
+}
+
+.silhouette {
+  width: 60%;
+  height: 80%;
+  opacity: 0.45;
+  color: var(--sg2-text-tertiary);
+  pointer-events: none;
+}
+
+.silhouetteRect {
+  width: 50%;
+  height: 50%;
+  border: 1px dashed var(--sg2-border-emphasized);
+  border-radius: 2px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.overrideDot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sg2-gold);
+  box-shadow: 0 0 3px rgba(245, 201, 97, 0.6);
+}
+
+.thumbLabel {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thumb.selected .thumbLabel {
+  color: var(--sg2-teal);
+}

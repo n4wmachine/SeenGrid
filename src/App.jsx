@@ -8,6 +8,8 @@ import LandingPage from './components/landing/LandingPage.jsx'
 import GridCreator from './components/gridcreator/GridCreator.jsx'
 import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
 import { useLang } from './context/LangContext.jsx'
+import { WorkspaceStoreProvider } from './lib/workspaceStore.js'
+import ToastProvider from './components/ui/ToastProvider.jsx'
 import './App.css'
 
 const PromptBuilder = lazy(() => import('./components/PromptBuilder.jsx'))
@@ -103,9 +105,16 @@ function AppContent({ activePage, onPageChange }) {
 export default function App() {
   const [activePage, setActivePage] = useState('home')
 
+  // WorkspaceStoreProvider lebt app-weit, damit Rail-Wechsel den
+  // Workspace-State NICHT verwirft (WORKSPACE_SPEC §15.1).
+  // ToastProvider gleicher Scope, damit alle Pages Toasts feuern können.
   return (
     <PageMetaProvider activePage={activePage}>
-      <AppContent activePage={activePage} onPageChange={setActivePage} />
+      <WorkspaceStoreProvider>
+        <ToastProvider>
+          <AppContent activePage={activePage} onPageChange={setActivePage} />
+        </ToastProvider>
+      </WorkspaceStoreProvider>
     </PageMetaProvider>
   )
 }

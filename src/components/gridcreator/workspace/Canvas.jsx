@@ -1,7 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useWorkspaceState, useWorkspaceActions } from '../../../lib/workspaceStore.js'
-import casesConfig from '../../../config/cases.config.json'
-import { panelRoleStrategy, SUPPORTED_PANEL_COUNTS } from '../../../lib/cases/characterAngleStudy/panelRoleStrategy.js'
+import { getDefaultRolesForCase } from '../../../lib/cases/registry.js'
 import styles from './Canvas.module.css'
 
 /**
@@ -85,10 +84,10 @@ export default function Canvas() {
     return () => ro.disconnect()
   }, [rows, cols, panelOrientation])
 
-  // Strategy-default pro Panel-Index. Für angle_study via
-  // panelRoleStrategy, sonst defaultRoles aus cases.config.json.
+  // Strategy-default pro Panel-Index — case-zentriert via registry
+  // (TODO(free-mode): Refactor-Anchor).
   const strategyDefaults = useMemo(
-    () => computeStrategyDefaults(selectedCase, rows * cols),
+    () => getDefaultRolesForCase(selectedCase, rows * cols),
     [selectedCase, rows, cols]
   )
 
@@ -127,7 +126,14 @@ export default function Canvas() {
         }}
       >
         {panels.map((panel, i) => {
-          const role = panel.role || strategyDefaults[i] || null
+          // Bug 3 fix: panel.role kann ein Legacy-Wert sein (z.B. "right"
+          // statt "right_profile"). Wenn er nicht im Silhouette-Mapping
+          // ist, fallback auf strategyDefault — verhindert Dashed-
+          // Rectangle-Fallback bei angle_study.
+          const rawRole = panel.role || strategyDefaults[i] || null
+          const role = rawRole && SILHOUETTE_PATHS[rawRole]
+            ? rawRole
+            : (strategyDefaults[i] || null)
           const isSelected = panel.id === selectedPanelId
           const hasSignature = Boolean(panel.signatureId)
           const hasOverride = hasOverrideState(panel, strategyDefaults[i])
@@ -171,17 +177,6 @@ export default function Canvas() {
 }
 
 /* -------------------- helpers -------------------- */
-
-function computeStrategyDefaults(caseId, panelCount) {
-  if (caseId === 'character_angle_study' && SUPPORTED_PANEL_COUNTS.includes(panelCount)) {
-    return panelRoleStrategy(panelCount).map(r => r.view)
-  }
-  const caseDef = casesConfig.cases.find(c => c.id === caseId)
-  if (caseDef?.defaultRoles) {
-    return Array.from({ length: panelCount }, (_, i) => caseDef.defaultRoles[i] || null)
-  }
-  return Array.from({ length: panelCount }, () => null)
-}
 
 function hasOverrideState(panel, strategyDefault) {
   if (panel.role && strategyDefault && panel.role !== strategyDefault) return true

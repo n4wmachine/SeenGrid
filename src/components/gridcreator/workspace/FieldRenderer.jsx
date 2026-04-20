@@ -12,7 +12,7 @@ import styles from './Inspector.module.css'
  *
  * Neue Field-Types werden hier additiv ergänzt.
  */
-export default function FieldRenderer({ field, value, onChange, placeholder }) {
+export default function FieldRenderer({ field, value, onChange, placeholder, title }) {
   const type = field?.type || 'text'
 
   if (type === 'role' || type === 'select') {
@@ -22,6 +22,7 @@ export default function FieldRenderer({ field, value, onChange, placeholder }) {
         className={styles.select}
         value={value ?? ''}
         onChange={e => onChange(e.target.value || null)}
+        title={title || ''}
       >
         <option value="">—</option>
         {options.map(opt => (
@@ -39,6 +40,7 @@ export default function FieldRenderer({ field, value, onChange, placeholder }) {
         className={styles.textarea}
         value={value ?? ''}
         placeholder={placeholder ?? ''}
+        title={title || ''}
         onChange={e => onChange(e.target.value)}
       />
     )
@@ -51,6 +53,7 @@ export default function FieldRenderer({ field, value, onChange, placeholder }) {
       type="text"
       value={value ?? ''}
       placeholder={placeholder ?? ''}
+      title={title || ''}
       onChange={e => onChange(e.target.value)}
     />
   )

@@ -1,0 +1,171 @@
+/* ============================================================
+   SAVE PRESET DIALOG
+   Center-Modal mit dunklem Overlay. WORKSPACE_SPEC §10.
+   ============================================================ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.dialog {
+  width: 460px;
+  max-width: calc(100vw - 32px);
+  background: var(--sg2-bg-elevated);
+  border: 1px solid var(--sg2-border-emphasized);
+  border-radius: var(--sg2-radius-lg);
+  box-shadow: var(--sg2-shadow-elevated);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--sg2-border-default);
+}
+
+.title {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-secondary);
+}
+
+.close {
+  background: transparent;
+  border: none;
+  color: var(--sg2-text-tertiary);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.close:hover { color: var(--sg2-text-primary); }
+
+.body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.previewChip {
+  align-self: flex-start;
+  font-family: var(--sg2-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-quaternary);
+  padding: 4px 10px;
+  background: var(--sg2-bg-tertiary);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+}
+
+.previewChipName {
+  color: var(--sg2-teal);
+  font-weight: 600;
+  margin-left: 4px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-caption);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg2-text-tertiary);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: var(--sg2-bg-tertiary);
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  padding: 8px 10px;
+  font-family: var(--sg2-font-body);
+  font-size: 13px;
+  color: var(--sg2-text-primary);
+  outline: none;
+}
+.input:focus,
+.textarea:focus {
+  border-color: var(--sg2-border-teal);
+}
+
+.textarea {
+  min-height: 60px;
+  resize: vertical;
+  line-height: 1.4;
+  font-family: var(--sg2-font-mono);
+  font-size: 12px;
+}
+
+.error {
+  color: var(--sg2-error);
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--sg2-border-default);
+}
+
+.btnCancel,
+.btnSave {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  padding: 7px 14px;
+  border-radius: var(--sg2-radius-sm);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  background: transparent;
+  border: 1px solid var(--sg2-border-default);
+  color: var(--sg2-text-secondary);
+}
+.btnCancel:hover {
+  border-color: var(--sg2-border-emphasized);
+  color: var(--sg2-text-primary);
+}
+
+.btnSave {
+  border-color: var(--sg2-border-teal);
+  color: var(--sg2-teal);
+  background: var(--sg2-teal-active-bg);
+}
+.btnSave:hover:not(:disabled) {
+  background: var(--sg2-teal-active-bg-strong);
+  border-color: var(--sg2-border-teal-strong);
+}
+
+.btnSaveDisabled,
+.btnSave:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

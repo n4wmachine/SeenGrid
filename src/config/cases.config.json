@@ -5,7 +5,7 @@
       "displayName": "Character Angle Study",
       "category": "character",
       "panelCount": 4,
-      "defaultRoles": ["front", "right", "left", "back"],
+      "defaultRoles": ["front", "right_profile", "left_profile", "back"],
       "description": "cinematic angles of one character · vertical panels side by side",
       "keywords": ["angle", "character", "portrait", "figure", "cinematic", "profile"],
       "thumbPattern": "grid-4x1-figures"

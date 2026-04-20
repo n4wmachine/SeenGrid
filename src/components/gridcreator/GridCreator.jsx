@@ -1,9 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Picker from './picker/Picker.jsx'
 import Workspace from './workspace/Workspace.jsx'
 import casesConfig from '../../config/cases.config.json'
-import modulesConfig from '../../config/modules.config.json'
-import { WorkspaceStoreProvider, createInitialState } from '../../lib/workspaceStore.js'
+import {
+  useWorkspaceActions,
+  useWorkspaceState,
+} from '../../lib/workspaceStore.js'
+import {
+  getCompatibleModuleIds,
+  getDefaultRolesForCase,
+} from '../../lib/cases/registry.js'
 import { WorkspaceHeaderProvider } from '../../context/WorkspaceHeaderContext.jsx'
 import { usePageMeta } from '../../context/PageMetaContext.jsx'
 
@@ -13,21 +19,20 @@ import { usePageMeta } from '../../context/PageMetaContext.jsx'
  *
  * Picker → `onPick` liefert `{ kind, caseId?, label, panelCount?,
  * defaultRoles?, presetId? }`. Aus der Selection leitet sich der
- * initial State des Workspace ab (Case, Panels, pre-aktivierte
- * Module aus `modules.config.json.compatibility`).
+ * Workspace-State ab (Case, Panels, Module). Das Reset läuft via
+ * `actions.setCase(...)` — der WorkspaceStoreProvider lebt in
+ * App.jsx (Rail-Wechsel-Persistenz, WORKSPACE_SPEC §15.1).
  *
- * FROM SCRATCH ist in v1 im Picker disabled (OPEN_DECISIONS #11) —
- * hier muss kein Fallback berücksichtigt werden, Scratch-Selection
- * kommt nicht an.
+ * FROM SCRATCH ist im Picker disabled (OPEN_DECISIONS #11).
  *
- * YOUR PRESETS: v1 lädt nur den Case (caseId). Volle Preset-
- * Hydration (Panel-Inhalte, Module-States, Signatures) kommt mit
+ * YOUR PRESETS: v1 lädt nur den Case. Volle Hydration kommt in
  * Token-Store Stufe 2 — siehe TODO(preset-hydration).
  */
 export default function GridCreator() {
   const [mode, setMode] = useState('picker')
-  const [selection, setSelection] = useState(null)
   const { setPageMeta } = usePageMeta()
+  const actions = useWorkspaceActions()
+  const state = useWorkspaceState()
 
   useEffect(() => {
     if (mode === 'picker') {
@@ -37,22 +42,31 @@ export default function GridCreator() {
     }
   }, [mode, setPageMeta])
 
+  // Re-Mount-Check: wenn der Store noch einen Case hält (Rail-Wechsel-
+  // Persistenz), springen wir direkt zurück in den Workspace.
+  useEffect(() => {
+    if (state.selectedCase && mode === 'picker') {
+      setMode('workspace')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   function handlePick(pick) {
-    setSelection(pick)
+    applyPickToStore(pick, actions)
     setMode('workspace')
   }
 
   function handleBackToPicker() {
+    // Workspace-State bewusst NICHT zurücksetzen — User kommt zurück,
+    // sieht denselben Stand. Reset passiert nur explizit über Picker-
+    // Auswahl (setCase wirft den Store).
     setMode('picker')
-    setSelection(null)
   }
 
   if (mode === 'workspace') {
     return (
       <WorkspaceHeaderProvider onBackToPicker={handleBackToPicker} currentProjectId={null}>
-        <WorkspaceStoreProvider initial={initialFromSelection(selection)}>
-          <Workspace />
-        </WorkspaceStoreProvider>
+        <Workspace />
       </WorkspaceHeaderProvider>
     )
   }
@@ -60,28 +74,21 @@ export default function GridCreator() {
   return <Picker onPick={handlePick} />
 }
 
-/* -------------------- selection → initial state -------------------- */
+/* -------------------- selection → store -------------------- */
 
-function initialFromSelection(selection) {
-  if (!selection) return createInitialState()
+function applyPickToStore(selection, actions) {
+  if (!selection) return
 
   const caseId = selection.caseId
   const caseDef = casesConfig.cases.find(c => c.id === caseId)
-
-  // v1-Fallback: unbekannter Case → leerer Workspace (Picker sollte
-  // das nicht durchlassen, aber wir crashen nicht).
-  if (!caseDef) return createInitialState({ caseId })
+  if (!caseDef) return
 
   const panelCount = selection.panelCount ?? caseDef.panelCount ?? 4
-  const defaultRoles = selection.defaultRoles ?? caseDef.defaultRoles ?? []
-
   const { rows, cols } = rowsColsForPanelCount(panelCount)
+  const defaultRoles = getDefaultRolesForCase(caseId, panelCount)
+  const activeModules = getCompatibleModuleIds(caseId)
 
-  const activeModules = modulesConfig.modules
-    .filter(m => Array.isArray(m.compatibility) && m.compatibility.includes(caseId))
-    .map(m => m.id)
-
-  return createInitialState({
+  actions.setCase({
     caseId,
     rows,
     cols,
@@ -93,7 +100,8 @@ function initialFromSelection(selection) {
   // TODO(preset-hydration): bei selection.kind === 'preset' auch
   // Panel-fieldValues, Overrides, Module-Overrides, forbiddenElements,
   // environmentMode, styleOverlayToken, signatures aus dem Preset-
-  // Objekt übernehmen. v1 lädt nur den Case.
+  // Objekt übernehmen. Erste Stufe via presetStore.loadWorkspaceFromPreset
+  // (siehe Part C presetStore-Erweiterung).
 }
 
 /**

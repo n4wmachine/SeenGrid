@@ -79,9 +79,9 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 ## Aktueller Stand
 
-**Letzte Session (2026-04-16):** Grid Engine Slices 4-8 fertig + Visual Overhaul (Farbsystem + Layout).
+**Letzte Session (2026-04-20):** Workspace-Bau Part C fertig. Die 4 Manual-Test-Bugs aus Part B sind gefixt (Role-Dropdown, Fallback-Leak, SVG-Silhouetten, Field-Hints), der Picker ist auf `character_angle_study` als einzigen aktiven Case reduziert (Rest disabled + `coming soon`, OPEN_DECISIONS #13), alle 4 Workspace-Bars sind live (ModuleToolbar mit Random/Reset+Confirm, PreviewStrip mit Thumb-Klick, SignaturesBar mit Applied-Cards, OutputBar mit Live-Token-Count + Dim-Warning + Copy + Save), Save-as-Preset-Modal + localStorage-basierter User-Preset-Store laufen, ToastProvider ist app-weit verdrahtet, Workspace-State überlebt Rail-Wechsel (Provider in App.jsx hochgezogen). Case-zentrierte Logik ist in `src/lib/cases/registry.js` isoliert (`TODO(free-mode)`-Anchor für späteren Engine-Refactor). Engine (42 Tests) unberührt.
 
-**Nächster Schritt:** UX Polish auf dem neuen Design. Bestehende Grid Operator UI durch Engine ersetzen.
+**Nächster Schritt:** Engine-Free-Mode-Planung — Konzept-Session für case-losen Builder. Siehe `docs/visual-overhaul/STARTPROMPT.md` und `docs/visual-overhaul/OPEN_DECISIONS.md` #11 + #12.
 
 ### Bestehende Module (alles in Arbeit, nichts final)
 - **Prompt Builder** — chip-basiert, Tab 1. Funktionsfähiger Platzhalter.

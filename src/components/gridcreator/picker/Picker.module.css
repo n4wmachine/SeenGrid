@@ -186,17 +186,53 @@
   padding: 12px 14px 14px;
 }
 
+:global(.sg2-shell) .cardTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
 :global(.sg2-shell) .cardTitle {
   font-family: var(--sg2-font-body);
   font-size: 13px;
   font-weight: 500;
   color: var(--sg2-text-primary);
   letter-spacing: -0.01em;
-  margin-bottom: 4px;
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.cardComing {
+  font-family: var(--sg2-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sg2-text-muted);
+  padding: 3px 7px;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+:global(.sg2-shell) .cardDisabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  border-style: dashed;
+  border-color: var(--sg2-border-default);
+}
+
+.cardDisabled:hover {
+  border-color: var(--sg2-border-default);
+  transform: none;
+  box-shadow: none;
 }
 
 .cardSub {

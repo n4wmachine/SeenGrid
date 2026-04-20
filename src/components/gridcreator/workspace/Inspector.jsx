@@ -4,13 +4,13 @@ import {
   useWorkspaceActions,
   useSelectedPanel,
 } from '../../../lib/workspaceStore.js'
-import casesConfig from '../../../config/cases.config.json'
-import modulesConfig from '../../../config/modules.config.json'
 import signaturesStub from '../../../data/signatures.stub.json'
 import {
-  panelRoleStrategy,
-  SUPPORTED_PANEL_COUNTS,
-} from '../../../lib/cases/characterAngleStudy/panelRoleStrategy.js'
+  getPanelFieldsSchema,
+  getPerPanelModulesForCase,
+  getStrategyDefaultForPanel,
+  hasRealSchema,
+} from '../../../lib/cases/registry.js'
 import FieldRenderer from './FieldRenderer.jsx'
 import styles from './Inspector.module.css'
 
@@ -18,49 +18,14 @@ import styles from './Inspector.module.css'
  * Inspector — 320px Sidebar rechts.
  *
  * Datengetrieben (WORKSPACE_SPEC §13). Keine case-spezifische Logik
- * im Inspector-Body — panel_fields + active-modules-Schema regieren
- * das Rendering.
+ * im Body — alle case-Lookups laufen über lib/cases/registry.js
+ * (TODO(free-mode)-Anchor).
  *
- * v1-Pragma: nur character_angle_study hat echtes panel_fields-
- * Schema. Andere Cases → Fallback-Schema aus `defaultRoles` des
- * Case-Config (TODO(panel-fields-schema-{caseId}) pro Case).
+ * Fallback-Pfad (generisches Custom-Notes-Textfeld pro Panel) ist
+ * **strikt** an "Case hat kein echtes Schema" gekoppelt — nicht an
+ * eine generische Modul-Aktivierung. Damit bleibt der Inspector bei
+ * angle_study sauber (Bug 2 aus Manual-Test Part B).
  */
-
-// v1: panel_fields direkt im Inspector abgelegt, bis echte Case-
-// Schema-Files pro Case existieren. Neue Cases → hier erweitern oder
-// als Schema-File ablegen (WORKSPACE_SPEC §13.3).
-const ANGLE_STUDY_ROLE_OPTIONS = [
-  'front',
-  'front_right',
-  'right_profile',
-  'back_right',
-  'back',
-  'back_left',
-  'left_profile',
-  'front_left',
-]
-
-const PANEL_FIELDS_BY_CASE = {
-  character_angle_study: [
-    {
-      id: 'role',
-      type: 'role',
-      label: 'role',
-      options: ANGLE_STUDY_ROLE_OPTIONS,
-      global_or_panel: 'panel',
-    },
-  ],
-  // TODO(panel-fields-schema-character_sheet): echtes Schema
-  // TODO(panel-fields-schema-character_normalizer): echtes Schema
-  // TODO(panel-fields-schema-expression_sheet): echtes Schema
-  // TODO(panel-fields-schema-outfit_variation): echtes Schema
-  // TODO(panel-fields-schema-world_zone_board): echtes Schema
-  // TODO(panel-fields-schema-world_angle_study): echtes Schema
-  // TODO(panel-fields-schema-shot_coverage): echtes Schema
-  // TODO(panel-fields-schema-story_sequence): echtes Schema
-  // TODO(panel-fields-schema-start_end_frame): echtes Schema
-}
-
 export default function Inspector() {
   const state = useWorkspaceState()
   const actions = useWorkspaceActions()
@@ -69,6 +34,16 @@ export default function Inspector() {
   const panelIndex = useMemo(
     () => (panel ? state.panels.findIndex(p => p.id === panel.id) : -1),
     [panel, state.panels]
+  )
+
+  const caseId = state.selectedCase
+  const panelFields = useMemo(() => getPanelFieldsSchema(caseId), [caseId])
+  const roleField = panelFields.find(f => f.id === 'role' || f.type === 'role')
+  const realSchema = hasRealSchema(caseId)
+
+  const perPanelModules = useMemo(
+    () => getPerPanelModulesForCase(caseId, state.activeModules),
+    [caseId, state.activeModules]
   )
 
   if (!panel) {
@@ -81,24 +56,12 @@ export default function Inspector() {
     )
   }
 
-  const caseId = state.selectedCase
-  const panelFields = getPanelFields(caseId)
-  const roleField = panelFields.find(f => f.id === 'role' || f.type === 'role')
-
   const strategyDefault = getStrategyDefaultForPanel(
     caseId,
     panelIndex,
     state.panels.length
   )
   const displayRole = panel.role || strategyDefault
-
-  const perPanelModules = useMemo(
-    () =>
-      modulesConfig.modules.filter(
-        m => m.hasPerPanelSettings && state.activeModules.includes(m.id)
-      ),
-    [state.activeModules]
-  )
 
   const signature = panel.signatureId
     ? signaturesStub.signatures.find(s => s.id === panel.signatureId) || null
@@ -140,11 +103,16 @@ export default function Inspector() {
               <span className={styles.overrideBadge}>overriding global</span>
             )}
           </div>
+          {roleField.hint && (
+            <div className={styles.fieldHint} title={roleField.hint}>
+              {roleField.hint}
+            </div>
+          )}
           <div className={styles.fieldRow}>
             <div className={styles.fieldControl}>
               <FieldRenderer
                 field={roleField}
-                value={panel.role}
+                value={panel.role || strategyDefault || ''}
                 onChange={handleRoleChange}
               />
             </div>
@@ -161,10 +129,13 @@ export default function Inspector() {
         </div>
       )}
 
-      {/* ---- PER-PANEL OVERRIDES (data-driven) ---- */}
+      {/* ---- PER-PANEL OVERRIDES (data-driven via registry) ---- */}
       {perPanelModules.length > 0 && (
         <div className={styles.section}>
           <div className={styles.sectionLabel}>per-panel overrides</div>
+          <div className={styles.fieldHint}>
+            override this panel only — leave empty to inherit global
+          </div>
           {perPanelModules.map(mod => (
             <PerPanelOverrideField
               key={mod.id}
@@ -193,6 +164,7 @@ export default function Inspector() {
             }}
             role="button"
             tabIndex={0}
+            title="click to open in LookLab (coming)"
           >
             <div className={styles.sigTop}>
               <span className={styles.sigStar}>★</span>
@@ -220,13 +192,38 @@ export default function Inspector() {
         </div>
       )}
 
+      {/* ---- PANEL CONTENT (fallback-only, see Bug 2 fix) ---- */}
+      {!realSchema && (
+        <div className={styles.section}>
+          <div className={styles.sectionLabel}>panel content</div>
+          <div className={styles.fieldHint}>
+            describe what this panel shows · this case has no structured roles yet
+          </div>
+          <textarea
+            className={styles.textarea}
+            value={panel.overrides.panel_content ?? ''}
+            placeholder="e.g. wide shot of the laundromat, harsh fluorescent overhead"
+            title="case has no panel-fields schema yet — free text describes this panel"
+            onChange={e => {
+              const v = e.target.value
+              if (v === '') actions.clearPanelOverride(panel.id, 'panel_content')
+              else actions.setPanelOverride(panel.id, 'panel_content', v)
+            }}
+          />
+        </div>
+      )}
+
       {/* ---- CUSTOM NOTES ---- */}
       <div className={styles.section}>
         <div className={styles.sectionLabel}>custom notes</div>
+        <div className={styles.fieldHint}>
+          extra prose for this panel · directions, references, edge cases
+        </div>
         <textarea
           className={styles.textarea}
           value={panel.customNotes}
           placeholder="panel-specific notes, directions, overrides in prose…"
+          title="free-text notes appended to this panel in the prompt output"
           onChange={e => actions.setPanelNotes(panel.id, e.target.value)}
         />
       </div>
@@ -236,6 +233,7 @@ export default function Inspector() {
         <button
           className={styles.resetFooterBtn}
           onClick={() => actions.resetPanel(panel.id)}
+          title="clear all overrides + notes + signature on this panel"
         >
           reset panel to case-default
         </button>
@@ -246,35 +244,6 @@ export default function Inspector() {
 
 /* -------------------- helpers -------------------- */
 
-function getPanelFields(caseId) {
-  if (PANEL_FIELDS_BY_CASE[caseId]) return PANEL_FIELDS_BY_CASE[caseId]
-  const caseDef = casesConfig.cases.find(c => c.id === caseId)
-  if (caseDef?.defaultRoles?.length) {
-    return [
-      {
-        id: 'role',
-        type: 'role',
-        label: 'role',
-        options: [...new Set(caseDef.defaultRoles)],
-        global_or_panel: 'panel',
-      },
-    ]
-  }
-  return []
-}
-
-function getStrategyDefaultForPanel(caseId, index, totalPanels) {
-  if (index < 0) return null
-  if (
-    caseId === 'character_angle_study' &&
-    SUPPORTED_PANEL_COUNTS.includes(totalPanels)
-  ) {
-    return panelRoleStrategy(totalPanels)[index]?.view ?? null
-  }
-  const caseDef = casesConfig.cases.find(c => c.id === caseId)
-  return caseDef?.defaultRoles?.[index] ?? null
-}
-
 function formatLabel(s) {
   return String(s).replace(/_/g, ' ').toLowerCase()
 }
@@ -283,8 +252,10 @@ function formatLabel(s) {
 
 function PerPanelOverrideField({ mod, value, onChange }) {
   // v1-Pragma: jeder per-Panel-Modul bekommt einen Freitext-Input.
-  // Echte field-type-Erkennung kommt mit case-schema-Erweiterung.
+  // Echte field-type-Erkennung kommt mit case-schema-Erweiterung
+  // (TODO(panel-fields-schema-…) im registry.js).
   const hasValue = value !== '' && value != null
+  const hint = `override ${mod.displayName} only on this panel`
   return (
     <div>
       <div className={styles.sectionLabelRow} style={{ marginBottom: 4 }}>
@@ -298,6 +269,7 @@ function PerPanelOverrideField({ mod, value, onChange }) {
             value={value}
             onChange={onChange}
             placeholder={`per-panel ${mod.displayName}`}
+            title={hint}
           />
         </div>
         {hasValue && (

@@ -1,0 +1,96 @@
+/* ============================================================
+   MODULE TOOLBAR — 52px, full-width.
+   WORKSPACE_SPEC §3. Modul-Chips links, random+reset rechts.
+   ============================================================ */
+
+:global(.sg2-shell) .bar {
+  flex: 0 0 var(--sg2-toolbar-height);
+  width: 100%;
+  height: var(--sg2-toolbar-height);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  background: var(--sg2-bg-secondary);
+  border-bottom: 1px solid var(--sg2-border-default);
+}
+
+.chips {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sg2-border-emphasized) transparent;
+}
+
+.chips::-webkit-scrollbar { height: 6px; }
+.chips::-webkit-scrollbar-thumb {
+  background: var(--sg2-border-emphasized);
+  border-radius: 3px;
+}
+
+.chip {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  color: var(--sg2-text-tertiary);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+  white-space: nowrap;
+}
+.chip:hover {
+  border-color: var(--sg2-border-teal-subtle);
+  color: var(--sg2-text-secondary);
+}
+
+.chipActive {
+  background: var(--sg2-teal-active-bg);
+  border-color: var(--sg2-border-teal);
+  color: var(--sg2-teal);
+}
+.chipActive:hover {
+  border-color: var(--sg2-border-teal-strong);
+  color: var(--sg2-teal);
+}
+
+/* ---- ACTIONS ---- */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  color: var(--sg2-text-secondary);
+  cursor: pointer;
+  transition: var(--sg2-transition);
+}
+.actionBtn:hover {
+  border-color: var(--sg2-border-teal);
+  color: var(--sg2-teal);
+}
+
+.divider {
+  color: var(--sg2-text-quaternary);
+  font-family: var(--sg2-font-mono);
+  font-size: 12px;
+}

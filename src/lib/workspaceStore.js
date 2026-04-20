@@ -15,6 +15,7 @@
 
 import { createContext, createElement, useContext, useMemo, useReducer, useCallback } from 'react'
 import { getRandomPool } from '../data/random/index.js'
+import { getDefaultRolesForCase, getRandomFieldPoolMap } from './cases/registry.js'
 
 /* ---- INITIAL STATE ---------------------------------------- */
 
@@ -98,17 +99,29 @@ function updatePanel(state, panelId, patch) {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.SET_CASE: {
-      const { caseId, defaultRoles = [], rows, cols, orientation } = action.payload || {}
+      const {
+        caseId,
+        defaultRoles,
+        rows,
+        cols,
+        orientation,
+        activeModules,
+      } = action.payload || {}
       const nextRows = rows ?? state.gridDims.rows
       const nextCols = cols ?? state.gridDims.cols
+      // Wenn defaultRoles vom Caller mitgegeben → benutzen, sonst aus
+      // dem registry für den neuen Case ableiten.
+      const roles =
+        defaultRoles ??
+        getDefaultRolesForCase(caseId, nextRows * nextCols)
       return {
         ...createInitialState({
           caseId,
           rows: nextRows,
           cols: nextCols,
           orientation: orientation ?? state.panelOrientation,
-          defaultRoles,
-          activeModules: state.activeModules,
+          defaultRoles: roles,
+          activeModules: activeModules ?? state.activeModules,
         }),
       }
     }
@@ -116,11 +129,17 @@ function reducer(state, action) {
     case ACTIONS.SET_DIMS: {
       const { rows, cols } = action.payload
       const total = Math.max(1, rows * cols)
+      // Bug aus Part B "Bekannte offene Punkte": neue Panels bekamen
+      // role: null. Jetzt vergeben wir die Strategy-Rolle für jeden
+      // Index — alte Panels behalten ihre user-overrides, nur fehlende
+      // Indizes werden frisch erzeugt.
+      const strategyRoles = getDefaultRolesForCase(state.selectedCase, total)
       const existing = state.panels
       const nextPanels = Array.from({ length: total }, (_, i) => {
-        return existing[i] || {
+        if (existing[i]) return existing[i]
+        return {
           id: `panel-${i + 1}`,
-          role: null,
+          role: strategyRoles[i] ?? null,
           fieldValues: {},
           overrides: {},
           customNotes: '',
@@ -256,14 +275,17 @@ function reducer(state, action) {
     }
 
     case ACTIONS.RESET_ALL: {
-      const { defaultRoles = [] } = action.payload || {}
+      const { defaultRoles, activeModules } = action.payload || {}
+      const total = state.gridDims.rows * state.gridDims.cols
+      const roles =
+        defaultRoles ?? getDefaultRolesForCase(state.selectedCase, total)
       return createInitialState({
         caseId: state.selectedCase,
         rows: state.gridDims.rows,
         cols: state.gridDims.cols,
         orientation: state.panelOrientation,
-        defaultRoles,
-        activeModules: [],
+        defaultRoles: roles,
+        activeModules: activeModules ?? state.activeModules,
       })
     }
 
@@ -313,8 +335,20 @@ export function WorkspaceStoreProvider({ initial, children }) {
       dispatch({ type: ACTIONS.DETACH_SIGNATURE_FROM_PANEL, payload: { panelId } }),
     randomizeFields: fieldPoolMap =>
       dispatch({ type: ACTIONS.RANDOMIZE_FIELDS, payload: { fieldPoolMap } }),
-    resetAll: (defaultRoles = []) =>
-      dispatch({ type: ACTIONS.RESET_ALL, payload: { defaultRoles } }),
+    resetAll: (opts = {}) =>
+      dispatch({ type: ACTIONS.RESET_ALL, payload: opts }),
+    resetAllToCaseDefaults: (caseId, activeModules) => {
+      // Hard reset auf Case-Defaults: Roles via Strategy, Module
+      // wieder auf compatibility-Liste.
+      dispatch({
+        type: ACTIONS.RESET_ALL,
+        payload: { defaultRoles: undefined, activeModules },
+      })
+    },
+    randomizeAll: (caseId, activeModules) => {
+      const fieldPoolMap = getRandomFieldPoolMap(caseId, activeModules)
+      dispatch({ type: ACTIONS.RANDOMIZE_FIELDS, payload: { fieldPoolMap } })
+    },
   }), [])
 
   const value = useMemo(() => ({ state, dispatch, actions }), [state, actions])
