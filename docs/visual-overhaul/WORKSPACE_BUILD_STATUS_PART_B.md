@@ -140,6 +140,40 @@ Wenn Part C in Save-Popup einen Preset speichert, sollte der Preset die volle Hy
 
 ---
 
+## Bekannte Bugs für Part C (aus manuellem Test 2026-04-20)
+
+Jonas hat nach dem Commit d95591f manuell im Browser getestet. Folgende
+Bugs müssen in Part C **zuerst** behoben werden, bevor die Bars gebaut
+werden:
+
+1. **ROLE-Dropdown bei `character_angle_study`** — prüfen ob wirklich
+   alle 8 Rollen rendern (`front`, `front_right`, `right_profile`,
+   `back_right`, `back`, `back_left`, `left_profile`, `front_left`).
+   Falls nicht alle erscheinen: Bug im Inspector-Rendering oder in
+   `PANEL_FIELDS_BY_CASE`-Options-Ableitung.
+2. **Panel-Content-Field (Fallback-Leak) im Inspector** — bei
+   `character_angle_study` (Case *mit* echtem Schema) erscheint
+   trotzdem ein zusätzliches Fallback-Feld. Das Fallback-Feld
+   (`Custom Notes`-artiger Textarea pro Panel als generischer
+   Panel-Content) darf **nur** bei Cases ohne `panel_fields`-Schema
+   erscheinen. Fix in Inspector.jsx: Fallback-Pfad strikt an "kein
+   Schema für Case vorhanden" koppeln.
+3. **SVG-Silhouetten-Rendering** — im Manual-Test nicht sichtbar
+   (oder nur bei angle_study sporadisch). Debuggen: sind die Paths
+   aus `SILHOUETTE_PATHS` wirklich referenziert, steht der `viewBox`
+   korrekt, werden die Panels groß genug berechnet (ResizeObserver-
+   Timing)? Cases ohne Silhouette zeigen Dashed-Rectangle-Fallback —
+   OK. Problem ist angle_study-spezifisch.
+4. **Inspector-Felder haben keine Kurz-Hints/Tooltips** — User weiß
+   nicht was in `Custom Notes`, `Panel Content` etc. reingehört. Part
+   C ergänzt knappe Mono-Hints (`title`-Attribut oder ein-Zeilen-Hint
+   unter dem Label). Wortlaut aus WORKSPACE_SPEC §6 ableiten.
+
+**Behebung zuerst, dann Bar-Bau.** Die Bars haben keinen Sinn wenn
+Inspector + Canvas-Basis buggy sind.
+
+---
+
 ## Bekannte offene Punkte
 
 - **Workspace-State bei Rail-Wechsel:** Aktuell unmount-et `GridCreator` wenn der User auf eine andere Rail-Page wechselt (App.jsx `{showGridCreator && <GridCreator />}`). Dadurch geht der Workspace-State verloren. WORKSPACE_SPEC §15.1 fordert "Session-weit persistent: User wechselt zu LookLab, kommt zurück, Workspace-State ist noch da". Das braucht eine Provider-Verankerung höher in App.jsx. **Part C entscheidet Architektur** (Option 1: Provider in App.jsx, Option 2: `display: none` statt Unmount).

@@ -116,7 +116,7 @@ Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
 
 ### 11. FROM SCRATCH deferred bis Engine Free-Mode (Post-v1-Phase)
 
-**Kontext:** Die Grid-Engine ist heute **case-gebunden** — Compiler, `panelRoleStrategy`, `panel_fields`-Schema, Module-Kompatibilität hängen alle an einem konkreten `caseId`. Ein echtes "from scratch" bräuchte einen Engine-Free-Mode (Panels ohne Case-Schema, freie Modul-Kombination, generischer Compile-Pfad). Das existiert nicht.
+**Kontext:** Die Grid-Engine ist heute **case-gebunden** — Compiler, `panelRoleStrategy`, `panel_fields`-Schema, Module-Kompatibilität hängen alle an einem konkreten `caseId`. Ein echtes "from scratch" bräuchte einen Engine-Free-Mode (Panels ohne Case-Schema, freie Modul-Kombination, generischer Compile-Pfad). Das existiert nicht. Siehe #12 für die Engine-Architektur-Begründung.
 
 **Aus Workspace-Part-B-Session (2026-04-20):** Die FROM-SCRATCH-Sektion im Picker wird in v1 **disabled + `COMING SOON`-Label** ausgeliefert (analog Coming-Pages-Pattern, NUANCEN 4). Ein Fallback auf `character_angle_study` wurde diskutiert und verworfen — das hätte die Produkt-Separation zwischen CORE TEMPLATES (schnelle Vorlagen) und FROM SCRATCH (echte Freiheit) gebrochen und eine Feature-Versprechung ohne Deckung geliefert.
 
@@ -148,6 +148,87 @@ Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
 ---
 
 ## Entschiedene Punkte
+
+### 12. Engine-Architektur v1 = case-zentriert (hardcoded) — ENTSCHIEDEN
+
+**Entscheidung (2026-04-20, nach Manual-Test Part B):**
+Die Grid-Engine ist in v1 **hart case-zentriert** und bleibt es für den gesamten v1-Scope. Kein Free-Mode, kein generischer Compile-Pfad, keine case-lose Modul-Kombination.
+
+**Konkret:**
+- Compiler hat `switch(state.case)` mit Whitelist; unbekannte Cases werfen Fehler.
+- `panelRoleStrategy`, `panel_fields`, Modul-Whitelist sind pro Case hardcoded.
+- Slices 1-8 (42 Tests) decken ausschließlich `character_angle_study` + `character_normalizer` ab.
+
+**Warum das gegen die ursprüngliche Vision ist (und trotzdem OK):**
+Jonas' konzeptionelles Ideal aus `SeenGrid_grundgeruest_fuer_claude.md` + `CLAUDE.md` ist ein modularer Free-Mode-Builder ("alles für alles möglich", Custom Builder = Herzstück). Die gebaute Engine liefert das **nicht** — sie ist ein Case-Runner mit Auswahl aus 10 empirisch validierten Setups. Die Diskrepanz ist bewusst: empirisch validierte Case-Logik schlägt theoretische Modularität, weil NanoBanana auf Case-Konstellationen trainiert reagiert, nicht auf beliebige Kombinationen.
+
+**Post-v1-Refactor:**
+Engine-Free-Mode-Session kommt als eigene **4-6h-Phase** (Planungs-Session vorab, dann Build). Scope: case-loser Panel-Container, generischer Compiler, universelle Modul-Liste mit Compat-Flags, `panel_fields`-Schema als runtime-loadable File. Vor dem Refactor nicht anfassen.
+
+**Folge für Workspace Part C:** Kein Free-Mode-Bau. FROM SCRATCH bleibt disabled (#11). Case-spezifische Logik wird aber **zentral isoliert** (siehe Part C Scope) damit der spätere Refactor nicht durch die ganze UI wühlen muss — `TODO(free-mode)`-Marker an den zentralen Stellen.
+
+**Quelle:** Manual-Test-Befund Part B (2026-04-20), Compiler-Code in `src/lib/compiler/`.
+
+---
+
+### 13. V1-Case-Scope = nur `character_angle_study` aktiv im Picker — ENTSCHIEDEN
+
+**Entscheidung (2026-04-20, nach Manual-Test Part B):**
+Im Grid Creator Picker ist in v1 **nur `character_angle_study`** aktiv und klickbar. Alle anderen Cases (`character_sheet`, `story_sequence`, `environment`, `wardrobe`, `character_normalizer`, `expression_sheet`, `outfit_sheet`, `turnaround`, `dynamic_pose_sheet`) sind disabled + `COMING SOON`-Mono-Label (analog Coming-Pages-Pattern, NUANCEN 4).
+
+**Begründung:**
+Nur `character_angle_study` + `character_normalizer` existieren tatsächlich als Code-Dateien in `src/lib/cases/`. Die übrigen 8 Cases aus `MODULE_AND_CASE_CATALOG.md` sind **Papier-Cases** — Name im Catalog, kein echtes Schema, kein Compiler-Handler, kein validiertes NanoBanana-Rezept. Ein Picker der sie anbietet würde Feature-Versprechen ohne Deckung liefern.
+
+`character_normalizer` existiert im Code, aber nicht als eigenständiger Picker-Entrypoint — er ist ein Pre-Step für Character-Cases. Im Picker also **ebenfalls nicht** als eigene Template-Card. (Später: Integration in Character-Workflow als Optional-Step.)
+
+**Spezifische Symptome aus Manual-Test:**
+- `character_sheet` zeigt nur `front / side / back / detail` (Stub-Rollen, kein Schema)
+- `story_sequence` zeigt hardcoded `action a / b / c / d` ohne Grid-Größen-Bezug
+- Alle anderen ohne jede Logik
+
+**Konsequenz für Picker:**
+- Card für `character_angle_study` bleibt aktiv.
+- Alle anderen 9 Cards: `disabled` + dashed Border + `COMING SOON`-Mono-Label (visuell analog FROM SCRATCH #11).
+- Klick blockiert, kein Tooltip-Spam — User versteht aus dem Label.
+- Part C baut das im Picker um.
+
+**Case-Build-Out-Phase (post-Workspace-Part-C):**
+Pro Case-Aktivierung ein eigenes Vorgehen:
+1. Schema-File + Compiler-Handler bauen (Claude).
+2. NanoBanana-Test + Iteration (Jonas).
+3. Picker-Card aktivieren.
+Geschätzt 1-2 Cases pro Build-Session.
+
+**Quelle:** Manual-Test Part B (2026-04-20), Codebase-Inspektion `src/lib/cases/`.
+
+---
+
+### 14. Terminologie-Glossar: Signature / Classics / Trendy — ENTSCHIEDEN
+
+**Entscheidung (2026-04-20):**
+Klare Abgrenzung zwischen drei Konzepten, die bisher sprachlich uneindeutig waren:
+
+- **Signature (NEU)** = Ein im **LookLab** erstellter Style-Code (Token). Vom User selbst kreiert oder abgespeichert aus einem NanoBanana-Discovery-Flow. Persönlich. Gold-codiert (NUANCEN 1). Referenzierbar im Grid Creator (`panel.signatureId`). Speicher-Schicht: Token-Store / Signatures-Library.
+- **Classics** = Die alten "Signatures" aus der Vor-LookLab-Ära. Handoptimierte, NanoBanana-validierte **fertige Prompts** (Character-Sheets, Angle-Studies, Settings-Sheets). Laufen **nicht** über die Engine — sind statische JSONs aus `src/data/presetsClassics.json` (oder äquivalent). Im Prompt Hub als eigene Sektion (OPEN_DECISIONS #1). **Nicht Gold** (NUANCEN 1 Anti-Pattern).
+- **Trendy** = Community-Prompts aus dem Prompt-Vault (1500+ Trending-Prompts). Kuratiert, nicht handoptimiert. Laufen **nicht** über die Engine — sind Roh-Prompts mit optionalem Customization-Layer (OPEN_DECISIONS #8). Im Prompt Hub als weitere Sektion. **Nicht Gold.**
+
+**Warum das fixiert wird:**
+In bisherigen Sessions haben Chats / Docs / Code teils "Signature" für Classics verwendet oder umgekehrt. Das vermischt drei verschiedene Daten-Quellen (LookLab-Token, statische Classics-JSON, Community-Vault) und blockiert saubere Architektur-Entscheidungen.
+
+**Code-Folgen:**
+- `signatureStore` / `tokenStore` → ausschließlich LookLab-Signatures.
+- `classicsStore` (neuer Name, später) → statische Classics-JSONs.
+- `promptVault` → Community-Trendy.
+- NUANCEN 10 bleibt gültig (UI-Name "Signature", intern darf "Token" heißen) — aber nur für die **LookLab-Klasse**. Classics und Trendy haben eigene Namen in UI und Code.
+
+**UI-Folgen:**
+- Signatures-Bar im Workspace: nur LookLab-Signatures.
+- Prompt Hub: separate Sektionen für Classics vs. Trendy vs. Community.
+- Keine "Premium"/"Gold"-Deko auf Classics (NUANCEN 1).
+
+**Quelle:** Session 2026-04-20.
+
+---
 
 ### 1. Classics-Verortung (Grid Creator Picker vs. Prompt Hub) — ENTSCHIEDEN
 

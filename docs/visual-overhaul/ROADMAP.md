@@ -1,7 +1,7 @@
 # SeenGrid Visual Overhaul — Roadmap
 
-**Stand:** 2026-04-19
-**Aktive Phase:** Workspace-Bau (Umsetzung WORKSPACE_SPEC_V1.md)
+**Stand:** 2026-04-20
+**Aktive Phase:** Workspace-Bau Part C (Bugfixes + Bars + Save + Docs)
 
 ---
 
@@ -15,13 +15,26 @@
 [✓] Picker-Bau: Grid Creator Picker + CONTINUE-Band-Adaption .... fertig 2026-04-18
 [✓] Landing-Redesign: Masthead-Composition .......................fertig 2026-04-18
 [✓] Workspace-Planung: Spec für Grid Creator Workspace ........... fertig 2026-04-19
-[→] Workspace-Bau: Grid Creator Workspace (3-Spalten + Bars) .. AKTIV (größter Brocken)
+[✓] Workspace-Bau Part A: Foundation + Infra .................. fertig 2026-04-19
+[✓] Workspace-Bau Part B: Workspace-Parent + 3 Spalten ........ fertig 2026-04-20
+[→] Workspace-Bau Part C: Bugfixes + Bars + Save + Docs ....... AKTIV
+[ ] Engine-Free-Mode-Planung: Spec für case-losen Builder (Konzept-Session)
+[ ] Engine-Free-Mode-Bau: Refactor Engine auf case-agnostisch (4-6h Code-Session)
 [ ] Token-Store Stufe 1: SeenLab schreibt, Grid Creator liest
 [ ] SeenLab Visual-Update (Chips → Kacheln, 3-Spalten)
+[ ] SeenFrame Visual-Update
+[ ] UX-Polish-Pass auf Grid Creator + Landing + Picker
 [ ] LIB-Tab: Library-Management-Page
 [ ] Coming-Pages finalisieren (Film, Board, Crop, Rev, Kit)
 [ ] Legacy-Tab-Header entfernen (PAGE_TO_TAB Bridge raus)
+[ ] Case-Build-Out-Phase: neue Cases pro Session (1-2 Cases + NanoBanana-Tests)
 ```
+
+**Sequenz-Logik (2026-04-20 nachgeschärft):**
+1. Workspace-Bau Part C schließt den **case-zentrierten** v1-Workspace ab.
+2. **Engine-Free-Mode** kommt **vor** Token-Store/SeenLab/etc. — weil der Refactor die Case-Interfaces ändert und sonst alle später gebauten Konsumenten (Token-Store-Links, LookLab-Integration) nachgezogen werden müssten.
+3. SeenLab/SeenFrame/Polish kommen danach.
+4. **Case-Build-Out** läuft als eigene fortlaufende Phase mit separaten Sessions pro 1-2 neuen Cases — inkl. Jonas' NanoBanana-Validierung. Keine Case-Erweiterung im Workspace-Bau oder Engine-Refactor.
 
 ---
 
@@ -98,8 +111,22 @@ Code-Phase. Ersetzt zentrierten Hero durch editorialen Masthead (~75px), schiebt
 **Workspace-Planung**
 Konzept-Session 2026-04-19. Geklärt: vertikaler Stack (56+52+flex+96+52+32), 3-Spalten-Inhalte, Preview-Strip als Panel-Thumbs (full-width), Signatures-Bar mit Gold-Territorium, Output-Bar mit Copy-Primary + Dim-Warning, Save-as-Preset-Popup (Center-Modal, 4 Checkboxen), Projekt-Dropdown im ShellHeader (OPEN_DECISIONS #7 entschieden), Dim-Advisory (4 Stufen aus Git-History portiert), Panel-Role-Customization (aus `panel_fields`-Schema), Random-Field-Auto-Fill mit Confirm, Back-to-Picker-Element, Toast-System generisch. Ergebnis: `WORKSPACE_SPEC_V1.md` + `HANDOFF_WORKSPACE_TO_CODE.md` + OPEN_DECISIONS #7 geschlossen + NUANCEN 13 korrigiert (4 statt 5 Stufen) + neuer OPEN_DECISIONS-Eintrag #10 (Min-Width-Message).
 
-**Workspace-Bau**
-Code-Phase. Umsetzung `WORKSPACE_SPEC_V1.md`. Größter Bau-Block der Phase — 6 Stack-Zonen, 3-Spalten-Layout, datengetriebener Inspector, Preview-Strip, Signatures-Bar, Output-Bar, Save-Popup, Random-Confirm, Toast-System, Back-to-Picker. Grid Engine (42 Tests, Slices 1-8) bleibt unberührt.
+**Workspace-Bau (3 Parts)**
+Code-Phase, aufgeteilt in drei Chats:
+- **Part A (fertig 2026-04-19):** Foundation + Infra — Store, Provider, tokens.css, Header-Integration, Picker-Adaption, ConfirmDialog + Toast + useOverflowDetection, signatures.stub, random-Pools, tokenCount, presetStore-Grundstruktur, compiler-Adapter.
+- **Part B (fertig 2026-04-20):** Workspace-Parent + 3 Spalten — Workspace.jsx, CaseContext (6 Sektionen), Canvas (SVG-Silhouetten + State-Visuals), Inspector (datengetrieben), FieldRenderer. Bars als Platzhalter. FROM SCRATCH im Picker auf disabled gesetzt (OPEN_DECISIONS #11).
+- **Part C (AKTIV):** Bugfixes aus Manual-Test (Role-Dropdown, Fallback-Leak, SVG-Rendering, Inspector-Hints) → Picker-Cases-Scope (nur angle_study aktiv, OPEN_DECISIONS #13) → Output-Bar priorisiert (Live-Prompt sichtbar) → PreviewStrip → SignaturesBar → ModuleToolbar → SavePresetModal → ToastProvider-Wire → presetStore-Erweiterung → finale Docs.
+Grid Engine (42 Tests, Slices 1-8) bleibt unberührt.
+
+**Engine-Free-Mode-Planung + Bau**
+Konzept-Session + Code-Session. Refactor der case-zentrierten Engine (OPEN_DECISIONS #12, NUANCEN 14) zu einem case-agnostischen Builder: case-loser Panel-Container, generischer Compiler, universelle Modul-Liste mit Compat-Flags, `panel_fields`-Schema als runtime-loadable File. Unlocks FROM SCRATCH (#11) und legt Fundament für Case-Build-Out. 4-6h Code-Session nach eigener Planungs-Spec.
+
+**Case-Build-Out-Phase**
+Fortlaufende Phase nach Engine-Free-Mode. Pro Session 1-2 neue Cases aktivieren:
+1. Schema-File + Compiler-Handler in `src/lib/cases/{caseId}/` bauen.
+2. NanoBanana-Tests durch Jonas + Iteration.
+3. Picker-Card aktivieren, `COMING SOON`-Label entfernen.
+Keine Cases im Workspace-Bau oder Engine-Refactor vorziehen — saubere Trennung zwischen Infrastruktur (Engine) und Content (Cases).
 
 **Token-Store Stufe 1**
 Zentraler Signature-Store. SeenLab schreibt Signatures, Grid Creator liest sie. Stufe 2 (Hub-Integration) und Stufe 3 (Vision-Features) kommen später. Grid-Presets kommen in Stufe 2 dazu, nicht jetzt.

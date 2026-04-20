@@ -253,6 +253,71 @@ Beispiele:
 
 ---
 
+## 14. Die gebaute Engine ist NICHT der Free-Mode-Builder aus der ursprünglichen Vision
+
+**Regel:** Die aktuell gebaute Grid-Engine (Slices 1-8, 42 Tests) ist **case-zentriert**, nicht modular-frei. Sie kann `character_angle_study` und `character_normalizer`. Sie kann keine freien Panel/Modul-Kombinationen.
+
+**Warum diese Klarstellung:**
+
+In `CLAUDE.md` + `SeenGrid_grundgeruest_fuer_claude.md` ist die konzeptionelle Vision: "Custom Builder = Herzstück, alles für alles möglich, modulare Live-Engine". Die gebaute Realität ist: case-gebundener Runner mit hardcoded Whitelist pro Case. Das ist **bewusst so** — empirische Case-Validierung (Jonas' NanoBanana-Tests) schlägt theoretische Modularität, weil NanoBanana auf bestimmte Case-Konstellationen trainiert reagiert.
+
+Siehe OPEN_DECISIONS #12 für die volle Begründung + Post-v1-Plan (Engine-Free-Mode als eigene 4-6h-Session).
+
+**Anti-Pattern das auftreten wird:**
+Ein Chat liest CLAUDE.md → denkt "ich muss jeden Case ermöglichen" → baut case-agnostische Fallbacks die nicht getestet sind. Oder umgekehrt: Chat versucht "den Free-Mode nachzuliefern" im Workspace-Bau. → **Ablehnen.** Der v1-Scope ist case-zentriert. Free-Mode ist eigene Phase.
+
+**Folge für Code-Chats:**
+- Wenn Spec / Catalog / CLAUDE.md Free-Mode-Terminologie verwendet: als *Zukunftsvision* lesen, nicht als v1-Anforderung.
+- Case-spezifische Logik **zentralisieren** (nicht durch UI verstreuen) damit Free-Mode-Refactor später diese Stellen gezielt ersetzen kann. Marker: `TODO(free-mode)`.
+- Keine case-agnostischen Pfade erfinden die ohne NanoBanana-Validierung geliefert werden.
+
+---
+
+## 15. Nur `character_angle_study` + `character_normalizer` existieren im Code
+
+**Regel:** `MODULE_AND_CASE_CATALOG.md` listet 10 Cases. Davon haben **nur 2** echte Code-Implementierung (`src/lib/cases/characterAngleStudy/`, `src/lib/cases/characterNormalizer/`). Die anderen 8 (`character_sheet`, `story_sequence`, `environment`, `wardrobe`, `expression_sheet`, `outfit_sheet`, `turnaround`, `dynamic_pose_sheet`) sind **Name-only Papier-Cases** — Catalog-Einträge ohne Schema, ohne Compiler-Handler, ohne validiertes NanoBanana-Rezept.
+
+**Warum das gefährlich ist wenn nicht explizit:**
+
+Ein Code-Chat liest den Catalog, sieht 10 Cases, geht davon aus dass alle funktionieren, baut Picker + Inspector so dass sie "generisch alle 10 bedienen". → Dashboard funktioniert scheinbar, aber sobald der User einen nicht-existenten Case klickt, wirft der Compiler einen Fehler oder liefert kaputten Output.
+
+**V1-Realität:**
+- Picker hat **eine** aktive Card: `character_angle_study`.
+- Alle anderen 9 (inkl. FROM SCRATCH) sind disabled + `COMING SOON`-Label (siehe OPEN_DECISIONS #13 + #11).
+- `character_normalizer` existiert im Code, ist aber **kein eigener Picker-Entrypoint** (Pre-Step für Character-Workflow, Integration kommt later).
+
+**Case-Build-Out-Phase (post-Workspace-Part-C):**
+Pro Case-Aktivierung:
+1. Schema-File + Compiler-Handler bauen.
+2. NanoBanana-Test durch Jonas.
+3. Picker-Card aktivieren.
+Geschätzt 1-2 neue Cases pro Build-Session.
+
+**Anti-Pattern:**
+Chat baut "pragmatischen Fallback" der alle 10 Cases mit Dummy-Inhalt anzeigt ("damit User schonmal was sehen"). → Ablehnen. Disabled + Label ist die saubere Lösung.
+
+---
+
+## 16. Terminologie-Glossar: Signature / Classics / Trendy
+
+**Regel:** Drei Begriffe, drei verschiedene Daten-Quellen, keine Vermischung:
+
+- **Signature** = Ein **LookLab-Token**. User-kreierter Style-Code. Persönlich. Gold (NUANCEN 1).
+- **Classics** = Die alten "Signatures" aus der Vor-LookLab-Ära. Handoptimierte fertige Prompts. Statische JSON, nicht durch die Engine. **Neutral, nicht Gold.**
+- **Trendy** = Community-Prompts aus dem Prompt-Vault. Kuratiert, nicht handoptimiert. Statische JSON, nicht durch die Engine. **Neutral.**
+
+Siehe OPEN_DECISIONS #14 für die vollen Code-/UI-Folgen.
+
+**Warum das fixiert werden musste:**
+Bisherige Docs + Code haben "Signature" uneindeutig verwendet — teils für LookLab-Token, teils für die alten Classics. Das hat drei verschiedene Speicher-Schichten vermischt (Token-Store vs. Classics-JSON vs. Community-Vault) und blockiert saubere Architektur.
+
+**Anti-Pattern:**
+- Chat sagt "Signature" und meint Classics. → Korrigieren.
+- Chat gibt Classics Gold-Akzente weil "sie sind ja Signatures". → Ablehnen. NUANCEN 1 gewinnt.
+- Chat baut einen einzigen `presetStore` für LookLab-Signatures + Classics + Trendy. → Ablehnen. Drei separate Stores (oder klar gegliederte Namespaces).
+
+---
+
 ## Wie dieses Dokument zu nutzen ist
 
 **Als neuer Claude-Code-Chat zu Beginn einer Session:**
