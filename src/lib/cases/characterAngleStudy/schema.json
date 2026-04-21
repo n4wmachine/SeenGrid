@@ -1,0 +1,59 @@
+{
+  "compileOrder": [
+    "id",
+    "type",
+    "goal",
+    "references",
+    "style",
+    "style_overlay",
+    "layout",
+    "panels",
+    "orientation_rules",
+    "full_body_rules",
+    "consistency_rules",
+    "pose",
+    "environment",
+    "forbidden_elements"
+  ],
+  "modules": ["face_reference", "style_overlay", "environment"],
+  "validPanelCounts": [3, 4, 6, 8],
+  "environmentModes": [
+    "inherit_from_reference",
+    "neutral_studio",
+    "custom_text"
+  ],
+  "panelRoles": {
+    "3": ["front", "right_profile", "left_profile"],
+    "4": ["front", "right_profile", "left_profile", "back"],
+    "6": [
+      "front",
+      "front_right",
+      "right_profile",
+      "back",
+      "left_profile",
+      "front_left"
+    ],
+    "8": [
+      "front",
+      "front_right",
+      "right_profile",
+      "back_right",
+      "back",
+      "back_left",
+      "left_profile",
+      "front_left"
+    ]
+  },
+  "empiricallyValidatedCounts": [4],
+  "panelFraming": "full_body",
+  "panelFields": [
+    {
+      "id": "role",
+      "type": "role",
+      "label": "role",
+      "hint": "which side the camera looks at — drives the silhouette",
+      "optionsFrom": "panelRoles",
+      "global_or_panel": "panel"
+    }
+  ]
+}

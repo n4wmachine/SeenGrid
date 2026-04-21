@@ -1,0 +1,123 @@
+{
+  "id": "character_angle_study",
+  "displayName": "Character Angle Study",
+  "category": "character",
+  "schemaVersion": "v1",
+  "defaultPanelCount": 4,
+  "defaultRoles": ["front", "right_profile", "left_profile", "back"],
+  "keywords": ["angle", "character", "portrait", "figure", "cinematic", "profile"],
+  "thumbPattern": "grid-4x1-figures",
+  "hasStrategyHook": true,
+  "hasSerializerHook": true,
+  "defaultState": {
+    "schema_version": "v1",
+    "case": "character_angle_study",
+    "id": "cinematic_panel_strip_v1",
+    "type": "character_sheet_cinematic",
+    "goal": "Create one finished cinematic panel strip as four tall vertical panels arranged side by side in a single horizontal row.",
+    "references": {
+      "full_body_master": {
+        "priority": 1,
+        "authority_over": [
+          "body_proportions",
+          "hairstyle",
+          "outfit",
+          "colors",
+          "materials",
+          "footwear"
+        ],
+        "payload": {
+          "type": "placeholder",
+          "label": "Full-body master reference"
+        }
+      },
+      "face_reference": {
+        "enabled": true,
+        "priority": 1,
+        "authority_over": ["facial_identity", "fine_facial_details"],
+        "payload": {
+          "type": "placeholder",
+          "label": "Face reference"
+        }
+      }
+    },
+    "style": {
+      "mode": "cinematic_panel_strip",
+      "not_mode": "neutral_studio_turnaround_sheet",
+      "finish": "polished"
+    },
+    "style_overlay": {
+      "enabled": false,
+      "source": null,
+      "token": null,
+      "ref_id": null
+    },
+    "layout": {
+      "panel_count": 4,
+      "panel_orientation": "vertical",
+      "panel_arrangement": "single_horizontal_row",
+      "panel_spacing": "even",
+      "figure_margin": "small"
+    },
+    "orientation_rules": {
+      "panel_2_must_show": "character_right_side_to_camera",
+      "panel_3_must_show": "character_left_side_to_camera",
+      "profiles_must_be_true_opposites": true,
+      "allow_mirrored_reuse": false,
+      "allow_duplicate_side_profile": false
+    },
+    "full_body_rules": {
+      "show_complete_figure_head_to_feet": true,
+      "both_shoes_fully_visible_in_every_panel": true,
+      "allow_cropped_legs": false,
+      "allow_cropped_feet": false,
+      "allow_hidden_footwear": false
+    },
+    "consistency_rules": {
+      "keep_identical": [
+        "facial_identity",
+        "hairstyle",
+        "body_proportions",
+        "outfit",
+        "colors",
+        "materials",
+        "footwear"
+      ],
+      "keep_constant_across_panels": [
+        "environment",
+        "lighting_direction",
+        "mood",
+        "rendering_quality"
+      ]
+    },
+    "pose": {
+      "base_pose": "natural_relaxed_standing",
+      "posture": "calm_balanced",
+      "only_change": "viewing_angle"
+    },
+    "environment": {
+      "enabled": true,
+      "mode": "inherit_from_reference",
+      "custom_text": null
+    },
+    "forbidden_elements": {
+      "case_level": [
+        "text",
+        "labels",
+        "captions",
+        "watermarks",
+        "extra_characters",
+        "extra_props",
+        "studio_background",
+        "identity_drift",
+        "outfit_drift",
+        "hairstyle_drift",
+        "material_drift",
+        "cropped_body_parts",
+        "hidden_shoes",
+        "mirrored_same_side_profile"
+      ],
+      "user_level": []
+    }
+  }
+}
