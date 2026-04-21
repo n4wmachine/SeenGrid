@@ -6,6 +6,8 @@
       "category": "style",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "style_overlay",
+      "emitPath": "modules/style_overlay/emit.js",
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -16,7 +18,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -25,6 +28,8 @@
       "category": "content",
       "hasGlobalSettings": false,
       "hasPerPanelSettings": true,
+      "outputKey": "content",
+      "emitPath": "modules/panel_content_fields/emit.js",
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -34,7 +39,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -43,6 +49,8 @@
       "category": "utility",
       "hasGlobalSettings": false,
       "hasPerPanelSettings": false,
+      "outputKey": null,
+      "emitPath": "modules/random_fill/emit.js",
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -52,7 +60,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -61,6 +70,8 @@
       "category": "constraints",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": false,
+      "outputKey": "forbidden_elements",
+      "emitPath": "modules/forbidden_elements_user/emit.js",
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -71,7 +82,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -80,6 +92,8 @@
       "category": "environment",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "environment",
+      "emitPath": "modules/environment_mode/emit.js",
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -88,7 +102,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -97,12 +112,15 @@
       "category": "camera",
       "hasGlobalSettings": false,
       "hasPerPanelSettings": true,
+      "outputKey": "camera_angle",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
         "start_end_frame",
         "shot_coverage",
-        "story_sequence"
+        "story_sequence",
+        "free_mode"
       ]
     },
     {
@@ -111,6 +129,8 @@
       "category": "environment",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "weather",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -120,7 +140,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -129,6 +150,8 @@
       "category": "character",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "wardrobe",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -136,7 +159,8 @@
         "start_end_frame",
         "shot_coverage",
         "story_sequence",
-        "expression_sheet"
+        "expression_sheet",
+        "free_mode"
       ]
     },
     {
@@ -145,6 +169,8 @@
       "category": "character",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "pose",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -152,7 +178,8 @@
         "start_end_frame",
         "shot_coverage",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -161,13 +188,16 @@
       "category": "character",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
+      "outputKey": "expression",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
         "start_end_frame",
         "shot_coverage",
         "story_sequence",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -176,6 +206,8 @@
       "category": "character",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": false,
+      "outputKey": "face_reference",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -184,7 +216,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     },
     {
@@ -193,10 +226,13 @@
       "category": "character",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": false,
+      "outputKey": "multi_character",
+      "emitPath": null,
       "compatibility": [
         "start_end_frame",
         "shot_coverage",
-        "story_sequence"
+        "story_sequence",
+        "free_mode"
       ]
     },
     {
@@ -205,6 +241,8 @@
       "category": "content",
       "hasGlobalSettings": true,
       "hasPerPanelSettings": false,
+      "outputKey": "object_anchor",
+      "emitPath": null,
       "compatibility": [
         "character_sheet",
         "character_angle_study",
@@ -215,7 +253,8 @@
         "shot_coverage",
         "story_sequence",
         "expression_sheet",
-        "outfit_variation"
+        "outfit_variation",
+        "free_mode"
       ]
     }
   ]
