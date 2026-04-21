@@ -5,7 +5,33 @@
 **Aktuell für:** nach Workspace-Bau Part C. Entscheidung durch Jonas am Anfang: **Option A (Engine-Free-Mode-Planung)** oder **Option B (UX-Polish)**. Empfehlung: A.
 
 **Session-Typ:** Konzept-/Planungs-Session bei A, Code-Session bei B.
-**Branch bleibt:** `claude/seengrid-visual-overhaul-6RK4n` (vorerst — bei A wird neue ENGINE_FREE_MODE_SPEC angelegt, kein Code).
+
+---
+
+**ALLERERSTE AKTION — BRANCH-WECHSEL (vor allem anderen):**
+
+Die Harness startet dich vermutlich auf einem frischen
+`claude/fix-*-XXXXX`-Branch in einer leeren Sandbox. Der echte
+Stand (Workspace Part A + B + C, Docs, Engine, Registry) liegt
+**ausschließlich** auf `claude/seengrid-visual-overhaul-6RK4n`.
+
+```
+git fetch origin claude/seengrid-visual-overhaul-6RK4n
+git checkout claude/seengrid-visual-overhaul-6RK4n
+git pull
+```
+
+**Verifikation:** `ls docs/visual-overhaul/` muss u.a. zeigen:
+`OPEN_DECISIONS.md`, `NUANCEN.md`, `WORKSPACE_SPEC_V1.md`,
+`WORKSPACE_BUILD_STATUS_PART_A.md`, `_PART_B.md`, `_PART_C.md`.
+`git log --oneline -1` muss `eea295e workspace part c: …`
+zeigen (oder neueres). Wenn das fehlt: stop, frag Jonas — nicht
+weiterarbeiten.
+
+Die CLAUDE.md-Regel "direkt auf main" ist überholt — Feature-
+Branch gewinnt. Branch bleibt für diese Session
+`claude/seengrid-visual-overhaul-6RK4n` (bei A wird nur eine
+neue `ENGINE_FREE_MODE_SPEC_V1.md` angelegt, kein Code).
 
 ---
 
