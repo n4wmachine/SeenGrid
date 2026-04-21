@@ -184,3 +184,71 @@ Ein gespeicherter Free-Mode-Preset hat `caseId: 'free_mode'` und lädt genauso
 wie ein Case-Preset — `presetStore.loadWorkspaceFromPreset` braucht keinen
 Sonderpfad, sobald `SET_CASE` `free_mode` akzeptiert (tut es mit §3).
 
+---
+
+## 7. Module-Serialisierung im Free-Mode
+
+Case-Serializer wie `json.js` kennen ihre Module hart (`face_reference`,
+`style_overlay`, `environment`). Der Free-Mode-Serializer muss **alle 13**
+bedienen ohne Case-Wissen.
+
+**Lösung:** Jedes Modul bekommt einen eigenen `emitFreeMode(state, panel?)`-Helper
+in einem neuen File pro Modul unter `src/lib/modules/<moduleId>/emit.js`. Der
+Free-Mode-Compiler iteriert `activeModules[]` und ruft pro Modul den Helper —
+Globals-Emit einmal, Per-Panel-Emit pro Panel.
+
+**Schema-Erweiterung `modules.config.json`:** jedes Modul bekommt
+`"outputKey": "<key>"` (z.B. `"wardrobe"` → Output-Block heißt `wardrobe`)
+und `"emitPath": "modules/wardrobe/emit.js"` (relativ zu `src/lib/`, optional).
+
+**v1-Free-Mode-Scope:** nur die 5 universellen Module bekommen Emit-Helper beim
+Refactor (`forbidden_elements_user`, `environment_mode`, `style_overlay`,
+`panel_content_fields`, `random_fill`). Die restlichen 8 sind im Free-Mode
+aktivierbar aber ihre Output-Serialisierung ist `TODO(module-emit-<id>)` —
+aktiviert der User sie, landet ein `_placeholder`-Eintrag im Output mit einem
+Hinweis-String. Jonas testet danach welche Module er als nächstes im Free-Mode
+NanoBanana-validiert, und die kriegen dann ihren echten Helper.
+
+**Begründung:** Alternative wäre "alle 13 Emit-Helper auf einmal" — das ist
+Scope-Creep. Der Free-Mode-Refactor ist Infrastruktur, Modul-Validierung ist
+Case-Build-Out-artige Arbeit und läuft in eigenen Sessions mit Jonas-Tests.
+
+---
+
+## 8. Case-Bundle-Format (W4 Hybrid)
+
+**Ziel:** neue Cases = neue Config-Dateien, kein neuer Compiler (CLAUDE.md
+"Erweiterbarkeit ohne Rebuild").
+
+**Bundle-Struktur pro Case:** ein Ordner unter `src/lib/cases/<caseId>/` mit:
+
+| Datei | Pflicht | Inhalt |
+|---|---|---|
+| `case.json` | ja | Metadata: id, displayName, category, supportedPanelCounts, defaultPanelCount, defaultRoles, keywords, thumbPattern |
+| `schema.json` | ja | Panel-Fields-Schema (Array von `{id, type, label, hint, options?, global_or_panel}`) + Compile-Order + Module-Whitelist + Default-State-Skeleton |
+| `strategy.js` | optional | JS-Hook für Panel-Role-Strategy wenn das Case eine hat (z.B. `panelRoleStrategy(count)` für Angle Study). Default: keine Strategy, Rollen aus `case.json.defaultRoles`. |
+| `serializer.js` | optional | JS-Hook für custom Prompt-JSON-Serialisierung wenn das Case Emit-Details hat die über die JSON-Deklaration hinausgehen. Default: generischer Serializer fährt nach Compile-Order aus `schema.json`. |
+
+**Generischer Compiler:** liest `case.json` + `schema.json`, iteriert
+Compile-Order, ruft pro Key entweder einen generischen Emitter (Text-Feld,
+Modul-Block, Panels-Derivation) oder den `serializer.js`-Hook wenn vorhanden.
+
+**Laufzeit-Ladung:** Case-Bundles werden beim App-Start in einen Case-Index
+geladen (statischer Vite-Import-Glob: `import.meta.glob('./cases/*/case.json')`).
+Runtime-Loading (aus dem Netz oder User-Upload) ist **nicht** Scope — das wäre
+erst sinnvoll wenn Jonas Cases teilt/lädt (eigene Phase).
+
+**Migration bestehender Cases:** `character_angle_study` und
+`character_normalizer` behalten ihre heutigen JS-Files (schema.js/defaults.js/
+panelRoleStrategy.js/serializer.js). Im Refactor werden sie in das neue
+Bundle-Format überführt:
+
+- `defaults.js` Default-State → `case.json.defaultState` + `schema.json`
+- `schema.js` COMPILE_ORDER + MODULES + VALID_PANEL_COUNTS → `schema.json`
+- `panelRoleStrategy.js` → `strategy.js` (unverändert)
+- `compiler/serializers/json.js` → `cases/characterAngleStudy/serializer.js`
+
+Die 42 Engine-Tests laufen gegen den **Output** des Compilers, nicht gegen die
+interne Struktur — wenn der Output byte-identisch bleibt, bleiben die Tests grün.
+Das ist die Akzeptanz-Schwelle für den Refactor.
+
