@@ -1,0 +1,49 @@
+{
+  "id": "free_mode",
+  "displayName": "Free Mode",
+  "category": "free",
+  "schemaVersion": "v1",
+  "defaultPanelCount": 4,
+  "defaultRoles": [],
+  "keywords": ["free", "custom", "scratch", "empty", "blank"],
+  "thumbPattern": "free-mode",
+  "hasStrategyHook": false,
+  "hasSerializerHook": true,
+  "defaultState": {
+    "schema_version": "v1",
+    "case": "free_mode",
+    "id": "freestyle_grid_v1",
+    "type": "freestyle",
+    "goal": "Generate N panels as described per panel.",
+    "references": {},
+    "style_overlay": {
+      "enabled": false,
+      "source": null,
+      "token": null,
+      "ref_id": null
+    },
+    "layout": {
+      "rows": 2,
+      "cols": 2,
+      "panel_count": 4,
+      "panel_orientation": "vertical"
+    },
+    "panels": [
+      { "index": 1, "content": "" },
+      { "index": 2, "content": "" },
+      { "index": 3, "content": "" },
+      { "index": 4, "content": "" }
+    ],
+    "environment": {
+      "enabled": false,
+      "mode": "inherit",
+      "custom_text": null
+    },
+    "forbidden_elements": {
+      "case_level": [],
+      "user_level": []
+    },
+    "active_modules": [],
+    "module_values": {}
+  }
+}

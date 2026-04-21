@@ -28,6 +28,11 @@ import normalizerSchema from "./characterNormalizer/schema.json" with { type: "j
 import { validateState as validateNormalizer } from "./characterNormalizer/validate.js";
 import { compileNormalizerJson } from "./characterNormalizer/serializer.js";
 
+import freeModeCase from "./freeMode/case.json" with { type: "json" };
+import freeModeSchema from "./freeMode/schema.json" with { type: "json" };
+import { validateState as validateFreeMode } from "./freeMode/validate.js";
+import { compileFreeModeJson } from "./freeMode/serializer.js";
+
 const BUNDLES = {
   [angleStudyCase.id]: {
     caseConfig: angleStudyCase,
@@ -41,6 +46,12 @@ const BUNDLES = {
     schema: normalizerSchema,
     validate: validateNormalizer,
     serialize: compileNormalizerJson,
+  },
+  [freeModeCase.id]: {
+    caseConfig: freeModeCase,
+    schema: freeModeSchema,
+    validate: validateFreeMode,
+    serialize: compileFreeModeJson,
   },
 };
 

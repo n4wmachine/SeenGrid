@@ -6,30 +6,26 @@
    (panels[], activeModules, environmentMode, styleOverlayToken,
    forbiddenElements, …). Die Engine (src/lib/compiler/) erwartet
    eine case-spezifische Shape pro Case (siehe
-   characterAngleStudy/defaults.js).
+   characterAngleStudy/case.json.defaultState).
 
    Dieser Adapter übersetzt das eine ins andere und ruft den
    Compiler. Sein Output ist ein Prompt-JSON-String, fertig zum
    Pasten in NanoBanana.
 
-   v1: nur character_angle_study unterstützt (NUANCEN 15,
-   OPEN_DECISIONS #13). Andere Cases liefern einen Stub-Output.
-
-   TODO(free-mode): bei Engine-Free-Mode-Refactor die case-Switch
-   hier auf den generischen Pfad umstellen.
+   Slice-4: free_mode-Zweig aktiv (case-los). Weitere Cases bleiben
+   Stub bis Case-Build-Out.
    ============================================================ */
 
-import { compile, compileToString } from './compiler/index.js'
-import { buildDefaultState } from './cases/characterAngleStudy/defaults.js'
+import { compile } from './compiler/index.js'
+import { buildDefaultState as buildAngleStudyDefault } from './cases/characterAngleStudy/defaults.js'
+import freeModeCase from './cases/freeMode/case.json' with { type: 'json' }
 
 const ANGLE_STUDY = 'character_angle_study'
+const FREE_MODE = 'free_mode'
 
 /**
  * Übersetzt den Workspace-Store-State in eine Engine-State-Shape
  * und ruft den Compiler. Liefert das Prompt-JSON-Objekt.
- *
- * Wirft bei unbekannten Cases — explizit, damit kein still-broken
- * Output entsteht.
  */
 export function compileWorkspaceToObject(workspaceState) {
   if (!workspaceState || !workspaceState.selectedCase) {
@@ -38,6 +34,9 @@ export function compileWorkspaceToObject(workspaceState) {
   const caseId = workspaceState.selectedCase
   if (caseId === ANGLE_STUDY) {
     return compile(toAngleStudyEngineState(workspaceState))
+  }
+  if (caseId === FREE_MODE) {
+    return compile(toFreeModeEngineState(workspaceState))
   }
   // v1-Fallback für noch nicht im Compiler abgebildete Papier-Cases.
   // Picker hält diese disabled, also ist das eher ein Sicherheitsnetz.
@@ -75,7 +74,7 @@ export function compileWorkspaceWithMeta(workspaceState) {
  * Workspace überschreibt nur die User-relevanten Felder.
  */
 function toAngleStudyEngineState(ws) {
-  const base = buildDefaultState()
+  const base = buildAngleStudyDefault()
 
   // panel_count aus rows × cols
   const panelCount = clampToValid(ws.gridDims.rows * ws.gridDims.cols, [3, 4, 6, 8])
@@ -131,6 +130,74 @@ function toAngleStudyEngineState(ws) {
   if (!isActive('environment_mode')) {
     base.environment.enabled = false
   }
+
+  return base
+}
+
+/* -------------------- workspace → free_mode engine -------------------- */
+
+/**
+ * Mapping vom UI-Workspace-State auf einen free_mode Engine-State.
+ * Free-Mode hat keine Case-Constraints — rows/cols beliebig,
+ * Rollen sind null, alle Module frei toggelbar. Defaults
+ * (id/type/goal) kommen aus case.json.defaultState und sind vom
+ * User über den Inspector editierbar (Slice 7).
+ */
+function toFreeModeEngineState(ws) {
+  const base = structuredClone(freeModeCase.defaultState)
+
+  const rows = ws.gridDims?.rows ?? base.layout.rows
+  const cols = ws.gridDims?.cols ?? base.layout.cols
+  base.layout.rows = rows
+  base.layout.cols = cols
+  base.layout.panel_count = rows * cols
+  if (ws.panelOrientation) base.layout.panel_orientation = ws.panelOrientation
+
+  base.panels = Array.from({ length: rows * cols }, (_, i) => {
+    const wsPanel = Array.isArray(ws.panels) ? ws.panels[i] : null
+    const content = typeof wsPanel?.fieldValues?.content === 'string'
+      ? wsPanel.fieldValues.content
+      : ''
+    return { index: i + 1, content }
+  })
+
+  // environment (Workspace-ENUM → free-mode mode-String)
+  switch (ws.environmentMode) {
+    case 'inherit':
+      base.environment = { enabled: true, mode: 'inherit', custom_text: null }
+      break
+    case 'neutral_studio':
+      base.environment = { enabled: true, mode: 'neutral_studio', custom_text: null }
+      break
+    case 'custom_text':
+      base.environment = { enabled: true, mode: 'custom_text', custom_text: ws.environmentCustomText || '' }
+      break
+    default:
+      base.environment = { enabled: false, mode: 'inherit', custom_text: null }
+      break
+  }
+
+  // style_overlay
+  if (ws.styleOverlayToken && ws.styleOverlayToken.trim()) {
+    base.style_overlay = {
+      enabled: true,
+      source: 'looklab',
+      token: ws.styleOverlayToken.trim(),
+      ref_id: null,
+    }
+  } else {
+    base.style_overlay = { enabled: false, source: null, token: null, ref_id: null }
+  }
+
+  // forbidden_elements user_level
+  base.forbidden_elements = {
+    case_level: [],
+    user_level: Array.isArray(ws.forbiddenElements) ? [...ws.forbiddenElements] : [],
+  }
+
+  // Modul-State — Slice-5 wertet das aus. Vorerst nur rohpassen.
+  base.active_modules = Array.isArray(ws.activeModules) ? [...ws.activeModules] : []
+  base.module_values = {}
 
   return base
 }

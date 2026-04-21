@@ -1,0 +1,16 @@
+{
+  "compileOrder": [
+    "id",
+    "type",
+    "goal",
+    "references",
+    "style_overlay",
+    "layout",
+    "panels",
+    "environment",
+    "forbidden_elements",
+    "modules_extra"
+  ],
+  "modules": [],
+  "softPanelCap": 24
+}
