@@ -1,146 +1,17 @@
 /**
- * buildDefaultState — character_normalizer
+ * character_normalizer — Default-State (Slice-2-Refactor)
  *
- * Baut den Default-State für den Normalizer (Step 1 im Two-Step-Flow).
- * Alle Prompt-Strings sind WORTWÖRTLICH aus
- * DISTILLATIONS/character-normalizer-json-example.md übernommen.
+ * Der Default-State lebt jetzt in `case.json.defaultState` (Spec §8
+ * Case-Bundle-Format). Diese Datei re-exportiert einen tiefen Klon davon
+ * unter der alten API. Strings bleiben byte-identisch zum empirisch
+ * validierten GT-Prompt aus DISTILLATIONS/character-normalizer-json-example.md.
  *
- * WICHTIG (CLAUDE.md Anti-Drift): Keine Umformulierung, keine
- * "Optimierung", keine Kürzung. Diese Strings sind empirisch in
- * NanoBanana validiert.
+ * Wird in Slice 3 obsolet sobald der generische Compiler-Pfad
+ * `case.json.defaultState` direkt liest.
  */
 
-import { SCHEMA_VERSION, CASE_ID } from "./schema.js";
+import caseConfig from "./case.json" with { type: "json" };
 
 export function buildDefaultState() {
-  return {
-    // ---- State-only Metadaten ----
-    schema_version: SCHEMA_VERSION,
-    case: CASE_ID,
-
-    // ---- Prompt-JSON-Felder (Reihenfolge = COMPILE_ORDER) ----
-
-    id: "single_full_body_character_lock_v1",
-    type: "single_character_cinematic_full_body",
-    goal: "Create one single full-body cinematic character image of the exact same person.",
-
-    references: {
-      reference_b: {
-        priority: 1,
-        authority_over: [
-          "facial_identity",
-          "fine_facial_details",
-        ],
-        payload: {
-          type: "placeholder",
-          label: "Face / identity reference",
-        },
-      },
-      reference_a: {
-        priority: 1,
-        authority_over: [
-          "hairstyle",
-          "body_proportions",
-          "outfit_design",
-          "garment_layering",
-          "colors",
-          "materials",
-          "accessories",
-          "footwear",
-          "environment",
-          "visual_world",
-        ],
-        payload: {
-          type: "placeholder",
-          label: "Body / outfit reference (may be cropped)",
-        },
-      },
-    },
-
-    critical_full_body_rule: {
-      show_complete_character_head_to_feet: true,
-      both_shoes_fully_visible: true,
-      reconstruct_missing_lower_body_if_reference_is_cropped: true,
-      reconstruction_rule: "faithfully complete the missing lower body so the result becomes one complete canonical full-body version of the same character",
-    },
-
-    outfit_preservation: {
-      preserve_exact_outfit_from_reference_a: true,
-      allow_redesign: false,
-      allow_restyle: false,
-      allow_replace_clothing: false,
-      allow_simplify_clothing: false,
-      allow_invent_new_clothing_items: false,
-      keep_identical: [
-        "garment_structure",
-        "layers",
-        "silhouette",
-        "colors",
-        "materials",
-        "patterns",
-        "accessories",
-        "footwear",
-      ],
-      if_partially_obscured: "complete conservatively in the same design language without adding new fashion elements",
-    },
-
-    environment_preservation: {
-      preserve_exact_environment_from_reference_a: true,
-      preserve_visual_world_from_reference_a: true,
-      allow_background_replacement: false,
-      allow_new_location: false,
-      allow_studio_backdrop: false,
-      allow_neutral_setting: false,
-      keep_identical: [
-        "atmosphere",
-        "spatial_context",
-        "lighting_mood",
-        "environmental_materials",
-      ],
-    },
-
-    pose: {
-      base_pose: "natural_relaxed_standing",
-      stance: "neutral_balanced",
-      allow_dramatic_action: false,
-    },
-
-    framing: {
-      shot_type: "full_body",
-      margin: "comfortable",
-      no_body_part_touches_frame_edge: true,
-    },
-
-    lock: {
-      keep_same: [
-        "identity",
-        "hairstyle",
-        "outfit",
-        "colors",
-        "materials",
-        "footwear",
-        "environment",
-      ],
-    },
-
-    forbidden_elements: {
-      case_level: [
-        "extra_characters",
-        "extra_props",
-        "text",
-        "labels",
-        "watermarks",
-        "cropped_feet",
-        "hidden_shoes",
-        "outfit_changes",
-        "new_clothing_items",
-        "new_accessories",
-        "hairstyle_changes",
-        "new_background",
-        "studio_background",
-        "simplified_rendering",
-      ],
-      user_level: [],
-    },
-  };
+  return structuredClone(caseConfig.defaultState);
 }

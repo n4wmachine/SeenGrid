@@ -1,55 +1,23 @@
 /**
- * character_normalizer — Schema v1
+ * character_normalizer — Schema (Slice-2-Refactor)
  *
- * Basiert auf DISTILLATIONS/character-normalizer-json-example.md (empirisch
- * validiert in NanoBanana am 2026-04-15, sogar sauberer als Paragraph-GT).
+ * Die deklarativen Schema-Daten leben jetzt in `schema.json` + `case.json`
+ * (Spec §8 Case-Bundle-Format). Diese Datei hält nur noch den
+ * `validateState()`-Validator und re-exportiert die kanonischen Konstanten
+ * aus dem JSON-Bundle.
  *
- * Der Normalizer ist ein Single-Image-Case (kein Grid): er nimmt ein
- * gecropptes/unvollständiges Referenzbild und erzeugt daraus einen
- * sauberen Full-Body Master Reference. Das Ergebnis dient als Input
- * für Step 2 (z.B. character_angle_study).
- *
- * Eigene Compile-Order, eigene Felder (critical_full_body_rule,
- * outfit_preservation, environment_preservation) — NICHT dieselbe
- * Struktur wie character_angle_study.
+ * Wird in Slice 3 obsolet sobald der generische Compiler-Pfad das Bundle
+ * direkt liest.
  */
 
-export const SCHEMA_VERSION = "v1";
-export const CASE_ID = "character_normalizer";
+import caseConfig from "./case.json" with { type: "json" };
+import schema from "./schema.json" with { type: "json" };
 
-/**
- * Compile-Order — bestimmt die Reihenfolge der Top-Level-Keys im
- * Prompt-JSON-Output. Direkt aus dem GT-Beispiel abgeleitet.
- */
-export const COMPILE_ORDER = [
-  "id",
-  "type",
-  "goal",
-  "references",
-  "critical_full_body_rule",
-  "outfit_preservation",
-  "environment_preservation",
-  "pose",
-  "framing",
-  "lock",
-  "forbidden_elements",
-];
+export const SCHEMA_VERSION = caseConfig.schemaVersion;
+export const CASE_ID = caseConfig.id;
+export const COMPILE_ORDER = schema.compileOrder;
+export const MODULES = schema.modules;
 
-/**
- * Module für diesen Case. Laut MODULE_AND_CASE_CATALOG.md:
- * - face_reference: ✓ (aber im Normalizer heißt die Ref "reference_b")
- * - style_overlay: ✓
- * - environment_mode: ✓
- *
- * Im MVP ist der Normalizer ein fester Prompt ohne Module-Toggles —
- * die Struktur ist locked weil empirisch validiert. Module kommen
- * post-MVP wenn Jonas sie braucht.
- */
-export const MODULES = [];
-
-/**
- * Minimaler Shape-Validator für einen character_normalizer State.
- */
 export function validateState(state) {
   const errors = [];
 
@@ -73,7 +41,6 @@ export function validateState(state) {
     }
   }
 
-  // references — reference_a and reference_b required
   if (!state.references?.reference_a) {
     errors.push("references.reference_a is required");
   }
@@ -81,22 +48,18 @@ export function validateState(state) {
     errors.push("references.reference_b is required");
   }
 
-  // critical_full_body_rule
   if (!state.critical_full_body_rule || typeof state.critical_full_body_rule !== "object") {
     errors.push("critical_full_body_rule must be an object");
   }
 
-  // outfit_preservation
   if (!state.outfit_preservation || typeof state.outfit_preservation !== "object") {
     errors.push("outfit_preservation must be an object");
   }
 
-  // environment_preservation
   if (!state.environment_preservation || typeof state.environment_preservation !== "object") {
     errors.push("environment_preservation must be an object");
   }
 
-  // forbidden_elements
   if (!state.forbidden_elements || typeof state.forbidden_elements !== "object") {
     errors.push("forbidden_elements must be an object");
   } else {

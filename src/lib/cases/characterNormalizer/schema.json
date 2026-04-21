@@ -1,0 +1,17 @@
+{
+  "compileOrder": [
+    "id",
+    "type",
+    "goal",
+    "references",
+    "critical_full_body_rule",
+    "outfit_preservation",
+    "environment_preservation",
+    "pose",
+    "framing",
+    "lock",
+    "forbidden_elements"
+  ],
+  "modules": [],
+  "referenceOrder": ["reference_b", "reference_a"]
+}
