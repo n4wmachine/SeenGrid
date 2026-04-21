@@ -111,3 +111,76 @@ switch (state.case) {
 - **Nichts an `angle_study`/`normalizer` anfassen.** Deren 42 Tests bleiben grün
   weil deren Pfade unverändert sind.
 
+---
+
+## 5. Modul-Verfügbarkeit im Free-Mode
+
+**Regel (W3):** Alle 13 Module aus `modules.config.json` sind im Free-Mode
+verfügbar. Keine Filterung, keine Warnings.
+
+**Konkret:**
+
+- `registry.getCompatibleModuleIds('free_mode')` gibt **alle** 13 Modul-IDs zurück.
+- Kein Pre-Aktivieren: im Free-Mode startet `activeModules` leer. User togglet
+  bewusst rein was er will.
+- Module mit UI-Infrastruktur die heute case-gebunden ist (`face_reference`
+  braucht Reference-Slots in der Inspector-Global-Sektion, `multi_character`
+  braucht Multi-Ref-UI) müssen ihre UI case-agnostisch bereitstellen. Wenn ein
+  Modul heute nur für Character-Cases ein UI hat, muss das UI im Free-Mode
+  genauso aktivierbar sein. Kein "Modul toggelbar aber UI fehlt".
+
+**Schema-Erweiterung `modules.config.json`:**
+
+Jedes Modul bekommt `"freeMode": true` in der Compatibility-Liste (alle, per
+default). Wenn ein Modul zukünftig doch nicht im Free-Mode soll (unwahrscheinlich),
+wird es dort explizit ausgeschlossen — aber v1-Default ist: alle drin.
+
+---
+
+## 6. UI-Konsequenzen
+
+**Picker (`Picker.jsx`):**
+
+- FROM SCRATCH-Card wird aktiv (OPEN_DECISIONS #11 aufgehoben).
+- Click → `actions.setCase({ caseId: 'free_mode', rows: 2, cols: 2 })` →
+  Workspace mit 4 leeren Panels, keine Rollen, keine vorausgewählten Module.
+- `isCaseActive('free_mode')` → `true` (neben `character_angle_study`).
+
+**Workspace CaseContext (`CaseContext.jsx`):**
+
+- Kein Case-Readout-Block. Stattdessen Mini-Label `FREE MODE` (neutral, kein
+  Gold — Gold ist für Signatures reserviert, NUANCEN 1).
+- Dim-Matrix: rows/cols frei wählbar (1-6 × 1-6, damit ≤ 24 Panels für
+  Dim-Advisory). Angle-Study-typischer Advisory (HIRES/STANDARD/LOW/TINY) bleibt
+  gültig, basiert rein auf Pixel-pro-Panel.
+
+**Workspace Inspector (`Inspector.jsx`):**
+
+- Kein Role-Dropdown (nur Cases mit `hasRealSchema` zeigen eins).
+- Per-Panel-Sektion zeigt das generische `content`-Textarea (heute schon der
+  Fallback-Pfad wenn `!hasRealSchema`) + alle aktiven Per-Panel-Module.
+- Override-Dot-Logik + Signature-Applied-Border bleiben unverändert.
+
+**Workspace Canvas (`Canvas.jsx`):**
+
+- Keine SVG-Silhouetten im Free-Mode (die sind an Rollen gekoppelt). Statt
+  Silhouette: leeres Panel mit Panel-Nummer-Label und dem `content`-Preview
+  (erste ~20 Zeichen des Textareas).
+- Selected-Teal-Border + Override-Dot + Signature-Border bleiben.
+
+**Workspace "Convert to Free Mode"-Action (W5):**
+
+- Im Case-Workspace: sekundärer Knopf `convert to free mode` in der
+  OutputBar-Leiste (nicht primary, um Copy-as-JSON nicht zu verdrängen).
+- Bestätigungs-Dialog (analog Random/Reset-Confirm): "Convert to free mode?
+  You lose case constraints, your panels and content stay."
+- Aktion: `selectedCase` → `'free_mode'`, `panels[].role` → `null`, Rest bleibt.
+- Einbahnstraße: im Free-Mode gibt's **keinen** Reverse-Knopf. Wer Case will,
+  geht `back to picker` → Case klicken.
+
+**Preset-Hydration:**
+
+Ein gespeicherter Free-Mode-Preset hat `caseId: 'free_mode'` und lädt genauso
+wie ein Case-Preset — `presetStore.loadWorkspaceFromPreset` braucht keinen
+Sonderpfad, sobald `SET_CASE` `free_mode` akzeptiert (tut es mit §3).
+
