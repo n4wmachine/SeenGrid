@@ -62,3 +62,52 @@ neuen Shape hinzu, er nutzt `selectedCase === 'free_mode'` als Sentinel.
 `registry.getDefaultRolesForCase`, was für `free_mode` ein leeres Array
 zurückgibt → alle Panels bekommen `role: null`. Saubere graceful degradation.
 
+---
+
+## 4. Compiler-Architektur
+
+**Heutiger Dispatcher** (`compiler/index.js:52`):
+
+```
+switch (state.case) {
+  case "character_angle_study":  → compileAngleStudyJson(state)
+  case "character_normalizer":   → compileNormalizerJson(state)
+  default: throw
+}
+```
+
+**Post-Refactor:**
+
+```
+switch (state.case) {
+  case "character_angle_study":  → compileAngleStudyJson(state)   // unverändert
+  case "character_normalizer":   → compileNormalizerJson(state)   // unverändert
+  case "free_mode":              → compileFreeModeJson(state)     // NEU
+  default: throw
+}
+```
+
+**compileFreeModeJson — was es tut:**
+
+1. Keine `COMPILE_ORDER` aus einem Case-Schema. Stattdessen **generische Compile-Order** fix im Serializer:
+   `id → type → goal → references → style_overlay → layout → panels → environment → forbidden_elements → modules_extra`.
+2. `panels` wird aus `state.panels[]` 1:1 gelesen (nicht aus einer Strategy abgeleitet).
+   Jedes Panel: `{ index, content }` wenn `content` nicht leer, sonst `{ index }`.
+3. `references`, `style_overlay`, `environment`, `forbidden_elements` laufen durch
+   die existierenden Emit-Helper (sind schon case-agnostisch geschrieben) oder ihre
+   Free-Mode-Varianten wenn nötig.
+4. Aktive Module mit Global-/Per-Panel-Werten landen in `modules_extra` als
+   serialisierter Block pro Modul. Reihenfolge: `activeModules[]`-Reihenfolge
+   des Users (stabil). Details in §7.
+5. Placeholder-Felder (`id`, `type`, `goal`) bekommen Free-Mode-Defaults
+   (`"freestyle_grid_v1"`, `"user_defined"`, vom User überschreibbar). Jonas-Test
+   entscheidet ob die Defaults bleiben.
+
+**Was der Refactor am existierenden Code anfasst:**
+
+- `compiler/index.js` — eine Zeile `case "free_mode":` + Import.
+- `compiler/serializers/freeModeJson.js` — neu, ~80-120 Zeilen.
+- `compileWorkspace.js:39` — `case 'free_mode'` zweig ergänzen, der `toFreeModeEngineState(ws)` ruft.
+- **Nichts an `angle_study`/`normalizer` anfassen.** Deren 42 Tests bleiben grün
+  weil deren Pfade unverändert sind.
+
