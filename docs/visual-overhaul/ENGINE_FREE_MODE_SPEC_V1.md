@@ -32,3 +32,33 @@ zu runtime-loadable Bundles, die UI bleibt weitgehend unberührt (dank
 | W4 | Case-Bundle-Format | Hybrid: JSON deklarativ (Schema, Defaults, Compile-Order) + optionaler JS-Hook für custom Strategy (z.B. `panelRoleStrategy`). |
 | W5 | Migration Case ↔ Free | Einbahnstraße **Case → Free**. "Convert to free mode"-Knopf im Workspace. Case-Panel-Count-Freiheit bleibt Case-Eigenschaft (Angle Study: 3/4/6/8). Wer andere Counts will, springt rüber ins Free. |
 
+---
+
+## 3. Free-Mode State-Shape
+
+Heutiger Workspace-Store (`workspaceStore.js:37`) ist bereits case-agnostisch in
+den UI-Feldern — `selectedCase` ist nur ein String. Der Free-Mode fügt keinen
+neuen Shape hinzu, er nutzt `selectedCase === 'free_mode'` als Sentinel.
+
+**Was im Free-Mode gilt / nicht gilt:**
+
+| Feld | Case-Modus | Free-Mode |
+|---|---|---|
+| `selectedCase` | `"character_angle_study"` etc. | `"free_mode"` |
+| `gridDims.rows × cols` | Case-Constraint (Angle Study: 3/4/6/8) | beliebig 1-N (Soft-Cap N=24 wegen Dim-Warning) |
+| `panelOrientation` | vom Case default, user-overridable | user wählt |
+| `panels[].role` | Strategy-Default (z.B. `front`) | `null` (kein Role-Dropdown im Inspector) |
+| `panels[].fieldValues` | Case-Schema-Felder (z.B. `role`) | nur `content`-Freitext |
+| `panels[].overrides` | gegen Case-Globals | gegen User-Globals (Modul-Inspector) |
+| `panels[].customNotes` | frei | frei |
+| `panels[].signatureId` | frei | frei |
+| `activeModules` | Case-Compat-Whitelist pre-aktiviert | alle 13 verfügbar, nichts pre-aktiviert |
+| `forbiddenElements` | frei | frei |
+| `environmentMode` | frei | frei |
+| `styleOverlayToken` | frei | frei |
+
+**Keine neuen Action-Types nötig.** `SET_CASE` mit `caseId: 'free_mode'` reicht
+— der Reducer macht das heute schon (`workspaceStore.js:101`) und fragt
+`registry.getDefaultRolesForCase`, was für `free_mode` ein leeres Array
+zurückgibt → alle Panels bekommen `role: null`. Saubere graceful degradation.
+
