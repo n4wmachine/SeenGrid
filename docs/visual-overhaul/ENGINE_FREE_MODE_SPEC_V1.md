@@ -252,3 +252,71 @@ Die 42 Engine-Tests laufen gegen den **Output** des Compilers, nicht gegen die
 interne Struktur — wenn der Output byte-identisch bleibt, bleiben die Tests grün.
 Das ist die Akzeptanz-Schwelle für den Refactor.
 
+---
+
+## 9. Nicht Teil dieses Refactors
+
+Explizit ausgeschlossen, damit die Build-Session nicht ausufert:
+
+- **Neue Cases.** `character_sheet`, `expression_sheet`, `outfit_variation` etc.
+  bleiben disabled + `coming soon`. OPEN_DECISIONS #13 bleibt gültig. Case-Build-Out
+  ist eigene Phase.
+- **Neue Module.** Die 13 im Catalog bleiben. Kein `camera_motion`, kein
+  `lighting_override` etc.
+- **NanoBanana-Validierung von Free-Mode-Outputs.** Das macht Jonas nach dem Bau.
+  Der Build liefert paste-fähige Free-Mode-JSONs, aber ob NanoBanana sie lecker
+  verarbeitet ist eine Test-Phase.
+- **Runtime-Case-Loading (aus Netz/Upload).** Statischer Vite-Import-Glob reicht
+  für v1.
+- **User-Custom-Fields.** Der User kann im Free-Mode keine eigenen Felder
+  definieren, nur `content`-Textarea nutzen. Custom-Field-Editor wäre eigene
+  Phase (siehe OPEN_DECISIONS #8 Hub-Customization-Mechanismus).
+- **Token-Store / LookLab-Integration.** Free-Mode-Signatures-Bar verhält sich
+  wie heute im Case-Modus (Applied-Cards, Gold-Border). Echter Library-Picker
+  kommt mit Token-Store Stufe 1.
+- **Engine-Tests erweitern.** Die 42 bleiben. Neue Tests für den Free-Mode-Pfad
+  sind wünschenswert, aber Nice-to-Have — Build-Session darf ohne sie mergen
+  wenn der manuelle Smoke-Test durchgeht.
+
+---
+
+## 10. Build-Reihenfolge (für die Nachfolge-Session)
+
+Grobes Slicing. Reihenfolge hat Rückwärts-Kompatibilität als Leitprinzip — nach
+jedem Schritt sollen die 42 Tests grün sein und der Case-Workspace funktionieren.
+
+1. **Case-Bundle-Format einführen** (§8). `cases/characterAngleStudy/` in neues
+   Format migrieren. Compiler bleibt vorerst case-switched. Tests grün halten.
+2. **Case-Bundle für `character_normalizer`** analog migrieren.
+3. **Generischen Compiler-Pfad bauen**, der Case-Bundles liest. Bestehender
+   Switch wird Fallback. Tests grün halten.
+4. **`free_mode`-Case einführen** (§3, §4): `case.json` + generischer Serializer
+   + Compiler-Dispatch + `compileWorkspace`-Adapter.
+5. **`modules.config.json` erweitern** (§7): `outputKey` + `emitPath` pro Modul.
+   Die 5 universellen Module bekommen Emit-Helper.
+6. **Picker-FROM-SCRATCH aktivieren** (§6): `isCaseActive('free_mode') === true`,
+   Card-State aktiv.
+7. **Workspace-UI-Anpassungen** (§6): CaseContext-Free-Label, Inspector ohne
+   Role-Dropdown im Free-Mode, Canvas ohne Silhouetten im Free-Mode.
+8. **Convert-to-Free-Mode-Action** (§6, W5): OutputBar-Knopf + ConfirmDialog.
+9. **Manueller Smoke-Test** — Jonas klickt FROM SCRATCH, baut ein 5-Panel-Grid,
+   togglet 3 Module, kopiert JSON, paste in NanoBanana.
+
+Geschätzte Länge: 4-6h Code-Session (wie OPEN_DECISIONS #12 vorhergesagt).
+
+---
+
+## 11. Offene Detail-Fragen für die Build-Session
+
+Die folgenden Punkte sind nicht blocking, aber beim Bauen zu klären:
+
+- **Default-`id`/`type`/`goal` im Free-Mode:** Strings festlegen oder leer lassen?
+  Vorschlag: `id="freestyle_grid_v1"`, `type="freestyle"`, `goal="Generate N
+  panels as described per panel."` — vom User editierbar über ein Global-Feld
+  in Inspector-CaseContext.
+- **Soft-Cap Panel-Count im Free-Mode:** 24 wie heute? Oder mehr? Dim-Advisory
+  setzt die harte Grenze — jenseits TINY-Warning darf der User trotzdem weitermachen.
+- **Free-Mode im Preset-Picker:** "YOUR PRESETS"-Sektion mischt Case- und
+  Free-Mode-Presets. Brauchen Free-Mode-Presets eine visuelle Markierung (z.B.
+  Mini-Label `free`)? Vorschlag: ja, kleines neutrales Label analog `coming soon`.
+
