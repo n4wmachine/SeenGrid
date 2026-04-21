@@ -149,6 +149,41 @@ Das Konzept stammt aus der Pre-JSON-Output-Ära und ist überholt:
 
 ## Entschiedene Punkte
 
+### 15. Engine-Free-Mode v1 Architektur — ENTSCHIEDEN
+
+**Entscheidung (2026-04-21, Engine-Free-Mode-Planungs-Session):**
+Free-Mode wird als gleichwertiger Case `free_mode` neben `character_angle_study`
+und `character_normalizer` eingeführt, **nicht** als paralleler Engine-Pfad.
+Case-Bundles werden in ein Hybrid-Format (JSON deklarativ + optionale JS-Hooks)
+überführt.
+
+**Kern-Entscheidungen (W1-W5):**
+
+- **W1:** Ein Compiler-Dispatcher, `free_mode` ist Case-ID im selben Switch.
+- **W2:** Free-Mode hat kein Panel-Fields-Schema — nur ein generisches
+  `content`-Textarea pro Panel. Änderbar nach NanoBanana-Tests.
+- **W3:** **Alle 13 Module** aus dem Catalog sind im Free-Mode verfügbar. Keine
+  Filterung, keine Warnings. FROM SCRATCH = FROM SCRATCH.
+- **W4:** Case-Bundle-Format = Hybrid. `case.json` + `schema.json` deklarativ,
+  `strategy.js` + `serializer.js` optional als JS-Hooks.
+- **W5:** Einbahnstraße Case → Free-Mode. "Convert to free mode"-Knopf in der
+  OutputBar. Angle-Study-Panel-Counts bleiben starr (3/4/6/8); wer 2/5/16 Panels
+  will, springt in Free-Mode.
+
+**Folgen:**
+
+- OPEN_DECISIONS #11 (FROM SCRATCH deferred) wird durch den Build gelöst.
+- Case-Interfaces ändern sich (JSON-Deklaration + optional JS-Hook). Alle
+  späteren Konsumenten (Token-Store, LIB, Case-Build-Out) bauen auf dem neuen
+  Format auf.
+- 42 Engine-Tests bleiben grün — Refactor berührt Output-Pfade, nicht Output-Bytes.
+
+**Volle Details:** `docs/visual-overhaul/ENGINE_FREE_MODE_SPEC_V1.md`
+
+**Quelle:** Planungs-Session 2026-04-21.
+
+---
+
 ### 12. Engine-Architektur v1 = case-zentriert (hardcoded) — ENTSCHIEDEN
 
 **Entscheidung (2026-04-20, nach Manual-Test Part B):**
