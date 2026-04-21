@@ -8,38 +8,27 @@
 
 ---
 
-**ALLERERSTE AKTION — BRANCH-WECHSEL (vor allem anderen):**
-
-Die Harness startet dich vermutlich auf einem frischen
-`claude/fix-*-XXXXX`-Branch in einer leeren Sandbox. Der echte
-Stand (Workspace Part A + B + C, Docs, Engine, Registry) liegt
-**ausschließlich** auf `claude/seengrid-visual-overhaul-6RK4n`.
-
-```
-git fetch origin claude/seengrid-visual-overhaul-6RK4n
-git checkout claude/seengrid-visual-overhaul-6RK4n
-git pull
-```
-
-**Verifikation:** `ls docs/visual-overhaul/` muss u.a. zeigen:
-`OPEN_DECISIONS.md`, `NUANCEN.md`, `WORKSPACE_SPEC_V1.md`,
-`WORKSPACE_BUILD_STATUS_PART_A.md`, `_PART_B.md`, `_PART_C.md`.
-`git log --oneline -1` muss `eea295e workspace part c: …`
-zeigen (oder neueres). Wenn das fehlt: stop, frag Jonas — nicht
-weiterarbeiten.
-
-Die CLAUDE.md-Regel "direkt auf main" ist überholt — Feature-
-Branch gewinnt. Branch bleibt für diese Session
-`claude/seengrid-visual-overhaul-6RK4n` (bei A wird nur eine
-neue `ENGINE_FREE_MODE_SPEC_V1.md` angelegt, kein Code).
-
----
-
 Hi. Ich bin Jonas, Solo AI-Filmmaker, Nicht-Coder. Die drei
 Workspace-Build-Chats (Part A + B + C) sind durch, der case-
 zentrierte v1-Workspace läuft (4 Bugs gefixt, 4 Bars live, Save
 funktioniert, Toasts app-weit, Workspace-State überlebt Rail-
-Wechsel). Jetzt steht zur Wahl:
+Wechsel). Jetzt steht zur Wahl zwischen **Option A (Engine-Free-
+Mode-Planung)** und **Option B (UX-Polish)** — Details unten.
+Kein Code-Bau in dieser Session (bei A), nur Spec.
+
+**ALLERERSTE AKTION — BRANCH-WECHSEL:**
+
+    git fetch origin claude/seengrid-visual-overhaul-6RK4n
+    git checkout claude/seengrid-visual-overhaul-6RK4n
+    git pull
+
+Verifikation: `ls docs/visual-overhaul/` muss u.a. zeigen
+`OPEN_DECISIONS.md`, `NUANCEN.md`, `WORKSPACE_SPEC_V1.md`,
+`WORKSPACE_BUILD_STATUS_PART_A.md` + `_PART_B.md` + `_PART_C.md`.
+`git log --oneline -1` muss `76d48f0` oder `eea295e` (oder neuer)
+zeigen. Wenn die Dateien fehlen: stop, frag Jonas — nicht
+weiterarbeiten. Die CLAUDE.md-Regel "direkt auf main" ist
+überholt — Feature-Branch gewinnt.
 
 ---
 
