@@ -1,0 +1,114 @@
+/* ============================================================
+   PROMPT PREVIEW
+   Live-JSON-Panel oberhalb der OutputBar. Toggle zwischen
+   expandiert (240px scrollable) und kollabiert (32px peek).
+   ============================================================ */
+
+:global(.sg2-shell) .bar {
+  flex: 0 0 auto;
+  width: 100%;
+  border-top: 1px solid var(--sg2-border-default);
+  background: var(--sg2-bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bar.open {
+  height: 240px;
+}
+
+.bar.collapsed {
+  height: 32px;
+}
+
+/* ---- HEAD ---- */
+
+.head {
+  flex: 0 0 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-bottom: 1px solid transparent;
+}
+
+.bar.open .head {
+  border-bottom-color: var(--sg2-border-default);
+}
+
+:global(.sg2-shell) .toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--sg2-text-secondary);
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+.toggle:hover {
+  color: var(--sg2-text-primary);
+}
+
+.caret {
+  color: var(--sg2-text-tertiary);
+  width: 10px;
+  display: inline-block;
+  text-align: center;
+}
+
+.label {
+  letter-spacing: 0.12em;
+}
+
+.tokens {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: var(--sg2-text-tertiary);
+  letter-spacing: 0.04em;
+}
+.tokensWarn {
+  color: var(--sg2-warning);
+  font-weight: 600;
+}
+
+.peek {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: var(--sg2-text-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- BODY ---- */
+
+.body {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 12px 16px;
+  overflow: auto;
+  font-family: var(--sg2-font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--sg2-text-secondary);
+  background: var(--sg2-bg-surface);
+  white-space: pre;
+  tab-size: 2;
+}
+
+.body code {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
+}

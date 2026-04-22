@@ -3,6 +3,7 @@ import Canvas from './Canvas.jsx'
 import Inspector from './Inspector.jsx'
 import ModuleToolbar from './ModuleToolbar.jsx'
 import PreviewStrip from './PreviewStrip.jsx'
+import PromptPreview from './PromptPreview.jsx'
 import SignaturesBar from './SignaturesBar.jsx'
 import OutputBar from './OutputBar.jsx'
 import styles from './Workspace.module.css'
@@ -35,6 +36,7 @@ export default function Workspace() {
 
       <PreviewStrip />
       <SignaturesBar />
+      <PromptPreview />
       <OutputBar />
     </div>
   )
