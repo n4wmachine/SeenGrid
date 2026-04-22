@@ -1,38 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Picker from './picker/Picker.jsx'
 import Workspace from './workspace/Workspace.jsx'
 import casesConfig from '../../config/cases.config.json'
-import {
-  useWorkspaceActions,
-  useWorkspaceState,
-} from '../../lib/workspaceStore.js'
+import { useWorkspaceActions } from '../../lib/workspaceStore.js'
 import {
   getCompatibleModuleIds,
   getDefaultRolesForCase,
 } from '../../lib/cases/registry.js'
-import { WorkspaceHeaderProvider } from '../../context/WorkspaceHeaderContext.jsx'
 import { usePageMeta } from '../../context/PageMetaContext.jsx'
 
 /**
  * Grid Creator
- * Parent-Komponente mit State-Switch zwischen Picker und Workspace.
+ * Prop-driven Dispatcher Picker/Workspace. Mode + Handler leben in
+ * App.jsx, damit der ShellHeader (der oberhalb von GridCreator in
+ * App.jsx rendert) denselben WorkspaceHeaderProvider sehen kann wie
+ * der Workspace — sonst erscheint der Back-Button nie.
  *
  * Picker → `onPick` liefert `{ kind, caseId?, label, panelCount?,
  * defaultRoles?, presetId? }`. Aus der Selection leitet sich der
- * Workspace-State ab (Case, Panels, Module). Das Reset läuft via
- * `actions.setCase(...)` — der WorkspaceStoreProvider lebt in
- * App.jsx (Rail-Wechsel-Persistenz, WORKSPACE_SPEC §15.1).
- *
- * FROM SCRATCH ist im Picker disabled (OPEN_DECISIONS #11).
+ * Workspace-State ab (Case, Panels, Module). App.jsx setzt mode auf
+ * 'workspace' nach dem Pick.
  *
  * YOUR PRESETS: v1 lädt nur den Case. Volle Hydration kommt in
  * Token-Store Stufe 2 — siehe TODO(preset-hydration).
  */
-export default function GridCreator() {
-  const [mode, setMode] = useState('picker')
+export default function GridCreator({ mode, onPick }) {
   const { setPageMeta } = usePageMeta()
   const actions = useWorkspaceActions()
-  const state = useWorkspaceState()
 
   useEffect(() => {
     if (mode === 'picker') {
@@ -42,33 +36,13 @@ export default function GridCreator() {
     }
   }, [mode, setPageMeta])
 
-  // Re-Mount-Check: wenn der Store noch einen Case hält (Rail-Wechsel-
-  // Persistenz), springen wir direkt zurück in den Workspace.
-  useEffect(() => {
-    if (state.selectedCase && mode === 'picker') {
-      setMode('workspace')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   function handlePick(pick) {
     applyPickToStore(pick, actions)
-    setMode('workspace')
-  }
-
-  function handleBackToPicker() {
-    // Workspace-State bewusst NICHT zurücksetzen — User kommt zurück,
-    // sieht denselben Stand. Reset passiert nur explizit über Picker-
-    // Auswahl (setCase wirft den Store).
-    setMode('picker')
+    onPick(pick)
   }
 
   if (mode === 'workspace') {
-    return (
-      <WorkspaceHeaderProvider onBackToPicker={handleBackToPicker} currentProjectId={null}>
-        <Workspace />
-      </WorkspaceHeaderProvider>
-    )
+    return <Workspace />
   }
 
   return <Picker onPick={handlePick} />
@@ -76,7 +50,7 @@ export default function GridCreator() {
 
 /* -------------------- selection → store -------------------- */
 
-function applyPickToStore(selection, actions) {
+export function applyPickToStore(selection, actions) {
   if (!selection) return
 
   const caseId = selection.caseId

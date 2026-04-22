@@ -7,8 +7,9 @@ import ComingSoon from './components/shell/ComingSoon.jsx'
 import LandingPage from './components/landing/LandingPage.jsx'
 import GridCreator from './components/gridcreator/GridCreator.jsx'
 import { PageMetaProvider, usePageMeta } from './context/PageMetaContext.jsx'
+import { WorkspaceHeaderProvider } from './context/WorkspaceHeaderContext.jsx'
 import { useLang } from './context/LangContext.jsx'
-import { WorkspaceStoreProvider } from './lib/workspaceStore.js'
+import { WorkspaceStoreProvider, useWorkspaceState } from './lib/workspaceStore.js'
 import ToastProvider from './components/ui/ToastProvider.jsx'
 import './App.css'
 
@@ -42,6 +43,14 @@ function AppContent({ activePage, onPageChange }) {
   const { t } = useLang()
   const { clearPageMeta } = usePageMeta()
 
+  // Grid-Mode lebt auf App-Ebene, damit der ShellHeader denselben
+  // WorkspaceHeaderProvider sieht wie der Workspace und der Back-
+  // Button im Header erscheint. Re-Mount-Check: wenn der Workspace-
+  // Store schon einen Case hält (Rail-Wechsel-Persistenz), starten
+  // wir direkt im Workspace-Mode.
+  const wsState = useWorkspaceState()
+  const [gridMode, setGridMode] = useState(wsState.selectedCase ? 'workspace' : 'picker')
+
   useEffect(() => {
     clearPageMeta()
   }, [activePage, clearPageMeta])
@@ -54,16 +63,36 @@ function AppContent({ activePage, onPageChange }) {
   ]
 
   function handlePageChange(pageId) {
+    // Rail-Klick auf den gerade aktiven Grid Creator im Workspace-Mode
+    // → zurück zum Picker (Workspace-State bleibt dank Store erhalten,
+    // User kommt zurück wie er war). Ohne diesen Zweig passiert gar
+    // nichts, weil setActivePage denselben Wert bekommt.
+    if (pageId === 'grid' && activePage === 'grid' && gridMode === 'workspace') {
+      setGridMode('picker')
+      return
+    }
     onPageChange(pageId)
     if (pageId in PAGE_TO_TAB && PAGE_TO_TAB[pageId]) {
       setActiveTab(PAGE_TO_TAB[pageId])
     }
   }
 
+  function handleGridPick() {
+    setGridMode('workspace')
+  }
+
+  function handleBackToPicker() {
+    // Workspace-State bewusst NICHT zurücksetzen — User kommt zurück,
+    // sieht denselben Stand. Reset passiert nur explizit über Picker-
+    // Auswahl (setCase wirft den Store).
+    setGridMode('picker')
+  }
+
   const showLegacyContent = activePage in PAGE_TO_TAB && PAGE_TO_TAB[activePage] !== null
   const showComingSoon = COMING_PAGES.has(activePage)
   const showHome = activePage === 'home'
   const showGridCreator = activePage === 'grid'
+  const workspaceActive = showGridCreator && gridMode === 'workspace'
 
   // Shell-Header wird auf Home unterdrueckt — der Landing-Masthead
   // uebernimmt dort die Kopfrolle allein (Landing-Redesign Slice,
@@ -71,50 +100,70 @@ function AppContent({ activePage, onPageChange }) {
   // ShellHeader die Kopfzeile.
   const showShellHeader = !showHome
 
+  const content = (
+    <>
+      {showShellHeader && <ShellHeader />}
+      {showLegacyContent && (
+        <>
+          <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
+            setActiveTab(tabId)
+            const pageMap = { builder: 'lab', mj: 'frame', vault: 'hub' }
+            if (pageMap[tabId]) onPageChange(pageMap[tabId])
+          }} />
+          <main className="app-main">
+            <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
+              {activeTab === 'builder' && <PromptBuilder />}
+              {activeTab === 'mj'     && <MJStartframe />}
+              {activeTab === 'vault'  && <PromptVault />}
+              {activeTab === 'poc'    && <CustomBuilderPoc />}
+            </Suspense>
+          </main>
+        </>
+      )}
+      {showGridCreator && (
+        <GridCreator mode={gridMode} onPick={handleGridPick} />
+      )}
+      {showComingSoon && <ComingSoon pageId={activePage} />}
+      {showHome && <LandingPage onNavigate={handlePageChange} />}
+      <StatusBar />
+    </>
+  )
+
   return (
     <div className="app-shell sg2-shell">
       <Rail activePage={activePage} onPageChange={handlePageChange} />
       <div className="app-content">
-        {showShellHeader && <ShellHeader />}
-        {showLegacyContent && (
-          <>
-            <Header activeTab={activeTab} tabs={TABS} onTabChange={(tabId) => {
-              setActiveTab(tabId)
-              const pageMap = { builder: 'lab', mj: 'frame', vault: 'hub' }
-              if (pageMap[tabId]) onPageChange(pageMap[tabId])
-            }} />
-            <main className="app-main">
-              <Suspense fallback={<div className="tab-loading"><span>Loading…</span></div>}>
-                {activeTab === 'builder' && <PromptBuilder />}
-                {activeTab === 'mj'     && <MJStartframe />}
-                {activeTab === 'vault'  && <PromptVault />}
-                {activeTab === 'poc'    && <CustomBuilderPoc />}
-              </Suspense>
-            </main>
-          </>
-        )}
-        {showGridCreator && <GridCreator />}
-        {showComingSoon && <ComingSoon pageId={activePage} />}
-        {showHome && <LandingPage onNavigate={handlePageChange} />}
-        <StatusBar />
+        {workspaceActive ? (
+          <WorkspaceHeaderProvider
+            onBackToPicker={handleBackToPicker}
+            currentProjectId={null}
+          >
+            {content}
+          </WorkspaceHeaderProvider>
+        ) : content}
       </div>
     </div>
   )
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState('home')
-
   // WorkspaceStoreProvider lebt app-weit, damit Rail-Wechsel den
   // Workspace-State NICHT verwirft (WORKSPACE_SPEC §15.1).
   // ToastProvider gleicher Scope, damit alle Pages Toasts feuern können.
   return (
+    <WorkspaceStoreProvider>
+      <AppWithPages />
+    </WorkspaceStoreProvider>
+  )
+}
+
+function AppWithPages() {
+  const [activePage, setActivePage] = useState('home')
+  return (
     <PageMetaProvider activePage={activePage}>
-      <WorkspaceStoreProvider>
-        <ToastProvider>
-          <AppContent activePage={activePage} onPageChange={setActivePage} />
-        </ToastProvider>
-      </WorkspaceStoreProvider>
+      <ToastProvider>
+        <AppContent activePage={activePage} onPageChange={setActivePage} />
+      </ToastProvider>
     </PageMetaProvider>
   )
 }
