@@ -79,9 +79,13 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 
 ## Aktueller Stand
 
-**Letzte Session (2026-04-20):** Workspace-Bau Part C fertig. Die 4 Manual-Test-Bugs aus Part B sind gefixt (Role-Dropdown, Fallback-Leak, SVG-Silhouetten, Field-Hints), der Picker ist auf `character_angle_study` als einzigen aktiven Case reduziert (Rest disabled + `coming soon`, OPEN_DECISIONS #13), alle 4 Workspace-Bars sind live (ModuleToolbar mit Random/Reset+Confirm, PreviewStrip mit Thumb-Klick, SignaturesBar mit Applied-Cards, OutputBar mit Live-Token-Count + Dim-Warning + Copy + Save), Save-as-Preset-Modal + localStorage-basierter User-Preset-Store laufen, ToastProvider ist app-weit verdrahtet, Workspace-State überlebt Rail-Wechsel (Provider in App.jsx hochgezogen). Case-zentrierte Logik ist in `src/lib/cases/registry.js` isoliert (`TODO(free-mode)`-Anchor für späteren Engine-Refactor). Engine (42 Tests) unberührt.
+**Letzte Session (2026-04-22):** Engine-Free-Mode komplett gebaut nach `docs/visual-overhaul/ENGINE_FREE_MODE_SPEC_V1.md` (9 Slices, Branch `claude/seengrid-visual-overhaul-6RK4n`). Alle 42 Engine-Tests grün, Output-Bytes für angle_study + normalizer byte-identisch preserviert. Free-Mode funktioniert als gleichwertiger Case: Picker FROM SCRATCH aktiv → Workspace mit leeren Panels ohne Rollen, alle 13 Module frei toggelbar. Case-Bundles eingeführt (`case.json` + `schema.json` + optional `strategy.js`/`serializer.js`/`validate.js`), zentrale `bundleRegistry.js` dispatcht generisch ohne Fallback-Switch. 5 universelle Module haben Emit-Helper unter `src/lib/modules/<id>/emit.js` (style_overlay, environment_mode, forbidden_elements_user, panel_content_fields, random_fill); 8 weitere landen als `_placeholder` unter `modules_extra` bis Emit-Helper folgen. `convert to free mode`-Knopf in OutputBar (Einbahnstraße, §6/W5).
 
-**Nächster Schritt:** Engine-Free-Mode-Planung — Konzept-Session für case-losen Builder. Siehe `docs/visual-overhaul/STARTPROMPT.md` und `docs/visual-overhaul/OPEN_DECISIONS.md` #11 + #12.
+Post-Smoke-Test-Fixes nach User-Feedback: (1) Back-Button im ShellHeader erschien nie — `WorkspaceHeaderProvider` saß in `GridCreator` unterhalb vom Header. `gridMode` + Handler nach `App.jsx` gehoben, Provider wrappt jetzt Header + GridCreator gemeinsam. GridCreator ist prop-driven (`mode`, `onPick`). (2) Rail-Klick auf aktive Grid-Creator-Kachel war tot (setActivePage(same) bailed) — jetzt: wenn schon auf grid im Workspace, Rail-Klick → Picker. (3) Live-`PromptPreview`-Bar oberhalb OutputBar (240px scrollable JSON, kollabiert auf 32px Peek mit Token-Count + Top-Level-Keys) — User sieht jeden Edit sofort im kompilierten Output. Besonders relevant im Free-Mode, wo keine Silhouetten/Rollen mehr Feedback liefern.
+
+Bekannte offene UX-Frage (Design, nicht Bug): Multi-Character im Free-Mode Content-Feld — aktuell Freitext-String pro Panel, sauber wäre das `multi_character`-Modul aus dem Katalog. Liegt als TODO-Emit-Platzhalter in `modules_extra`.
+
+**Nächster Schritt:** Fresh Smoke-Test durch Jonas im Browser (Free-Mode durchklicken, neue Fixes verifizieren — Back-Button erscheint, Rail-Klick + Preview-Panel funktionieren). Danach Entscheidung: (a) mit den 8 TODO-Modul-Emittern weiter (`camera_angle`, `weather_atmosphere`, `wardrobe`, `pose_override`, `expression_emotion`, `face_reference`, `multi_character`, `object_anchor`), oder (b) Design-Session zu `multi_character` / pose-per-Character / Content-Feld-Strukturierung.
 
 ### Bestehende Module (alles in Arbeit, nichts final)
 - **Prompt Builder** — chip-basiert, Tab 1. Funktionsfähiger Platzhalter.
@@ -91,17 +95,23 @@ Der JSON-Prompt-Output ist spezifisch für den **Grid Creator** (empirisch valid
 - **Look Lab** — Style-Playground. Funktionsfähiger Platzhalter.
 - **Design System** — cinematic dark theme, Teal-Akzent (Markenfarbe), Gold nur für Signature, i18n DE/EN.
 
-### Grid Engine (Slices 1-8 fertig)
-- Schema: `src/lib/cases/characterAngleStudy/{schema,defaults,panelRoleStrategy}.js`
-- Normalizer: `src/lib/cases/characterNormalizer/{schema,defaults}.js`
-- Compiler: `src/lib/compiler/{index.js,serializers/json.js,serializers/normalizerJson.js}`
-- POC UI: `src/components/CustomBuilderPoc.jsx` (throwaway Tab 5 — wird nach Visual Overhaul in den echten Grid Creator integriert)
+### Grid Engine (Slices 1-8 + Engine-Free-Mode-Refactor fertig)
+- Case-Bundles: `src/lib/cases/<caseId>/{case.json, schema.json, serializer.js, validate.js}` + optional `strategy.js`
+- Angle Study: `src/lib/cases/characterAngleStudy/{case,schema}.json + strategy.js + serializer.js + validate.js`
+- Normalizer: `src/lib/cases/characterNormalizer/{case,schema}.json + serializer.js + validate.js`
+- Free Mode: `src/lib/cases/freeMode/{case,schema}.json + serializer.js + validate.js` (case-los, module-driven)
+- Bundle-Registry: `src/lib/cases/bundleRegistry.js` (zentraler Dispatch, kein Fallback-Switch)
+- Module-Emit-Registry: `src/lib/modules/emitRegistry.js` + 5 Helper unter `src/lib/modules/<id>/emit.js`
+- Compiler: `src/lib/compiler/{index.js,serializers/json.js,serializers/normalizerJson.js}` (serializers sind thin shims auf Bundle-Serializer)
+- Thin-Shims rückwärtskompatibel für Tests: `characterAngleStudy/{schema,defaults,panelRoleStrategy}.js`, `characterNormalizer/{schema,defaults}.js`
+- POC UI: `src/components/CustomBuilderPoc.jsx` (throwaway Tab 5)
 - Tests: 42/42 grün (14 Schema + 19 Compiler + 9 Normalizer)
 - Slice 4: Face Reference Toggle (Checkbox → references.face_reference erscheint/verschwindet)
 - Slice 5: Environment Mode (inherit / neutral_studio / custom_text)
 - Slice 6: Live Visual Preview (SVG-Silhouetten für 8 Panel-Rollen)
 - Slice 7: Style Overlay (Token-Eingabe → style_overlay Block im Output)
 - Slice 8: Normalizer Two-Step (character_normalizer Case + Compiler + Serializer)
+- Engine-Free-Mode Slice 1-9 (2026-04-22): Case-Bundle-Refactor + free_mode + Picker-Aktivierung + Workspace-UI + Convert-Action
 
 ### Visual Overhaul (fertig)
 - **theme.css**: Teal (#2bb5b2) als primärer UI-Akzent (Markenfarbe). Gold nur für Signature-Mode. Blue-tinted Surfaces. 56px Header.
