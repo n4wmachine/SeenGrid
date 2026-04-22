@@ -140,13 +140,11 @@ function emitPanels(state) {
   const contentEmitter = isModuleActive(state, "panel_content_fields")
     ? getEmitter("panel_content_fields")
     : null;
-  // User-definierter Output-Key für panel_content_fields. Default
-  // 'content'. User kann das im CaseContext zu 'pose', 'description'
-  // etc. umbenennen.
-  const contentKey =
-    typeof state.panel_content_key === "string" && state.panel_content_key.length > 0
-      ? state.panel_content_key
-      : "content";
+  // User-definierte Output-Keys (fieldId → key). Default-Fallback
+  // pro Feld. User benennt z.B. 'content' → 'pose', 'notes' →
+  // 'director_comment'.
+  const contentKey = resolveOutputKey(state, "panel_content", "content");
+  const notesKey = resolveOutputKey(state, "panel_notes", "notes");
 
   return panels.map((panel, i) => {
     const out = { index: typeof panel.index === "number" ? panel.index : i + 1 };
@@ -154,13 +152,19 @@ function emitPanels(state) {
       const content = contentEmitter(state, panel);
       if (content != null) out[contentKey] = content;
     }
-    // Custom Notes (UI-Feld im Inspector) landen pro Panel als
-    // `notes`-String, sofern non-empty. Always-on, kein Modul-Gating —
-    // Notes sind reine User-Annotation, kein optionales Feature.
+    // Custom Notes (UI-Feld im Inspector) landen pro Panel.
+    // Always-on, kein Modul-Gating — Notes sind reine User-
+    // Annotation, kein optionales Feature.
     const notes = typeof panel.notes === "string" ? panel.notes.trim() : "";
-    if (notes.length > 0) out.notes = panel.notes;
+    if (notes.length > 0) out[notesKey] = panel.notes;
     return out;
   });
+}
+
+function resolveOutputKey(state, fieldId, fallback) {
+  const map = state && typeof state.output_keys === "object" ? state.output_keys : null;
+  const v = map && typeof map[fieldId] === "string" ? map[fieldId].trim() : "";
+  return v.length > 0 ? v : fallback;
 }
 
 function emitModulesExtra(state) {

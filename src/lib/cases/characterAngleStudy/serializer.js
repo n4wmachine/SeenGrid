@@ -116,6 +116,7 @@ function emitStyleOverlay(state) {
 function emitPanels(state) {
   const count = state.layout?.panel_count;
   const extras = Array.isArray(state.panel_extras) ? state.panel_extras : [];
+  const notesKey = resolveOutputKey(state, "panel_notes", "notes");
   return panelRoleStrategy(count).map((role, i) => {
     const panel = {
       index: i + 1,
@@ -126,9 +127,15 @@ function emitPanels(state) {
     // hat. Tests bauen aus buildDefaultState (kein panel_extras) →
     // notes wird nie hinzugefügt → Output bleibt byte-identisch.
     const notes = typeof extras[i]?.notes === "string" ? extras[i].notes.trim() : "";
-    if (notes.length > 0) panel.notes = extras[i].notes;
+    if (notes.length > 0) panel[notesKey] = extras[i].notes;
     return panel;
   });
+}
+
+function resolveOutputKey(state, fieldId, fallback) {
+  const map = state && typeof state.output_keys === "object" ? state.output_keys : null;
+  const v = map && typeof map[fieldId] === "string" ? map[fieldId].trim() : "";
+  return v.length > 0 ? v : fallback;
 }
 
 function emitEnvironment(state) {

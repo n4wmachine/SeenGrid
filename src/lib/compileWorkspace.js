@@ -143,6 +143,9 @@ function toAngleStudyEngineState(ws) {
       }))
     : []
 
+  // Universal Output-Keys-Map (siehe free_mode).
+  base.output_keys = toOutputKeysMap(ws)
+
   return base
 }
 
@@ -214,15 +217,21 @@ function toFreeModeEngineState(ws) {
   base.active_modules = Array.isArray(ws.activeModules) ? [...ws.activeModules] : []
   base.module_values = {}
 
-  // Customizable JSON-Key für panel_content_fields — default 'content'.
-  // User setzt im CaseContext z.B. 'pose', 'description', 'scene'; der
-  // Serializer emittiert dann `"<key>": "<text>"` statt `"content"`.
-  base.panel_content_key =
-    typeof ws.panelContentKey === 'string' && ws.panelContentKey.length > 0
-      ? ws.panelContentKey
-      : 'content'
+  // Universal Output-Keys-Map (fieldId → JSON-Key). Serializer liest
+  // daraus mit Fallback auf den Default. User konfiguriert Keys im
+  // Inspector / CaseContext pro Feld.
+  base.output_keys = toOutputKeysMap(ws)
 
   return base
+}
+
+function toOutputKeysMap(ws) {
+  const src = ws && typeof ws.outputKeys === 'object' ? ws.outputKeys : {}
+  const out = {}
+  for (const [k, v] of Object.entries(src)) {
+    if (typeof v === 'string') out[k] = v
+  }
+  return out
 }
 
 function clampToValid(n, valid) {

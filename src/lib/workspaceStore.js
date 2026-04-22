@@ -56,11 +56,16 @@ export function createInitialState({
     environmentMode: 'inherit',
     environmentCustomText: '',
     styleOverlayToken: '',
-    // JSON-Key für panel_content_fields-Output. User kann das
-    // Default `content` zu einem Case-tauglichen Begriff umbenennen
-    // (z.B. "pose", "description", "scene", "shot"). Wird in
-    // freeMode/serializer als Output-Key pro Panel verwendet.
-    panelContentKey: 'content',
+    // Universelle Map für customisierbare JSON-Output-Keys. Jedes
+    // editierbare Textfeld das im Prompt landet registriert hier
+    // einen fieldId → key. User kann die Defaults durch case-
+    // taugliche Begriffe ersetzen (content → pose, notes →
+    // director_comment, etc.). Serializer lesen state.output_keys
+    // mit Fallback auf den Default.
+    outputKeys: {
+      panel_content: 'content',
+      panel_notes: 'notes',
+    },
   }
 }
 
@@ -84,7 +89,7 @@ export const ACTIONS = {
   SET_ENVIRONMENT_MODE: 'SET_ENVIRONMENT_MODE',
   SET_ENVIRONMENT_CUSTOM_TEXT: 'SET_ENVIRONMENT_CUSTOM_TEXT',
   SET_STYLE_OVERLAY_TOKEN: 'SET_STYLE_OVERLAY_TOKEN',
-  SET_PANEL_CONTENT_KEY: 'SET_PANEL_CONTENT_KEY',
+  SET_OUTPUT_KEY: 'SET_OUTPUT_KEY',
   APPLY_SIGNATURE: 'APPLY_SIGNATURE',
   REMOVE_SIGNATURE: 'REMOVE_SIGNATURE',
   APPLY_SIGNATURE_TO_PANEL: 'APPLY_SIGNATURE_TO_PANEL',
@@ -251,12 +256,22 @@ function reducer(state, action) {
     case ACTIONS.SET_STYLE_OVERLAY_TOKEN:
       return { ...state, styleOverlayToken: action.payload }
 
-    case ACTIONS.SET_PANEL_CONTENT_KEY: {
-      // User-getippter Key wird leicht bereinigt: trim + lowercase-
-      // Underscore-Shape (kein Punkt/Space im JSON-Key).
-      const raw = typeof action.payload === 'string' ? action.payload : ''
+    case ACTIONS.SET_OUTPUT_KEY: {
+      // Universelle Key-Customisierung pro Feld. Payload: { fieldId,
+      // value }. User-getippter Key wird trim + space→underscore
+      // normalisiert, damit er als JSON-Key valide ist. Leerer Key
+      // fällt auf den Current-Wert zurück (kein Key-Wipe via leer).
+      const { fieldId, value } = action.payload || {}
+      if (!fieldId) return state
+      const raw = typeof value === 'string' ? value : ''
       const clean = raw.trim().replace(/\s+/g, '_')
-      return { ...state, panelContentKey: clean || 'content' }
+      return {
+        ...state,
+        outputKeys: {
+          ...(state.outputKeys || {}),
+          [fieldId]: clean,
+        },
+      }
     }
 
     case ACTIONS.APPLY_SIGNATURE:
@@ -355,7 +370,8 @@ export function WorkspaceStoreProvider({ initial, children }) {
     setEnvironmentCustomText: v =>
       dispatch({ type: ACTIONS.SET_ENVIRONMENT_CUSTOM_TEXT, payload: v }),
     setStyleOverlayToken: v => dispatch({ type: ACTIONS.SET_STYLE_OVERLAY_TOKEN, payload: v }),
-    setPanelContentKey: v => dispatch({ type: ACTIONS.SET_PANEL_CONTENT_KEY, payload: v }),
+    setOutputKey: (fieldId, value) =>
+      dispatch({ type: ACTIONS.SET_OUTPUT_KEY, payload: { fieldId, value } }),
     applySignature: sigId => dispatch({ type: ACTIONS.APPLY_SIGNATURE, payload: sigId }),
     removeSignature: () => dispatch({ type: ACTIONS.REMOVE_SIGNATURE }),
     applySignatureToPanel: (panelId, signatureId) =>

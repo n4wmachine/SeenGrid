@@ -32,6 +32,7 @@ export default function Inspector() {
   const actions = useWorkspaceActions()
   const panel = useSelectedPanel()
   const { setAnchor } = usePromptPreview()
+  const outputKeys = state.outputKeys || {}
 
   const panelIndex = useMemo(
     () => (panel ? state.panels.findIndex(p => p.id === panel.id) : -1),
@@ -116,6 +117,8 @@ export default function Inspector() {
                 field={roleField}
                 value={panel.role || strategyDefault || ''}
                 onChange={handleRoleChange}
+                onFocus={() => setAnchor({ key: 'view', nth: panelIndex })}
+                onBlur={() => setAnchor(null)}
               />
             </div>
             {strategyDefault && panel.role && panel.role !== strategyDefault && (
@@ -199,27 +202,22 @@ export default function Inspector() {
         <div className={styles.section}>
           <div className={styles.sectionLabelRow}>
             <span className={styles.sectionLabel}>panel content</span>
-            <div className={styles.keyInputWrap} title="JSON key for this field in the compiled output">
-              <span className={styles.keyInputLabel}>key</span>
-              <input
-                className={styles.keyInput}
-                type="text"
-                value={state.panelContentKey ?? 'content'}
-                placeholder="content"
-                spellCheck={false}
-                onChange={e => actions.setPanelContentKey(e.target.value)}
-              />
-            </div>
+            <KeyInput
+              fieldId="panel_content"
+              fallback="content"
+              value={outputKeys?.panel_content}
+              onChange={actions.setOutputKey}
+            />
           </div>
           <div className={styles.fieldHint}>
-            describe what this panel shows · rename the key above to match your case (e.g. pose, description, scene)
+            describe what this panel shows · rename the key to match your case (e.g. pose, description, scene)
           </div>
           <textarea
             className={styles.textarea}
             value={panel.overrides.panel_content ?? ''}
             placeholder="e.g. wide shot of the laundromat, harsh fluorescent overhead"
             title="case has no panel-fields schema yet — free text describes this panel"
-            onFocus={() => setAnchor({ key: state.panelContentKey || 'content', nth: panelIndex })}
+            onFocus={() => setAnchor({ key: (outputKeys?.panel_content || 'content'), nth: panelIndex })}
             onBlur={() => setAnchor(null)}
             onChange={e => {
               const v = e.target.value
@@ -232,16 +230,24 @@ export default function Inspector() {
 
       {/* ---- CUSTOM NOTES ---- */}
       <div className={styles.section}>
-        <div className={styles.sectionLabel}>custom notes</div>
+        <div className={styles.sectionLabelRow}>
+          <span className={styles.sectionLabel}>custom notes</span>
+          <KeyInput
+            fieldId="panel_notes"
+            fallback="notes"
+            value={outputKeys?.panel_notes}
+            onChange={actions.setOutputKey}
+          />
+        </div>
         <div className={styles.fieldHint}>
-          extra prose for this panel · directions, references, edge cases
+          extra prose for this panel · rename the key to match your case (e.g. director_comment, intent)
         </div>
         <textarea
           className={styles.textarea}
           value={panel.customNotes}
           placeholder="panel-specific notes, directions, overrides in prose…"
           title="free-text notes appended to this panel in the prompt output"
-          onFocus={() => setAnchor({ key: 'notes', nth: panelIndex })}
+          onFocus={() => setAnchor({ key: (outputKeys?.panel_notes || 'notes'), nth: panelIndex })}
           onBlur={() => setAnchor(null)}
           onChange={e => actions.setPanelNotes(panel.id, e.target.value)}
         />
@@ -265,6 +271,31 @@ export default function Inspector() {
 
 function formatLabel(s) {
   return String(s).replace(/_/g, ' ').toLowerCase()
+}
+
+/* -------------------- KEY INPUT (universal) -------------------- */
+
+/**
+ * Inline-Key-Editor neben einer Section-Überschrift. User ändert
+ * den JSON-Output-Key pro Feld — z.B. 'content' → 'pose',
+ * 'notes' → 'director_comment'. Fallback greift wenn der State
+ * den Key (noch) nicht hat.
+ */
+function KeyInput({ fieldId, fallback, value, onChange }) {
+  const current = typeof value === 'string' ? value : fallback
+  return (
+    <div className={styles.keyInputWrap} title="JSON key for this field in the compiled output">
+      <span className={styles.keyInputLabel}>key</span>
+      <input
+        className={styles.keyInput}
+        type="text"
+        value={current}
+        placeholder={fallback}
+        spellCheck={false}
+        onChange={e => onChange && onChange(fieldId, e.target.value)}
+      />
+    </div>
+  )
 }
 
 /* -------------------- PER-PANEL OVERRIDE FIELD -------------------- */
