@@ -6,6 +6,7 @@ import PreviewStrip from './PreviewStrip.jsx'
 import PromptPreview from './PromptPreview.jsx'
 import SignaturesBar from './SignaturesBar.jsx'
 import OutputBar from './OutputBar.jsx'
+import { PromptPreviewProvider } from '../../../context/PromptPreviewContext.jsx'
 import styles from './Workspace.module.css'
 
 /**
@@ -19,25 +20,27 @@ import styles from './Workspace.module.css'
  */
 export default function Workspace() {
   return (
-    <div className={styles.page}>
-      <ModuleToolbar />
+    <PromptPreviewProvider>
+      <div className={styles.page}>
+        <ModuleToolbar />
 
-      <div className={styles.threeCol}>
-        <aside className={styles.sideLeft} aria-label="Case context">
-          <CaseContext />
-        </aside>
-        <div className={styles.canvasSlot}>
-          <Canvas />
+        <div className={styles.threeCol}>
+          <aside className={styles.sideLeft} aria-label="Case context">
+            <CaseContext />
+          </aside>
+          <div className={styles.canvasSlot}>
+            <Canvas />
+          </div>
+          <aside className={styles.sideRight} aria-label="Panel inspector">
+            <Inspector />
+          </aside>
         </div>
-        <aside className={styles.sideRight} aria-label="Panel inspector">
-          <Inspector />
-        </aside>
-      </div>
 
-      <PreviewStrip />
-      <SignaturesBar />
-      <PromptPreview />
-      <OutputBar />
-    </div>
+        <PreviewStrip />
+        <SignaturesBar />
+        <PromptPreview />
+        <OutputBar />
+      </div>
+    </PromptPreviewProvider>
   )
 }

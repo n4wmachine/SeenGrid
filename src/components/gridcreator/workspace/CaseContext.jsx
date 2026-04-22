@@ -3,6 +3,7 @@ import { useWorkspaceState, useWorkspaceActions } from '../../../lib/workspaceSt
 import { getDimAdvice } from '../../../lib/dimAdvisory.js'
 import casesConfig from '../../../config/cases.config.json'
 import modulesConfig from '../../../config/modules.config.json'
+import { usePromptPreview } from '../../../context/PromptPreviewContext.jsx'
 import styles from './CaseContext.module.css'
 
 /**
@@ -34,6 +35,7 @@ const CHARACTER_CATEGORY = 'character'
 export default function CaseContext() {
   const state = useWorkspaceState()
   const actions = useWorkspaceActions()
+  const { setAnchor } = usePromptPreview()
   const {
     selectedCase,
     gridDims,
@@ -88,6 +90,7 @@ export default function CaseContext() {
       <SectionForbidden
         items={forbiddenElements}
         onChange={actions.setForbidden}
+        setAnchor={setAnchor}
       />
 
       {activeModulesWithGlobals.map(mod => (
@@ -98,6 +101,7 @@ export default function CaseContext() {
           environmentCustomText={environmentCustomText}
           styleOverlayToken={styleOverlayToken}
           actions={actions}
+          setAnchor={setAnchor}
         />
       ))}
     </div>
@@ -270,7 +274,7 @@ function SectionOrientation({ value, onChange }) {
 
 /* -------------------- SECTION: FORBIDDEN -------------------- */
 
-function SectionForbidden({ items, onChange }) {
+function SectionForbidden({ items, onChange, setAnchor }) {
   const [draft, setDraft] = useState('')
 
   function add() {
@@ -309,6 +313,8 @@ function SectionForbidden({ items, onChange }) {
           type="text"
           value={draft}
           placeholder="e.g. no logos"
+          onFocus={() => setAnchor && setAnchor({ key: 'forbidden_elements' })}
+          onBlur={() => setAnchor && setAnchor(null)}
           onChange={e => setDraft(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); add() } }}
         />
@@ -326,7 +332,11 @@ function SectionModuleGlobal({
   environmentCustomText,
   styleOverlayToken,
   actions,
+  setAnchor,
 }) {
+  const anchorOn = key => () => setAnchor && setAnchor({ key })
+  const anchorOff = () => setAnchor && setAnchor(null)
+
   if (mod.id === 'environment_mode') {
     return (
       <div className={styles.section}>
@@ -363,6 +373,8 @@ function SectionModuleGlobal({
             className={styles.textarea}
             value={environmentCustomText}
             placeholder="e.g. sparse studio backdrop, neutral grey"
+            onFocus={anchorOn('custom_text')}
+            onBlur={anchorOff}
             onChange={e => actions.setEnvironmentCustomText(e.target.value)}
           />
         )}
@@ -379,6 +391,8 @@ function SectionModuleGlobal({
           type="text"
           value={styleOverlayToken}
           placeholder="token · e.g. deakins-noir"
+          onFocus={anchorOn('token')}
+          onBlur={anchorOff}
           onChange={e => actions.setStyleOverlayToken(e.target.value)}
         />
       </div>

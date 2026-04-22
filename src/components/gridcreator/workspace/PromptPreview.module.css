@@ -1,7 +1,9 @@
 /* ============================================================
    PROMPT PREVIEW
-   Live-JSON-Panel oberhalb der OutputBar. Toggle zwischen
-   expandiert (240px scrollable) und kollabiert (32px peek).
+   Live-JSON-Panel oberhalb der OutputBar. Zeilenweise gerendert,
+   damit Focus-Anchor (teal) und Flash-Highlight (gelb bei
+   Compile-Change) pro Zeile gezielt gesetzt werden können.
+   Toggle zwischen expandiert (240px) und kollabiert (32px peek).
    ============================================================ */
 
 :global(.sg2-shell) .bar {
@@ -94,21 +96,49 @@
 
 .body {
   flex: 1 1 auto;
-  margin: 0;
-  padding: 12px 16px;
+  padding: 12px 0;
   overflow: auto;
+  background: var(--sg2-bg-surface);
   font-family: var(--sg2-font-mono);
   font-size: 12px;
   line-height: 1.5;
   color: var(--sg2-text-secondary);
-  background: var(--sg2-bg-surface);
-  white-space: pre;
   tab-size: 2;
 }
 
-.body code {
-  font-family: inherit;
-  color: inherit;
-  background: none;
-  padding: 0;
+.line {
+  display: block;
+  padding: 0 16px;
+  white-space: pre;
+  min-height: 1.5em;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+
+/* Focus-Anchor — fokussiertes Feld zeigt hier hin. Persistent
+   solange das Feld Fokus hat. Teal = Edit-Stelle (NUANCEN 1). */
+.lineAnchor {
+  background: var(--sg2-teal-active-bg);
+  box-shadow: inset 3px 0 0 var(--sg2-teal);
+  color: var(--sg2-text-primary);
+}
+
+/* Flash — Zeile hat sich bei letztem Compile geändert. 1500ms
+   durchgängige Highlight, Timer restartet bei jedem Edit, damit
+   Tipp-Sequenzen am Stück markiert bleiben. Gelb, kein Gold —
+   Gold bleibt Signature-only. */
+.lineFlash {
+  background: rgba(245, 201, 97, 0.22);
+  color: var(--sg2-text-primary);
+  animation: promptPreviewFlash 1500ms ease-out forwards;
+}
+
+/* Focus + Flash am gleichen Punkt → Flash bleibt dominant */
+.lineAnchor.lineFlash {
+  box-shadow: inset 3px 0 0 var(--sg2-teal);
+}
+
+@keyframes promptPreviewFlash {
+  0%   { background: rgba(245, 201, 97, 0.45); }
+  40%  { background: rgba(245, 201, 97, 0.32); }
+  100% { background: rgba(245, 201, 97, 0.00); }
 }

@@ -11,6 +11,7 @@ import {
   getStrategyDefaultForPanel,
   hasRealSchema,
 } from '../../../lib/cases/registry.js'
+import { usePromptPreview } from '../../../context/PromptPreviewContext.jsx'
 import FieldRenderer from './FieldRenderer.jsx'
 import styles from './Inspector.module.css'
 
@@ -30,6 +31,7 @@ export default function Inspector() {
   const state = useWorkspaceState()
   const actions = useWorkspaceActions()
   const panel = useSelectedPanel()
+  const { setAnchor } = usePromptPreview()
 
   const panelIndex = useMemo(
     () => (panel ? state.panels.findIndex(p => p.id === panel.id) : -1),
@@ -204,6 +206,8 @@ export default function Inspector() {
             value={panel.overrides.panel_content ?? ''}
             placeholder="e.g. wide shot of the laundromat, harsh fluorescent overhead"
             title="case has no panel-fields schema yet — free text describes this panel"
+            onFocus={() => setAnchor({ key: 'content', nth: panelIndex })}
+            onBlur={() => setAnchor(null)}
             onChange={e => {
               const v = e.target.value
               if (v === '') actions.clearPanelOverride(panel.id, 'panel_content')
