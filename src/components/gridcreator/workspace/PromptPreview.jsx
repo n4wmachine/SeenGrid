@@ -160,14 +160,17 @@ function resolveAnchorLine(lines, anchor) {
   if (!anchor || !anchor.key) return -1
   const needle = `"${anchor.key}":`
   const nth = Number.isInteger(anchor.nth) ? anchor.nth : 0
-  let hits = 0
+  const hits = []
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].includes(needle)) {
-      if (hits === nth) return i
-      hits += 1
-    }
+    if (lines[i].includes(needle)) hits.push(i)
   }
-  return -1
+  if (hits.length === 0) return -1
+  // Clamp statt -1: wenn nth über Hits hinaus, nimm den nächstbesten.
+  // Wichtig wenn Keys nur für non-empty Werte emittiert werden
+  // (z.B. content/notes erscheinen pro Panel nur wenn der User etwas
+  // getippt hat). User klickt auf Panel 4 ohne Notes → wir scrollen
+  // zur letzten existierenden notes-Zeile, statt gar nicht.
+  return hits[Math.min(nth, hits.length - 1)]
 }
 
 /**

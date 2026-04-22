@@ -147,6 +147,11 @@ function emitPanels(state) {
       const content = contentEmitter(state, panel);
       if (content != null) out.content = content;
     }
+    // Custom Notes (UI-Feld im Inspector) landen pro Panel als
+    // `notes`-String, sofern non-empty. Always-on, kein Modul-Gating —
+    // Notes sind reine User-Annotation, kein optionales Feature.
+    const notes = typeof panel.notes === "string" ? panel.notes.trim() : "";
+    if (notes.length > 0) out.notes = panel.notes;
     return out;
   });
 }

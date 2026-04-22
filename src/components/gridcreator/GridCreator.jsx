@@ -55,8 +55,12 @@ export function applyPickToStore(selection, actions) {
 
   const caseId = selection.caseId
 
-  // Free-Mode (FROM SCRATCH): case-los, nichts pre-aktiviert.
-  // Spec §3 / §6 / W3: alle 13 Module verfügbar, aber activeModules=[].
+  // Free-Mode (FROM SCRATCH): case-los, alle 13 Module verfügbar.
+  // Die zwei "always-visible"-Universals (panel_content_fields,
+  // forbidden_elements_user) werden pre-aktiviert, sonst zeigen
+  // ihre UI-Felder zwar Inputs an, der Wert landet aber nicht im
+  // Output-JSON (Module-driven Gating, Slice 5 Option A).
+  // Spec §3 / §6 / W3: alle anderen 11 Module bleiben aus.
   if (caseId === 'free_mode') {
     const panelCount = selection.panelCount ?? 4
     const { rows, cols } = rowsColsForPanelCount(panelCount)
@@ -66,7 +70,7 @@ export function applyPickToStore(selection, actions) {
       cols,
       orientation: 'vertical',
       defaultRoles: [],
-      activeModules: [],
+      activeModules: ['panel_content_fields', 'forbidden_elements_user'],
     })
     return
   }

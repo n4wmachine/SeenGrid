@@ -131,6 +131,18 @@ function toAngleStudyEngineState(ws) {
     base.environment.enabled = false
   }
 
+  // Per-Panel User-Annotations (Custom Notes + Per-Panel-Overrides).
+  // angle_study leitet panels[] sonst rein aus der Strategy ab; mit
+  // dieser Liste kann der Serializer optionale notes pro Panel-Index
+  // mit-emittieren. Default ist `[]` — Tests bleiben byte-identisch
+  // weil buildDefaultState diesen Schlüssel nicht hat und der
+  // Serializer ohne Daten leise nichts ergänzt.
+  base.panel_extras = Array.isArray(ws.panels)
+    ? ws.panels.map(p => ({
+        notes: typeof p?.customNotes === 'string' ? p.customNotes : '',
+      }))
+    : []
+
   return base
 }
 
@@ -160,7 +172,8 @@ function toFreeModeEngineState(ws) {
     // Felder, nur Freitext pro Panel.
     const rawContent = wsPanel?.overrides?.panel_content
     const content = typeof rawContent === 'string' ? rawContent : ''
-    return { index: i + 1, content }
+    const notes = typeof wsPanel?.customNotes === 'string' ? wsPanel.customNotes : ''
+    return { index: i + 1, content, notes }
   })
 
   // environment (Workspace-ENUM → free-mode mode-String)

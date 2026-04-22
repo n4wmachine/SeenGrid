@@ -228,6 +228,8 @@ export default function Inspector() {
           value={panel.customNotes}
           placeholder="panel-specific notes, directions, overrides in prose…"
           title="free-text notes appended to this panel in the prompt output"
+          onFocus={() => setAnchor({ key: 'notes', nth: panelIndex })}
+          onBlur={() => setAnchor(null)}
           onChange={e => actions.setPanelNotes(panel.id, e.target.value)}
         />
       </div>

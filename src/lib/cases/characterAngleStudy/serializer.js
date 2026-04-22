@@ -115,11 +115,20 @@ function emitStyleOverlay(state) {
 
 function emitPanels(state) {
   const count = state.layout?.panel_count;
-  return panelRoleStrategy(count).map((role, i) => ({
-    index: i + 1,
-    view: role.view,
-    framing: role.framing,
-  }));
+  const extras = Array.isArray(state.panel_extras) ? state.panel_extras : [];
+  return panelRoleStrategy(count).map((role, i) => {
+    const panel = {
+      index: i + 1,
+      view: role.view,
+      framing: role.framing,
+    };
+    // Custom Notes pro Panel — nur wenn der User wirklich was getippt
+    // hat. Tests bauen aus buildDefaultState (kein panel_extras) →
+    // notes wird nie hinzugefügt → Output bleibt byte-identisch.
+    const notes = typeof extras[i]?.notes === "string" ? extras[i].notes.trim() : "";
+    if (notes.length > 0) panel.notes = extras[i].notes;
+    return panel;
+  });
 }
 
 function emitEnvironment(state) {
