@@ -66,6 +66,16 @@ export function createInitialState({
       panel_content: 'content',
       panel_notes: 'notes',
     },
+    // Free-Mode Top-Level-Metadaten. Angle-Study & Normalizer haben
+    // empirisch validierte id/type/goal aus ihrer case.json; Free-
+    // Mode hat keine Default-Bedeutung → User schreibt selbst oder
+    // lässt leer. Empty Strings werden vom Serializer übersprungen
+    // (keine Junk-Platzhalter im NanoBanana-Prompt).
+    freeModeMeta: {
+      id: '',
+      type: '',
+      goal: '',
+    },
   }
 }
 
@@ -90,6 +100,7 @@ export const ACTIONS = {
   SET_ENVIRONMENT_CUSTOM_TEXT: 'SET_ENVIRONMENT_CUSTOM_TEXT',
   SET_STYLE_OVERLAY_TOKEN: 'SET_STYLE_OVERLAY_TOKEN',
   SET_OUTPUT_KEY: 'SET_OUTPUT_KEY',
+  SET_FREE_MODE_META: 'SET_FREE_MODE_META',
   APPLY_SIGNATURE: 'APPLY_SIGNATURE',
   REMOVE_SIGNATURE: 'REMOVE_SIGNATURE',
   APPLY_SIGNATURE_TO_PANEL: 'APPLY_SIGNATURE_TO_PANEL',
@@ -256,6 +267,18 @@ function reducer(state, action) {
     case ACTIONS.SET_STYLE_OVERLAY_TOKEN:
       return { ...state, styleOverlayToken: action.payload }
 
+    case ACTIONS.SET_FREE_MODE_META: {
+      const { field, value } = action.payload || {}
+      if (!field) return state
+      return {
+        ...state,
+        freeModeMeta: {
+          ...(state.freeModeMeta || {}),
+          [field]: typeof value === 'string' ? value : '',
+        },
+      }
+    }
+
     case ACTIONS.SET_OUTPUT_KEY: {
       // Universelle Key-Customisierung pro Feld. Payload: { fieldId,
       // value }. User-getippter Key wird trim + space→underscore
@@ -372,6 +395,8 @@ export function WorkspaceStoreProvider({ initial, children }) {
     setStyleOverlayToken: v => dispatch({ type: ACTIONS.SET_STYLE_OVERLAY_TOKEN, payload: v }),
     setOutputKey: (fieldId, value) =>
       dispatch({ type: ACTIONS.SET_OUTPUT_KEY, payload: { fieldId, value } }),
+    setFreeModeMeta: (field, value) =>
+      dispatch({ type: ACTIONS.SET_FREE_MODE_META, payload: { field, value } }),
     applySignature: sigId => dispatch({ type: ACTIONS.APPLY_SIGNATURE, payload: sigId }),
     removeSignature: () => dispatch({ type: ACTIONS.REMOVE_SIGNATURE }),
     applySignatureToPanel: (panelId, signatureId) =>

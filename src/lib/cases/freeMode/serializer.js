@@ -63,8 +63,15 @@ function emitField(key, state) {
   switch (key) {
     case "id":
     case "type":
-    case "goal":
-      return state[key];
+    case "goal": {
+      // Free-Mode hat keine empirisch validierten Default-Werte für
+      // id/type/goal (vs. Angle-Study). Leer-String → skip, damit
+      // keine generischen Platzhalter im Prompt landen. User kann
+      // eigene Werte in der CaseContext-Sidebar eintragen.
+      const v = state[key];
+      if (typeof v !== "string" || v.trim().length === 0) return SKIP;
+      return v;
+    }
 
     case "references":
       return emitReferences(state);

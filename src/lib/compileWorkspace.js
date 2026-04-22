@@ -161,6 +161,17 @@ function toAngleStudyEngineState(ws) {
 function toFreeModeEngineState(ws) {
   const base = structuredClone(freeModeCase.defaultState)
 
+  // Free-Mode id/type/goal sind NICHT aus dem case.json-Default
+  // genommen — die generischen Platzhalter ("freestyle_grid_v1",
+  // "freestyle", "Generate N panels as described per panel.") haben
+  // im NanoBanana-Prompt nichts zu suchen. User füllt in der
+  // CaseContext-Sidebar selbst was Sinnvolles ein; leer = Serializer
+  // überspringt das Feld.
+  const meta = ws.freeModeMeta || {}
+  base.id = typeof meta.id === 'string' ? meta.id : ''
+  base.type = typeof meta.type === 'string' ? meta.type : ''
+  base.goal = typeof meta.goal === 'string' ? meta.goal : ''
+
   const rows = ws.gridDims?.rows ?? base.layout.rows
   const cols = ws.gridDims?.cols ?? base.layout.cols
   base.layout.rows = rows

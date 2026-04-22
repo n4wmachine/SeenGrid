@@ -46,6 +46,7 @@ export default function CaseContext() {
     environmentCustomText,
     styleOverlayToken,
     activeModules,
+    freeModeMeta,
   } = state
 
   const caseDef = useMemo(
@@ -67,6 +68,14 @@ export default function CaseContext() {
   return (
     <div className={styles.root}>
       {isFreeMode ? <SectionFreeMode /> : <SectionCase caseDef={caseDef} />}
+
+      {isFreeMode && (
+        <SectionFreeModeMeta
+          meta={freeModeMeta || {}}
+          onChange={actions.setFreeModeMeta}
+          setAnchor={setAnchor}
+        />
+      )}
 
       {isCharacterCase && (
         <SectionReferenceState
@@ -104,6 +113,67 @@ export default function CaseContext() {
           setAnchor={setAnchor}
         />
       ))}
+    </div>
+  )
+}
+
+/* -------------------- SECTION: FREE MODE META -------------------- */
+
+/**
+ * Top-Level-Prompt-Metadaten (id/type/goal) für Free-Mode. Jedes
+ * Feld ist optional — leer = wird im Output übersprungen. Default
+ * ist leer, damit keine generischen Platzhalter im NanoBanana-
+ * Prompt landen. User füllt je nach Use-Case ein (z.B.
+ * `id: character_pose_sheet_v1`, `goal: Generate a 4-panel pose
+ * sheet for a single character`).
+ */
+function SectionFreeModeMeta({ meta, onChange, setAnchor }) {
+  const anchorOn = key => () => setAnchor && setAnchor({ key })
+  const anchorOff = () => setAnchor && setAnchor(null)
+
+  return (
+    <div className={styles.section}>
+      <div className={styles.label}>prompt metadata</div>
+      <div className={styles.moduleMiniHint} style={{ marginBottom: 6 }}>
+        optional top-level fields · leave empty to skip in the output
+      </div>
+      <div className={styles.metaRow}>
+        <span className={styles.metaLabel}>id</span>
+        <input
+          className={styles.inputText}
+          type="text"
+          value={meta.id || ''}
+          placeholder="e.g. character_pose_sheet_v1"
+          spellCheck={false}
+          onFocus={anchorOn('id')}
+          onBlur={anchorOff}
+          onChange={e => onChange('id', e.target.value)}
+        />
+      </div>
+      <div className={styles.metaRow}>
+        <span className={styles.metaLabel}>type</span>
+        <input
+          className={styles.inputText}
+          type="text"
+          value={meta.type || ''}
+          placeholder="e.g. pose_reference_sheet"
+          spellCheck={false}
+          onFocus={anchorOn('type')}
+          onBlur={anchorOff}
+          onChange={e => onChange('type', e.target.value)}
+        />
+      </div>
+      <div className={styles.metaRow}>
+        <span className={styles.metaLabel}>goal</span>
+        <textarea
+          className={styles.textarea}
+          value={meta.goal || ''}
+          placeholder="e.g. Generate a 4-panel pose sheet for one character."
+          onFocus={anchorOn('goal')}
+          onBlur={anchorOff}
+          onChange={e => onChange('goal', e.target.value)}
+        />
+      </div>
     </div>
   )
 }

@@ -29,9 +29,13 @@ export function validateState(state) {
     errors.push(`case must be "${CASE_ID}", got ${JSON.stringify(state.case)}`);
   }
 
+  // id / type / goal sind im Free-Mode optional. Der Serializer
+  // skippt Leer-Strings, damit im NanoBanana-Prompt keine generischen
+  // Platzhalter landen. Validator akzeptiert daher String oder
+  // leer — nur andere Typen sind hart invalid.
   for (const key of ["id", "type", "goal"]) {
-    if (typeof state[key] !== "string" || state[key].length === 0) {
-      errors.push(`${key} must be a non-empty string`);
+    if (state[key] !== undefined && typeof state[key] !== "string") {
+      errors.push(`${key} must be a string if set`);
     }
   }
 

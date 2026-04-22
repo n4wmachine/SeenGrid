@@ -271,6 +271,23 @@
 }
 .textarea:focus { border-color: var(--sg2-border-teal); }
 
+/* ---- FREE MODE META (id / type / goal rows) ---- */
+
+.metaRow {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.metaLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-min);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 /* ---- MODULE-GLOBAL MINI SECTION (unimplemented modules) ---- */
 
 .moduleMini {
