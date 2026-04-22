@@ -26,6 +26,7 @@ Diese Session: **offen**. Je nachdem was mein Smoke-Test ergibt.
     git pull
 
 Verifikation: `git log --oneline -10` muss Commits mit
+`feat(preview): flash-on-change + focus-anchor`,
 `feat(workspace): live prompt-preview pane`, `fix(shell):
 back-button never rendered`, `feat(workspace): convert-to-free-mode`,
 `feat(engine): module-driven free-mode` etc. zeigen (neuester zuerst).
