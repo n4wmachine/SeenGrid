@@ -155,9 +155,11 @@ function toFreeModeEngineState(ws) {
 
   base.panels = Array.from({ length: rows * cols }, (_, i) => {
     const wsPanel = Array.isArray(ws.panels) ? ws.panels[i] : null
-    const content = typeof wsPanel?.fieldValues?.content === 'string'
-      ? wsPanel.fieldValues.content
-      : ''
+    // Inspector schreibt im !hasRealSchema-Pfad nach overrides.panel_content
+    // (Fallback-Textarea). Free-Mode nutzt denselben Pfad — keine Schema-
+    // Felder, nur Freitext pro Panel.
+    const rawContent = wsPanel?.overrides?.panel_content
+    const content = typeof rawContent === 'string' ? rawContent : ''
     return { index: i + 1, content }
   })
 

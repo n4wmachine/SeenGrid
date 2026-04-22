@@ -60,9 +60,11 @@ export default function CaseContext() {
     )
   }, [activeModules])
 
+  const isFreeMode = selectedCase === 'free_mode'
+
   return (
     <div className={styles.root}>
-      <SectionCase caseDef={caseDef} />
+      {isFreeMode ? <SectionFreeMode /> : <SectionCase caseDef={caseDef} />}
 
       {isCharacterCase && (
         <SectionReferenceState
@@ -98,6 +100,22 @@ export default function CaseContext() {
           actions={actions}
         />
       ))}
+    </div>
+  )
+}
+
+/* -------------------- SECTION: FREE MODE -------------------- */
+
+// Kein Case-Readout. Neutrales Mini-Label (Spec §6 · NUANCEN 1:
+// Gold bleibt für Signatures reserviert).
+function SectionFreeMode() {
+  return (
+    <div className={styles.section}>
+      <div className={styles.label}>mode</div>
+      <div className={styles.caseName}>free mode</div>
+      <div className={styles.caseDesc}>
+        case-less grid · all modules available, nothing pre-selected
+      </div>
     </div>
   )
 }

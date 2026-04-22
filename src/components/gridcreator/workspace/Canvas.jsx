@@ -52,6 +52,7 @@ export default function Canvas() {
 
   const rows = Math.max(1, gridDims.rows)
   const cols = Math.max(1, gridDims.cols)
+  const isFreeMode = selectedCase === 'free_mode'
 
   useLayoutEffect(() => {
     if (!outerRef.current) return
@@ -137,8 +138,13 @@ export default function Canvas() {
           const isSelected = panel.id === selectedPanelId
           const hasSignature = Boolean(panel.signatureId)
           const hasOverride = hasOverrideState(panel, strategyDefaults[i])
-          const silhouettePath = role ? SILHOUETTE_PATHS[role] : null
-          const label = role ? formatRoleLabel(role) : `panel ${i + 1}`
+          // Free-Mode (Spec §6): keine Silhouette, nur Panel-Nummer +
+          // Content-Preview. Rollen-gekoppelte Labels entfallen.
+          const silhouettePath = isFreeMode ? null : (role ? SILHOUETTE_PATHS[role] : null)
+          const contentPreview = isFreeMode ? truncatePreview(panel.overrides?.panel_content) : ''
+          const label = isFreeMode
+            ? `panel ${i + 1}`
+            : (role ? formatRoleLabel(role) : `panel ${i + 1}`)
           const classes = [
             styles.panel,
             isSelected ? styles.selected : '',
@@ -162,6 +168,13 @@ export default function Canvas() {
                   >
                     <path d={silhouettePath} fill="currentColor" fillRule="evenodd" />
                   </svg>
+                ) : isFreeMode ? (
+                  <div className={styles.freeModeBody}>
+                    <div className={styles.freeModeIndex}>{i + 1}</div>
+                    {contentPreview && (
+                      <div className={styles.freeModePreview}>{contentPreview}</div>
+                    )}
+                  </div>
                 ) : (
                   <div className={styles.silhouetteRect} />
                 )}
@@ -188,4 +201,12 @@ function hasOverrideState(panel, strategyDefault) {
 
 function formatRoleLabel(role) {
   return String(role).replace(/_/g, ' ').toLowerCase()
+}
+
+function truncatePreview(text) {
+  if (!text || typeof text !== 'string') return ''
+  const trimmed = text.trim()
+  if (trimmed.length === 0) return ''
+  if (trimmed.length <= 20) return trimmed
+  return trimmed.slice(0, 20).trimEnd() + '…'
 }
