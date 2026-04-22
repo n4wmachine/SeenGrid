@@ -80,6 +80,23 @@ function applyPickToStore(selection, actions) {
   if (!selection) return
 
   const caseId = selection.caseId
+
+  // Free-Mode (FROM SCRATCH): case-los, nichts pre-aktiviert.
+  // Spec §3 / §6 / W3: alle 13 Module verfügbar, aber activeModules=[].
+  if (caseId === 'free_mode') {
+    const panelCount = selection.panelCount ?? 4
+    const { rows, cols } = rowsColsForPanelCount(panelCount)
+    actions.setCase({
+      caseId,
+      rows,
+      cols,
+      orientation: 'vertical',
+      defaultRoles: [],
+      activeModules: [],
+    })
+    return
+  }
+
   const caseDef = casesConfig.cases.find(c => c.id === caseId)
   if (!caseDef) return
 

@@ -72,6 +72,16 @@ export default function Picker({ onPick }) {
     onPick({ kind: 'hub-link', label: 'Prompt Hub (placeholder)' })
   }
 
+  function handleScratchPick() {
+    onPick({
+      kind: 'scratch',
+      caseId: 'free_mode',
+      label: 'Free Mode',
+      panelCount: 4,
+      defaultRoles: [],
+    })
+  }
+
   return (
     <div className={styles.page}>
 
@@ -154,12 +164,12 @@ export default function Picker({ onPick }) {
 
           <section className={styles.section}>
             <SectionLabel text="START FROM SCRATCH" tone="neutral" />
-            {/* Disabled in v1 — OPEN_DECISIONS #11. Engine is case-bound;
-                real free-mode is a post-v1 engine extension. */}
-            <div
-              className={`${styles.scratchCard} ${styles.scratchCardDisabled}`}
-              aria-disabled="true"
-              role="presentation"
+            {/* Engine-Free-Mode (Slice 6): case-loser Grid-Builder,
+                alle 13 Module verfügbar, nichts pre-aktiviert. */}
+            <button
+              type="button"
+              className={styles.scratchCard}
+              onClick={handleScratchPick}
             >
               <div className={styles.scratchIcon}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
@@ -168,10 +178,9 @@ export default function Picker({ onPick }) {
               </div>
               <div className={styles.scratchBody}>
                 <div className={styles.scratchTitle}>empty grid</div>
-                <div className={styles.scratchSub}>choose your own case, dimensions, and modules</div>
+                <div className={styles.scratchSub}>choose your own dimensions and modules</div>
               </div>
-              <div className={styles.scratchComing}>coming soon</div>
-            </div>
+            </button>
           </section>
         </>
       )}

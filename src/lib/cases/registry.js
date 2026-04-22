@@ -81,10 +81,11 @@ export function hasRealSchema(caseId) {
 
 /**
  * v1-aktive Cases (im Picker klickbar). Rest ist disabled +
- * `coming soon` (OPEN_DECISIONS #13, NUANCEN 15).
+ * `coming soon` (OPEN_DECISIONS #13, NUANCEN 15). Engine-Free-Mode
+ * (Slice 6) ist aktiv — FROM SCRATCH im Picker klickbar.
  */
 export function isCaseActive(caseId) {
-  return caseId === 'character_angle_study'
+  return caseId === 'character_angle_study' || caseId === 'free_mode'
 }
 
 /**
