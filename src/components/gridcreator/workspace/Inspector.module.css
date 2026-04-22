@@ -100,6 +100,43 @@
   gap: 6px;
 }
 
+/* ---- KEY INPUT (customizable JSON key, Inspector-inline) ---- */
+
+.keyInputWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--sg2-border-default);
+  border-radius: var(--sg2-radius-sm);
+  background: var(--sg2-bg-surface);
+  transition: var(--sg2-transition);
+}
+.keyInputWrap:focus-within {
+  border-color: var(--sg2-border-teal-strong);
+}
+
+.keyInputLabel {
+  font-family: var(--sg2-font-mono);
+  font-size: var(--sg2-text-min);
+  color: var(--sg2-text-quaternary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+:global(.sg2-shell) .keyInput {
+  font-family: var(--sg2-font-mono);
+  font-size: 11px;
+  color: var(--sg2-teal);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 80px;
+  letter-spacing: 0.02em;
+}
+
 /* ---- FIELD HINT (Bug 4: short Mono-Hints under labels) ---- */
 
 .fieldHint {

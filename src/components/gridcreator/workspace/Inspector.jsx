@@ -197,9 +197,22 @@ export default function Inspector() {
       {/* ---- PANEL CONTENT (fallback-only, see Bug 2 fix) ---- */}
       {!realSchema && (
         <div className={styles.section}>
-          <div className={styles.sectionLabel}>panel content</div>
+          <div className={styles.sectionLabelRow}>
+            <span className={styles.sectionLabel}>panel content</span>
+            <div className={styles.keyInputWrap} title="JSON key for this field in the compiled output">
+              <span className={styles.keyInputLabel}>key</span>
+              <input
+                className={styles.keyInput}
+                type="text"
+                value={state.panelContentKey ?? 'content'}
+                placeholder="content"
+                spellCheck={false}
+                onChange={e => actions.setPanelContentKey(e.target.value)}
+              />
+            </div>
+          </div>
           <div className={styles.fieldHint}>
-            describe what this panel shows · this case has no structured roles yet
+            describe what this panel shows · rename the key above to match your case (e.g. pose, description, scene)
           </div>
           <textarea
             className={styles.textarea}
