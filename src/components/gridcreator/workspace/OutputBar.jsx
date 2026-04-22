@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
-import { useWorkspaceState } from '../../../lib/workspaceStore.js'
+import { useWorkspaceState, useWorkspaceActions } from '../../../lib/workspaceStore.js'
 import { compileWorkspace } from '../../../lib/compileWorkspace.js'
 import { countTokens, isTokenWarning } from '../../../lib/tokenCount.js'
 import { getDimAdvice, isWarningQuality } from '../../../lib/dimAdvisory.js'
 import { useToast } from '../../ui/ToastProvider.jsx'
+import ConfirmDialog from '../../ui/ConfirmDialog.jsx'
 import SavePresetDialog from './SavePresetDialog.jsx'
 import styles from './OutputBar.module.css'
 
@@ -19,8 +20,11 @@ import styles from './OutputBar.module.css'
  */
 export default function OutputBar() {
   const state = useWorkspaceState()
+  const actions = useWorkspaceActions()
   const { toast } = useToast()
   const [saveOpen, setSaveOpen] = useState(false)
+  const [convertOpen, setConvertOpen] = useState(false)
+  const isFreeMode = state.selectedCase === 'free_mode'
 
   const compiled = useMemo(() => compileWorkspace(state), [state])
   const tokens = useMemo(() => countTokens(compiled), [compiled])
@@ -37,6 +41,12 @@ export default function OutputBar() {
     }
   }
 
+  function handleConvertConfirm() {
+    actions.convertToFreeMode()
+    setConvertOpen(false)
+    toast('converted to free mode', 'success')
+  }
+
   return (
     <>
       <div className={styles.bar}>
@@ -48,6 +58,15 @@ export default function OutputBar() {
           >
             save as preset
           </button>
+          {!isFreeMode && (
+            <button
+              className={styles.btnSecondary}
+              onClick={() => setConvertOpen(true)}
+              title="drop case constraints, keep your panels and content"
+            >
+              convert to free mode
+            </button>
+          )}
           <button
             className={styles.btnPrimary}
             onClick={handleCopy}
@@ -82,6 +101,16 @@ export default function OutputBar() {
         open={saveOpen}
         onClose={() => setSaveOpen(false)}
         compiledPreview={compiled}
+      />
+
+      <ConfirmDialog
+        open={convertOpen}
+        title="convert to free mode?"
+        message="you lose case constraints (roles, panel-count rules, case-specific schema). your panels, dimensions, content, notes, signatures and module selections stay. this is a one-way switch — to go back, use 'back to picker' and pick the case again."
+        confirmLabel="convert"
+        cancelLabel="cancel"
+        onConfirm={handleConvertConfirm}
+        onCancel={() => setConvertOpen(false)}
       />
     </>
   )

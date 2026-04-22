@@ -85,6 +85,7 @@ export const ACTIONS = {
   DETACH_SIGNATURE_FROM_PANEL: 'DETACH_SIGNATURE_FROM_PANEL',
   RANDOMIZE_FIELDS: 'RANDOMIZE_FIELDS',
   RESET_ALL: 'RESET_ALL',
+  CONVERT_TO_FREE_MODE: 'CONVERT_TO_FREE_MODE',
 }
 
 /* ---- REDUCER ---------------------------------------------- */
@@ -274,6 +275,19 @@ function reducer(state, action) {
       return { ...state, panels: nextPanels }
     }
 
+    case ACTIONS.CONVERT_TO_FREE_MODE: {
+      // Spec §6 / W5: Einbahnstraße Case → Free. Case-Sentinel
+      // tauschen, alle panels[].role nullen, Rest (Dimensions,
+      // Orientation, Panels, Overrides, Notes, Signatures, Module,
+      // Forbidden, Environment, Style-Overlay) bleibt.
+      if (state.selectedCase === 'free_mode') return state
+      return {
+        ...state,
+        selectedCase: 'free_mode',
+        panels: state.panels.map(p => ({ ...p, role: null })),
+      }
+    }
+
     case ACTIONS.RESET_ALL: {
       const { defaultRoles, activeModules } = action.payload || {}
       const total = state.gridDims.rows * state.gridDims.cols
@@ -337,6 +351,8 @@ export function WorkspaceStoreProvider({ initial, children }) {
       dispatch({ type: ACTIONS.RANDOMIZE_FIELDS, payload: { fieldPoolMap } }),
     resetAll: (opts = {}) =>
       dispatch({ type: ACTIONS.RESET_ALL, payload: opts }),
+    convertToFreeMode: () =>
+      dispatch({ type: ACTIONS.CONVERT_TO_FREE_MODE }),
     resetAllToCaseDefaults: (caseId, activeModules) => {
       // Hard reset auf Case-Defaults: Roles via Strategy, Module
       // wieder auf compatibility-Liste.
