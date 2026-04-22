@@ -26,7 +26,7 @@
       "id": "panel_content_fields",
       "displayName": "panel content fields",
       "category": "content",
-      "hasGlobalSettings": false,
+      "hasGlobalSettings": true,
       "hasPerPanelSettings": true,
       "outputKey": "content",
       "emitPath": "modules/panel_content_fields/emit.js",

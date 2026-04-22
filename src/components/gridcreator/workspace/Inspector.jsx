@@ -206,7 +206,7 @@ export default function Inspector() {
             value={panel.overrides.panel_content ?? ''}
             placeholder="e.g. wide shot of the laundromat, harsh fluorescent overhead"
             title="case has no panel-fields schema yet — free text describes this panel"
-            onFocus={() => setAnchor({ key: 'content', nth: panelIndex })}
+            onFocus={() => setAnchor({ key: state.panelContentKey || 'content', nth: panelIndex })}
             onBlur={() => setAnchor(null)}
             onChange={e => {
               const v = e.target.value

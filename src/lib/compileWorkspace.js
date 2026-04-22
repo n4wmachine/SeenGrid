@@ -214,6 +214,14 @@ function toFreeModeEngineState(ws) {
   base.active_modules = Array.isArray(ws.activeModules) ? [...ws.activeModules] : []
   base.module_values = {}
 
+  // Customizable JSON-Key für panel_content_fields — default 'content'.
+  // User setzt im CaseContext z.B. 'pose', 'description', 'scene'; der
+  // Serializer emittiert dann `"<key>": "<text>"` statt `"content"`.
+  base.panel_content_key =
+    typeof ws.panelContentKey === 'string' && ws.panelContentKey.length > 0
+      ? ws.panelContentKey
+      : 'content'
+
   return base
 }
 

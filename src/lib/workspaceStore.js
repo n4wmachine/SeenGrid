@@ -56,6 +56,11 @@ export function createInitialState({
     environmentMode: 'inherit',
     environmentCustomText: '',
     styleOverlayToken: '',
+    // JSON-Key für panel_content_fields-Output. User kann das
+    // Default `content` zu einem Case-tauglichen Begriff umbenennen
+    // (z.B. "pose", "description", "scene", "shot"). Wird in
+    // freeMode/serializer als Output-Key pro Panel verwendet.
+    panelContentKey: 'content',
   }
 }
 
@@ -79,6 +84,7 @@ export const ACTIONS = {
   SET_ENVIRONMENT_MODE: 'SET_ENVIRONMENT_MODE',
   SET_ENVIRONMENT_CUSTOM_TEXT: 'SET_ENVIRONMENT_CUSTOM_TEXT',
   SET_STYLE_OVERLAY_TOKEN: 'SET_STYLE_OVERLAY_TOKEN',
+  SET_PANEL_CONTENT_KEY: 'SET_PANEL_CONTENT_KEY',
   APPLY_SIGNATURE: 'APPLY_SIGNATURE',
   REMOVE_SIGNATURE: 'REMOVE_SIGNATURE',
   APPLY_SIGNATURE_TO_PANEL: 'APPLY_SIGNATURE_TO_PANEL',
@@ -245,6 +251,14 @@ function reducer(state, action) {
     case ACTIONS.SET_STYLE_OVERLAY_TOKEN:
       return { ...state, styleOverlayToken: action.payload }
 
+    case ACTIONS.SET_PANEL_CONTENT_KEY: {
+      // User-getippter Key wird leicht bereinigt: trim + lowercase-
+      // Underscore-Shape (kein Punkt/Space im JSON-Key).
+      const raw = typeof action.payload === 'string' ? action.payload : ''
+      const clean = raw.trim().replace(/\s+/g, '_')
+      return { ...state, panelContentKey: clean || 'content' }
+    }
+
     case ACTIONS.APPLY_SIGNATURE:
       return { ...state, appliedSignature: action.payload }
 
@@ -341,6 +355,7 @@ export function WorkspaceStoreProvider({ initial, children }) {
     setEnvironmentCustomText: v =>
       dispatch({ type: ACTIONS.SET_ENVIRONMENT_CUSTOM_TEXT, payload: v }),
     setStyleOverlayToken: v => dispatch({ type: ACTIONS.SET_STYLE_OVERLAY_TOKEN, payload: v }),
+    setPanelContentKey: v => dispatch({ type: ACTIONS.SET_PANEL_CONTENT_KEY, payload: v }),
     applySignature: sigId => dispatch({ type: ACTIONS.APPLY_SIGNATURE, payload: sigId }),
     removeSignature: () => dispatch({ type: ACTIONS.REMOVE_SIGNATURE }),
     applySignatureToPanel: (panelId, signatureId) =>

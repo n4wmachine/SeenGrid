@@ -130,18 +130,20 @@ export function getCompatibleModuleIds(caseId) {
  * Sektion). Filtert aus den active Modulen die heraus, die für die
  * "per-panel"-Sektion relevant sind.
  *
- * Strict-Coupling: wenn der Case ein **echtes Schema** hat, wird
- * `panel_content_fields` (das generische Catch-All-Textfeld)
- * unterdrückt. Sein Zweck ist explizit der Fallback für Cases
- * **ohne** Schema. (Bug 2 aus Manual-Test Part B: Fallback-Leak.)
+ * `panel_content_fields` wird IMMER ausgefiltert — egal ob der Case
+ * ein echtes Schema hat oder nicht. Für Cases mit Schema ist das
+ * Feld nicht vorgesehen (Bug 2 aus Manual-Test Part B: Fallback-
+ * Leak). Für Cases ohne Schema (free_mode) hat der Inspector eine
+ * eigene, dedizierte `panel content`-Textarea — ein zusätzliches
+ * per-Panel-Override-Feld wäre ein Duplikat mit abweichendem
+ * Storage-Key und würde nirgendwo emittiert.
  */
 export function getPerPanelModulesForCase(caseId, activeModuleIds) {
   const activeSet = new Set(activeModuleIds || [])
-  const real = hasRealSchema(caseId)
   return modulesConfig.modules.filter(m => {
     if (!m.hasPerPanelSettings) return false
     if (!activeSet.has(m.id)) return false
-    if (real && m.id === 'panel_content_fields') return false
+    if (m.id === 'panel_content_fields') return false
     return true
   })
 }

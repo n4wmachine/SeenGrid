@@ -45,6 +45,7 @@ export default function CaseContext() {
     environmentMode,
     environmentCustomText,
     styleOverlayToken,
+    panelContentKey,
     activeModules,
   } = state
 
@@ -100,6 +101,7 @@ export default function CaseContext() {
           environmentMode={environmentMode}
           environmentCustomText={environmentCustomText}
           styleOverlayToken={styleOverlayToken}
+          panelContentKey={panelContentKey}
           actions={actions}
           setAnchor={setAnchor}
         />
@@ -331,11 +333,35 @@ function SectionModuleGlobal({
   environmentMode,
   environmentCustomText,
   styleOverlayToken,
+  panelContentKey,
   actions,
   setAnchor,
 }) {
   const anchorOn = key => () => setAnchor && setAnchor({ key })
   const anchorOff = () => setAnchor && setAnchor(null)
+
+  if (mod.id === 'panel_content_fields') {
+    // Globaler Output-Key für das panel_content_fields-Modul. Default
+    // 'content' — generisch und für NanoBanana nicht besonders
+    // aussagekräftig; User kann in einen case-tauglichen Begriff
+    // umbenennen (z.B. 'pose', 'description', 'scene', 'shot').
+    return (
+      <div className={styles.section}>
+        <div className={styles.label}>{mod.displayName}</div>
+        <div className={styles.moduleMiniHint} style={{ marginBottom: 6 }}>
+          JSON key for each panel's text · e.g. pose, description, scene
+        </div>
+        <input
+          className={styles.inputText}
+          type="text"
+          value={panelContentKey ?? 'content'}
+          placeholder="content"
+          spellCheck={false}
+          onChange={e => actions.setPanelContentKey(e.target.value)}
+        />
+      </div>
+    )
+  }
 
   if (mod.id === 'environment_mode') {
     return (

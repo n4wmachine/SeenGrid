@@ -140,12 +140,19 @@ function emitPanels(state) {
   const contentEmitter = isModuleActive(state, "panel_content_fields")
     ? getEmitter("panel_content_fields")
     : null;
+  // User-definierter Output-Key für panel_content_fields. Default
+  // 'content'. User kann das im CaseContext zu 'pose', 'description'
+  // etc. umbenennen.
+  const contentKey =
+    typeof state.panel_content_key === "string" && state.panel_content_key.length > 0
+      ? state.panel_content_key
+      : "content";
 
   return panels.map((panel, i) => {
     const out = { index: typeof panel.index === "number" ? panel.index : i + 1 };
     if (contentEmitter) {
       const content = contentEmitter(state, panel);
-      if (content != null) out.content = content;
+      if (content != null) out[contentKey] = content;
     }
     // Custom Notes (UI-Feld im Inspector) landen pro Panel als
     // `notes`-String, sofern non-empty. Always-on, kein Modul-Gating —
